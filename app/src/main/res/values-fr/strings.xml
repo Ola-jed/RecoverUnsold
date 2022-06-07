@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RecoverUnsold</string>
+    <string name="email_label">Email</string>
+    <string name="email_placeholder">utilisateur@email.com</string>
+    <string name="login_label">Connexion</string>
+    <string name="password_placeholder">Mot de passe</string>
+    <string name="password_label">Mot de passe</string>
+    <string name="email_invalid_message">Adresse mail invalide</string>
+    <string name="phone_invalid_message">Numéro de téléphone invalide</string>
+    <string name="required_field_invalid_message">Ce champ est requis</string>
+</resources>

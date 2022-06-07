@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">RecoverUnsold</string>
+    <string name="email_label">Email</string>
+    <string name="email_placeholder">user@email.com</string>
+    <string name="login_label">Login</string>
+    <string name="password_placeholder">Password</string>
+    <string name="password_label">Password</string>
+    <string name="email_invalid_message">Invalid email</string>
+    <string name="phone_invalid_message">Invalid phone number</string>
+    <string name="required_field_invalid_message">This field is required</string>
+</resources>
