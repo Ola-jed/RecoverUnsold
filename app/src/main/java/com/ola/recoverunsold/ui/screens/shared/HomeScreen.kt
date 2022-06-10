@@ -1,10 +1,11 @@
 package com.ola.recoverunsold.ui.screens.shared
 
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 
 @Composable
-@Preview
-fun HomeScreen() {
-
+fun HomeScreen(navController: NavController,snackbarHostState: SnackbarHostState) {
+    Text("Home")
 }

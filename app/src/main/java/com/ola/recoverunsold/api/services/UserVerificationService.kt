@@ -1,6 +1,6 @@
 package com.ola.recoverunsold.api.services
 
-import com.ola.recoverunsold.api.ApiConstants
+import com.ola.recoverunsold.api.core.ApiConstants
 import com.ola.recoverunsold.api.requests.UserVerificationConfirmRequest
 import com.ola.recoverunsold.api.requests.UserVerificationStartRequest
 import retrofit2.Response

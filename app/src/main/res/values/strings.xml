@@ -2,10 +2,52 @@
     <string name="app_name">RecoverUnsold</string>
     <string name="email_label">Email</string>
     <string name="email_placeholder">user@email.com</string>
-    <string name="login_label">Login</string>
+    <string name="login_label">Welcome</string>
+    <string name="login_action">Login</string>
     <string name="password_placeholder">Password</string>
     <string name="password_label">Password</string>
     <string name="email_invalid_message">Invalid email</string>
     <string name="phone_invalid_message">Invalid phone number</string>
     <string name="required_field_invalid_message">This field is required</string>
+    <string name="not_registered">Not yet registered ?</string>
+    <string name="forgot_password_question">Forgot your password ?</string>
+    <string name="invalid_credentials">Invalid credentials</string>
+    <string name="account_not_verified">Account not verified</string>
+    <string name="ok">OK</string>
+    <string name="customer_status_declaration">I am a customer</string>
+    <string name="distributor_status_declaration">I am a distributor</string>
+    <string name="who_are_you">Who are you ?</string>
+    <string name="invalid_data">Invalid data</string>
+    <string name="user_not_found">User not found</string>
+    <string name="forgot_password_indications">Enter your email address to receive the password reset code</string>
+    <string name="send_code_action">Send the code</string>
+    <string name="code_already_sent">Code already sent ?</string>
+    <string name="code_sent_successfully">Code sent successfully, check your mail inbox</string>
+    <string name="invalid_expired_code">Invalid or expired code</string>
+    <string name="password_reset_instruction">Enter the code received by email with the new password for your account</string>
+    <string name="code">Code</string>
+    <string name="reset_password_message">Reset my password</string>
+    <string name="code_not_sent">Code not sent ?</string>
+    <string name="password_reset_successfull">Password reset successfully. You can now login with your new password</string>
+    <string name="account_already_verified">Account already verified</string>
+    <string name="user_verification_instruction">Enter your email to receive the code to verify your account</string>
+    <string name="account_not_verified_question">Account not yet verified ?</string>
+    <string name="user_verification_confirm_instruction">Enter the code you previously received by email</string>
+    <string name="verify_account_action">Verify my account</string>
+    <string name="account_verified_success_message">Account verified successfully</string>
+    <string name="register_success_verification_failed">Register successful but verification email not sent</string>
+    <string name="username_placeholder">John Doe</string>
+    <string name="username_label">Username</string>
+    <string name="register_action">Register</string>
+    <string name="already_registered">Already registered ?</string>
+    <string name="verification_code_not_sent">Verification code not sent ?</string>
+    <string name="unknown_error_occured">Something weird happened. Please retry</string>
+    <string name="phone_label">Phone number</string>
+    <string name="phone_placeholder" translatable="false">+22900000000</string>
+    <string name="tax_id_label">Tax ID</string>
+    <string name="tax_id_placeholder" translatable="false">00000</string>
+    <string name="rccm_placeholder" translatable="false">RB/AAA/00 A 0000</string>
+    <string name="rccm_label" translatable="false">Rccm</string>
+    <string name="website_url_placeholder">www.company.com</string>
+    <string name="website_url_label">Website</string>
 </resources>

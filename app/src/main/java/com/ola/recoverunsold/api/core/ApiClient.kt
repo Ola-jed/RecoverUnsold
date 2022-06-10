@@ -1,4 +1,4 @@
-package com.ola.recoverunsold.api
+package com.ola.recoverunsold.api.core
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -10,6 +10,7 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.reflect.Type
+import java.util.concurrent.TimeUnit
 
 object ApiClient {
     private val gson: Gson by lazy {
@@ -24,6 +25,9 @@ object ApiClient {
 
     private val httpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
+            .connectTimeout(1, TimeUnit.MINUTES)
+            .readTimeout(1, TimeUnit.MINUTES)
+            .writeTimeout(1, TimeUnit.MINUTES)
             .addInterceptor(logger)
             .build()
     }
@@ -47,7 +51,7 @@ object ApiClient {
         }
     }
 
-    private val retrofit: Retrofit by lazy {
+    val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(ApiConstants.apiBaseUrl)
             .client(httpClient)
@@ -56,5 +60,5 @@ object ApiClient {
             .build()
     }
 
-    fun <T : BaseApiService> buildService(service: Class<T>): T = retrofit.create(service)
+    inline fun <reified T : BaseApiService> buildService(): T = retrofit.create(T::class.java)
 }

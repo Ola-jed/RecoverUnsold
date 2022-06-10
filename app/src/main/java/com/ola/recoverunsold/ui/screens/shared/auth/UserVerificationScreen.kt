@@ -1,11 +1,14 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,50 +26,49 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.api.core.StatusCode
-import com.ola.recoverunsold.api.requests.UserVerificationStartRequest
+import com.ola.recoverunsold.api.requests.UserVerificationConfirmRequest
 import com.ola.recoverunsold.api.services.UserVerificationService
 import com.ola.recoverunsold.ui.components.CustomTextInput
 import com.ola.recoverunsold.ui.components.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.resources.Strings
-import com.ola.recoverunsold.utils.validation.EmailValidator
+import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.get
 
 @Composable
-fun StartUserVerificationScreen(
+fun UserVerificationScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
-    userVerificationViewModel: StartUserVerificationViewModel = viewModel()
+    userVerificationViewModel: UserVerificationViewModel = viewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
     ) { padding ->
-        StartUserVerificationContent(
-            email = userVerificationViewModel.emailFieldText,
-            onEmailChange = { userVerificationViewModel.emailFieldText = it },
-            onEmailValidated = { userVerificationViewModel.email = it },
+        UserVerificationContent(
+            modifier = Modifier.padding(padding),
+            token = userVerificationViewModel.tokenFieldText,
+            onTokenChange = { userVerificationViewModel.tokenFieldText = it },
+            onTokenValidated = { userVerificationViewModel.token = it },
             onSubmit = { userVerificationViewModel.submit() },
             loading = userVerificationViewModel.apiCallResult.status == ApiStatus.LOADING,
-            errorMessage = userVerificationViewModel.errorMessage(),
             navController = navController,
             snackbarHostState = snackbarHostState,
             coroutineScope = coroutineScope,
-            modifier = Modifier.padding(padding),
             isSuccessful = userVerificationViewModel.apiCallResult.status == ApiStatus.SUCCESS
         )
     }
 }
 
 @Composable
-fun StartUserVerificationContent(
+fun UserVerificationContent(
     modifier: Modifier = Modifier,
-    email: String,
-    onEmailChange: (String) -> Unit,
-    onEmailValidated: (String) -> Unit,
+    token: String,
+    onTokenChange: (String) -> Unit,
+    onTokenValidated: (String) -> Unit,
     onSubmit: () -> Unit,
     loading: Boolean,
     navController: NavController,
@@ -76,7 +78,6 @@ fun StartUserVerificationContent(
     isSuccessful: Boolean
 ) {
     val focusManager = LocalFocusManager.current
-
     Column(
         modifier = modifier
             .fillMaxSize(),
@@ -84,7 +85,7 @@ fun StartUserVerificationContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            stringResource(R.string.user_verification_instruction),
+            stringResource(R.string.user_verification_confirm_instruction),
             modifier = Modifier
                 .padding(horizontal = 25.dp, vertical = 10.dp)
                 .align(Alignment.CenterHorizontally),
@@ -92,18 +93,18 @@ fun StartUserVerificationContent(
         )
 
         CustomTextInput(
-            value = email,
-            leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
-            label = { Text(text = stringResource(R.string.email_label)) },
-            onValueChange = onEmailChange,
+            value = token,
+            leadingIcon = { Icon(Icons.Filled.Menu, contentDescription = null) },
+            placeholder = { Text(text = stringResource(R.string.code)) },
+            label = { Text(text = stringResource(R.string.code)) },
+            onValueChange = onTokenChange,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Email
+                keyboardType = KeyboardType.Number
             ),
             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = EmailValidator(),
-            onValidatedValue = onEmailValidated
+            validator = IsRequiredValidator(),
+            onValidatedValue = onTokenValidated
         )
 
         if (loading) {
@@ -112,7 +113,7 @@ fun StartUserVerificationContent(
             }
         } else {
             Button(onClick = onSubmit, modifier = Modifier.padding(horizontal = 10.dp)) {
-                Text(stringResource(R.string.send_code_action))
+                Text(stringResource(R.string.verify_account_action))
             }
         }
 
@@ -123,8 +124,8 @@ fun StartUserVerificationContent(
         )
         NavigationTextButton(
             navController = navController,
-            route = Routes.ConfirmUserVerification.path,
-            text = R.string.code_already_sent
+            route = Routes.StartUserVerification.path,
+            text = R.string.code_not_sent
         )
 
         if (errorMessage != null) {
@@ -143,31 +144,34 @@ fun StartUserVerificationContent(
             LaunchedEffect(snackbarHostState) {
                 coroutineScope.launch {
                     snackbarHostState.showSnackbar(
-                        message = Strings.get(R.string.code_sent_successfully),
+                        message = Strings.get(R.string.account_verified_success_message),
                         actionLabel = Strings.get(R.string.ok),
                         duration = SnackbarDuration.Long
                     )
                 }
+                navController.navigate(Routes.Login.path)
             }
         }
     }
 }
 
-class StartUserVerificationViewModel(
+class UserVerificationViewModel(
     private val userVerificationService: UserVerificationService = get(
         UserVerificationService::class.java
     )
 ) : ViewModel() {
     var apiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive())
-    var emailFieldText by mutableStateOf("")
-    var email by mutableStateOf("")
+    var tokenFieldText by mutableStateOf("")
+    var token by mutableStateOf("")
 
     fun submit() {
-        if (email.isBlank()) return
+        if (token.isBlank()) return
         apiCallResult = ApiCallResult.Loading()
         viewModelScope.launch {
-            val response = userVerificationService.startUserVerification(
-                UserVerificationStartRequest(email)
+            val response = userVerificationService.confirmUserVerification(
+                UserVerificationConfirmRequest(
+                    token
+                )
             )
             apiCallResult = if (response.isSuccessful) {
                 ApiCallResult.Success(_data = Unit)
@@ -178,8 +182,7 @@ class StartUserVerificationViewModel(
     }
 
     fun errorMessage(): String? = when (apiCallResult.statusCode) {
-        StatusCode.BadRequest.code -> Strings.get(R.string.account_already_verified)
-        StatusCode.NotFound.code -> Strings.get(R.string.user_not_found)
+        StatusCode.BadRequest.code -> Strings.get(R.string.invalid_expired_code)
         in 400..600 -> Strings.get(R.string.unknown_error_occured)
         else -> null
     }

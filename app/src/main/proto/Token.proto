@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option java_package = "com.ola.recoverunsold";
+option java_multiple_files = true;
+
+message Token {
+  string role = 1;
+  string token = 2;
+  google.protobuf.Timestamp expirationDate = 3;
+}

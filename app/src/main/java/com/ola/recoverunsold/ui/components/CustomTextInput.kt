@@ -37,10 +37,11 @@ fun CustomTextInput(
     validator: Validator? = null,
     onValidatedValue: ((String) -> Unit)? = null
 ) {
+    val valueIsInvalid = value.isNotBlank() && validator?.isValid(value.trimEnd()) == false
     Column(
         modifier = Modifier
             .padding(
-                bottom = if (validator?.isValid(value) != false) {
+                bottom = if (!valueIsInvalid) {
                     10.dp
                 } else {
                     0.dp
@@ -50,10 +51,10 @@ fun CustomTextInput(
         OutlinedTextField(
             enabled = enabled,
             readOnly = readOnly,
-            value = value,
+            value = value.trimEnd(),
             onValueChange = {
                 onValueChange(it)
-                if(validator?.isValid(value) != false && onValidatedValue != null) {
+                if (!valueIsInvalid && onValidatedValue != null) {
                     onValidatedValue(value)
                 }
             },
@@ -64,7 +65,7 @@ fun CustomTextInput(
             placeholder = placeholder,
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon,
-            isError = validator?.isValid(value) == false,
+            isError = valueIsInvalid,
             visualTransformation = visualTransformation,
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
@@ -74,14 +75,13 @@ fun CustomTextInput(
             colors = colors
         )
 
-        if (validator?.isValid(value) == false) {
+        if (valueIsInvalid) {
             Text(
-                text = validator.errorMessage(value) ?: "",
+                text = validator?.errorMessage(value) ?: "",
                 color = MaterialTheme.colors.error,
                 style = MaterialTheme.typography.caption,
                 modifier = Modifier.padding(start = 16.dp)
             )
         }
     }
-
 }

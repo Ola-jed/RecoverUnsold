@@ -7,5 +7,5 @@ data class DistributorRegisterRequest(
     val phone: String,
     val rccm: String,
     val username: String,
-    val websiteUrl: String
+    val websiteUrl: String?
 )

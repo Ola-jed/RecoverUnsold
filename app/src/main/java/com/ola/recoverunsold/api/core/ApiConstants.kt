@@ -1,4 +1,4 @@
-package com.ola.recoverunsold.api
+package com.ola.recoverunsold.api.core
 
 object ApiConstants {
     const val apiBaseUrl = "https://recover-unsold-api.herokuapp.com/api/"
