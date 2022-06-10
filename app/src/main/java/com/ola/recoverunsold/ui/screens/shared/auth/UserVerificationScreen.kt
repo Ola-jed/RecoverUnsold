@@ -1,5 +1,6 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -58,6 +59,7 @@ fun UserVerificationScreen(
             navController = navController,
             snackbarHostState = snackbarHostState,
             coroutineScope = coroutineScope,
+            errorMessage = userVerificationViewModel.errorMessage(),
             isSuccessful = userVerificationViewModel.apiCallResult.status == ApiStatus.SUCCESS
         )
     }
@@ -169,9 +171,7 @@ class UserVerificationViewModel(
         apiCallResult = ApiCallResult.Loading()
         viewModelScope.launch {
             val response = userVerificationService.confirmUserVerification(
-                UserVerificationConfirmRequest(
-                    token
-                )
+                UserVerificationConfirmRequest(token)
             )
             apiCallResult = if (response.isSuccessful) {
                 ApiCallResult.Success(_data = Unit)
@@ -185,5 +185,9 @@ class UserVerificationViewModel(
         StatusCode.BadRequest.code -> Strings.get(R.string.invalid_expired_code)
         in 400..600 -> Strings.get(R.string.unknown_error_occured)
         else -> null
+    }.also {
+        if (it != null) {
+            Log.e("aaaaa", it)
+        }
     }
 }

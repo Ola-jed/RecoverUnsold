@@ -6,7 +6,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
@@ -51,11 +52,11 @@ fun CustomTextInput(
         OutlinedTextField(
             enabled = enabled,
             readOnly = readOnly,
-            value = value.trimEnd(),
+            value = value,
             onValueChange = {
-                onValueChange(it)
-                if (!valueIsInvalid && onValidatedValue != null) {
-                    onValidatedValue(value)
+                onValueChange(it.trimEnd())
+                if ((it.isBlank() || validator?.isValid(it.trimEnd()) != false) && onValidatedValue != null) {
+                    onValidatedValue(it.trimEnd())
                 }
             },
             modifier = modifier,
