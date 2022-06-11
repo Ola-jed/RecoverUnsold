@@ -1,10 +1,7 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -105,16 +102,22 @@ fun LoginScreenContent(
 
     Column(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(12.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        val fieldsModifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp)
+
         Text(
             stringResource(R.string.login_label),
             modifier = Modifier.padding(vertical = 10.dp)
         )
 
         CustomTextInput(
+            modifier = fieldsModifier,
             value = email,
             leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
             placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
@@ -130,6 +133,7 @@ fun LoginScreenContent(
         )
 
         CustomTextInput(
+            modifier = fieldsModifier,
             value = password,
             leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
             placeholder = { Text(text = stringResource(R.string.password_placeholder)) },
@@ -150,8 +154,11 @@ fun LoginScreenContent(
                 CircularProgressIndicator(color = MaterialTheme.colors.background)
             }
         } else {
-            Button(onClick = onSubmit, modifier = Modifier.padding(horizontal = 10.dp)) {
-                Text(stringResource(R.string.login_action))
+            Button(
+                onClick = onSubmit,
+                modifier = fieldsModifier,
+            ) {
+                Text(stringResource(R.string.login_action), modifier = Modifier.padding(5.dp))
             }
         }
 

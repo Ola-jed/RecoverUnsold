@@ -1,10 +1,7 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -80,12 +77,18 @@ fun UserVerificationContent(
     isSuccessful: Boolean
 ) {
     val focusManager = LocalFocusManager.current
+
     Column(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(12.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        val fieldsModifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp)
+
         Text(
             stringResource(R.string.user_verification_confirm_instruction),
             modifier = Modifier
@@ -95,6 +98,7 @@ fun UserVerificationContent(
         )
 
         CustomTextInput(
+            modifier = fieldsModifier,
             value = token,
             leadingIcon = { Icon(Icons.Filled.Menu, contentDescription = null) },
             placeholder = { Text(text = stringResource(R.string.code)) },
@@ -114,8 +118,11 @@ fun UserVerificationContent(
                 CircularProgressIndicator(color = MaterialTheme.colors.background)
             }
         } else {
-            Button(onClick = onSubmit, modifier = Modifier.padding(horizontal = 10.dp)) {
-                Text(stringResource(R.string.verify_account_action))
+            Button(onClick = onSubmit, modifier = fieldsModifier) {
+                Text(
+                    stringResource(R.string.verify_account_action),
+                    modifier = Modifier.padding(vertical = 5.dp)
+                )
             }
         }
 

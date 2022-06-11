@@ -4,7 +4,9 @@ import androidx.annotation.StringRes
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 
 @Composable
@@ -13,12 +15,20 @@ fun NavigationTextButton(
     route: String,
     @StringRes text: Int? = null,
     content: String? = null,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Center,
 ) {
     require((text == null) xor (content == null))
 
     TextButton(onClick = {
         navController.navigate(route)
     }) {
-        (content ?: text?.let { stringResource(it) })?.let { Text(it) }
+        (content ?: text?.let { stringResource(it) })?.let {
+            Text(
+                it,
+                modifier = modifier,
+                textAlign = textAlign
+            )
+        }
     }
 }

@@ -1,10 +1,7 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -97,10 +94,14 @@ fun CustomerRegisterContent(
     isSuccessful: Boolean
 ) {
     val focusManager = LocalFocusManager.current
+    val fieldsModifier = modifier
+        .fillMaxWidth()
+        .padding(horizontal = 10.dp)
 
     Column(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(12.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -110,6 +111,7 @@ fun CustomerRegisterContent(
         )
 
         CustomTextInput(
+            modifier = fieldsModifier,
             value = username,
             leadingIcon = { Icon(Icons.Filled.AccountBox, contentDescription = null) },
             placeholder = { Text(text = stringResource(R.string.username_placeholder)) },
@@ -125,6 +127,7 @@ fun CustomerRegisterContent(
         )
 
         CustomTextInput(
+            modifier = fieldsModifier,
             value = email,
             leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
             placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
@@ -140,6 +143,7 @@ fun CustomerRegisterContent(
         )
 
         CustomTextInput(
+            modifier = fieldsModifier,
             value = password,
             leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
             placeholder = { Text(text = stringResource(R.string.password_placeholder)) },
@@ -160,8 +164,11 @@ fun CustomerRegisterContent(
                 CircularProgressIndicator(color = MaterialTheme.colors.background)
             }
         } else {
-            Button(onClick = onSubmit, modifier = Modifier.padding(horizontal = 10.dp)) {
-                Text(stringResource(R.string.register_action))
+            Button(onClick = onSubmit, modifier = fieldsModifier) {
+                Text(
+                    stringResource(R.string.register_action),
+                    modifier = Modifier.padding(vertical = 5.dp)
+                )
             }
         }
 
@@ -198,8 +205,8 @@ fun CustomerRegisterContent(
                         duration = SnackbarDuration.Long
                     )
                 }
+                navController.navigate(Routes.ConfirmUserVerification.path)
             }
-            navController.navigate(Routes.ConfirmUserVerification.path)
         }
     }
 }

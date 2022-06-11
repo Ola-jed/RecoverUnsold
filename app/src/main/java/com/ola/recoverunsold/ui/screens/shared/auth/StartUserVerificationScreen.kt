@@ -76,10 +76,14 @@ fun StartUserVerificationContent(
     isSuccessful: Boolean
 ) {
     val focusManager = LocalFocusManager.current
+    val fieldsModifier = modifier
+        .fillMaxWidth()
+        .padding(horizontal = 10.dp)
 
     Column(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(horizontal = 12.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -92,6 +96,7 @@ fun StartUserVerificationContent(
         )
 
         CustomTextInput(
+            modifier = fieldsModifier,
             value = email,
             leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
             placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
@@ -111,8 +116,11 @@ fun StartUserVerificationContent(
                 CircularProgressIndicator(color = MaterialTheme.colors.background)
             }
         } else {
-            Button(onClick = onSubmit, modifier = Modifier.padding(horizontal = 10.dp)) {
-                Text(stringResource(R.string.send_code_action))
+            Button(onClick = onSubmit, modifier = fieldsModifier) {
+                Text(
+                    stringResource(R.string.send_code_action),
+                    modifier = Modifier.padding(vertical = 5.dp)
+                )
             }
         }
 

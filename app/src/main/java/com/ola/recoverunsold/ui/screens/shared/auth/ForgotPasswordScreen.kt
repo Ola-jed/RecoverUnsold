@@ -78,10 +78,15 @@ fun ForgotPasswordContent(
 
     Column(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(12.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        val fieldsModifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp)
+
         Text(
             stringResource(R.string.forgot_password_indications),
             modifier = Modifier
@@ -91,6 +96,7 @@ fun ForgotPasswordContent(
         )
 
         CustomTextInput(
+            modifier = fieldsModifier,
             value = email,
             leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
             placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
@@ -107,8 +113,11 @@ fun ForgotPasswordContent(
                 CircularProgressIndicator(color = MaterialTheme.colors.background)
             }
         } else {
-            Button(onClick = onSubmit, modifier = Modifier.padding(horizontal = 10.dp)) {
-                Text(stringResource(R.string.send_code_action))
+            Button(onClick = onSubmit, modifier = fieldsModifier) {
+                Text(
+                    stringResource(R.string.send_code_action),
+                    modifier = Modifier.padding(vertical = 5.dp)
+                )
             }
         }
 

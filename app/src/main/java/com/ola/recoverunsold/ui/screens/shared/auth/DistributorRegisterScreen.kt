@@ -1,9 +1,6 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -19,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -122,10 +120,14 @@ fun DistributorRegisterContent(
     isSuccessful: Boolean = false,
 ) {
     val focusManager = LocalFocusManager.current
+    val fieldsModifier = modifier
+        .fillMaxWidth()
+        .padding(horizontal = 10.dp)
 
     Column(
         modifier = modifier
             .fillMaxSize()
+            .padding(12.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -136,6 +138,7 @@ fun DistributorRegisterContent(
         )
 
         CustomTextInput(
+            modifier = fieldsModifier,
             value = username,
             leadingIcon = { Icon(Icons.Filled.AccountBox, contentDescription = null) },
             placeholder = { Text(text = stringResource(R.string.username_placeholder)) },
@@ -152,6 +155,7 @@ fun DistributorRegisterContent(
         )
 
         CustomTextInput(
+            modifier = fieldsModifier,
             value = email,
             leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
             placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
@@ -168,6 +172,7 @@ fun DistributorRegisterContent(
         )
 
         CustomTextInput(
+            modifier = fieldsModifier,
             value = phone,
             leadingIcon = { Icon(Icons.Filled.Phone, contentDescription = null) },
             placeholder = { Text(text = stringResource(R.string.phone_placeholder)) },
@@ -184,6 +189,7 @@ fun DistributorRegisterContent(
         )
 
         CustomTextInput(
+            modifier = fieldsModifier,
             value = password,
             leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
             placeholder = { Text(text = stringResource(R.string.password_placeholder)) },
@@ -201,6 +207,7 @@ fun DistributorRegisterContent(
         )
 
         CustomTextInput(
+            modifier = fieldsModifier,
             value = taxId,
             leadingIcon = { Icon(Icons.Filled.Info, contentDescription = null) },
             placeholder = { Text(text = stringResource(R.string.tax_id_placeholder)) },
@@ -217,6 +224,7 @@ fun DistributorRegisterContent(
         )
 
         CustomTextInput(
+            modifier = fieldsModifier,
             value = rccm,
             leadingIcon = { Icon(Icons.Filled.Info, contentDescription = null) },
             placeholder = { Text(text = stringResource(R.string.rccm_placeholder)) },
@@ -233,6 +241,7 @@ fun DistributorRegisterContent(
         )
 
         CustomTextInput(
+            modifier = fieldsModifier,
             value = websiteUrl,
             leadingIcon = { Icon(Icons.Filled.Home, contentDescription = null) },
             placeholder = { Text(text = stringResource(R.string.website_url_placeholder)) },
@@ -252,21 +261,26 @@ fun DistributorRegisterContent(
                 CircularProgressIndicator(color = MaterialTheme.colors.background)
             }
         } else {
-            Button(onClick = onSubmit, modifier = Modifier.padding(horizontal = 10.dp)) {
-                Text(stringResource(R.string.register_action))
+            Button(onClick = onSubmit, modifier = fieldsModifier) {
+                Text(
+                    stringResource(R.string.register_action),
+                    modifier = Modifier.padding(vertical = 5.dp)
+                )
             }
         }
 
         NavigationTextButton(
             navController = navController,
             route = Routes.Login.path,
-            text = R.string.already_registered
+            text = R.string.already_registered,
+            textAlign = TextAlign.Center
         )
 
         NavigationTextButton(
             navController = navController,
             route = Routes.StartUserVerification.path,
-            text = R.string.verification_code_not_sent
+            text = R.string.verification_code_not_sent,
+            textAlign = TextAlign.Center
         )
 
         if (errorMessage != null) {

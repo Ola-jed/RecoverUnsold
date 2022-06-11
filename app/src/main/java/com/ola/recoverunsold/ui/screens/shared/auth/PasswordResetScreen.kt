@@ -85,10 +85,15 @@ fun PasswordResetContent(
     val focusManager = LocalFocusManager.current
     Column(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(12.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        val fieldsModifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp)
+
         Text(
             stringResource(R.string.password_reset_instruction),
             modifier = Modifier
@@ -98,6 +103,7 @@ fun PasswordResetContent(
         )
 
         CustomTextInput(
+            modifier = fieldsModifier,
             value = token,
             leadingIcon = { Icon(Icons.Filled.Menu, contentDescription = null) },
             placeholder = { Text(text = stringResource(R.string.code)) },
@@ -114,6 +120,7 @@ fun PasswordResetContent(
         )
 
         CustomTextInput(
+            modifier = fieldsModifier,
             value = password,
             leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
             placeholder = { Text(text = stringResource(R.string.password_placeholder)) },
@@ -134,8 +141,11 @@ fun PasswordResetContent(
                 CircularProgressIndicator(color = MaterialTheme.colors.background)
             }
         } else {
-            Button(onClick = onSubmit, modifier = Modifier.padding(horizontal = 10.dp)) {
-                Text(stringResource(R.string.reset_password_message))
+            Button(onClick = onSubmit, modifier = fieldsModifier) {
+                Text(
+                    stringResource(R.string.reset_password_message),
+                    modifier = Modifier.padding(vertical = 5.dp)
+                )
             }
         }
 
