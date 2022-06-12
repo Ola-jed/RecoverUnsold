@@ -6,7 +6,7 @@ data class Distributor(
     override val username: String,
     override val email: String,
     val phone: String,
-    val ifu: String,
+    val taxId: String,
     val rccm: String,
     val websiteUrl: String? = null,
     override val emailVerifiedAt: Date? = null,
