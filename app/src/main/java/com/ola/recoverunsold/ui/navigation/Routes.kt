@@ -13,6 +13,6 @@ sealed class Routes(val path: String) {
     object Distributors : Routes("distributors")
     object Offers : Routes("offers")
     object Orders : Routes("orders")
-    object Account : Routes("account")
+    object DistributorAccount : Routes("account/distributor")
 }
 

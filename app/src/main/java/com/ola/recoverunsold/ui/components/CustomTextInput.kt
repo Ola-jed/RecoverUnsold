@@ -54,7 +54,7 @@ fun CustomTextInput(
             readOnly = readOnly,
             value = value,
             onValueChange = {
-                onValueChange(it.trimEnd())
+                onValueChange(it)
                 if ((it.isBlank() || validator?.isValid(it.trimEnd()) != false) && onValidatedValue != null) {
                     onValidatedValue(it.trimEnd())
                 }

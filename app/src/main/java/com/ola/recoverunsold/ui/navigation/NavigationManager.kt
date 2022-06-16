@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.ola.recoverunsold.ui.screens.customer.DistributorsScreen
 import com.ola.recoverunsold.ui.screens.customer.OffersScreen
 import com.ola.recoverunsold.ui.screens.customer.OrdersScreen
+import com.ola.recoverunsold.ui.screens.distributor.DistributorAccountScreen
 import com.ola.recoverunsold.ui.screens.shared.HomeScreen
 import com.ola.recoverunsold.ui.screens.shared.auth.*
 
@@ -82,6 +83,12 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
         }
         composable(Routes.Orders.path) {
             OrdersScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState
+            )
+        }
+        composable(Routes.DistributorAccount.path) {
+            DistributorAccountScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState
             )

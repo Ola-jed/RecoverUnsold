@@ -118,7 +118,7 @@ fun CustomerRegisterContent(
             onValueChange = onUsernameChange,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Ascii
+                keyboardType = KeyboardType.Text
             ),
             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             validator = IsRequiredValidator(),

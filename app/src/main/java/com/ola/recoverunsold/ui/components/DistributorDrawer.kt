@@ -24,7 +24,6 @@ import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +41,7 @@ import com.ola.recoverunsold.utils.misc.logout
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
 
-// TODO : urls
+// TODO : links
 
 @Composable
 fun DistributorDrawer(
@@ -79,7 +78,9 @@ fun DistributorDrawer(
                         Text(user.username, color = MaterialTheme.colors.onSecondary)
                         Text(user.phone, color = MaterialTheme.colors.onSecondary)
                     }
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {
+                        navController.navigate(Routes.DistributorAccount.path)
+                    }) {
                         Icon(Icons.Filled.Edit, contentDescription = null)
                     }
                 }

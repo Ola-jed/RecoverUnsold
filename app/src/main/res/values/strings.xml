@@ -60,4 +60,5 @@
     <string name="offers_published">Offers published</string>
     <string name="logout_label">Logout</string>
     <string name="logout_successfull">Logged out successfully</string>
+    <string name="distributor_username_placeholder">Best Distribution</string>
 </resources>

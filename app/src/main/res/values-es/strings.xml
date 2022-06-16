@@ -57,4 +57,5 @@
     <string name="offers_published">Ofertas publicadas</string>
     <string name="logout_label">Cierre de sesión</string>
     <string name="logout_successfull">Se ha desconectado con éxito</string>
+    <string name="distributor_username_placeholder">Best Distribution</string>
 </resources>

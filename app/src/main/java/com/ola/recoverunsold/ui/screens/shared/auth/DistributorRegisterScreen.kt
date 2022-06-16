@@ -141,13 +141,13 @@ fun DistributorRegisterContent(
             modifier = fieldsModifier,
             value = username,
             leadingIcon = { Icon(Icons.Filled.AccountBox, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.username_placeholder)) },
+            placeholder = { Text(text = stringResource(R.string.distributor_username_placeholder)) },
             label = { Text(text = stringResource(R.string.username_label)) },
             onValueChange = onUsernameChange,
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Ascii
+                keyboardType = KeyboardType.Text
             ),
             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             validator = IsRequiredValidator(),
@@ -339,7 +339,6 @@ class DistributorRegisterViewModel(
             || username.isBlank()
             || taxId.isBlank()
             || rccm.isBlank()
-            || websiteUrl.isBlank()
         ) return
         apiCallResult = ApiCallResult.Loading()
         viewModelScope.launch {
