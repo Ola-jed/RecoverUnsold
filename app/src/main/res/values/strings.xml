@@ -50,4 +50,14 @@
     <string name="rccm_label" translatable="false">Rccm</string>
     <string name="website_url_placeholder">www.company.com</string>
     <string name="website_url_label">Website</string>
+    <string name="home">Home</string>
+    <string name="distributors">Distributors</string>
+    <string name="offers">Offers</string>
+    <string name="modify_account">Modify my account</string>
+    <string name="orders">Orders</string>
+    <string name="settings">Settings</string>
+    <string name="orders_received">Orders received</string>
+    <string name="offers_published">Offers published</string>
+    <string name="logout_label">Logout</string>
+    <string name="logout_successfull">Logged out successfully</string>
 </resources>

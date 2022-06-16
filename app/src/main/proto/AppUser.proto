@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option java_package = "com.ola.recoverunsold";
+option java_multiple_files = true;
+
+message AppUser {
+  string username = 1;
+  string email = 2;
+  string firstName = 3;
+  string lastName = 4;
+  string phone = 5;
+  string taxId = 6;
+  string rccm = 7;
+  string websiteUrl = 8;
+  string emailVerifiedAt = 9;
+  string createdAt = 10;
+  enum Status {
+    CUSTOMER = 0;
+    DISTRIBUTOR = 1;
+  }
+  Status status = 11;
+}

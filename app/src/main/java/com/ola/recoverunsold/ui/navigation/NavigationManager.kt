@@ -5,12 +5,15 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.ola.recoverunsold.ui.screens.customer.DistributorsScreen
+import com.ola.recoverunsold.ui.screens.customer.OffersScreen
+import com.ola.recoverunsold.ui.screens.customer.OrdersScreen
 import com.ola.recoverunsold.ui.screens.shared.HomeScreen
 import com.ola.recoverunsold.ui.screens.shared.auth.*
 
 @Composable
 fun NavigationManager(navHostController: NavHostController, snackbarHostState: SnackbarHostState) {
-    NavHost(navController = navHostController, startDestination = Routes.Login.path) {
+    NavHost(navController = navHostController, startDestination = Routes.Home.path) {
         composable(Routes.Home.path) {
             HomeScreen(
                 navController = navHostController,
@@ -61,6 +64,24 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
         }
         composable(Routes.ConfirmUserVerification.path) {
             UserVerificationScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState
+            )
+        }
+        composable(Routes.Distributors.path) {
+            DistributorsScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState
+            )
+        }
+        composable(Routes.Offers.path) {
+            OffersScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState
+            )
+        }
+        composable(Routes.Orders.path) {
+            OrdersScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState
             )

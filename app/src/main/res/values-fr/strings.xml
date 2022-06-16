@@ -47,4 +47,14 @@
     <string name="tax_id_label">Identifiant fiscal</string>
     <string name="website_url_placeholder">www.company.com</string>
     <string name="website_url_label">Site web</string>
+    <string name="home">Acceuil</string>
+    <string name="distributors">Distributeurs</string>
+    <string name="offers">Offres</string>
+    <string name="modify_account">Modifier mon compte</string>
+    <string name="orders">Mes commandes</string>
+    <string name="settings">Paramètres</string>
+    <string name="orders_received">Commandes reçues</string>
+    <string name="offers_published">Offres publiées</string>
+    <string name="logout_label">Déconnexion</string>
+    <string name="logout_successfull">Déconnexion réussie</string>
 </resources>

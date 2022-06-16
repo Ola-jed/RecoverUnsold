@@ -1,6 +1,5 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
