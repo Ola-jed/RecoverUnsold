@@ -126,8 +126,8 @@ fun DistributorDrawer(
             .clickable {
                 coroutineScope.launch {
                     context.logout()
-                    navController.navigate(Routes.Home.path) {
-                        popUpTo(Routes.Home.path) {
+                    navController.navigate(Routes.Login.path) {
+                        popUpTo(Routes.Login.path) {
                             inclusive = true
                         }
                     }

@@ -14,7 +14,6 @@ class TokenStore(context: Context) {
     fun token(): Flow<Token> = dataStore.data.map { it }
 
     suspend fun storeToken(apiToken: com.ola.recoverunsold.api.responses.Token) {
-
         dataStore.updateData { token ->
             token.toBuilder()
                 .setRole(apiToken.role)
@@ -28,29 +27,28 @@ class TokenStore(context: Context) {
 
     suspend fun removeToken() {
         dataStore.updateData { it.toBuilder().clear().build() }
+        remove()
     }
 
     companion object {
-        lateinit var token: com.ola.recoverunsold.api.responses.Token
+        var token: com.ola.recoverunsold.api.responses.Token? = null
 
         fun init(producer: () -> com.ola.recoverunsold.api.responses.Token) {
             token = producer()
         }
 
-        fun get(): com.ola.recoverunsold.api.responses.Token? = if (::token.isInitialized) {
-            token
-        } else {
-            null
-        }
+        fun get(): com.ola.recoverunsold.api.responses.Token? = token
 
         fun getOr(producer: () -> com.ola.recoverunsold.api.responses.Token)
                 : com.ola.recoverunsold.api.responses.Token {
-            return if (::token.isInitialized) {
-                token
-            } else {
+            if (token == null) {
                 token = producer()
-                token
             }
+            return token!!
+        }
+
+        fun remove() {
+            token = null
         }
     }
 }

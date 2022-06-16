@@ -22,7 +22,6 @@ fun AppBar(coroutineScope: CoroutineScope, scaffoldState: ScaffoldState) {
                 contentDescription = null,
                 modifier = Modifier.clickable(onClick = {
                     coroutineScope.launch {
-                        scaffoldState.drawerState.close()
                         scaffoldState.drawerState.open()
                     }
                 })
