@@ -4,8 +4,8 @@ import android.app.Application
 import com.ola.recoverunsold.api.responses.TokenRoles
 import com.ola.recoverunsold.api.services.AccountService
 import com.ola.recoverunsold.di.appModule
-import com.ola.recoverunsold.utils.store.AppUserStore
 import com.ola.recoverunsold.utils.store.TokenStore
+import com.ola.recoverunsold.utils.store.UserObserver
 import com.ola.recoverunsold.utils.store.toApiToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -50,7 +50,7 @@ class App : Application() {
             if (response.isSuccessful) {
                 val user = response.body()
                 if (user != null) {
-                    AppUserStore.init { user }
+                    UserObserver.update(user)
                 }
             }
         }

@@ -139,7 +139,7 @@ fun DistributorDrawer(
                 }
             }
             .fillMaxWidth()
-            .padding(top = 15.dp, bottom = 15.dp)
+            .padding(top = 15.dp, bottom = 15.dp, start = 5.dp)
         ) {
             Icon(
                 Icons.Filled.Logout,

@@ -44,12 +44,15 @@ import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.api.core.StatusCode
 import com.ola.recoverunsold.api.requests.LoginRequest
 import com.ola.recoverunsold.api.responses.Token
+import com.ola.recoverunsold.api.responses.TokenRoles
+import com.ola.recoverunsold.api.services.AccountService
 import com.ola.recoverunsold.api.services.AuthService
 import com.ola.recoverunsold.ui.components.CustomTextInput
 import com.ola.recoverunsold.ui.components.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
+import com.ola.recoverunsold.utils.store.UserObserver
 import com.ola.recoverunsold.utils.validation.EmailValidator
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import kotlinx.coroutines.CoroutineScope
@@ -84,6 +87,18 @@ fun LoginScreen(
                             tokenStore.removeToken()
                             tokenStore.storeToken(token)
                             TokenStore.init { token }
+                            val accountService: AccountService = get(AccountService::class.java)
+                            val response = if (token.role == TokenRoles.CUSTOMER) {
+                                accountService.getCustomer(token.bearerToken)
+                            } else {
+                                accountService.getDistributor(token.bearerToken)
+                            }
+                            val user = if (response.isSuccessful) {
+                                response.body()
+                            } else {
+                                null
+                            }
+                            UserObserver.update { user }
                         }
                     }
                 }
