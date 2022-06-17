@@ -7,7 +7,7 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
 private val LightColors = lightColors(
-    primary = md_theme_light_primary,
+    primary = themeLightPrimary,
     onPrimary = md_theme_light_onPrimary,
     secondary = md_theme_light_secondary,
     onSecondary = md_theme_light_onSecondary,

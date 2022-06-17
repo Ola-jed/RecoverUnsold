@@ -61,4 +61,10 @@
     <string name="logout_label">Logout</string>
     <string name="logout_successfull">Logged out successfully</string>
     <string name="distributor_username_placeholder">Best Distribution</string>
+    <string name="n_a">N/A</string>
+    <string name="member_since_label">Member since</string>
+    <string name="profile_information_label">Profile information</string>
+    <string name="edit_my_profile">Edit my profile</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 </resources>

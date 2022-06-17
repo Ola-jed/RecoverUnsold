@@ -2,7 +2,7 @@ package com.ola.recoverunsold.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val md_theme_light_primary = Color(0xFF5056A9)
+val themeLightPrimary = Color(0xFF5056A9)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_secondary = Color(0xFF5C5D72)
 val md_theme_light_onSecondary = Color(0xFFFFFFFF)

@@ -58,4 +58,10 @@
     <string name="logout_label">Cierre de sesión</string>
     <string name="logout_successfull">Se ha desconectado con éxito</string>
     <string name="distributor_username_placeholder">Best Distribution</string>
+    <string name="n_a">N/A</string>
+    <string name="member_since_label">Miembro desde</string>
+    <string name="profile_information_label">Información del perfil</string>
+    <string name="edit_my_profile">Editar mi perfil</string>
+    <string name="cancel">Anular</string>
+    <string name="save">Guardar</string>
 </resources>
