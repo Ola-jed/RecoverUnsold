@@ -174,15 +174,8 @@ fun PasswordResetContent(
 
         if (isSuccessful) {
             LaunchedEffect(snackbarHostState) {
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = Strings.get(R.string.password_reset_successfull),
-                        actionLabel = Strings.get(R.string.ok),
-                        duration = SnackbarDuration.Long
-                    )
-                }
+                navController.navigate(Routes.PasswordResetSuccess.path)
             }
-            navController.navigate(Routes.Login.path)
         }
     }
 }

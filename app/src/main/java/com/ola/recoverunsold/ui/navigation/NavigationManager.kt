@@ -9,6 +9,7 @@ import com.ola.recoverunsold.ui.screens.customer.DistributorsScreen
 import com.ola.recoverunsold.ui.screens.customer.OffersScreen
 import com.ola.recoverunsold.ui.screens.customer.OrdersScreen
 import com.ola.recoverunsold.ui.screens.distributor.DistributorAccountScreen
+import com.ola.recoverunsold.ui.screens.shared.AboutScreen
 import com.ola.recoverunsold.ui.screens.shared.HomeScreen
 import com.ola.recoverunsold.ui.screens.shared.auth.*
 
@@ -69,6 +70,18 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
                 snackbarHostState = snackbarHostState
             )
         }
+        composable(Routes.UserVerificationSuccess.path) {
+            UserVerificationSuccessScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState
+            )
+        }
+        composable(Routes.PasswordResetSuccess.path) {
+            PasswordResetSuccessScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState
+            )
+        }
         composable(Routes.Distributors.path) {
             DistributorsScreen(
                 navController = navHostController,
@@ -89,6 +102,12 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
         }
         composable(Routes.DistributorAccount.path) {
             DistributorAccountScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState
+            )
+        }
+        composable(Routes.About.path) {
+            AboutScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState
             )

@@ -64,4 +64,10 @@
     <string name="edit_my_profile">Editar mi perfil</string>
     <string name="cancel">Anular</string>
     <string name="save">Guardar</string>
+    <string name="account_verified_successfully">Cuenta verificada con éxito</string>
+    <string name="account_verified_successfully_full_message">Su cuenta ha sido verificada con éxito. Ahora puede acceder a su cuenta.</string>
+    <string name="navigate_to_login">Continuar con el inicio de sesión</string>
+    <string name="password_reset_successfully">Restablecimiento de la contraseña con éxito</string>
+    <string name="password_reset_successfully_full_message">Su contraseña ha sido restablecida con éxito. Ahora puede acceder a su cuenta con su nueva contraseña.</string>
+    <string name="about">Sobre nosotros</string>
 </resources>

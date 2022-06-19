@@ -18,12 +18,13 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Logout
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.ShoppingBag
-import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.ShoppingBag
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -75,7 +76,7 @@ fun CustomerDrawer(
                         .fillMaxWidth()
                         .padding(top = 10.dp)
                 ) {
-                    Column {
+                    Column(modifier = Modifier.padding(4.dp)) {
                         Text(user.username, color = MaterialTheme.colors.onSecondary)
                         Text(user.email, color = MaterialTheme.colors.onSecondary)
                     }
@@ -90,7 +91,7 @@ fun CustomerDrawer(
             route = Routes.Home.path,
             text = R.string.home,
             leadingIcon = {
-                Icon(imageVector = Icons.Default.Home, contentDescription = null)
+                Icon(imageVector = Icons.Outlined.Home, contentDescription = null)
             },
             modifier = Modifier.padding(bottom = 10.dp, top = 10.dp)
         )
@@ -99,7 +100,7 @@ fun CustomerDrawer(
             route = Routes.Distributors.path,
             text = R.string.distributors,
             leadingIcon = {
-                Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = null)
+                Icon(imageVector = Icons.Outlined.ShoppingCart, contentDescription = null)
             },
             modifier = Modifier.padding(vertical = 5.dp)
         )
@@ -108,7 +109,7 @@ fun CustomerDrawer(
             route = Routes.Offers.path,
             text = R.string.offers,
             leadingIcon = {
-                Icon(imageVector = Icons.Default.ShoppingBag, contentDescription = null)
+                Icon(imageVector = Icons.Outlined.ShoppingBag, contentDescription = null)
             },
             modifier = Modifier.padding(vertical = 5.dp)
         )
@@ -117,7 +118,7 @@ fun CustomerDrawer(
             route = Routes.Login.path,
             text = R.string.orders,
             leadingIcon = {
-                Icon(imageVector = Icons.Default.History, contentDescription = null)
+                Icon(imageVector = Icons.Outlined.History, contentDescription = null)
             },
             modifier = Modifier.padding(vertical = 5.dp)
         )
@@ -126,29 +127,39 @@ fun CustomerDrawer(
             route = Routes.Register.path,
             text = R.string.settings,
             leadingIcon = {
-                Icon(imageVector = Icons.Default.Settings, contentDescription = null)
+                Icon(imageVector = Icons.Outlined.Settings, contentDescription = null)
+            },
+            modifier = Modifier.padding(vertical = 5.dp)
+        )
+        DrawerNavRow(
+            navController = navController,
+            route = Routes.About.path,
+            text = R.string.about,
+            leadingIcon = {
+                Icon(imageVector = Icons.Outlined.Info, contentDescription = null)
             },
             modifier = Modifier.padding(vertical = 5.dp)
         )
         Spacer(Modifier.weight(4f))
-        Row(modifier = Modifier
-            .clickable {
-                coroutineScope.launch {
-                    context.logout()
-                    navController.navigate(Routes.Home.path) {
-                        popUpTo(Routes.Home.path) {
-                            inclusive = true
+        Row(
+            modifier = Modifier
+                .clickable {
+                    coroutineScope.launch {
+                        context.logout()
+                        navController.navigate(Routes.Home.path) {
+                            popUpTo(Routes.Home.path) {
+                                inclusive = true
+                            }
                         }
+                        snackbarHostState.showSnackbar(
+                            Strings.get(R.string.logout_successfull),
+                            Strings.get(R.string.ok),
+                            duration = SnackbarDuration.Long
+                        )
                     }
-                    snackbarHostState.showSnackbar(
-                        Strings.get(R.string.logout_successfull),
-                        Strings.get(R.string.ok),
-                        duration = SnackbarDuration.Long
-                    )
                 }
-            }
-            .fillMaxWidth()
-            .padding(top = 15.dp, bottom = 15.dp, start = 5.dp)
+                .fillMaxWidth()
+                .padding(top = 15.dp, bottom = 15.dp, start = 5.dp)
         ) {
             Icon(
                 Icons.Filled.Logout,

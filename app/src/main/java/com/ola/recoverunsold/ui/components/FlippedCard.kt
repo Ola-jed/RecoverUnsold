@@ -45,7 +45,7 @@ fun FlippedCard(
 
                 drawRoundRect(
                     color = Color(
-                        ColorUtils.blendARGB(color.toArgb(), 0x000000, 0.5f)
+                        ColorUtils.blendARGB(color.toArgb(), 0xFFFFFF, 0.6f)
                     ),
                     topLeft = Offset(size.width - cutCornerSize.toPx(), -100f),
                     size = Size(cutCornerSize.toPx() + 100f, cutCornerSize.toPx() + 100f),

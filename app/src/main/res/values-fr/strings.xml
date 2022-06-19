@@ -64,4 +64,10 @@
     <string name="edit_my_profile">Modifier mon profil</string>
     <string name="cancel">Annuler</string>
     <string name="save">Sauvegarder</string>
+    <string name="account_verified_successfully">Compte vérifié avec succès</string>
+    <string name="account_verified_successfully_full_message">Votre compte a été vérifié avec succès. Vous pouvez maintenant vous connecter à votre compte.</string>
+    <string name="navigate_to_login">Aller à la connexion</string>
+    <string name="password_reset_successfully">Mot de passe réinitialisé avec succès</string>
+    <string name="password_reset_successfully_full_message">Votre mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous connecter à votre compte avec votre nouveau mot de passe.</string>
+    <string name="about">À propos</string>
 </resources>

@@ -7,10 +7,8 @@ import com.ola.recoverunsold.di.appModule
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
 import com.ola.recoverunsold.utils.store.toApiToken
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.java.KoinJavaComponent.get
@@ -28,7 +26,7 @@ class App : Application() {
             androidLogger()
             modules(appModule)
         }
-        GlobalScope.launch(Dispatchers.IO) {
+        runBlocking {
             loadTokenAndUser()
         }
     }

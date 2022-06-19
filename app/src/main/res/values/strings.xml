@@ -67,4 +67,10 @@
     <string name="edit_my_profile">Edit my profile</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="account_verified_successfully">Account verified successfully</string>
+    <string name="account_verified_successfully_full_message">Your account have been verified successfully. You can now login to your account.</string>
+    <string name="navigate_to_login">Continue to login</string>
+    <string name="password_reset_successfully">Password reset successfully</string>
+    <string name="password_reset_successfully_full_message">Your password have been reset successfully. You can now login to your account with your new password.</string>
+    <string name="about">About</string>
 </resources>

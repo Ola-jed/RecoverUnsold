@@ -32,7 +32,7 @@ fun DrawerNavRow(
     val textColor: Color
     val modifierToApply: Modifier
     if (isCurrent) {
-        bgColor = MaterialTheme.colors.primary.copy(alpha = 0.5f)
+        bgColor = MaterialTheme.colors.primary.copy(alpha = 0.7f)
         textColor = MaterialTheme.colors.onPrimary
         modifierToApply = modifier
             .background(bgColor)

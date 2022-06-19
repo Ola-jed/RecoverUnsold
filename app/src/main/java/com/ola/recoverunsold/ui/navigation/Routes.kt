@@ -9,10 +9,13 @@ sealed class Routes(val path: String) {
     object PasswordReset : Routes("password-reset")
     object StartUserVerification : Routes("user-verification")
     object ConfirmUserVerification : Routes("user-verification/confirm")
+    object UserVerificationSuccess : Routes("user-verification/success")
+    object PasswordResetSuccess : Routes("password-reset/success")
     object Home : Routes("home")
     object Distributors : Routes("distributors")
     object Offers : Routes("offers")
     object Orders : Routes("orders")
     object DistributorAccount : Routes("account/distributor")
+    object About : Routes("about")
 }
 

@@ -54,7 +54,8 @@ fun DistributorAccountScreen(navController: NavController, snackbarHostState: Sn
         Column(
             modifier = Modifier
                 .padding(it)
-                .verticalScroll(scrollState), horizontalAlignment = Alignment.CenterHorizontally
+                .verticalScroll(scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             DistributorProfileInformationSection(
                 distributor = user!! as Distributor,
@@ -87,7 +88,7 @@ fun DistributorProfileInformationSection(
         CircularProgressIndicator(color = MaterialTheme.colors.background)
     } else {
         if (isEditing) {
-            Column {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text("You are editing this data")
                 Row {
                     TextButton(onClick = onEditingEnd) {
@@ -99,7 +100,7 @@ fun DistributorProfileInformationSection(
                 }
             }
         } else {
-            Column {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 DistributorInformationComponent(distributor = distributor)
                 TextButton(onClick = onEditingStart) {
                     Text(stringResource(R.string.edit_my_profile))

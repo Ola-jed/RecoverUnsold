@@ -6,7 +6,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.AppRegistration
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Login
+import androidx.compose.material.icons.outlined.ShoppingBag
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -25,7 +30,7 @@ fun VisitorDrawer(navController: NavController): @Composable ColumnScope.() -> U
             route = Routes.Home.path,
             text = R.string.home,
             leadingIcon = {
-                Icon(imageVector = Icons.Default.Home, contentDescription = null)
+                Icon(imageVector = Icons.Outlined.Home, contentDescription = null)
             },
             modifier = Modifier.padding(vertical = 5.dp)
         )
@@ -34,7 +39,7 @@ fun VisitorDrawer(navController: NavController): @Composable ColumnScope.() -> U
             route = Routes.Distributors.path,
             text = R.string.distributors,
             leadingIcon = {
-                Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = null)
+                Icon(imageVector = Icons.Outlined.ShoppingCart, contentDescription = null)
             },
             modifier = Modifier.padding(vertical = 5.dp)
         )
@@ -43,7 +48,7 @@ fun VisitorDrawer(navController: NavController): @Composable ColumnScope.() -> U
             route = Routes.Offers.path,
             text = R.string.offers,
             leadingIcon = {
-                Icon(imageVector = Icons.Default.ShoppingBag, contentDescription = null)
+                Icon(imageVector = Icons.Outlined.ShoppingBag, contentDescription = null)
             },
             modifier = Modifier.padding(vertical = 5.dp)
         )
@@ -52,7 +57,7 @@ fun VisitorDrawer(navController: NavController): @Composable ColumnScope.() -> U
             route = Routes.Login.path,
             text = R.string.login_action,
             leadingIcon = {
-                Icon(imageVector = Icons.Default.Login, contentDescription = null)
+                Icon(imageVector = Icons.Outlined.Login, contentDescription = null)
             },
             modifier = Modifier.padding(vertical = 5.dp)
         )
@@ -61,7 +66,16 @@ fun VisitorDrawer(navController: NavController): @Composable ColumnScope.() -> U
             route = Routes.Register.path,
             text = R.string.register_action,
             leadingIcon = {
-                Icon(imageVector = Icons.Default.AppRegistration, contentDescription = null)
+                Icon(imageVector = Icons.Outlined.AppRegistration, contentDescription = null)
+            },
+            modifier = Modifier.padding(vertical = 5.dp)
+        )
+        DrawerNavRow(
+            navController = navController,
+            route = Routes.About.path,
+            text = R.string.about,
+            leadingIcon = {
+                Icon(imageVector = Icons.Outlined.Info, contentDescription = null)
             },
             modifier = Modifier.padding(vertical = 5.dp)
         )

@@ -182,6 +182,15 @@ fun LoginScreenContent(
             onValidatedValue = onPasswordValidated
         )
 
+        NavigationTextButton(
+            navController = navController,
+            route = Routes.ForgotPassword.path,
+            text = R.string.forgot_password_question,
+            outerModifier = Modifier
+                .padding(start = 10.dp)
+                .align(Alignment.Start)
+        )
+
         if (loading) {
             Button(onClick = {}) {
                 CircularProgressIndicator(color = MaterialTheme.colors.background)
@@ -199,12 +208,6 @@ fun LoginScreenContent(
             navController = navController,
             route = Routes.Register.path,
             text = R.string.not_registered
-        )
-
-        NavigationTextButton(
-            navController = navController,
-            route = Routes.ForgotPassword.path,
-            text = R.string.forgot_password_question
         )
 
         NavigationTextButton(

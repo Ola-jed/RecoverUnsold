@@ -1,13 +1,29 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
-import android.util.Log
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.*
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -34,6 +50,7 @@ import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.get
+import kotlin.ranges.contains
 
 @Composable
 fun UserVerificationScreen(
@@ -151,14 +168,7 @@ fun UserVerificationContent(
 
         if (isSuccessful) {
             LaunchedEffect(snackbarHostState) {
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = Strings.get(R.string.account_verified_success_message),
-                        actionLabel = Strings.get(R.string.ok),
-                        duration = SnackbarDuration.Long
-                    )
-                }
-                navController.navigate(Routes.Login.path)
+                navController.navigate(Routes.UserVerificationSuccess.path)
             }
         }
     }
@@ -192,9 +202,5 @@ class UserVerificationViewModel(
         StatusCode.BadRequest.code -> Strings.get(R.string.invalid_expired_code)
         in 400..600 -> Strings.get(R.string.unknown_error_occured)
         else -> null
-    }.also {
-        if (it != null) {
-            Log.e("aaaaa", it)
-        }
     }
 }
