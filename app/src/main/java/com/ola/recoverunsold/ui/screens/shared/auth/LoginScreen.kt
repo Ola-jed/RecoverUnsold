@@ -96,11 +96,10 @@ fun LoginScreen(
                                 accountService.getDistributor(token.bearerToken)
                             }
                             if (response.isSuccessful) {
-                                response.body()
-                            } else {
-                                null
-                            }.also {
-                                UserObserver.update { it }
+                                val user = response.body()
+                                if (user != null) {
+                                    UserObserver.update(user)
+                                }
                             }
                         }
                     }
