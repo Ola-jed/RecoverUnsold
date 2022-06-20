@@ -1,8 +1,10 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
@@ -29,6 +31,7 @@ import com.ola.recoverunsold.api.requests.CustomerRegisterRequest
 import com.ola.recoverunsold.api.requests.UserVerificationStartRequest
 import com.ola.recoverunsold.api.services.AuthService
 import com.ola.recoverunsold.api.services.UserVerificationService
+import com.ola.recoverunsold.ui.components.AppHero
 import com.ola.recoverunsold.ui.components.CustomTextInput
 import com.ola.recoverunsold.ui.components.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
@@ -100,111 +103,117 @@ fun CustomerRegisterContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(12.dp),
-        verticalArrangement = Arrangement.Center,
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            stringResource(R.string.login_label),
-            modifier = Modifier.padding(vertical = 10.dp)
+        AppHero(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 50.dp),
+            text = stringResource(R.string.login_label)
         )
 
-        CustomTextInput(
-            modifier = fieldsModifier,
-            value = username,
-            leadingIcon = { Icon(Icons.Filled.AccountBox, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.username_placeholder)) },
-            label = { Text(text = stringResource(R.string.username_label)) },
-            onValueChange = onUsernameChange,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Text
-            ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = IsRequiredValidator(),
-            onValidatedValue = onUsernameValidated
-        )
+        Column(
+            modifier = Modifier.padding(start = 12.dp, end = 12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CustomTextInput(
+                modifier = fieldsModifier,
+                value = username,
+                leadingIcon = { Icon(Icons.Filled.AccountBox, contentDescription = null) },
+                placeholder = { Text(text = stringResource(R.string.username_placeholder)) },
+                label = { Text(text = stringResource(R.string.username_label)) },
+                onValueChange = onUsernameChange,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Text
+                ),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                validator = IsRequiredValidator(),
+                onValidatedValue = onUsernameValidated
+            )
 
-        CustomTextInput(
-            modifier = fieldsModifier,
-            value = email,
-            leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
-            label = { Text(text = stringResource(R.string.email_label)) },
-            onValueChange = onEmailChange,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Email
-            ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = EmailValidator(),
-            onValidatedValue = onEmailValidated
-        )
+            CustomTextInput(
+                modifier = fieldsModifier,
+                value = email,
+                leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
+                placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
+                label = { Text(text = stringResource(R.string.email_label)) },
+                onValueChange = onEmailChange,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Email
+                ),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                validator = EmailValidator(),
+                onValidatedValue = onEmailValidated
+            )
 
-        CustomTextInput(
-            modifier = fieldsModifier,
-            value = password,
-            leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.password_placeholder)) },
-            label = { Text(text = stringResource(R.string.password_label)) },
-            onValueChange = onPasswordChange,
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Password
-            ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = IsRequiredValidator(),
-            onValidatedValue = onPasswordValidated
-        )
+            CustomTextInput(
+                modifier = fieldsModifier,
+                value = password,
+                leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
+                placeholder = { Text(text = stringResource(R.string.password_placeholder)) },
+                label = { Text(text = stringResource(R.string.password_label)) },
+                onValueChange = onPasswordChange,
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Password
+                ),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                validator = IsRequiredValidator(),
+                onValidatedValue = onPasswordValidated
+            )
 
-        if (loading) {
-            Button(onClick = {}) {
-                CircularProgressIndicator(color = MaterialTheme.colors.background)
-            }
-        } else {
-            Button(onClick = onSubmit, modifier = fieldsModifier) {
-                Text(
-                    stringResource(R.string.register_action),
-                    modifier = Modifier.padding(vertical = 5.dp)
-                )
-            }
-        }
-
-        NavigationTextButton(
-            navController = navController,
-            route = Routes.Login.path,
-            text = R.string.already_registered
-        )
-
-        NavigationTextButton(
-            navController = navController,
-            route = Routes.StartUserVerification.path,
-            text = R.string.verification_code_not_sent
-        )
-
-        if (errorMessage != null) {
-            LaunchedEffect(snackbarHostState) {
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = errorMessage,
-                        actionLabel = Strings.get(R.string.ok),
-                        duration = SnackbarDuration.Long
+            if (loading) {
+                Button(onClick = {}) {
+                    CircularProgressIndicator(color = MaterialTheme.colors.background)
+                }
+            } else {
+                Button(onClick = onSubmit, modifier = fieldsModifier) {
+                    Text(
+                        stringResource(R.string.register_action),
+                        modifier = Modifier.padding(vertical = 5.dp)
                     )
                 }
             }
-        }
 
-        if (isSuccessful) {
-            LaunchedEffect(snackbarHostState) {
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = Strings.get(R.string.code_sent_successfully),
-                        actionLabel = Strings.get(R.string.ok),
-                        duration = SnackbarDuration.Long
-                    )
+            NavigationTextButton(
+                navController = navController,
+                route = Routes.Login.path,
+                text = R.string.already_registered
+            )
+
+            NavigationTextButton(
+                navController = navController,
+                route = Routes.StartUserVerification.path,
+                text = R.string.verification_code_not_sent
+            )
+
+            if (errorMessage != null) {
+                LaunchedEffect(snackbarHostState) {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = errorMessage,
+                            actionLabel = Strings.get(R.string.ok),
+                            duration = SnackbarDuration.Long
+                        )
+                    }
                 }
-                navController.navigate(Routes.ConfirmUserVerification.path)
+            }
+
+            if (isSuccessful) {
+                LaunchedEffect(snackbarHostState) {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = Strings.get(R.string.code_sent_successfully),
+                            actionLabel = Strings.get(R.string.ok),
+                            duration = SnackbarDuration.Long
+                        )
+                    }
+                    navController.navigate(Routes.ConfirmUserVerification.path)
+                }
             }
         }
     }

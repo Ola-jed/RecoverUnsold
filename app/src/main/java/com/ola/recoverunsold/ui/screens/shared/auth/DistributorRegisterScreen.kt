@@ -30,6 +30,7 @@ import com.ola.recoverunsold.api.requests.DistributorRegisterRequest
 import com.ola.recoverunsold.api.requests.UserVerificationStartRequest
 import com.ola.recoverunsold.api.services.AuthService
 import com.ola.recoverunsold.api.services.UserVerificationService
+import com.ola.recoverunsold.ui.components.AppHero
 import com.ola.recoverunsold.ui.components.CustomTextInput
 import com.ola.recoverunsold.ui.components.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
@@ -127,185 +128,191 @@ fun DistributorRegisterContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(12.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            stringResource(R.string.login_label),
-            modifier = Modifier.padding(vertical = 10.dp)
+        AppHero(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 50.dp),
+            text = stringResource(R.string.login_label)
         )
 
-        CustomTextInput(
-            modifier = fieldsModifier,
-            value = username,
-            leadingIcon = { Icon(Icons.Filled.AccountBox, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.distributor_username_placeholder)) },
-            label = { Text(text = stringResource(R.string.username_label)) },
-            onValueChange = onUsernameChange,
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Text
-            ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = IsRequiredValidator(),
-            onValidatedValue = onUsernameValidated
-        )
+        Column(
+            modifier = Modifier.padding(start = 12.dp, end = 12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CustomTextInput(
+                modifier = fieldsModifier,
+                value = username,
+                leadingIcon = { Icon(Icons.Filled.AccountBox, contentDescription = null) },
+                placeholder = { Text(text = stringResource(R.string.distributor_username_placeholder)) },
+                label = { Text(text = stringResource(R.string.username_label)) },
+                onValueChange = onUsernameChange,
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Text
+                ),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                validator = IsRequiredValidator(),
+                onValidatedValue = onUsernameValidated
+            )
 
-        CustomTextInput(
-            modifier = fieldsModifier,
-            value = email,
-            leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
-            label = { Text(text = stringResource(R.string.email_label)) },
-            onValueChange = onEmailChange,
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Email
-            ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = EmailValidator(),
-            onValidatedValue = onEmailValidated
-        )
+            CustomTextInput(
+                modifier = fieldsModifier,
+                value = email,
+                leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
+                placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
+                label = { Text(text = stringResource(R.string.email_label)) },
+                onValueChange = onEmailChange,
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Email
+                ),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                validator = EmailValidator(),
+                onValidatedValue = onEmailValidated
+            )
 
-        CustomTextInput(
-            modifier = fieldsModifier,
-            value = phone,
-            leadingIcon = { Icon(Icons.Filled.Phone, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.phone_placeholder)) },
-            label = { Text(text = stringResource(R.string.phone_label)) },
-            onValueChange = onPhoneChange,
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Phone
-            ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = PhoneValidator(),
-            onValidatedValue = onPhoneValidated
-        )
+            CustomTextInput(
+                modifier = fieldsModifier,
+                value = phone,
+                leadingIcon = { Icon(Icons.Filled.Phone, contentDescription = null) },
+                placeholder = { Text(text = stringResource(R.string.phone_placeholder)) },
+                label = { Text(text = stringResource(R.string.phone_label)) },
+                onValueChange = onPhoneChange,
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Phone
+                ),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                validator = PhoneValidator(),
+                onValidatedValue = onPhoneValidated
+            )
 
-        CustomTextInput(
-            modifier = fieldsModifier,
-            value = password,
-            leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.password_placeholder)) },
-            label = { Text(text = stringResource(R.string.password_label)) },
-            onValueChange = onPasswordChange,
-            singleLine = true,
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Password
-            ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = IsRequiredValidator(),
-            onValidatedValue = onPasswordValidated
-        )
+            CustomTextInput(
+                modifier = fieldsModifier,
+                value = password,
+                leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
+                placeholder = { Text(text = stringResource(R.string.password_placeholder)) },
+                label = { Text(text = stringResource(R.string.password_label)) },
+                onValueChange = onPasswordChange,
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Password
+                ),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                validator = IsRequiredValidator(),
+                onValidatedValue = onPasswordValidated
+            )
 
-        CustomTextInput(
-            modifier = fieldsModifier,
-            value = taxId,
-            leadingIcon = { Icon(Icons.Filled.Info, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.tax_id_placeholder)) },
-            label = { Text(text = stringResource(R.string.tax_id_label)) },
-            onValueChange = onTaxIdChange,
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Number
-            ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = IsRequiredValidator(),
-            onValidatedValue = onTaxIdValidated
-        )
+            CustomTextInput(
+                modifier = fieldsModifier,
+                value = taxId,
+                leadingIcon = { Icon(Icons.Filled.Info, contentDescription = null) },
+                placeholder = { Text(text = stringResource(R.string.tax_id_placeholder)) },
+                label = { Text(text = stringResource(R.string.tax_id_label)) },
+                onValueChange = onTaxIdChange,
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Number
+                ),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                validator = IsRequiredValidator(),
+                onValidatedValue = onTaxIdValidated
+            )
 
-        CustomTextInput(
-            modifier = fieldsModifier,
-            value = rccm,
-            leadingIcon = { Icon(Icons.Filled.Info, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.rccm_placeholder)) },
-            label = { Text(text = stringResource(R.string.rccm_label)) },
-            onValueChange = onRccmChange,
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Text
-            ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = IsRequiredValidator(),
-            onValidatedValue = onRccmValidated
-        )
+            CustomTextInput(
+                modifier = fieldsModifier,
+                value = rccm,
+                leadingIcon = { Icon(Icons.Filled.Info, contentDescription = null) },
+                placeholder = { Text(text = stringResource(R.string.rccm_placeholder)) },
+                label = { Text(text = stringResource(R.string.rccm_label)) },
+                onValueChange = onRccmChange,
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Text
+                ),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                validator = IsRequiredValidator(),
+                onValidatedValue = onRccmValidated
+            )
 
-        CustomTextInput(
-            modifier = fieldsModifier,
-            value = websiteUrl,
-            leadingIcon = { Icon(Icons.Filled.Home, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.website_url_placeholder)) },
-            label = { Text(text = stringResource(R.string.website_url_label)) },
-            onValueChange = onWebsiteUrlChange,
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Uri
-            ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            onValidatedValue = onWebsiteUrlValidated
-        )
+            CustomTextInput(
+                modifier = fieldsModifier,
+                value = websiteUrl,
+                leadingIcon = { Icon(Icons.Filled.Home, contentDescription = null) },
+                placeholder = { Text(text = stringResource(R.string.website_url_placeholder)) },
+                label = { Text(text = stringResource(R.string.website_url_label)) },
+                onValueChange = onWebsiteUrlChange,
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Uri
+                ),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                onValidatedValue = onWebsiteUrlValidated
+            )
 
-        if (loading) {
-            Button(onClick = {}) {
-                CircularProgressIndicator(color = MaterialTheme.colors.background)
-            }
-        } else {
-            Button(onClick = onSubmit, modifier = fieldsModifier) {
-                Text(
-                    stringResource(R.string.register_action),
-                    modifier = Modifier.padding(vertical = 5.dp)
-                )
-            }
-        }
-
-        NavigationTextButton(
-            navController = navController,
-            route = Routes.Login.path,
-            text = R.string.already_registered,
-            textAlign = TextAlign.Center
-        )
-
-        NavigationTextButton(
-            navController = navController,
-            route = Routes.StartUserVerification.path,
-            text = R.string.verification_code_not_sent,
-            textAlign = TextAlign.Center
-        )
-
-        if (errorMessage != null) {
-            LaunchedEffect(snackbarHostState) {
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = errorMessage,
-                        actionLabel = Strings.get(R.string.ok),
-                        duration = SnackbarDuration.Long
+            if (loading) {
+                Button(onClick = {}) {
+                    CircularProgressIndicator(color = MaterialTheme.colors.background)
+                }
+            } else {
+                Button(onClick = onSubmit, modifier = fieldsModifier) {
+                    Text(
+                        stringResource(R.string.register_action),
+                        modifier = Modifier.padding(vertical = 5.dp)
                     )
                 }
             }
-        }
 
-        if (isSuccessful) {
-            LaunchedEffect(snackbarHostState) {
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = Strings.get(R.string.code_sent_successfully),
-                        actionLabel = Strings.get(R.string.ok),
-                        duration = SnackbarDuration.Long
-                    )
+            NavigationTextButton(
+                navController = navController,
+                route = Routes.Login.path,
+                text = R.string.already_registered,
+                textAlign = TextAlign.Center
+            )
+
+            NavigationTextButton(
+                navController = navController,
+                route = Routes.StartUserVerification.path,
+                text = R.string.verification_code_not_sent,
+                textAlign = TextAlign.Center
+            )
+
+            if (errorMessage != null) {
+                LaunchedEffect(snackbarHostState) {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = errorMessage,
+                            actionLabel = Strings.get(R.string.ok),
+                            duration = SnackbarDuration.Long
+                        )
+                    }
                 }
             }
-            navController.navigate(Routes.ConfirmUserVerification.path)
+
+            if (isSuccessful) {
+                LaunchedEffect(snackbarHostState) {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = Strings.get(R.string.code_sent_successfully),
+                            actionLabel = Strings.get(R.string.ok),
+                            duration = SnackbarDuration.Long
+                        )
+                    }
+                }
+                navController.navigate(Routes.ConfirmUserVerification.path)
+            }
         }
     }
 }

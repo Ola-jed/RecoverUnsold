@@ -2,15 +2,17 @@ package com.ola.recoverunsold.ui.screens.shared.auth
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
+import com.ola.recoverunsold.ui.components.AppHero
 import com.ola.recoverunsold.ui.components.FlippedCard
 import com.ola.recoverunsold.ui.navigation.Routes
 
@@ -29,11 +31,17 @@ fun RegisterScreenContent(
     navController: NavController,
 ) {
     Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(stringResource(R.string.who_are_you), fontSize = 18.sp)
+        AppHero(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 30.dp),
+            text = stringResource(R.string.who_are_you)
+        )
 
         FlippedCard(
             modifier = Modifier

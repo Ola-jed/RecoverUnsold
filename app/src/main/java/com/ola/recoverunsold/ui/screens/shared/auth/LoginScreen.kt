@@ -1,12 +1,13 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
@@ -47,6 +48,7 @@ import com.ola.recoverunsold.api.responses.Token
 import com.ola.recoverunsold.api.responses.TokenRoles
 import com.ola.recoverunsold.api.services.AccountService
 import com.ola.recoverunsold.api.services.AuthService
+import com.ola.recoverunsold.ui.components.AppHero
 import com.ola.recoverunsold.ui.components.CustomTextInput
 import com.ola.recoverunsold.ui.components.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
@@ -136,103 +138,109 @@ fun LoginScreenContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(12.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        val fieldsModifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 10.dp)
-
-        Text(
-            stringResource(R.string.login_label),
-            modifier = Modifier.padding(vertical = 10.dp)
+        AppHero(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 100.dp),
+            text = stringResource(R.string.login_label)
         )
 
-        CustomTextInput(
-            modifier = fieldsModifier,
-            value = email,
-            leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
-            label = { Text(text = stringResource(R.string.email_label)) },
-            onValueChange = onEmailChange,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Email
-            ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = EmailValidator(),
-            onValidatedValue = onEmailValidated
-        )
+        Column(
+            modifier = Modifier.padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            val fieldsModifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp)
 
-        CustomTextInput(
-            modifier = fieldsModifier,
-            value = password,
-            leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.password_placeholder)) },
-            label = { Text(text = stringResource(R.string.password_label)) },
-            onValueChange = onPasswordChange,
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Password
-            ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = IsRequiredValidator(),
-            onValidatedValue = onPasswordValidated
-        )
-
-        NavigationTextButton(
-            navController = navController,
-            route = Routes.ForgotPassword.path,
-            text = R.string.forgot_password_question,
-            outerModifier = Modifier
-                .padding(start = 10.dp)
-                .align(Alignment.Start)
-        )
-
-        if (loading) {
-            Button(onClick = {}) {
-                CircularProgressIndicator(color = MaterialTheme.colors.background)
-            }
-        } else {
-            Button(
-                onClick = onSubmit,
+            CustomTextInput(
                 modifier = fieldsModifier,
-            ) {
-                Text(stringResource(R.string.login_action), modifier = Modifier.padding(5.dp))
-            }
-        }
+                value = email,
+                leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
+                placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
+                label = { Text(text = stringResource(R.string.email_label)) },
+                onValueChange = onEmailChange,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Email
+                ),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                validator = EmailValidator(),
+                onValidatedValue = onEmailValidated
+            )
 
-        NavigationTextButton(
-            navController = navController,
-            route = Routes.Register.path,
-            text = R.string.not_registered
-        )
+            CustomTextInput(
+                modifier = fieldsModifier,
+                value = password,
+                leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
+                placeholder = { Text(text = stringResource(R.string.password_placeholder)) },
+                label = { Text(text = stringResource(R.string.password_label)) },
+                onValueChange = onPasswordChange,
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Password
+                ),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                validator = IsRequiredValidator(),
+                onValidatedValue = onPasswordValidated
+            )
 
-        NavigationTextButton(
-            navController = navController,
-            route = Routes.StartUserVerification.path,
-            text = R.string.account_not_verified_question
-        )
+            NavigationTextButton(
+                navController = navController,
+                route = Routes.ForgotPassword.path,
+                text = R.string.forgot_password_question,
+                outerModifier = Modifier
+                    .padding(start = 10.dp)
+                    .align(Alignment.Start)
+            )
 
-        if (errorMessage != null) {
-            LaunchedEffect(snackbarHostState) {
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = errorMessage,
-                        actionLabel = Strings.get(R.string.ok),
-                        duration = SnackbarDuration.Long
-                    )
+            if (loading) {
+                Button(onClick = {}) {
+                    CircularProgressIndicator(color = MaterialTheme.colors.background)
+                }
+            } else {
+                Button(
+                    onClick = onSubmit,
+                    modifier = fieldsModifier,
+                ) {
+                    Text(stringResource(R.string.login_action), modifier = Modifier.padding(5.dp))
                 }
             }
-        }
 
-        if (isSuccessful) {
-            LaunchedEffect(snackbarHostState) {
-                navController.navigate(Routes.Home.path) {
-                    popUpTo(Routes.Home.path) {
-                        inclusive = true
+            NavigationTextButton(
+                navController = navController,
+                route = Routes.Register.path,
+                text = R.string.not_registered
+            )
+
+            NavigationTextButton(
+                navController = navController,
+                route = Routes.StartUserVerification.path,
+                text = R.string.account_not_verified_question
+            )
+
+            if (errorMessage != null) {
+                LaunchedEffect(snackbarHostState) {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = errorMessage,
+                            actionLabel = Strings.get(R.string.ok),
+                            duration = SnackbarDuration.Long
+                        )
+                    }
+                }
+            }
+
+            if (isSuccessful) {
+                LaunchedEffect(snackbarHostState) {
+                    navController.navigate(Routes.Home.path) {
+                        popUpTo(Routes.Home.path) {
+                            inclusive = true
+                        }
                     }
                 }
             }
