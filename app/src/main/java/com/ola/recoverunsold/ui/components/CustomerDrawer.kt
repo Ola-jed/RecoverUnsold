@@ -81,7 +81,11 @@ fun CustomerDrawer(
                         Text(user.email, color = MaterialTheme.colors.onSecondary)
                     }
                     IconButton(onClick = {}) {
-                        Icon(Icons.Filled.Edit, contentDescription = null)
+                        Icon(
+                            Icons.Filled.Edit,
+                            tint = MaterialTheme.colors.onSecondary,
+                            contentDescription = null
+                        )
                     }
                 }
             }

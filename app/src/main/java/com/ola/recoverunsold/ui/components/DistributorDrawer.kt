@@ -82,7 +82,11 @@ fun DistributorDrawer(
                     IconButton(onClick = {
                         navController.navigate(Routes.DistributorAccount.path)
                     }) {
-                        Icon(Icons.Filled.Edit, contentDescription = null)
+                        Icon(
+                            Icons.Filled.Edit,
+                            tint = MaterialTheme.colors.onSecondary,
+                            contentDescription = null
+                        )
                     }
                 }
             }

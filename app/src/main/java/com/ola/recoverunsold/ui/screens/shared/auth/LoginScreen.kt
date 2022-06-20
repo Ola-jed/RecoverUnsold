@@ -95,12 +95,13 @@ fun LoginScreen(
                             } else {
                                 accountService.getDistributor(token.bearerToken)
                             }
-                            val user = if (response.isSuccessful) {
+                            if (response.isSuccessful) {
                                 response.body()
                             } else {
                                 null
+                            }.also {
+                                UserObserver.update { it }
                             }
-                            UserObserver.update { user }
                         }
                     }
                 }
@@ -144,7 +145,7 @@ fun LoginScreenContent(
         AppHero(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 100.dp),
+                .padding(bottom = 60.dp),
             text = stringResource(R.string.login_label)
         )
 
