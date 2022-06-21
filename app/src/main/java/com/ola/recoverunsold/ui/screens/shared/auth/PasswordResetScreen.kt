@@ -113,7 +113,6 @@ fun PasswordResetContent(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Number
             ),
-            singleLine = true,
             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             validator = IsRequiredValidator(),
             onValidatedValue = onTokenValidated
