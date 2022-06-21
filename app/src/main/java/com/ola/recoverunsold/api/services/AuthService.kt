@@ -11,11 +11,17 @@ import retrofit2.http.POST
 
 interface AuthService : BaseApiService {
     @POST(ApiConstants.loginUrl)
-    suspend fun login(@Body loginRequest: LoginRequest): Response<Token>
+    suspend fun login(
+        @Body loginRequest: LoginRequest
+    ): Response<Token>
 
     @POST(ApiConstants.distributorRegisterUrl)
-    suspend fun registerDistributor(@Body distributorRegisterRequest: DistributorRegisterRequest): Response<Void>
+    suspend fun registerDistributor(
+        @Body distributorRegisterRequest: DistributorRegisterRequest
+    ): NoContentResponse
 
     @POST(ApiConstants.customerRegisterUrl)
-    suspend fun registerCustomer(@Body customerRegisterRequest: CustomerRegisterRequest): Response<Void>
+    suspend fun registerCustomer(
+        @Body customerRegisterRequest: CustomerRegisterRequest
+    ): NoContentResponse
 }

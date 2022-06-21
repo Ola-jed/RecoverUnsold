@@ -42,8 +42,8 @@ interface LocationService : BaseApiService {
     @Multipart
     suspend fun createLocation(
         @Header("Authorization") authorization: String,
-        @Part("image") image : MultipartBody.Part? = null,
-        @Part("indication") indication : RequestBody? = null,
+        @Part("image") image: MultipartBody.Part? = null,
+        @Part("indication") indication: RequestBody? = null,
         @Part("name") name: RequestBody,
         @Part("latitude") latitude: RequestBody,
         @Part("longitude") longitude: RequestBody
@@ -54,16 +54,16 @@ interface LocationService : BaseApiService {
     suspend fun updateLocation(
         @Header("Authorization") authorization: String,
         @Path("id") id: String,
-        @Part("image") image : MultipartBody.Part? = null,
-        @Part("indication") indication : RequestBody? = null,
+        @Part("image") image: MultipartBody.Part? = null,
+        @Part("indication") indication: RequestBody? = null,
         @Part("name") name: RequestBody,
         @Part("latitude") latitude: RequestBody,
         @Part("longitude") longitude: RequestBody
-    ): Response<Void>
+    ): NoContentResponse
 
     @DELETE(ApiConstants.locationsUrl + "/{id}")
     suspend fun deleteLocation(
         @Header("Authorization") authorization: String,
         @Path("id") id: String
-    ): Response<Void>
+    ): NoContentResponse
 }

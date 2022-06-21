@@ -3,6 +3,7 @@ package com.ola.recoverunsold.api.services.wrappers
 import com.ola.recoverunsold.api.query.PaginationQuery
 import com.ola.recoverunsold.api.requests.LocationCreateOrUpdateRequest
 import com.ola.recoverunsold.api.services.LocationService
+import com.ola.recoverunsold.api.services.NoContentResponse
 import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.utils.misc.toMultipartRequestBody
@@ -52,7 +53,7 @@ class LocationServiceWrapper(private val locationService: LocationService) {
         bearerToken: String,
         id: String,
         locationCreateOrUpdateRequest: LocationCreateOrUpdateRequest
-    ): Response<Void> {
+    ): NoContentResponse {
         return locationService.updateLocation(
             bearerToken,
             id,
@@ -67,7 +68,7 @@ class LocationServiceWrapper(private val locationService: LocationService) {
     suspend fun deleteLocation(
         bearerToken: String,
         id: String
-    ): Response<Void> {
+    ): NoContentResponse {
         return locationService.deleteLocation(bearerToken, id)
     }
 }
