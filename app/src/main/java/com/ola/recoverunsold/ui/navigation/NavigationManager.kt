@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import com.ola.recoverunsold.ui.screens.customer.DistributorsScreen
 import com.ola.recoverunsold.ui.screens.customer.OffersScreen
 import com.ola.recoverunsold.ui.screens.customer.OrdersScreen
-import com.ola.recoverunsold.ui.screens.distributor.DistributorAccountScreen
+import com.ola.recoverunsold.ui.screens.distributor.account.DistributorAccountScreen
 import com.ola.recoverunsold.ui.screens.shared.AboutScreen
 import com.ola.recoverunsold.ui.screens.shared.HomeScreen
 import com.ola.recoverunsold.ui.screens.shared.auth.*
