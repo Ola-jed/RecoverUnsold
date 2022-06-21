@@ -150,7 +150,6 @@ fun DistributorRegisterContent(
                 placeholder = { Text(text = stringResource(R.string.distributor_username_placeholder)) },
                 label = { Text(text = stringResource(R.string.username_label)) },
                 onValueChange = onUsernameChange,
-                singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
                     keyboardType = KeyboardType.Text
@@ -167,7 +166,6 @@ fun DistributorRegisterContent(
                 placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
                 label = { Text(text = stringResource(R.string.email_label)) },
                 onValueChange = onEmailChange,
-                singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
                     keyboardType = KeyboardType.Email
@@ -184,7 +182,6 @@ fun DistributorRegisterContent(
                 placeholder = { Text(text = stringResource(R.string.phone_placeholder)) },
                 label = { Text(text = stringResource(R.string.phone_label)) },
                 onValueChange = onPhoneChange,
-                singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
                     keyboardType = KeyboardType.Phone
@@ -201,7 +198,6 @@ fun DistributorRegisterContent(
                 placeholder = { Text(text = stringResource(R.string.password_placeholder)) },
                 label = { Text(text = stringResource(R.string.password_label)) },
                 onValueChange = onPasswordChange,
-                singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
@@ -219,7 +215,6 @@ fun DistributorRegisterContent(
                 placeholder = { Text(text = stringResource(R.string.tax_id_placeholder)) },
                 label = { Text(text = stringResource(R.string.tax_id_label)) },
                 onValueChange = onTaxIdChange,
-                singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
                     keyboardType = KeyboardType.Number
@@ -236,7 +231,6 @@ fun DistributorRegisterContent(
                 placeholder = { Text(text = stringResource(R.string.rccm_placeholder)) },
                 label = { Text(text = stringResource(R.string.rccm_label)) },
                 onValueChange = onRccmChange,
-                singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
                     keyboardType = KeyboardType.Text
@@ -253,7 +247,6 @@ fun DistributorRegisterContent(
                 placeholder = { Text(text = stringResource(R.string.website_url_placeholder)) },
                 label = { Text(text = stringResource(R.string.website_url_label)) },
                 onValueChange = onWebsiteUrlChange,
-                singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
                     keyboardType = KeyboardType.Uri
