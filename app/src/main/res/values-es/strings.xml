@@ -70,4 +70,7 @@
     <string name="password_reset_successfully">Restablecimiento de la contraseña con éxito</string>
     <string name="password_reset_successfully_full_message">Su contraseña ha sido restablecida con éxito. Ahora puede acceder a su cuenta con su nueva contraseña.</string>
     <string name="about">Sobre nosotros</string>
+    <string name="account_updated_successfully">Cuenta actualizada con éxito</string>
+    <string name="information">Información</string>
+    <string name="locations">Ubicaciones</string>
 </resources>

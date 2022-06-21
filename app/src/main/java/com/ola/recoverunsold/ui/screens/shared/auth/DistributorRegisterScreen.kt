@@ -211,7 +211,7 @@ fun DistributorRegisterContent(
             CustomTextInput(
                 modifier = fieldsModifier,
                 value = taxId,
-                leadingIcon = { Icon(Icons.Filled.Info, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Filled.Numbers, contentDescription = null) },
                 placeholder = { Text(text = stringResource(R.string.tax_id_placeholder)) },
                 label = { Text(text = stringResource(R.string.tax_id_label)) },
                 onValueChange = onTaxIdChange,

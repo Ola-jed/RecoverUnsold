@@ -2,6 +2,7 @@ package com.ola.recoverunsold.api.services
 
 import com.ola.recoverunsold.api.core.ApiConstants
 import com.ola.recoverunsold.api.requests.CustomerUpdateRequest
+import com.ola.recoverunsold.api.requests.DistributorUpdateRequest
 import com.ola.recoverunsold.api.requests.PasswordUpdateRequest
 import com.ola.recoverunsold.models.Customer
 import com.ola.recoverunsold.models.Distributor
@@ -32,7 +33,7 @@ interface AccountService : BaseApiService {
     @PUT(ApiConstants.distributorAccountUrl)
     suspend fun updateDistributor(
         @Header("Authorization") authorization: String,
-        @Body distributorUpdateRequest: CustomerUpdateRequest
+        @Body distributorUpdateRequest: DistributorUpdateRequest
     ): NoContentResponse
 
     @PUT(ApiConstants.accountPasswordUrl)

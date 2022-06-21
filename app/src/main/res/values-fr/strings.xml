@@ -70,4 +70,7 @@
     <string name="password_reset_successfully">Mot de passe réinitialisé avec succès</string>
     <string name="password_reset_successfully_full_message">Votre mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous connecter à votre compte avec votre nouveau mot de passe.</string>
     <string name="about">À propos</string>
+    <string name="account_updated_successfully">Compte mis à jour avec succès</string>
+    <string name="information">Informations</string>
+    <string name="locations">Sites</string>
 </resources>

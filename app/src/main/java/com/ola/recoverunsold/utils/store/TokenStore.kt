@@ -31,7 +31,7 @@ class TokenStore(context: Context) {
     }
 
     companion object {
-        var token: com.ola.recoverunsold.api.responses.Token? = null
+        private var token: com.ola.recoverunsold.api.responses.Token? = null
 
         fun init(producer: () -> com.ola.recoverunsold.api.responses.Token) {
             token = producer()

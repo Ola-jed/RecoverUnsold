@@ -73,4 +73,7 @@
     <string name="password_reset_successfully">Password reset successfully</string>
     <string name="password_reset_successfully_full_message">Your password have been reset successfully. You can now login to your account with your new password.</string>
     <string name="about">About</string>
+    <string name="account_updated_successfully">Account updated successfully</string>
+    <string name="information">Information</string>
+    <string name="locations">Locations</string>
 </resources>
