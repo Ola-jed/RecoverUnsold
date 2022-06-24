@@ -5,10 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.ola.recoverunsold.ui.screens.customer.CustomerAccountScreen
 import com.ola.recoverunsold.ui.screens.customer.DistributorsScreen
 import com.ola.recoverunsold.ui.screens.customer.OffersScreen
 import com.ola.recoverunsold.ui.screens.customer.OrdersScreen
 import com.ola.recoverunsold.ui.screens.distributor.account.DistributorAccountScreen
+import com.ola.recoverunsold.ui.screens.distributor.account.DistributorLocationFormScreen
 import com.ola.recoverunsold.ui.screens.shared.AboutScreen
 import com.ola.recoverunsold.ui.screens.shared.HomeScreen
 import com.ola.recoverunsold.ui.screens.shared.auth.*
@@ -106,11 +108,21 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
                 snackbarHostState = snackbarHostState
             )
         }
+        composable(Routes.CustomerAccount.path) {
+            CustomerAccountScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState
+            )
+        }
         composable(Routes.About.path) {
             AboutScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState
             )
         }
+        // TODO
+//        composable(Routes.LocationCreate) {
+//            DistributorLocationFormScreen(navController = navCon, snackbarHostState = )
+//        }
     }
 }

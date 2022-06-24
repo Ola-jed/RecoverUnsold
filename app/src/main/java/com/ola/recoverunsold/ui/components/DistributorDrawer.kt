@@ -73,7 +73,7 @@ fun DistributorDrawer(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 10.dp)
+                        .padding(top = 10.dp, bottom = 5.dp)
                 ) {
                     Column(modifier = Modifier.padding(4.dp)) {
                         Text(user.username, color = MaterialTheme.colors.onSecondary)

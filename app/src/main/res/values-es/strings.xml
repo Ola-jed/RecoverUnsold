@@ -73,4 +73,13 @@
     <string name="account_updated_successfully">Cuenta actualizada con éxito</string>
     <string name="information">Información</string>
     <string name="locations">Ubicaciones</string>
+    <string name="delete_account">Eliminar mi cuenta</string>
+    <string name="delete_account_message">Su cuenta será eliminada permanentemente. Esta acción no es reversible. ¿ Está seguro ?</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
+    <string name="not_authenticated_full_message">No estás autentificado. Por favor, inicie sesión o regístrese primero</string>
+    <string name="previous">Anterior</string>
+    <string name="next">Siguiente</string>
+    <string name="published_the">Publicado el</string>
+    <string name="no_location_create_one">No hay ubicación, crea una nueva</string>
 </resources>

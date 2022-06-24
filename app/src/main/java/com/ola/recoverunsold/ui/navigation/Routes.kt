@@ -16,6 +16,8 @@ sealed class Routes(val path: String) {
     object Offers : Routes("offers")
     object Orders : Routes("orders")
     object DistributorAccount : Routes("account/distributor")
+    object CustomerAccount : Routes("account/customer")
+    object LocationCreate : Routes("locations/create")
     object About : Routes("about")
 }
 

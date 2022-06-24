@@ -1,4 +1,4 @@
-package com.ola.recoverunsold.ui.screens.distributor.account
+package com.ola.recoverunsold.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,7 +22,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
-import com.ola.recoverunsold.ui.components.CustomTextInput
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import com.ola.recoverunsold.utils.validation.PhoneValidator
 

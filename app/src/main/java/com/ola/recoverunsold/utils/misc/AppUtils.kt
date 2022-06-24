@@ -1,7 +1,10 @@
 package com.ola.recoverunsold.utils.misc
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.annotation.ColorInt
+import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
@@ -19,6 +22,24 @@ fun String.toHslColor(saturation: Float = 0.5f, lightness: Float = 0.4f): Int {
 suspend fun Context.logout() {
     TokenStore(this).removeToken()
     UserObserver.remove()
+}
+
+fun Context.hasNetwork(): Boolean {
+    val connectivityManager = this.getSystemService<ConnectivityManager>()
+    if (connectivityManager != null) {
+        val capabilities = connectivityManager
+            .getNetworkCapabilities(connectivityManager.activeNetwork)
+        if (capabilities != null) {
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                return true
+            }
+        }
+    }
+    return false
 }
 
 fun <T> T.toMultipartRequestBody(): RequestBody {

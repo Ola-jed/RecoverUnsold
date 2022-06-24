@@ -73,4 +73,13 @@
     <string name="account_updated_successfully">Compte mis à jour avec succès</string>
     <string name="information">Informations</string>
     <string name="locations">Sites</string>
+    <string name="delete_account">Supprimer mon compte</string>
+    <string name="delete_account_message">Votre compte sera définitivement supprimé. Cette action n\'est pas réversible. Êtes-vous sûr ?</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="not_authenticated_full_message">Vous n\'êtes pas authentifié. Veuillez vous connecter ou vous enregistrer d\'abord</string>
+    <string name="previous">Précédent</string>
+    <string name="next">Suivant</string>
+    <string name="published_the">Publié le</string>
+    <string name="no_location_create_one">Aucun site, créez-en un nouveau</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.ola.recoverunsold.utils.store
 
-import android.util.Log
 import com.ola.recoverunsold.models.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,7 +9,6 @@ object UserObserver {
     var user = userFlow.asStateFlow()
 
     fun update(user: User?) {
-        Log.e("UserObserver", "Updating user with :" + user.toString())
         userFlow.value = user
     }
 
