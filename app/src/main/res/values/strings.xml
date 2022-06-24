@@ -85,4 +85,7 @@
     <string name="next">Next</string>
     <string name="published_the">Published the</string>
     <string name="no_location_create_one">No location, create a new one</string>
+    <string name="first_name_label">First name</string>
+    <string name="last_name_label">Last name</string>
+    <string name="account_deleted_successfully">Account deleted successfully</string>
 </resources>

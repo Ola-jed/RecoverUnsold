@@ -25,7 +25,7 @@ import org.koin.java.KoinJavaComponent.get
 fun DistributorLocationFormScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
-    location : Location? = null,
+    location: Location? = null,
     distributorLocationFormViewModel: DistributorLocationFormViewModel = viewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -52,7 +52,7 @@ fun DistributorLocationFormScreen(
             Marker(
                 title = "Singapore",
                 snippet = "Marker in Singapore",
-                position = LatLng(0.0,0.0)
+                position = LatLng(0.0, 0.0)
             )
         }
 
@@ -61,7 +61,7 @@ fun DistributorLocationFormScreen(
 
 class DistributorLocationFormViewModel(
     private val locationServiceWrapper: LocationServiceWrapper = get(LocationServiceWrapper::class.java),
-    private val location : Location? = null
+    private val location: Location? = null
 ) : ViewModel() {
 
 }

@@ -1,26 +1,32 @@
 package com.ola.recoverunsold.ui.screens.customer
 
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
+import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.api.requests.CustomerUpdateRequest
-import com.ola.recoverunsold.api.requests.DistributorUpdateRequest
 import com.ola.recoverunsold.api.services.AccountService
 import com.ola.recoverunsold.models.Customer
 import com.ola.recoverunsold.ui.components.AppBar
+import com.ola.recoverunsold.ui.components.CustomerProfileInformationSection
 import com.ola.recoverunsold.ui.components.DrawerContent
+import com.ola.recoverunsold.ui.navigation.Routes
+import com.ola.recoverunsold.utils.misc.logout
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
@@ -31,11 +37,13 @@ import org.koin.java.KoinJavaComponent.get
 fun CustomerAccountScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
-    accountServiceViewModel: ViewModel = viewModel()
+    customerAccountServiceViewModel: CustomerAccountViewModel = viewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
-    val scrollState = rememberScrollState()
+    val user by UserObserver.user.collectAsState()
+    var isEditing by rememberSaveable { mutableStateOf(false) }
+    val context = LocalContext.current
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -47,7 +55,43 @@ fun CustomerAccountScreen(
         },
         drawerContent = DrawerContent(navController, snackbarHostState)
     ) {
-
+        CustomerProfileInformationSection(
+            customer = user!! as Customer,
+            username = customerAccountServiceViewModel.usernameTextField,
+            firstName = customerAccountServiceViewModel.firstNameTextField,
+            lastName = customerAccountServiceViewModel.lastNameTextField,
+            isEditing = isEditing,
+            onEditingStart = { isEditing = true },
+            onEditingEnd = {
+                customerAccountServiceViewModel.updateCustomer()
+                isEditing = false
+            },
+            onEditingCancel = { isEditing = false },
+            loading = customerAccountServiceViewModel.accountApiCallResult.status == ApiStatus.LOADING,
+            onUsernameChange = { customerAccountServiceViewModel.usernameTextField = it },
+            onUsernameValidated = { customerAccountServiceViewModel.username = it },
+            onFirstNameChange = { customerAccountServiceViewModel.firstNameTextField = it },
+            onFirstNameValidated = { customerAccountServiceViewModel.firstName = it },
+            onLastNameChange = { customerAccountServiceViewModel.lastNameTextField = it },
+            onLastNameValidated = { customerAccountServiceViewModel.lastName = it },
+            onDelete = {
+                customerAccountServiceViewModel.deleteCustomer {
+                    coroutineScope.launch {
+                        context.logout()
+                        navController.navigate(Routes.Home.path) {
+                            popUpTo(Routes.Home.path) {
+                                inclusive = true
+                            }
+                        }
+                        snackbarHostState.showSnackbar(
+                            Strings.get(R.string.account_deleted_successfully),
+                            Strings.get(R.string.ok),
+                            duration = SnackbarDuration.Long
+                        )
+                    }
+                }
+            }
+        )
     }
 }
 

@@ -82,4 +82,7 @@
     <string name="next">Siguiente</string>
     <string name="published_the">Publicado el</string>
     <string name="no_location_create_one">No hay ubicación, crea una nueva</string>
+    <string name="first_name_label">Nombre</string>
+    <string name="last_name_label">Apellido</string>
+    <string name="account_deleted_successfully">Cuenta eliminada con éxito</string>
 </resources>

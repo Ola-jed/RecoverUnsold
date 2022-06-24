@@ -163,7 +163,7 @@ fun DistributorAccountScreen(
                                     }
                                 }
                                 snackbarHostState.showSnackbar(
-                                    Strings.get(R.string.logout_successfull),
+                                    Strings.get(R.string.account_deleted_successfully),
                                     Strings.get(R.string.ok),
                                     duration = SnackbarDuration.Long
                                 )

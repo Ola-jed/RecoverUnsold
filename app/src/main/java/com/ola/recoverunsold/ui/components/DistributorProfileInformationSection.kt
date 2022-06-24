@@ -72,7 +72,7 @@ fun DistributorProfileInformationSection(
     } else {
         if (isEditing) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                DistributorUpdateComponent(
+                UserUpdateComponent<Distributor>(
                     username = username,
                     phone = phone,
                     rccm = rccm,
@@ -110,7 +110,7 @@ fun DistributorProfileInformationSection(
             }
         } else {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                DistributorInformationList(distributor = distributor)
+                UserInformationList(user = distributor)
                 Button(onClick = onEditingStart) {
                     Text(stringResource(R.string.edit_my_profile))
                 }
