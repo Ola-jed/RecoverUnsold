@@ -5,7 +5,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 object UserObserver {
-    private val userFlow: MutableStateFlow<User?> = MutableStateFlow(null)
+    private val userFlow = MutableStateFlow<User?>(null)
+
     var user = userFlow.asStateFlow()
 
     fun update(user: User?) {

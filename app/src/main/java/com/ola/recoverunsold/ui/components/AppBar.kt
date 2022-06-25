@@ -39,13 +39,14 @@ fun AppBar(
                     })
                 )
             } else {
-                Icon(
-                    Icons.Default.ArrowBack,
-                    contentDescription = null,
-                    modifier = Modifier.clickable(onClick = {
-                        navController?.navigateUp()
-                    })
-                )
+                IconButton(onClick = {
+                    navController?.navigateUp()
+                }) {
+                    Icon(
+                        Icons.Default.ArrowBack,
+                        contentDescription = null,
+                    )
+                }
             }
         }
     )

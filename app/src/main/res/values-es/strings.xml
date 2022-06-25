@@ -85,4 +85,5 @@
     <string name="first_name_label">Nombre</string>
     <string name="last_name_label">Apellido</string>
     <string name="account_deleted_successfully">Cuenta eliminada con éxito</string>
+    <string name="pick_an_image">Elige una imagen</string>
 </resources>
