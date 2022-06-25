@@ -168,6 +168,10 @@ class LocationsSectionViewModel(
         }
     }
 
+    fun deleteLocation(location: Location) {
+        // TODO
+    }
+
     fun errorMessage(): String? {
         if (locationsGetResponse.status == ApiStatus.ERROR) {
             return when (locationsGetResponse.statusCode) {

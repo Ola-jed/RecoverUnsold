@@ -32,7 +32,7 @@ import com.ola.recoverunsold.R
  * A custom image picker with a preview
  */
 @Composable
-fun ImagePicker(modifier: Modifier = Modifier) {
+fun ImagePicker(modifier: Modifier = Modifier, onImagePicked: (Uri) -> Unit) {
     val context = LocalContext.current
     val imageData: MutableState<Uri?> = remember { mutableStateOf(null) }
 
@@ -53,8 +53,11 @@ fun ImagePicker(modifier: Modifier = Modifier) {
             val bitmap: MutableState<Bitmap?> = remember { mutableStateOf(null) }
             val uri = it.value
             if (uri != null) {
+                onImagePicked(uri)
                 if (Build.VERSION.SDK_INT < 28) {
-                    bitmap.value = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+                    bitmap.value = MediaStore.Images
+                        .Media
+                        .getBitmap(context.contentResolver, uri)
                 } else {
                     val source = ImageDecoder
                         .createSource(context.contentResolver, uri)

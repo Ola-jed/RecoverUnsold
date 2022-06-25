@@ -6,6 +6,8 @@ import android.net.NetworkCapabilities
 import androidx.annotation.ColorInt
 import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
+import com.google.android.gms.maps.model.LatLng
+import com.ola.recoverunsold.models.LatLong
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -46,6 +48,9 @@ fun <T> T.toMultipartRequestBody(): RequestBody {
     return this.toString().toRequestBody("multipart/form-data".toMediaTypeOrNull())
 }
 
-fun String.remove(partToRemove: String): String {
-    return this.replace(partToRemove, "")
-}
+fun String.remove(partToRemove: String): String = this.replace(partToRemove, "")
+
+fun LatLng.toCoordinates(): LatLong = LatLong(
+    this.latitude,
+    this.longitude
+)
