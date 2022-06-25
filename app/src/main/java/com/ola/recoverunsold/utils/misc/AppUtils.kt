@@ -45,3 +45,7 @@ fun Context.hasNetwork(): Boolean {
 fun <T> T.toMultipartRequestBody(): RequestBody {
     return this.toString().toRequestBody("multipart/form-data".toMediaTypeOrNull())
 }
+
+fun String.remove(partToRemove: String): String {
+    return this.replace(partToRemove, "")
+}

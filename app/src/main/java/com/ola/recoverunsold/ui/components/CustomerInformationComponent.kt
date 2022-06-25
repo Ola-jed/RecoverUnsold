@@ -19,7 +19,6 @@ import java.util.Locale
 
 @Composable
 fun CustomerInformationComponent(customer: Customer, modifier: Modifier = Modifier) {
-    // TODO
     Column(
         modifier = modifier
             .fillMaxWidth()

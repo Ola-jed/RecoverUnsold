@@ -173,6 +173,7 @@ fun DistributorAccountScreen(
                 )
                 locationsIndex -> DistributorLocationsScreen(
                     modifier = Modifier.fillMaxSize(),
+                    navController = navController,
                     snackbarHostState = snackbarHostState
                 )
                 else -> Box(Modifier)

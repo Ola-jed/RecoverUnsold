@@ -3,8 +3,10 @@ package com.ola.recoverunsold.ui.navigation
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.ola.recoverunsold.ui.screens.customer.CustomerAccountScreen
 import com.ola.recoverunsold.ui.screens.customer.DistributorsScreen
 import com.ola.recoverunsold.ui.screens.customer.OffersScreen
@@ -120,9 +122,18 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
                 snackbarHostState = snackbarHostState
             )
         }
-        // TODO
-//        composable(Routes.LocationCreate) {
-//            DistributorLocationFormScreen(navController = navCon, snackbarHostState = )
-//        }
+        composable(
+            Routes.LocationCreate.path,
+            arguments = listOf(navArgument("serializedLocation") {
+                nullable = true
+                type = NavType.StringType
+            })
+        ) { backStackEntry ->
+            DistributorLocationFormScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState,
+                serializedLocation = backStackEntry.arguments?.getString("serializedLocation")
+            )
+        }
     }
 }

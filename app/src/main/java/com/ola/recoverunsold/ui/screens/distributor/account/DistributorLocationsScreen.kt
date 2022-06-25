@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.core.ApiStatus
@@ -42,6 +43,8 @@ import com.ola.recoverunsold.api.services.wrappers.LocationServiceWrapper
 import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.ui.components.LocationItem
+import com.ola.recoverunsold.ui.navigation.Routes
+import com.ola.recoverunsold.utils.misc.remove
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import kotlinx.coroutines.launch
@@ -50,6 +53,7 @@ import org.koin.java.KoinJavaComponent.get
 @Composable
 fun DistributorLocationsScreen(
     modifier: Modifier = Modifier,
+    navController: NavController,
     snackbarHostState: SnackbarHostState,
     locationsSectionViewModel: LocationsSectionViewModel = viewModel()
 ) {
@@ -89,7 +93,11 @@ fun DistributorLocationsScreen(
                 val locations = locationsSectionViewModel.locationsGetResponse.data!!
 
                 Scaffold(floatingActionButton = {
-                    FloatingActionButton(onClick = {/* TODO */ }) {
+                    FloatingActionButton(onClick = {
+                        navController.navigate(
+                            Routes.LocationCreate.path.remove("{location}")
+                        )
+                    }) {
                         Icon(Icons.Default.Add, contentDescription = null)
                     }
                 }) {

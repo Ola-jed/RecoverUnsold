@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -53,18 +55,18 @@ fun LocationItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (location.image != null) {
-                    val height = (LocalConfiguration.current.screenHeightDp / 5).dp
-                    val width = (LocalConfiguration.current.screenWidthDp * 0.6).dp
+                    val size = (LocalConfiguration.current.screenHeightDp * 0.1).dp
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(location.image)
                             .crossfade(true)
                             .build(),
-                        contentScale = ContentScale.Fit,
+                        contentScale = ContentScale.Crop,
                         contentDescription = null,
                         modifier = Modifier
-                            .size(height = height, width = width)
-                            .padding(end = 5.dp),
+                            .size(size)
+                            .padding(end = 5.dp)
+                            .clip(CircleShape),
                     )
                 }
                 if (location.indication != null) {
