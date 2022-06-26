@@ -123,8 +123,8 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
             )
         }
         composable(
-            Routes.LocationCreate.path,
-            arguments = listOf(navArgument("serializedLocation") {
+            Routes.LocationCreateOrUpdate.path,
+            arguments = listOf(navArgument("location") {
                 nullable = true
                 type = NavType.StringType
             })
@@ -132,7 +132,7 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
             DistributorLocationFormScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState,
-                serializedLocation = backStackEntry.arguments?.getString("serializedLocation")
+                serializedLocation = backStackEntry.arguments?.getString("location")
             )
         }
     }

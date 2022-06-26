@@ -34,6 +34,7 @@ import com.ola.recoverunsold.ui.components.AppHero
 import com.ola.recoverunsold.ui.components.CustomTextInput
 import com.ola.recoverunsold.ui.components.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
+import com.ola.recoverunsold.utils.misc.nullIfBlank
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.EmailValidator
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
@@ -350,7 +351,7 @@ class DistributorRegisterViewModel(
                     phone,
                     rccm,
                     username,
-                    websiteUrl.ifBlank { null }
+                    websiteUrl.nullIfBlank()
                 )
             )
             apiCallResult = if (response.isSuccessful) {

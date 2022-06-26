@@ -131,7 +131,7 @@ fun LoginScreenContent(
     snackbarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope,
     errorMessage: String? = null,
-    isSuccessful: Boolean,
+    isSuccessful: Boolean
 ) {
     val focusManager = LocalFocusManager.current
 

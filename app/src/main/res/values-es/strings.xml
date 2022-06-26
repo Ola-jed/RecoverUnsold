@@ -86,4 +86,8 @@
     <string name="last_name_label">Apellido</string>
     <string name="account_deleted_successfully">Cuenta eliminada con éxito</string>
     <string name="pick_an_image">Elige una imagen</string>
+    <string name="name">Nombre</string>
+    <string name="indication">Indicación</string>
+    <string name="submit">Enviar</string>
+    <string name="location_published_successfully">Ubicación publicada con éxito</string>
 </resources>

@@ -89,4 +89,8 @@
     <string name="last_name_label">Last name</string>
     <string name="account_deleted_successfully">Account deleted successfully</string>
     <string name="pick_an_image">Pick an image</string>
+    <string name="name">Name</string>
+    <string name="indication">Indication</string>
+    <string name="submit">Submit</string>
+    <string name="location_published_successfully">Location published successfully</string>
 </resources>

@@ -8,10 +8,14 @@ import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
@@ -19,9 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -40,35 +44,49 @@ fun ImagePicker(modifier: Modifier = Modifier, onImagePicked: (Uri) -> Unit) {
         contract = ActivityResultContracts.GetContent(),
     ) { imageData.value = it }
 
-    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        Button(onClick = {
-            launcher.launch(
-                "image/*"
-            )
-        }) {
-            Text(stringResource(R.string.pick_an_image))
-            Icon(Icons.Default.CameraAlt, contentDescription = null)
-        }
-        imageData.let {
-            val bitmap: MutableState<Bitmap?> = remember { mutableStateOf(null) }
-            val uri = it.value
-            if (uri != null) {
-                onImagePicked(uri)
-                if (Build.VERSION.SDK_INT < 28) {
-                    bitmap.value = MediaStore.Images
-                        .Media
-                        .getBitmap(context.contentResolver, uri)
-                } else {
-                    val source = ImageDecoder
-                        .createSource(context.contentResolver, uri)
-                    bitmap.value = ImageDecoder.decodeBitmap(source)
-                }
 
-                bitmap.value?.let { btm ->
-                    Image(
-                        bitmap = btm.asImageBitmap(),
+    Column {
+        Text(
+            stringResource(id = R.string.pick_an_image),
+            modifier = Modifier.padding(start = 10.dp)
+        )
+        Surface(
+            modifier = modifier
+                .clip(RoundedCornerShape(5.dp))
+                .clickable {
+                    launcher.launch(
+                        "image/*"
+                    )
+                },
+            color = Color.Black.copy(alpha = 0.3F)
+        ) {
+            imageData.let {
+                val bitmap: MutableState<Bitmap?> = remember { mutableStateOf(null) }
+                val uri = it.value
+                if (uri != null) {
+                    onImagePicked(uri)
+                    if (Build.VERSION.SDK_INT < 28) {
+                        bitmap.value = MediaStore.Images
+                            .Media
+                            .getBitmap(context.contentResolver, uri)
+                    } else {
+                        val source = ImageDecoder
+                            .createSource(context.contentResolver, uri)
+                        bitmap.value = ImageDecoder.decodeBitmap(source)
+                    }
+
+                    bitmap.value?.let { btm ->
+                        Image(
+                            bitmap = btm.asImageBitmap(),
+                            contentDescription = null,
+                            modifier = Modifier.clip(RoundedCornerShape(10.dp))
+                        )
+                    }
+                } else {
+                    Icon(
+                        Icons.Default.CameraAlt,
                         contentDescription = null,
-                        modifier = Modifier.clip(RoundedCornerShape(10.dp))
+                        modifier = Modifier.size(60.dp)
                     )
                 }
             }

@@ -45,6 +45,7 @@ import com.ola.recoverunsold.ui.components.DistributorProfileInformationSection
 import com.ola.recoverunsold.ui.components.DrawerContent
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.misc.logout
+import com.ola.recoverunsold.utils.misc.nullIfBlank
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
@@ -235,7 +236,7 @@ class DistributorAccountViewModel(
                     phone = phone,
                     taxId = taxId,
                     rccm = rccm,
-                    websiteUrl = websiteUrl.ifBlank { null }
+                    websiteUrl = websiteUrl.nullIfBlank()
                 )
             )
             accountApiCallResult = if (response.isSuccessful) {
@@ -244,7 +245,7 @@ class DistributorAccountViewModel(
                     phone = phone,
                     taxId = taxId,
                     rccm = rccm,
-                    websiteUrl = websiteUrl.ifBlank { null }
+                    websiteUrl = websiteUrl.nullIfBlank()
                 ))
                 ApiCallResult.Success(_data = Unit)
             } else {

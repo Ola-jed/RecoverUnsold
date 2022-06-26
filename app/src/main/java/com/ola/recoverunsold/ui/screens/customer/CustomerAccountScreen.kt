@@ -27,6 +27,7 @@ import com.ola.recoverunsold.ui.components.CustomerProfileInformationSection
 import com.ola.recoverunsold.ui.components.DrawerContent
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.misc.logout
+import com.ola.recoverunsold.utils.misc.nullIfBlank
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
@@ -117,19 +118,22 @@ class CustomerAccountViewModel(
         if (username.isBlank()) return
         accountApiCallResult = ApiCallResult.Loading()
         viewModelScope.launch {
-            val response = accountService.updateCustomer(token.bearerToken,
+            val response = accountService.updateCustomer(
+                token.bearerToken,
                 CustomerUpdateRequest(
                     username,
-                    firstName.ifBlank { null },
-                    lastName.ifBlank { null }
+                    firstName.nullIfBlank(),
+                    lastName.nullIfBlank()
                 )
             )
             accountApiCallResult = if (response.isSuccessful) {
-                UserObserver.update((UserObserver.user.value as Customer).copy(
-                    username = username,
-                    firstName = firstName.ifBlank { null },
-                    lastName = lastName.ifBlank { null }
-                ))
+                UserObserver.update(
+                    (UserObserver.user.value as Customer).copy(
+                        username = username,
+                        firstName = firstName.nullIfBlank(),
+                        lastName = lastName.nullIfBlank()
+                    )
+                )
                 ApiCallResult.Success(_data = Unit)
             } else {
                 ApiCallResult.Error(code = response.code())

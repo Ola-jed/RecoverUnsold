@@ -44,6 +44,7 @@ import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.ui.components.LocationItem
 import com.ola.recoverunsold.ui.navigation.Routes
+import com.ola.recoverunsold.utils.misc.jsonSerialize
 import com.ola.recoverunsold.utils.misc.remove
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
@@ -95,7 +96,7 @@ fun DistributorLocationsScreen(
                 Scaffold(floatingActionButton = {
                     FloatingActionButton(onClick = {
                         navController.navigate(
-                            Routes.LocationCreate.path.remove("{location}")
+                            Routes.LocationCreateOrUpdate.path.remove("{location}")
                         )
                     }) {
                         Icon(Icons.Default.Add, contentDescription = null)
@@ -116,7 +117,16 @@ fun DistributorLocationsScreen(
                                         .fillParentMaxWidth()
                                         .padding(horizontal = 20.dp, vertical = 10.dp),
                                     location = item,
-                                    isModifiable = true
+                                    isModifiable = true,
+                                    onEdit = {
+                                        navController.navigate(
+                                            Routes.LocationCreateOrUpdate.path.replace(
+                                                "{location}",
+                                                item.jsonSerialize()
+                                            )
+                                        )
+                                    },
+                                    onDelete = { locationsSectionViewModel.deleteLocation(item) }
                                 )
                             }
                             item {
