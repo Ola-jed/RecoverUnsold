@@ -10,7 +10,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -36,9 +36,13 @@ import com.ola.recoverunsold.R
  * A custom image picker with a preview
  */
 @Composable
-fun ImagePicker(modifier: Modifier = Modifier, onImagePicked: (Uri) -> Unit) {
+fun ImagePicker(
+    modifier: Modifier = Modifier,
+    imageUri: Uri? = null,
+    onImagePicked: (Uri) -> Unit
+) {
     val context = LocalContext.current
-    val imageData: MutableState<Uri?> = remember { mutableStateOf(null) }
+    val imageData: MutableState<Uri?> = rememberSaveable { mutableStateOf(imageUri) }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -61,7 +65,7 @@ fun ImagePicker(modifier: Modifier = Modifier, onImagePicked: (Uri) -> Unit) {
             color = Color.Black.copy(alpha = 0.3F)
         ) {
             imageData.let {
-                val bitmap: MutableState<Bitmap?> = remember { mutableStateOf(null) }
+                val bitmap: MutableState<Bitmap?> = rememberSaveable { mutableStateOf(null) }
                 val uri = it.value
                 if (uri != null) {
                     onImagePicked(uri)

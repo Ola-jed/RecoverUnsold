@@ -90,4 +90,7 @@
     <string name="indication">Indicación</string>
     <string name="submit">Enviar</string>
     <string name="location_published_successfully">Ubicación publicada con éxito</string>
+    <string name="choose_location_on_map">Elija la ubicación en el mapa</string>
+    <string name="location_deleted_successfully">Ubicación eliminada con éxito</string>
+    <string name="location_deletion_failed">Fallo en la eliminación de la ubicación</string>
 </resources>

@@ -126,7 +126,35 @@ fun DistributorLocationsScreen(
                                             )
                                         )
                                     },
-                                    onDelete = { locationsSectionViewModel.deleteLocation(item) }
+                                    onDelete = {
+                                        locationsSectionViewModel.deleteLocation(
+                                            location = item,
+                                            onSuccess = {
+                                                coroutineScope.launch {
+                                                    snackbarHostState.showSnackbar(
+                                                        message = Strings.get(R.string.location_deleted_successfully),
+                                                        actionLabel = Strings.get(R.string.ok),
+                                                        duration = SnackbarDuration.Long
+                                                    )
+                                                }
+                                                locationsSectionViewModel.getLocations(
+                                                    currentPaginationQuery
+                                                )
+                                            },
+                                            onFailure = {
+                                                coroutineScope.launch {
+                                                    snackbarHostState.showSnackbar(
+                                                        message = Strings.get(R.string.location_deletion_failed),
+                                                        actionLabel = Strings.get(R.string.ok),
+                                                        duration = SnackbarDuration.Long
+                                                    )
+                                                }
+                                                locationsSectionViewModel.getLocations(
+                                                    currentPaginationQuery
+                                                )
+                                            }
+                                        )
+                                    }
                                 )
                             }
                             item {
@@ -178,8 +206,15 @@ class LocationsSectionViewModel(
         }
     }
 
-    fun deleteLocation(location: Location) {
-        // TODO
+    fun deleteLocation(location: Location, onSuccess: () -> Unit, onFailure: () -> Unit) {
+        viewModelScope.launch {
+            val response = locationServiceWrapper.deleteLocation(token.bearerToken, location.id)
+            if (response.isSuccessful) {
+                onSuccess()
+            } else {
+                onFailure()
+            }
+        }
     }
 
     fun errorMessage(): String? {

@@ -93,4 +93,7 @@
     <string name="indication">Indication</string>
     <string name="submit">Submit</string>
     <string name="location_published_successfully">Location published successfully</string>
+    <string name="choose_location_on_map">Choose the location on the map</string>
+    <string name="location_deleted_successfully">Location deleted successfully</string>
+    <string name="location_deletion_failed">Location deletion failed</string>
 </resources>

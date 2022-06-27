@@ -1,39 +1,20 @@
 package com.ola.recoverunsold.ui.screens.distributor.account
 
-import android.content.ContentResolver
+import android.content.Context
 import android.net.Uri
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.TextFields
-import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -61,7 +42,8 @@ import com.ola.recoverunsold.ui.components.AppBar
 import com.ola.recoverunsold.ui.components.CustomTextInput
 import com.ola.recoverunsold.ui.components.ImagePicker
 import com.ola.recoverunsold.ui.components.LocationMap
-import com.ola.recoverunsold.utils.misc.getFilePath
+import com.ola.recoverunsold.ui.navigation.Routes
+import com.ola.recoverunsold.utils.misc.createFile
 import com.ola.recoverunsold.utils.misc.jsonDeserialize
 import com.ola.recoverunsold.utils.misc.nullIfBlank
 import com.ola.recoverunsold.utils.misc.toCoordinates
@@ -74,7 +56,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import org.koin.java.KoinJavaComponent.get
-import java.io.File
+import kotlin.ranges.contains
 
 @Composable
 fun DistributorLocationFormScreen(
@@ -88,7 +70,7 @@ fun DistributorLocationFormScreen(
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
     val location = serializedLocation.jsonDeserialize<Location>()
-    val contentResolver = LocalContext.current.contentResolver
+    val context = LocalContext.current
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -108,6 +90,7 @@ fun DistributorLocationFormScreen(
             name = distributorLocationFormViewModel.name,
             indication = distributorLocationFormViewModel.indication,
             location = location,
+            imageUri = distributorLocationFormViewModel.imageUri,
             loading = distributorLocationFormViewModel.apiCallResult.status == ApiStatus.LOADING,
             errorMessage = distributorLocationFormViewModel.errorMessage(),
             isSuccessful = distributorLocationFormViewModel.apiCallResult.status == ApiStatus.SUCCESS,
@@ -119,9 +102,9 @@ fun DistributorLocationFormScreen(
             onLatLngUpdate = { distributorLocationFormViewModel.latLong = it.toCoordinates() },
             onSubmit = {
                 if (location == null) {
-                    distributorLocationFormViewModel.create(contentResolver)
+                    distributorLocationFormViewModel.create(context)
                 } else {
-                    distributorLocationFormViewModel.update(contentResolver)
+                    distributorLocationFormViewModel.update(context)
                 }
             },
             snackbarHostState = snackbarHostState,
@@ -137,6 +120,7 @@ fun DistributorLocationFormScreenContent(
     name: String,
     indication: String,
     location: Location? = null,
+    imageUri: Uri? = null,
     loading: Boolean,
     isSuccessful: Boolean,
     errorMessage: String?,
@@ -152,7 +136,7 @@ fun DistributorLocationFormScreenContent(
     navController: NavController
 ) {
     var currentIndex by remember { mutableStateOf(0) }
-    val maxIndex = 3
+    val maxIndex = 2
 
     Column(
         modifier = modifier
@@ -191,45 +175,38 @@ fun DistributorLocationFormScreenContent(
                     placeholder = { Text(text = stringResource(R.string.indication)) },
                     label = { Text(text = stringResource(R.string.indication)) },
                     onValueChange = onIndicationChange,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done,
-                        keyboardType = KeyboardType.Text
-                    ),
+                    singleLine = false,
                     keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                    validator = IsRequiredValidator(),
                     onValidatedValue = onIndicationValidated
                 )
             }
             1 -> ImagePicker(
                 modifier = fieldsModifier
                     .height((LocalConfiguration.current.screenHeightDp * 0.25).dp),
+                imageUri = imageUri,
                 onImagePicked = onImagePicked
             )
-            2 -> LocationMap(
-                modifier = Modifier
-                    .size(
-                        height = (LocalConfiguration.current.screenHeightDp * 0.5).dp,
-                        width = (LocalConfiguration.current.screenHeightDp * 0.7).dp
-                    )
-                    .clip(RoundedCornerShape(10.dp)),
-                latLng = if (location != null) {
-                    LatLng(location.coordinates.latitude, location.coordinates.longitude)
-                } else {
-                    null
-                },
-                onLatLngUpdate = onLatLngUpdate
-            )
-            3 -> if (loading) {
-                Button(onClick = {}) {
-                    CircularProgressIndicator(color = MaterialTheme.colors.background)
-                }
-            } else {
-                Button(
-                    onClick = onSubmit,
-                    modifier = fieldsModifier,
-                ) {
-                    Text(stringResource(R.string.submit), modifier = Modifier.padding(5.dp))
-                }
+            2 -> Column(modifier = Modifier.padding(top = 15.dp)) {
+                Text(
+                    stringResource(id = R.string.choose_location_on_map),
+                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 15.dp),
+                    style = MaterialTheme.typography.h6
+                )
+
+                LocationMap(
+                    modifier = Modifier
+                        .size(
+                            height = (LocalConfiguration.current.screenHeightDp * 0.5).dp,
+                            width = (LocalConfiguration.current.screenHeightDp * 0.7).dp
+                        )
+                        .clip(RoundedCornerShape(10.dp)),
+                    latLng = if (location != null) {
+                        LatLng(location.coordinates.latitude, location.coordinates.longitude)
+                    } else {
+                        null
+                    },
+                    onLatLngUpdate = onLatLngUpdate
+                )
             }
         }
 
@@ -256,6 +233,19 @@ fun DistributorLocationFormScreenContent(
                     Icon(Icons.Default.ArrowForward, contentDescription = null)
                 }
             }
+
+            if (currentIndex == maxIndex) {
+                if (loading) {
+                    Button(onClick = {}) {
+                        CircularProgressIndicator(color = MaterialTheme.colors.background)
+                    }
+                } else {
+                    Button(onClick = onSubmit) {
+                        Text(text = stringResource(R.string.submit))
+                        Icon(Icons.Default.Send, contentDescription = null)
+                    }
+                }
+            }
         }
 
         if (errorMessage != null) {
@@ -272,7 +262,7 @@ fun DistributorLocationFormScreenContent(
 
         if (isSuccessful) {
             LaunchedEffect(snackbarHostState) {
-                navController.popBackStack()
+                navController.navigate(Routes.DistributorAccount.path)
                 coroutineScope.launch {
                     snackbarHostState.showSnackbar(
                         message = Strings.get(R.string.location_published_successfully),
@@ -309,7 +299,7 @@ class DistributorLocationFormViewModel(
     var imageUri by mutableStateOf<Uri?>(null)
     var latLong by mutableStateOf(location?.coordinates ?: LatLong.zero())
 
-    fun create(contentResolver: ContentResolver) {
+    fun create(context: Context) {
         if (name.isBlank()) return
 
         apiCallResult = ApiCallResult.Loading()
@@ -322,7 +312,7 @@ class DistributorLocationFormViewModel(
             image = if (imageUri == null) {
                 null
             } else {
-                val imageFile = File(imageUri!!.getFilePath(contentResolver)!!)
+                val imageFile = imageUri!!.createFile(context)
                 MultipartBody.Part.createFormData(
                     "image",
                     imageFile.name,
@@ -343,7 +333,7 @@ class DistributorLocationFormViewModel(
         }
     }
 
-    fun update(contentResolver: ContentResolver) {
+    fun update(context: Context) {
         if (name.isBlank()) return
 
         apiCallResult = ApiCallResult.Loading()
@@ -356,7 +346,7 @@ class DistributorLocationFormViewModel(
             image = if (imageUri == null) {
                 null
             } else {
-                val imageFile = File(imageUri!!.getFilePath(contentResolver)!!)
+                val imageFile = imageUri!!.createFile(context)
                 MultipartBody.Part.createFormData(
                     "image",
                     imageFile.name,

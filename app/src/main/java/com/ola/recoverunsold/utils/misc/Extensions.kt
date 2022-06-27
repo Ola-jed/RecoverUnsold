@@ -5,7 +5,10 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
+import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.provider.OpenableColumns
+import android.util.Log
 import androidx.annotation.ColorInt
 import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
@@ -15,6 +18,9 @@ import com.ola.recoverunsold.models.LatLong
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 import kotlin.math.absoluteValue
 
 
@@ -97,13 +103,40 @@ fun LatLng.toCoordinates(): LatLong = LatLong(
     this.longitude
 )
 
-fun Uri.getFilePath(contentResolver: ContentResolver): String? {
-    val projection = arrayOf(MediaStore.MediaColumns.DISPLAY_NAME)
-    val metaCursor = contentResolver.query(this, projection, null, null, null)
-    metaCursor?.use { cursor ->
-        if (cursor.moveToFirst()) {
-            return cursor.getString(0)
+fun Uri.createFile(context: Context): File {
+    var fileName = ""
+    val contentResolver = context.contentResolver
+    this.let { returnUri ->
+        contentResolver.query(returnUri, null, null, null)
+    }?.use { cursor ->
+        val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        cursor.moveToFirst()
+        fileName = cursor.getString(nameIndex)
+    }
+
+    val fileType: String? = this.let { returnUri ->
+        contentResolver.getType(returnUri)
+    }
+
+    val iStream: InputStream = contentResolver.openInputStream(this)!!
+    val outputDir: File = context.cacheDir!!
+    val outputFile = File(outputDir, fileName)
+    copyStreamToFile(iStream, outputFile)
+    iStream.close()
+    return outputFile
+}
+
+fun copyStreamToFile(inputStream: InputStream, outputFile: File) {
+    inputStream.use { input ->
+        val outputStream = FileOutputStream(outputFile)
+        outputStream.use { output ->
+            val buffer = ByteArray(4 * 1024)
+            while (true) {
+                val byteCount = input.read(buffer)
+                if (byteCount < 0) break
+                output.write(buffer, 0, byteCount)
+            }
+            output.flush()
         }
     }
-    return null
 }
