@@ -1,8 +1,11 @@
 package com.ola.recoverunsold.utils.misc
 
+import android.content.ContentResolver
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
+import android.provider.MediaStore
 import androidx.annotation.ColorInt
 import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
@@ -13,6 +16,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import kotlin.math.absoluteValue
+
 
 /**
  * Extensions methods for our classes
@@ -92,3 +96,14 @@ fun LatLng.toCoordinates(): LatLong = LatLong(
     this.latitude,
     this.longitude
 )
+
+fun Uri.getFilePath(contentResolver: ContentResolver): String? {
+    val projection = arrayOf(MediaStore.MediaColumns.DISPLAY_NAME)
+    val metaCursor = contentResolver.query(this, projection, null, null, null)
+    metaCursor?.use { cursor ->
+        if (cursor.moveToFirst()) {
+            return cursor.getString(0)
+        }
+    }
+    return null
+}

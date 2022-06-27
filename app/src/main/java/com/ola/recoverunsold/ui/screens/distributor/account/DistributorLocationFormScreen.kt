@@ -1,7 +1,10 @@
 package com.ola.recoverunsold.ui.screens.distributor.account
 
+import android.content.ContentResolver
 import android.net.Uri
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,18 +23,22 @@ import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.TextFields
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -54,6 +61,7 @@ import com.ola.recoverunsold.ui.components.AppBar
 import com.ola.recoverunsold.ui.components.CustomTextInput
 import com.ola.recoverunsold.ui.components.ImagePicker
 import com.ola.recoverunsold.ui.components.LocationMap
+import com.ola.recoverunsold.utils.misc.getFilePath
 import com.ola.recoverunsold.utils.misc.jsonDeserialize
 import com.ola.recoverunsold.utils.misc.nullIfBlank
 import com.ola.recoverunsold.utils.misc.toCoordinates
@@ -80,8 +88,7 @@ fun DistributorLocationFormScreen(
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
     val location = serializedLocation.jsonDeserialize<Location>()
-
-    android.util.Log.e("AAAAAAAAA", location.toString())
+    val contentResolver = LocalContext.current.contentResolver
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -112,9 +119,9 @@ fun DistributorLocationFormScreen(
             onLatLngUpdate = { distributorLocationFormViewModel.latLong = it.toCoordinates() },
             onSubmit = {
                 if (location == null) {
-                    distributorLocationFormViewModel.create()
+                    distributorLocationFormViewModel.create(contentResolver)
                 } else {
-                    distributorLocationFormViewModel.update()
+                    distributorLocationFormViewModel.update(contentResolver)
                 }
             },
             snackbarHostState = snackbarHostState,
@@ -144,11 +151,14 @@ fun DistributorLocationFormScreenContent(
     coroutineScope: CoroutineScope,
     navController: NavController
 ) {
+    var currentIndex by remember { mutableStateOf(0) }
+    val maxIndex = 3
+
     Column(
         modifier = modifier
             .verticalScroll(rememberScrollState())
             .fillMaxWidth()
-            .padding(top = 10.dp, bottom = 25.dp),
+            .padding(top = 25.dp, bottom = 25.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val focusManager = LocalFocusManager.current
@@ -156,69 +166,95 @@ fun DistributorLocationFormScreenContent(
             .fillMaxWidth()
             .padding(horizontal = 10.dp)
 
-        CustomTextInput(
-            modifier = fieldsModifier,
-            value = name,
-            leadingIcon = { Icon(Icons.Filled.TextFields, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.name)) },
-            label = { Text(text = stringResource(R.string.name)) },
-            onValueChange = onNameChange,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Ascii
-            ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = IsRequiredValidator(),
-            onValidatedValue = onNameValidated
-        )
-
-        CustomTextInput(
-            modifier = fieldsModifier,
-            value = indication,
-            leadingIcon = { Icon(Icons.Filled.TextFields, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.indication)) },
-            label = { Text(text = stringResource(R.string.indication)) },
-            onValueChange = onIndicationChange,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Text
-            ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = IsRequiredValidator(),
-            onValidatedValue = onIndicationValidated
-        )
-
-        ImagePicker(
-            modifier = fieldsModifier
-                .height((LocalConfiguration.current.screenHeightDp * 0.25).dp),
-            onImagePicked = onImagePicked
-        )
-
-        LocationMap(
-            modifier = Modifier
-                .size(
-                    height = (LocalConfiguration.current.screenHeightDp * 0.5).dp,
-                    width = (LocalConfiguration.current.screenHeightDp * 0.7).dp
+        when (currentIndex) {
+            0 -> Column(modifier = Modifier.padding(top = 25.dp)) {
+                CustomTextInput(
+                    modifier = fieldsModifier,
+                    value = name,
+                    leadingIcon = { Icon(Icons.Filled.TextFields, contentDescription = null) },
+                    placeholder = { Text(text = stringResource(R.string.name)) },
+                    label = { Text(text = stringResource(R.string.name)) },
+                    onValueChange = onNameChange,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Ascii
+                    ),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                    validator = IsRequiredValidator(),
+                    onValidatedValue = onNameValidated
                 )
-                .clip(RoundedCornerShape(10.dp)),
-            latLng = if (location != null) {
-                LatLng(location.coordinates.latitude, location.coordinates.longitude)
-            } else {
-                null
-            },
-            onLatLngUpdate = onLatLngUpdate
-        )
 
-        if (loading) {
-            Button(onClick = {}) {
-                CircularProgressIndicator(color = MaterialTheme.colors.background)
+                CustomTextInput(
+                    modifier = fieldsModifier,
+                    value = indication,
+                    leadingIcon = { Icon(Icons.Filled.TextFields, contentDescription = null) },
+                    placeholder = { Text(text = stringResource(R.string.indication)) },
+                    label = { Text(text = stringResource(R.string.indication)) },
+                    onValueChange = onIndicationChange,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Text
+                    ),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                    validator = IsRequiredValidator(),
+                    onValidatedValue = onIndicationValidated
+                )
             }
-        } else {
-            Button(
-                onClick = onSubmit,
-                modifier = fieldsModifier,
-            ) {
-                Text(stringResource(R.string.submit), modifier = Modifier.padding(5.dp))
+            1 -> ImagePicker(
+                modifier = fieldsModifier
+                    .height((LocalConfiguration.current.screenHeightDp * 0.25).dp),
+                onImagePicked = onImagePicked
+            )
+            2 -> LocationMap(
+                modifier = Modifier
+                    .size(
+                        height = (LocalConfiguration.current.screenHeightDp * 0.5).dp,
+                        width = (LocalConfiguration.current.screenHeightDp * 0.7).dp
+                    )
+                    .clip(RoundedCornerShape(10.dp)),
+                latLng = if (location != null) {
+                    LatLng(location.coordinates.latitude, location.coordinates.longitude)
+                } else {
+                    null
+                },
+                onLatLngUpdate = onLatLngUpdate
+            )
+            3 -> if (loading) {
+                Button(onClick = {}) {
+                    CircularProgressIndicator(color = MaterialTheme.colors.background)
+                }
+            } else {
+                Button(
+                    onClick = onSubmit,
+                    modifier = fieldsModifier,
+                ) {
+                    Text(stringResource(R.string.submit), modifier = Modifier.padding(5.dp))
+                }
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 10.dp, vertical = 15.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            if (currentIndex > 0) {
+                Button(onClick = {
+                    currentIndex--
+                }) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = null)
+                    Text(text = stringResource(id = R.string.previous))
+                }
+            }
+
+            if (currentIndex < maxIndex) {
+                Button(onClick = {
+                    currentIndex++
+                }) {
+                    Text(text = stringResource(id = R.string.next))
+                    Icon(Icons.Default.ArrowForward, contentDescription = null)
+                }
             }
         }
 
@@ -273,7 +309,7 @@ class DistributorLocationFormViewModel(
     var imageUri by mutableStateOf<Uri?>(null)
     var latLong by mutableStateOf(location?.coordinates ?: LatLong.zero())
 
-    fun create() {
+    fun create(contentResolver: ContentResolver) {
         if (name.isBlank()) return
 
         apiCallResult = ApiCallResult.Loading()
@@ -286,7 +322,7 @@ class DistributorLocationFormViewModel(
             image = if (imageUri == null) {
                 null
             } else {
-                val imageFile = File(imageUri!!.path!!)
+                val imageFile = File(imageUri!!.getFilePath(contentResolver)!!)
                 MultipartBody.Part.createFormData(
                     "image",
                     imageFile.name,
@@ -307,7 +343,7 @@ class DistributorLocationFormViewModel(
         }
     }
 
-    fun update() {
+    fun update(contentResolver: ContentResolver) {
         if (name.isBlank()) return
 
         apiCallResult = ApiCallResult.Loading()
@@ -320,7 +356,7 @@ class DistributorLocationFormViewModel(
             image = if (imageUri == null) {
                 null
             } else {
-                val imageFile = File(imageUri!!.path!!)
+                val imageFile = File(imageUri!!.getFilePath(contentResolver)!!)
                 MultipartBody.Part.createFormData(
                     "image",
                     imageFile.name,
