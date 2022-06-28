@@ -17,5 +17,7 @@ object ApiConstants {
     const val distributorsLocationsUrl = "Locations/Distributors"
     const val locationsSearchUrl = "Locations/Search"
     const val offersUrl = "Offers"
-    const val distributorOffersUrl = "Offers/Distributor"
+    const val distributorOffersUrl = "Offers/Distributors"
+    const val productsUrl = "Products"
+    const val distributorProductsUrl = "Products/Distributors"
 }

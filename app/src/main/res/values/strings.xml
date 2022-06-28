@@ -83,7 +83,7 @@
     <string name="not_authenticated_full_message">You are not authenticated. Please login or register first</string>
     <string name="previous">Previous</string>
     <string name="next">Next</string>
-    <string name="published_the">Published the</string>
+    <string name="published_the">Published the $1%s</string>
     <string name="no_location_create_one">No location, create a new one</string>
     <string name="first_name_label">First name</string>
     <string name="last_name_label">Last name</string>
@@ -99,4 +99,7 @@
     <string name="location_fetch_failed">Cannot get your current location. Try enabling location in your settings</string>
     <string name="delete_location_label">Delete location</string>
     <string name="delete_location_question">Do you want to delete this location ?</string>
+    <string name="offer_beneficiaries_data">%1$d beneficiaries</string>
+    <string name="total_amount">Total amount : $1%d</string>
+    <string name="duration">From $1%s to $2%s</string>
 </resources>

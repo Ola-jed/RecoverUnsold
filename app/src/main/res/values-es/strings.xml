@@ -80,7 +80,7 @@
     <string name="not_authenticated_full_message">No estás autentificado. Por favor, inicie sesión o regístrese primero</string>
     <string name="previous">Anterior</string>
     <string name="next">Siguiente</string>
-    <string name="published_the">Publicado el</string>
+    <string name="published_the">Publicado el $1%s</string>
     <string name="no_location_create_one">No hay ubicación, crea una nueva</string>
     <string name="first_name_label">Nombre</string>
     <string name="last_name_label">Apellido</string>
@@ -96,4 +96,7 @@
     <string name="location_fetch_failed">No se puede obtener tu ubicación actual. Prueba a activar la localización en tus ajustes</string>
     <string name="delete_location_label">Borrar ubicación</string>
     <string name="delete_location_question">¿ Desea eliminar esta ubicación ?</string>
+    <string name="offer_beneficiaries_data">%1$d beneficiarios</string>
+    <string name="total_amount">Cantidad total : $1%d</string>
+    <string name="duration">Del $1%s al $2%s</string>
 </resources>

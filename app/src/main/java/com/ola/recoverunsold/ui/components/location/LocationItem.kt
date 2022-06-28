@@ -80,9 +80,12 @@ fun LocationItem(
                 }
             }
             Text(
-                stringResource(R.string.published_the) + " " + DateFormat
-                    .getDateInstance(DateFormat.DEFAULT, Locale.getDefault())
-                    .format(location.createdAt),
+                stringResource(R.string.published_the)
+                    .format(
+                        DateFormat
+                            .getDateInstance(DateFormat.DEFAULT, Locale.getDefault())
+                            .format(location.createdAt)
+                    ),
                 modifier = Modifier.padding(top = 5.dp)
             )
             if (isModifiable) {

@@ -80,7 +80,7 @@
     <string name="not_authenticated_full_message">Vous n\'êtes pas authentifié. Veuillez vous connecter ou vous enregistrer d\'abord</string>
     <string name="previous">Précédent</string>
     <string name="next">Suivant</string>
-    <string name="published_the">Publié le</string>
+    <string name="published_the">Publié le $1%s</string>
     <string name="no_location_create_one">Aucun site, créez-en un nouveau</string>
     <string name="first_name_label">Prénom</string>
     <string name="last_name_label">Nom</string>
@@ -96,4 +96,7 @@
     <string name="location_fetch_failed">Impossible d\'obtenir votre position actuelle. Essayez d\'activer la localisation dans vos paramètres</string>
     <string name="delete_location_label">Supprimer le site</string>
     <string name="delete_location_question">Voulez-vous supprimer ce site ?</string>
+    <string name="offer_beneficiaries_data">%1$d bénéficiaires</string>
+    <string name="total_amount">Montant total : $1%d</string>
+    <string name="duration">Du $1%s au $2%s</string>
 </resources>
