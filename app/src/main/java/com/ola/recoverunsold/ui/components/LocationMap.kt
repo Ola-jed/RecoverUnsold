@@ -32,9 +32,6 @@ fun LocationMap(
     onLocationFetchFailed: () -> Unit
 ) {
     var latLngData by rememberSaveable { mutableStateOf(latLng ?: LatLng(0.0, 0.0)) }
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(latLngData, 10f)
-    }
     val context = LocalContext.current
     val locationPermissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -51,7 +48,7 @@ fun LocationMap(
 
     when {
         locationPermissionState.hasPermission -> {
-            getDeviceLocation(context,{
+            getDeviceLocation(context, {
                 latLngData = it.also { Log.i("Location", "Updated with  $it") }
                 onLatLngUpdate(it)
             }, { onLocationFetchFailed() })
@@ -61,7 +58,12 @@ fun LocationMap(
 
     GoogleMap(
         modifier = modifier.fillMaxWidth(),
-        cameraPositionState = cameraPositionState,
+        cameraPositionState = rememberCameraPositionState {
+            (CameraPosition.fromLatLngZoom(
+                latLngData,
+                25f
+            ))
+        },
         onMapLongClick = {
             latLngData = it
             onLatLngUpdate(it)
