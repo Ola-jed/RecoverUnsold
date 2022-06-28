@@ -18,10 +18,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.*
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -67,7 +64,10 @@ fun LocationMap(
         onMapLongClick = {
             latLngData = it
             onLatLngUpdate(it)
-        }
+        },
+        properties = MapProperties(
+            mapType = MapType.HYBRID
+        )
     ) {
         Marker(
             state = MarkerState(position = latLngData)
