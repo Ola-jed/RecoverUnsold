@@ -1,7 +1,7 @@
 package com.ola.recoverunsold.api.query
 
-data class PaginationQuery(var page: Int = 1, var perPage: Int = 10) : ApiClientQueryInterface {
-    override fun toQueryMap(): Map<String, String> {
+open class PaginationQuery(open var page: Int = 1, open var perPage: Int = 10) : ApiClientQueryInterface {
+    override fun toQueryMap(): Map<String, Any> {
         return mapOf("page" to page.toString(), "perPage" to perPage.toString())
     }
 

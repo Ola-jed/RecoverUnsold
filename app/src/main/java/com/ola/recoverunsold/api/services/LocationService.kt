@@ -20,13 +20,13 @@ interface LocationService : BaseApiService {
     @GET(ApiConstants.distributorsLocationsUrl + "/{distributorId}")
     suspend fun getDistributorLocations(
         @Path("distributorId") distributorId: String,
-        @QueryMap pagination: Map<String, String>
+        @QueryMap pagination: Map<String, Any>
     ): Response<Page<Location>>
 
     @GET(ApiConstants.locationsSearchUrl + "/{query}")
     suspend fun searchLocations(
         @Path("query") query: String,
-        @QueryMap pagination: Map<String, String>
+        @QueryMap pagination: Map<String, Any>
     ): Response<Page<Location>>
 
     @GET(ApiConstants.locationsUrl + "/{id}")
@@ -35,7 +35,7 @@ interface LocationService : BaseApiService {
     @GET(ApiConstants.locationsUrl)
     suspend fun getLocations(
         @Header("Authorization") authorization: String,
-        @QueryMap pagination: Map<String, String>
+        @QueryMap pagination: Map<String, Any>
     ): Response<Page<Location>>
 
     @POST(ApiConstants.locationsUrl)
