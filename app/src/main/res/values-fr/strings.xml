@@ -94,4 +94,6 @@
     <string name="location_deleted_successfully">Emplacement supprimé avec succès</string>
     <string name="location_deletion_failed">La suppression de l\'emplacement a échoué</string>
     <string name="location_fetch_failed">Impossible d\'obtenir votre position actuelle. Essayez d\'activer la localisation dans vos paramètres</string>
+    <string name="delete_location_label">Supprimer le site</string>
+    <string name="delete_location_question">Voulez-vous supprimer ce site ?</string>
 </resources>

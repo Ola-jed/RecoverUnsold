@@ -1,4 +1,4 @@
-package com.ola.recoverunsold.ui.components
+package com.ola.recoverunsold.ui.components.app
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material.*
@@ -39,9 +39,7 @@ fun AppBar(
                     })
                 )
             } else {
-                IconButton(onClick = {
-                    navController?.navigateUp()
-                }) {
+                IconButton(onClick = { navController?.navigateUp() }) {
                     Icon(
                         Icons.Default.ArrowBack,
                         contentDescription = null,

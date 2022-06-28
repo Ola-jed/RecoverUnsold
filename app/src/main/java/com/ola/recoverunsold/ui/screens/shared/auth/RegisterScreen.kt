@@ -12,8 +12,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
-import com.ola.recoverunsold.ui.components.AppHero
-import com.ola.recoverunsold.ui.components.FlippedCard
+import com.ola.recoverunsold.ui.components.app.AppHero
+import com.ola.recoverunsold.ui.components.app.FlippedCard
 import com.ola.recoverunsold.ui.navigation.Routes
 
 @Composable

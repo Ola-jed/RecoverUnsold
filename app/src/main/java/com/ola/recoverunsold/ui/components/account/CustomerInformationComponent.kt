@@ -1,4 +1,4 @@
-package com.ola.recoverunsold.ui.components
+package com.ola.recoverunsold.ui.components.account
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

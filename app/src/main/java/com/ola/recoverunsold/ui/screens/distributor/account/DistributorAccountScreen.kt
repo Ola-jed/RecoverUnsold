@@ -40,9 +40,9 @@ import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.api.requests.DistributorUpdateRequest
 import com.ola.recoverunsold.api.services.AccountService
 import com.ola.recoverunsold.models.Distributor
-import com.ola.recoverunsold.ui.components.AppBar
-import com.ola.recoverunsold.ui.components.DistributorProfileInformationSection
-import com.ola.recoverunsold.ui.components.DrawerContent
+import com.ola.recoverunsold.ui.components.app.AppBar
+import com.ola.recoverunsold.ui.components.account.DistributorProfileInformationSection
+import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.misc.logout
 import com.ola.recoverunsold.utils.misc.nullIfBlank

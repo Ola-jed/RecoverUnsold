@@ -42,7 +42,7 @@ import com.ola.recoverunsold.api.query.PaginationQuery
 import com.ola.recoverunsold.api.services.wrappers.LocationServiceWrapper
 import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.models.Page
-import com.ola.recoverunsold.ui.components.LocationItem
+import com.ola.recoverunsold.ui.components.location.LocationItem
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.misc.jsonSerialize
 import com.ola.recoverunsold.utils.misc.remove

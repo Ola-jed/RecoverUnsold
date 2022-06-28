@@ -1,4 +1,4 @@
-package com.ola.recoverunsold.ui.components
+package com.ola.recoverunsold.ui.components.drawer
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material.SnackbarHostState

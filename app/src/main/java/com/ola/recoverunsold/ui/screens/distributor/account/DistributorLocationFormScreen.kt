@@ -38,10 +38,10 @@ import com.ola.recoverunsold.api.requests.LocationCreateOrUpdateRequest
 import com.ola.recoverunsold.api.services.wrappers.LocationServiceWrapper
 import com.ola.recoverunsold.models.LatLong
 import com.ola.recoverunsold.models.Location
-import com.ola.recoverunsold.ui.components.AppBar
-import com.ola.recoverunsold.ui.components.CustomTextInput
-import com.ola.recoverunsold.ui.components.ImagePicker
-import com.ola.recoverunsold.ui.components.LocationMap
+import com.ola.recoverunsold.ui.components.app.AppBar
+import com.ola.recoverunsold.ui.components.app.CustomTextInput
+import com.ola.recoverunsold.ui.components.app.ImagePicker
+import com.ola.recoverunsold.ui.components.location.LocationMap
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.misc.createFile
 import com.ola.recoverunsold.utils.misc.jsonDeserialize

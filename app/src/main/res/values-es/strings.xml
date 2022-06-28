@@ -94,4 +94,6 @@
     <string name="location_deleted_successfully">Ubicación eliminada con éxito</string>
     <string name="location_deletion_failed">Fallo en la eliminación de la ubicación</string>
     <string name="location_fetch_failed">No se puede obtener tu ubicación actual. Prueba a activar la localización en tus ajustes</string>
+    <string name="delete_location_label">Borrar ubicación</string>
+    <string name="delete_location_question">¿ Desea eliminar esta ubicación ?</string>
 </resources>

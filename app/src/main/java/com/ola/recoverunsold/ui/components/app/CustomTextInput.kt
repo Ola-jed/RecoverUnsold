@@ -1,4 +1,4 @@
-package com.ola.recoverunsold.ui.components
+package com.ola.recoverunsold.ui.components.app
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -43,7 +43,8 @@ fun CustomTextInput(
     validator: Validator? = null,
     onValidatedValue: ((String) -> Unit)? = null
 ) {
-    val valueIsInvalid = value.isNotBlank() && validator?.isValid(value.trimEnd()) == false
+    val valueIsInvalid =
+        value.isNotBlank() && validator?.isValid(value.trimEnd()) == false
     Column(
         modifier = Modifier
             .padding(

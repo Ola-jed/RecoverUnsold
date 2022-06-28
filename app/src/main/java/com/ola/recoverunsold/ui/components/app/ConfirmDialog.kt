@@ -1,4 +1,4 @@
-package com.ola.recoverunsold.ui.components
+package com.ola.recoverunsold.ui.components.app
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,9 +24,7 @@ fun ConfirmDialog(
 ) {
     AlertDialog(
         modifier = Modifier.fillMaxWidth(),
-        onDismissRequest = {
-            onDismiss()
-        },
+        onDismissRequest = { onDismiss() },
         text = {
             Column(
                 modifier = Modifier

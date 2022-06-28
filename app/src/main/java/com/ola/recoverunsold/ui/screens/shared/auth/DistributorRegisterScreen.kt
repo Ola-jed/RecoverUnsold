@@ -30,9 +30,9 @@ import com.ola.recoverunsold.api.requests.DistributorRegisterRequest
 import com.ola.recoverunsold.api.requests.UserVerificationStartRequest
 import com.ola.recoverunsold.api.services.AuthService
 import com.ola.recoverunsold.api.services.UserVerificationService
-import com.ola.recoverunsold.ui.components.AppHero
-import com.ola.recoverunsold.ui.components.CustomTextInput
-import com.ola.recoverunsold.ui.components.NavigationTextButton
+import com.ola.recoverunsold.ui.components.app.AppHero
+import com.ola.recoverunsold.ui.components.app.CustomTextInput
+import com.ola.recoverunsold.ui.components.app.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.misc.nullIfBlank
 import com.ola.recoverunsold.utils.resources.Strings

@@ -42,8 +42,8 @@ import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.api.core.StatusCode
 import com.ola.recoverunsold.api.requests.UserVerificationConfirmRequest
 import com.ola.recoverunsold.api.services.UserVerificationService
-import com.ola.recoverunsold.ui.components.CustomTextInput
-import com.ola.recoverunsold.ui.components.NavigationTextButton
+import com.ola.recoverunsold.ui.components.app.CustomTextInput
+import com.ola.recoverunsold.ui.components.app.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator

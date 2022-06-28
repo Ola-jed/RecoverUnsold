@@ -97,4 +97,6 @@
     <string name="location_deleted_successfully">Location deleted successfully</string>
     <string name="location_deletion_failed">Location deletion failed</string>
     <string name="location_fetch_failed">Cannot get your current location. Try enabling location in your settings</string>
+    <string name="delete_location_label">Delete location</string>
+    <string name="delete_location_question">Do you want to delete this location ?</string>
 </resources>

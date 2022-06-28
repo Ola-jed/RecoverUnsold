@@ -1,4 +1,4 @@
-package com.ola.recoverunsold.ui.components
+package com.ola.recoverunsold.ui.components.location
 
 import android.Manifest
 import android.content.Context
@@ -93,7 +93,6 @@ private fun getDeviceLocation(
             onLocationFetchFailed()
         }
     }
-    fusedLocationProviderClient.lastLocation.addOnSuccessListener(locationChangeListener)
     fusedLocationProviderClient.getCurrentLocation(
         Priority.PRIORITY_BALANCED_POWER_ACCURACY,
         null

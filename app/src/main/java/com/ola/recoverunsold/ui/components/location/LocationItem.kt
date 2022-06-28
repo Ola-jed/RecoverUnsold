@@ -1,4 +1,4 @@
-package com.ola.recoverunsold.ui.components
+package com.ola.recoverunsold.ui.components.location
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +16,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,6 +32,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Location
+import com.ola.recoverunsold.ui.components.app.ConfirmDialog
 import java.text.DateFormat
 import java.util.Locale
 
@@ -39,6 +44,7 @@ fun LocationItem(
     onEdit: () -> Unit = {},
     onDelete: () -> Unit = {}
 ) {
+    var showDialog by rememberSaveable { mutableStateOf(false) }
     Card(modifier = modifier, elevation = 15.dp, shape = RoundedCornerShape(20.dp)) {
         Column(modifier = Modifier.padding(5.dp)) {
             Text(
@@ -87,7 +93,7 @@ fun LocationItem(
                     IconButton(onClick = onEdit) {
                         Icon(Icons.Default.Edit, contentDescription = null)
                     }
-                    IconButton(onClick = onDelete) {
+                    IconButton(onClick = { showDialog = true }) {
                         Icon(
                             Icons.Default.Delete,
                             tint = MaterialTheme.colors.error,
@@ -96,6 +102,18 @@ fun LocationItem(
                     }
                 }
             }
+        }
+        if (showDialog) {
+            ConfirmDialog(
+                title = stringResource(R.string.delete_location_label),
+                content = stringResource(R.string.delete_location_question),
+                onDismiss = { showDialog = false },
+                onConfirm = {
+                    showDialog = false
+                    onDelete()
+                },
+                isDanger = true
+            )
         }
     }
 }

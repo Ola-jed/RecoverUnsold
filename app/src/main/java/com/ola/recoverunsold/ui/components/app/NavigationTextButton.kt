@@ -1,4 +1,4 @@
-package com.ola.recoverunsold.ui.components
+package com.ola.recoverunsold.ui.components.app
 
 import androidx.annotation.StringRes
 import androidx.compose.material.Text

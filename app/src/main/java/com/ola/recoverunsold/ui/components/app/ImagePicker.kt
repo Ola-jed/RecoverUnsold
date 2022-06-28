@@ -1,4 +1,4 @@
-package com.ola.recoverunsold.ui.components
+package com.ola.recoverunsold.ui.components.app
 
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -21,7 +21,6 @@ import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,7 +41,8 @@ fun ImagePicker(
     onImagePicked: (Uri) -> Unit
 ) {
     val context = LocalContext.current
-    val imageData: MutableState<Uri?> = rememberSaveable { mutableStateOf(imageUri) }
+    val imageData: MutableState<Uri?> =
+        rememberSaveable { mutableStateOf(imageUri) }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -65,7 +65,8 @@ fun ImagePicker(
             color = Color.Black.copy(alpha = 0.3F)
         ) {
             imageData.let {
-                val bitmap: MutableState<Bitmap?> = rememberSaveable { mutableStateOf(null) }
+                val bitmap: MutableState<Bitmap?> =
+                    rememberSaveable { mutableStateOf(null) }
                 val uri = it.value
                 if (uri != null) {
                     onImagePicked(uri)

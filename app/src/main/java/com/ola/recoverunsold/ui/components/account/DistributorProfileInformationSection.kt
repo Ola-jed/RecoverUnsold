@@ -1,16 +1,7 @@
-package com.ola.recoverunsold.ui.components
+package com.ola.recoverunsold.ui.components.account
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,14 +13,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ola.recoverunsold.R
-import com.ola.recoverunsold.models.Customer
+import com.ola.recoverunsold.models.Distributor
+import com.ola.recoverunsold.ui.components.app.ConfirmDialog
 
 @Composable
-fun CustomerProfileInformationSection(
-    customer: Customer,
+fun DistributorProfileInformationSection(
+    distributor: Distributor,
     username: String,
-    firstName: String,
-    lastName: String,
+    phone: String,
+    rccm: String,
+    taxId: String,
+    websiteUrl: String,
     isEditing: Boolean,
     onEditingStart: () -> Unit,
     onEditingEnd: () -> Unit,
@@ -37,10 +31,14 @@ fun CustomerProfileInformationSection(
     loading: Boolean,
     onUsernameChange: (String) -> Unit,
     onUsernameValidated: (String) -> Unit,
-    onFirstNameChange: (String) -> Unit,
-    onFirstNameValidated: (String) -> Unit,
-    onLastNameChange: (String) -> Unit,
-    onLastNameValidated: (String) -> Unit,
+    onPhoneChange: (String) -> Unit,
+    onPhoneValidated: (String) -> Unit,
+    onRccmChange: (String) -> Unit,
+    onRccmValidated: (String) -> Unit,
+    onTaxIdChange: (String) -> Unit,
+    onTaxIdValidated: (String) -> Unit,
+    onWebsiteUrlChange: (String) -> Unit,
+    onWebsiteUrlValidated: (String) -> Unit,
     onDelete: () -> Unit
 ) {
     var showDialog by rememberSaveable { mutableStateOf(false) }
@@ -66,16 +64,22 @@ fun CustomerProfileInformationSection(
     } else {
         if (isEditing) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                UserUpdateComponent<Customer>(
+                UserUpdateComponent<Distributor>(
                     username = username,
-                    firstName = firstName,
-                    lastName = lastName,
+                    phone = phone,
+                    rccm = rccm,
+                    taxId = taxId,
+                    websiteUrl = websiteUrl,
                     onUsernameChange = onUsernameChange,
                     onUsernameValidated = onUsernameValidated,
-                    onFirstNameChange = onFirstNameChange,
-                    onFirstNameValidated = onFirstNameValidated,
-                    onLastNameChange = onLastNameChange,
-                    onLastNameValidated = onLastNameValidated
+                    onPhoneChange = onPhoneChange,
+                    onPhoneValidated = onPhoneValidated,
+                    onRccmChange = onRccmChange,
+                    onRccmValidated = onRccmValidated,
+                    onTaxIdChange = onTaxIdChange,
+                    onTaxIdValidated = onTaxIdValidated,
+                    onWebsiteUrlChange = onWebsiteUrlChange,
+                    onWebsiteUrlValidated = onWebsiteUrlValidated
                 )
 
                 Row(
@@ -86,27 +90,33 @@ fun CustomerProfileInformationSection(
                         onClick = onEditingEnd,
                         colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
                     ) {
-                        Text(stringResource(R.string.save), color = MaterialTheme.colors.onPrimary)
+                        Text(
+                            stringResource(R.string.save),
+                            color = MaterialTheme.colors.onPrimary
+                        )
                     }
                     Button(
                         onClick = onEditingCancel,
                         colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
                     ) {
-                        Text(stringResource(R.string.cancel), color = MaterialTheme.colors.onError)
+                        Text(
+                            stringResource(R.string.cancel),
+                            color = MaterialTheme.colors.onError
+                        )
                     }
                 }
             }
         } else {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                UserInformationList(user = customer)
-                Button(onClick = onEditingStart) {
+                UserInformationList(user = distributor)
+                val buttonsModifier = Modifier.fillMaxWidth(fraction = 0.75F)
+
+                Button(modifier = buttonsModifier, onClick = onEditingStart) {
                     Text(stringResource(R.string.edit_my_profile))
                 }
                 Button(
-                    onClick = {
-                        showDialog = true
-                        onDelete()
-                    },
+                    modifier = buttonsModifier,
+                    onClick = { showDialog = true },
                     colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
                 ) {
                     Text(

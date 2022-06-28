@@ -9,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.ola.recoverunsold.ui.components.AppBar
-import com.ola.recoverunsold.ui.components.DrawerContent
+import com.ola.recoverunsold.ui.components.app.AppBar
+import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 
 @Composable
 fun HomeScreen(navController: NavController, snackbarHostState: SnackbarHostState) {

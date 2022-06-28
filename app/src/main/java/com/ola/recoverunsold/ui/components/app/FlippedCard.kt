@@ -1,4 +1,4 @@
-package com.ola.recoverunsold.ui.components
+package com.ola.recoverunsold.ui.components.app
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,7 +48,10 @@ fun FlippedCard(
                         ColorUtils.blendARGB(color.toArgb(), 0xFFFFFF, 0.6f)
                     ),
                     topLeft = Offset(size.width - cutCornerSize.toPx(), -100f),
-                    size = Size(cutCornerSize.toPx() + 100f, cutCornerSize.toPx() + 100f),
+                    size = Size(
+                        cutCornerSize.toPx() + 100f,
+                        cutCornerSize.toPx() + 100f
+                    ),
                     cornerRadius = CornerRadius(cornerRadius.toPx())
                 )
             }
