@@ -90,7 +90,8 @@
     <string name="indication">Indicación</string>
     <string name="submit">Enviar</string>
     <string name="location_published_successfully">Ubicación publicada con éxito</string>
-    <string name="choose_location_on_map">Elija la ubicación en el mapa</string>
+    <string name="choose_location_on_map">Elija la ubicación en el mapa con una pulsación larga. Asegúrate de que la localización está activada en tu dispositivo</string>
     <string name="location_deleted_successfully">Ubicación eliminada con éxito</string>
     <string name="location_deletion_failed">Fallo en la eliminación de la ubicación</string>
+    <string name="location_fetch_failed">No se puede obtener tu ubicación actual. Prueba a activar la localización en tus ajustes</string>
 </resources>

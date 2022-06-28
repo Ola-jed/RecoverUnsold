@@ -97,8 +97,7 @@ fun DistributorLocationFormScreen(
             onImagePicked = { distributorLocationFormViewModel.imageUri = it },
             onNameChange = { distributorLocationFormViewModel.nameFieldText = it },
             onNameValidated = { distributorLocationFormViewModel.name = it },
-            onIndicationChange = { distributorLocationFormViewModel.indicationTextField = it },
-            onIndicationValidated = { distributorLocationFormViewModel.indication = it },
+            onIndicationChange = { distributorLocationFormViewModel.indication = it },
             onLatLngUpdate = { distributorLocationFormViewModel.latLong = it.toCoordinates() },
             onSubmit = {
                 if (location == null) {
@@ -128,7 +127,6 @@ fun DistributorLocationFormScreenContent(
     onNameChange: (String) -> Unit,
     onNameValidated: (String) -> Unit,
     onIndicationChange: (String) -> Unit,
-    onIndicationValidated: (String) -> Unit,
     onLatLngUpdate: (LatLng) -> Unit,
     onSubmit: () -> Unit,
     snackbarHostState: SnackbarHostState,
@@ -175,9 +173,12 @@ fun DistributorLocationFormScreenContent(
                     placeholder = { Text(text = stringResource(R.string.indication)) },
                     label = { Text(text = stringResource(R.string.indication)) },
                     onValueChange = onIndicationChange,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Text
+                    ),
                     singleLine = false,
                     keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                    onValidatedValue = onIndicationValidated
                 )
             }
             1 -> ImagePicker(
@@ -186,10 +187,12 @@ fun DistributorLocationFormScreenContent(
                 imageUri = imageUri,
                 onImagePicked = onImagePicked
             )
-            2 -> Column(modifier = Modifier.padding(top = 15.dp)) {
+            2 -> Column(modifier = Modifier.padding(top = 10.dp)) {
                 Text(
                     stringResource(id = R.string.choose_location_on_map),
-                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 15.dp),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(bottom = 15.dp, start = 10.dp, end = 10.dp),
                     style = MaterialTheme.typography.h6
                 )
 
@@ -205,7 +208,16 @@ fun DistributorLocationFormScreenContent(
                     } else {
                         null
                     },
-                    onLatLngUpdate = onLatLngUpdate
+                    onLatLngUpdate = onLatLngUpdate,
+                    onLocationFetchFailed = {
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = Strings.get(R.string.location_fetch_failed),
+                                actionLabel = Strings.get(R.string.ok),
+                                duration = SnackbarDuration.Long
+                            )
+                        }
+                    }
                 )
             }
         }
@@ -289,13 +301,9 @@ class DistributorLocationFormViewModel(
     private val location: Location?
 ) : ViewModel() {
     var apiCallResult: ApiCallResult<Location> by mutableStateOf(ApiCallResult.Inactive())
-
     var nameFieldText by mutableStateOf(location?.name ?: "")
     var name by mutableStateOf(location?.name ?: "")
-
-    var indicationTextField by mutableStateOf(location?.indication ?: "")
     var indication by mutableStateOf(location?.indication ?: "")
-
     var imageUri by mutableStateOf<Uri?>(null)
     var latLong by mutableStateOf(location?.coordinates ?: LatLong.zero())
 

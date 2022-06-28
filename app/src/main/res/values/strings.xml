@@ -93,7 +93,8 @@
     <string name="indication">Indication</string>
     <string name="submit">Submit</string>
     <string name="location_published_successfully">Location published successfully</string>
-    <string name="choose_location_on_map">Choose the location on the map</string>
+    <string name="choose_location_on_map">Choose a location on the map with a long press. Make sure that location is enabled on your device</string>
     <string name="location_deleted_successfully">Location deleted successfully</string>
     <string name="location_deletion_failed">Location deletion failed</string>
+    <string name="location_fetch_failed">Cannot get your current location. Try enabling location in your settings</string>
 </resources>
