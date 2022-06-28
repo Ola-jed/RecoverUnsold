@@ -90,7 +90,7 @@
     <string name="indication">Indication</string>
     <string name="submit">Soumettre</string>
     <string name="location_published_successfully">Lieu publié avec succès</string>
-    <string name="choose_location_on_map">Choisissez un emplacement sur la carte avec un appui l-ong. Assurez vous que la localisation est activée sur votre appareil</string>
+    <string name="choose_location_on_map">Choisissez un emplacement sur la carte avec un appui long. Assurez vous que la localisation est activée sur votre appareil</string>
     <string name="location_deleted_successfully">Emplacement supprimé avec succès</string>
     <string name="location_deletion_failed">La suppression de l\'emplacement a échoué</string>
     <string name="location_fetch_failed">Impossible d\'obtenir votre position actuelle. Essayez d\'activer la localisation dans vos paramètres</string>
