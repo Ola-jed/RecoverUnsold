@@ -46,20 +46,23 @@ fun LocationMap(
     when {
         locationPermissionState.hasPermission -> {
             getDeviceLocation(context, {
-                latLngData = it.also { Log.i("Location", "Updated with  $it") }
+                latLngData = it
                 onLatLngUpdate(it)
             }, { onLocationFetchFailed() })
         }
         else -> {}
     }
 
+
     GoogleMap(
         modifier = modifier.fillMaxWidth(),
-        cameraPositionState = rememberCameraPositionState {
-            (CameraPosition.fromLatLngZoom(
-                latLngData,
-                25f
-            ))
+        cameraPositionState = remember {
+            CameraPositionState(
+                position = (CameraPosition.fromLatLngZoom(
+                    latLngData,
+                    25f
+                ))
+            )
         },
         onMapLongClick = {
             latLngData = it

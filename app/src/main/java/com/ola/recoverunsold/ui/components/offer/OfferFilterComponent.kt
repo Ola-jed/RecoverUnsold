@@ -54,8 +54,6 @@ fun OfferFilterComponent(
     onReset: () -> Unit
 ) {
     var itemsAreVisible by rememberSaveable { mutableStateOf(false) }
-    val minPriceRange = (minPrice ?: 0.0).toFloat()
-    val maxPriceRange = (maxPrice ?: 25_000).toFloat()
 
     Column(modifier = modifier, horizontalAlignment = Alignment.End) {
         Button(onClick = { itemsAreVisible = !itemsAreVisible }) {

@@ -54,7 +54,6 @@ import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.get
-import java.util.Date
 
 @Composable
 fun DistributorOffersScreen(
@@ -108,13 +107,7 @@ fun DistributorOffersScreen(
                 }
             }
             else -> {
-//                val offers = distributorOffersViewModel.offersGetResponse.data!! TODO :
-
-                val offers = Page(
-                    items = listOf(
-                        Offer("48562", Date(), 4000UL, 4, 150.0, Date(), null, emptyList())
-                    ), hasNext = false, pageNumber = 1, pageSize = 1, total = 1
-                )
+                val offers = distributorOffersViewModel.offersApiResult.data!!
 
                 if (offers.items.isEmpty()) {
                     Row(
