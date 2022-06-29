@@ -2,7 +2,6 @@ package com.ola.recoverunsold.ui.components.drawer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -11,13 +10,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Home
@@ -26,7 +23,6 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -67,26 +63,11 @@ fun DistributorDrawer(
                     size = configuration.screenHeightDp.dp / 10,
                     textStyle = TextStyle(fontSize = 20.sp)
                 )
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp, bottom = 5.dp)
-                ) {
-                    Column(modifier = Modifier.padding(4.dp)) {
-                        Text(user.username, color = MaterialTheme.colors.onSecondary)
-                        Text(user.phone, color = MaterialTheme.colors.onSecondary)
-                    }
-                    IconButton(onClick = {
-                        navController.navigate(Routes.DistributorAccount.path)
-                    }) {
-                        Icon(
-                            Icons.Filled.Edit,
-                            tint = MaterialTheme.colors.onSecondary,
-                            contentDescription = null
-                        )
-                    }
+
+                Column(modifier = Modifier.padding(4.dp)) {
+                    Text(user.username, color = MaterialTheme.colors.onSecondary)
+                    Text(user.email, color = MaterialTheme.colors.onSecondary)
+                    Text(user.phone, color = MaterialTheme.colors.onSecondary)
                 }
             }
         }
@@ -119,7 +100,7 @@ fun DistributorDrawer(
         )
         DrawerNavRow(
             navController = navController,
-            route = Routes.Register.path, // TODO
+            route = Routes.DistributorAccount.path,
             text = R.string.settings,
             leadingIcon = {
                 Icon(imageVector = Icons.Outlined.Settings, contentDescription = null)
