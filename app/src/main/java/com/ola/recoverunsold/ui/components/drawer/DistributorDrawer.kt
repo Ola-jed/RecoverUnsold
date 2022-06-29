@@ -43,8 +43,6 @@ import com.ola.recoverunsold.utils.misc.logout
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
 
-// TODO : links
-
 @Composable
 fun DistributorDrawer(
     user: Distributor,
@@ -103,7 +101,7 @@ fun DistributorDrawer(
         )
         DrawerNavRow(
             navController = navController,
-            route = Routes.Offers.path,
+            route = Routes.DistributorOffers.path,
             text = R.string.offers_published,
             leadingIcon = {
                 Icon(imageVector = Icons.Outlined.ShoppingBag, contentDescription = null)
@@ -112,7 +110,7 @@ fun DistributorDrawer(
         )
         DrawerNavRow(
             navController = navController,
-            route = Routes.Login.path,
+            route = Routes.DistributorOrdersReceived.path,
             text = R.string.orders_received,
             leadingIcon = {
                 Icon(imageVector = Icons.Outlined.History, contentDescription = null)
@@ -121,7 +119,7 @@ fun DistributorDrawer(
         )
         DrawerNavRow(
             navController = navController,
-            route = Routes.Register.path,
+            route = Routes.Register.path, // TODO
             text = R.string.settings,
             leadingIcon = {
                 Icon(imageVector = Icons.Outlined.Settings, contentDescription = null)

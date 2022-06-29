@@ -36,6 +36,10 @@ import com.ola.recoverunsold.ui.components.app.ConfirmDialog
 import java.text.DateFormat
 import java.util.Locale
 
+/**
+ * The component to show information about a distributor's location
+ * Can have edit and delete buttons if they are showed to their owner
+ */
 @Composable
 fun LocationItem(
     modifier: Modifier = Modifier,
@@ -44,7 +48,8 @@ fun LocationItem(
     onEdit: () -> Unit = {},
     onDelete: () -> Unit = {}
 ) {
-    var showDialog by rememberSaveable { mutableStateOf(false) }
+    var showDeleteConfirmationDialog by rememberSaveable { mutableStateOf(false) }
+
     Card(modifier = modifier, elevation = 15.dp, shape = RoundedCornerShape(20.dp)) {
         Column(modifier = Modifier.padding(5.dp)) {
             Text(
@@ -96,7 +101,7 @@ fun LocationItem(
                     IconButton(onClick = onEdit) {
                         Icon(Icons.Default.Edit, contentDescription = null)
                     }
-                    IconButton(onClick = { showDialog = true }) {
+                    IconButton(onClick = { showDeleteConfirmationDialog = true }) {
                         Icon(
                             Icons.Default.Delete,
                             tint = MaterialTheme.colors.error,
@@ -106,13 +111,13 @@ fun LocationItem(
                 }
             }
         }
-        if (showDialog) {
+        if (showDeleteConfirmationDialog) {
             ConfirmDialog(
                 title = stringResource(R.string.delete_location_label),
                 content = stringResource(R.string.delete_location_question),
-                onDismiss = { showDialog = false },
+                onDismiss = { showDeleteConfirmationDialog = false },
                 onConfirm = {
-                    showDialog = false
+                    showDeleteConfirmationDialog = false
                     onDelete()
                 },
                 isDanger = true

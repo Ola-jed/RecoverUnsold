@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -59,15 +58,6 @@ fun DistributorLocationsScreen(
     locationsSectionViewModel: LocationsSectionViewModel = viewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val currentPaginationQuery by remember { mutableStateOf(PaginationQuery()) }
-
-    fun goToNext() {
-        locationsSectionViewModel.getLocations(currentPaginationQuery.inc())
-    }
-
-    fun goToPrevious() {
-        locationsSectionViewModel.getLocations(currentPaginationQuery.dec())
-    }
 
     Box(modifier = modifier) {
         when (locationsSectionViewModel.locationsGetResponse.status) {
@@ -103,10 +93,14 @@ fun DistributorLocationsScreen(
                     }
                 }) {
                     if (locations.items.isEmpty()) {
-                        Row(horizontalArrangement = Arrangement.Center) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
                             Text(
                                 stringResource(R.string.no_location_create_one),
-                                style = MaterialTheme.typography.h6
+                                style = MaterialTheme.typography.h6,
+                                modifier = Modifier.padding(horizontal = 10.dp)
                             )
                         }
                     } else {
@@ -137,9 +131,7 @@ fun DistributorLocationsScreen(
                                                         duration = SnackbarDuration.Long
                                                     )
                                                 }
-                                                locationsSectionViewModel.getLocations(
-                                                    currentPaginationQuery
-                                                )
+                                                locationsSectionViewModel.getLocations()
                                             },
                                             onFailure = {
                                                 coroutineScope.launch {
@@ -149,9 +141,6 @@ fun DistributorLocationsScreen(
                                                         duration = SnackbarDuration.Long
                                                     )
                                                 }
-                                                locationsSectionViewModel.getLocations(
-                                                    currentPaginationQuery
-                                                )
                                             }
                                         )
                                     }
@@ -165,12 +154,16 @@ fun DistributorLocationsScreen(
                                     horizontalArrangement = Arrangement.SpaceEvenly
                                 ) {
                                     if (locations.pageNumber > 1) {
-                                        Button(onClick = { goToPrevious() }) {
+                                        Button(onClick = {
+                                            locationsSectionViewModel.getPrevious()
+                                        }) {
                                             Text(stringResource(id = R.string.previous))
                                         }
                                     }
                                     if (locations.hasNext) {
-                                        Button(onClick = { goToNext() }) {
+                                        Button(onClick = {
+                                            locationsSectionViewModel.getNext()
+                                        }) {
                                             Text(stringResource(id = R.string.next))
                                         }
                                     }
@@ -189,12 +182,13 @@ class LocationsSectionViewModel(
 ) : ViewModel() {
     private val token = TokenStore.get()!!
     var locationsGetResponse: ApiCallResult<Page<Location>> by mutableStateOf(ApiCallResult.Inactive())
+    private var paginationQuery by mutableStateOf(PaginationQuery())
 
     init {
-        getLocations(PaginationQuery())
+        getLocations()
     }
 
-    fun getLocations(paginationQuery: PaginationQuery) {
+    fun getLocations() {
         locationsGetResponse = ApiCallResult.Loading()
         viewModelScope.launch {
             val response = locationServiceWrapper.getLocations(token.bearerToken, paginationQuery)
@@ -204,6 +198,16 @@ class LocationsSectionViewModel(
                 ApiCallResult.Error(code = response.code())
             }
         }
+    }
+
+    fun getNext() {
+        paginationQuery = paginationQuery.inc()
+        getLocations()
+    }
+
+    fun getPrevious() {
+        paginationQuery = paginationQuery.dec()
+        getLocations()
     }
 
     fun deleteLocation(location: Location, onSuccess: () -> Unit, onFailure: () -> Unit) {

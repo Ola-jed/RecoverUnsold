@@ -3,6 +3,7 @@ package com.ola.recoverunsold.models
 import java.util.Date
 
 data class Customer(
+    override val id: String,
     override val username: String,
     override val email: String,
     val firstName: String? = null,

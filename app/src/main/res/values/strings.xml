@@ -83,7 +83,7 @@
     <string name="not_authenticated_full_message">You are not authenticated. Please login or register first</string>
     <string name="previous">Previous</string>
     <string name="next">Next</string>
-    <string name="published_the">Published the $1%s</string>
+    <string name="published_the">Published the %1$s</string>
     <string name="no_location_create_one">No location, create a new one</string>
     <string name="first_name_label">First name</string>
     <string name="last_name_label">Last name</string>
@@ -99,7 +99,19 @@
     <string name="location_fetch_failed">Cannot get your current location. Try enabling location in your settings</string>
     <string name="delete_location_label">Delete location</string>
     <string name="delete_location_question">Do you want to delete this location ?</string>
-    <string name="offer_beneficiaries_data">%1$d beneficiaries</string>
-    <string name="total_amount">Total amount : $1%d</string>
-    <string name="duration">From $1%s to $2%s</string>
+    <string name="offer_beneficiaries_data">Total quantity : %1$d</string>
+    <string name="total_amount">Total amount : %1$s</string>
+    <string name="delete_offer_label">Delete offer</string>
+    <string name="delete_offer_question">Do you want to delete this offer ?</string>
+    <string name="filters">Filters</string>
+    <string name="minimum_price_label">Minimum price</string>
+    <string name="maximum_price_label">Maximum price</string>
+    <string name="price">Price</string>
+    <string name="no_offer_published">No offers published, publish one now</string>
+    <string name="start_date_time">Date and time of start : %1$s</string>
+    <string name="end_date_time">Date and time of end : %1$s</string>
+    <string name="apply_filters">Apply filters</string>
+    <string name="reset">Reset</string>
+    <string name="offer_deleted_successfully">Offer deleted successfully</string>
+    <string name="offer_deletion_failed">Offer deletion failed</string>
 </resources>

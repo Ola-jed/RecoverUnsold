@@ -27,13 +27,13 @@ interface ProductService : BaseApiService {
     @GET(ApiConstants.distributorProductsUrl + "/{id}")
     suspend fun getDistributorProducts(
         @Path("id") id: String,
-        @QueryMap pagination: Map<String, Any>
+        @QueryMap pagination: Map<String, String>
     ): Response<Page<Product>>
 
     @GET(ApiConstants.offersUrl + "/{id}/Products")
     suspend fun getOfferProducts(
         @Path("id") id: String,
-        @QueryMap pagination: Map<String, Any>
+        @QueryMap pagination: Map<String, String>
     ): Response<Page<Product>>
 
     @POST(ApiConstants.offersUrl + "/{id}/Products")

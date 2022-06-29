@@ -80,7 +80,7 @@
     <string name="not_authenticated_full_message">Vous n\'êtes pas authentifié. Veuillez vous connecter ou vous enregistrer d\'abord</string>
     <string name="previous">Précédent</string>
     <string name="next">Suivant</string>
-    <string name="published_the">Publié le $1%s</string>
+    <string name="published_the">Publié le %1$s</string>
     <string name="no_location_create_one">Aucun site, créez-en un nouveau</string>
     <string name="first_name_label">Prénom</string>
     <string name="last_name_label">Nom</string>
@@ -96,7 +96,19 @@
     <string name="location_fetch_failed">Impossible d\'obtenir votre position actuelle. Essayez d\'activer la localisation dans vos paramètres</string>
     <string name="delete_location_label">Supprimer le site</string>
     <string name="delete_location_question">Voulez-vous supprimer ce site ?</string>
-    <string name="offer_beneficiaries_data">%1$d bénéficiaires</string>
-    <string name="total_amount">Montant total : $1%d</string>
-    <string name="duration">Du $1%s au $2%s</string>
+    <string name="offer_beneficiaries_data">Quantité totale : %1$d</string>
+    <string name="total_amount">Montant total : %1$s</string>
+    <string name="delete_offer_label">Suppression de cette offre</string>
+    <string name="delete_offer_question">Voulez-vous supprimer cette offre ?</string>
+    <string name="filters">Filtres</string>
+    <string name="minimum_price_label">Prix minimum</string>
+    <string name="maximum_price_label">Prix maximum</string>
+    <string name="price">Prix</string>
+    <string name="no_offer_published">Aucune offre publiée, publiez-en une dès maintenant</string>
+    <string name="start_date_time">Date et heure de début : %1$s</string>
+    <string name="end_date_time">Date et heure de fin : %1$s</string>
+    <string name="apply_filters">Appliquer les filtres</string>
+    <string name="reset">Réinitialiser</string>
+    <string name="offer_deleted_successfully">Offre supprimée avec succès</string>
+    <string name="offer_deletion_failed">La suppression de l\'offre a échoué</string>
 </resources>

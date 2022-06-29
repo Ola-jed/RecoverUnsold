@@ -13,8 +13,12 @@ import com.ola.recoverunsold.ui.screens.customer.OffersScreen
 import com.ola.recoverunsold.ui.screens.customer.OrdersScreen
 import com.ola.recoverunsold.ui.screens.distributor.account.DistributorAccountScreen
 import com.ola.recoverunsold.ui.screens.distributor.account.DistributorLocationFormScreen
+import com.ola.recoverunsold.ui.screens.distributor.offers.DistributorOfferFormScreen
+import com.ola.recoverunsold.ui.screens.distributor.offers.DistributorOffersScreen
+import com.ola.recoverunsold.ui.screens.distributor.orders.DistributorOrdersReceivedScreen
 import com.ola.recoverunsold.ui.screens.shared.AboutScreen
 import com.ola.recoverunsold.ui.screens.shared.HomeScreen
+import com.ola.recoverunsold.ui.screens.shared.OfferDetailsScreen
 import com.ola.recoverunsold.ui.screens.shared.auth.*
 
 @Composable
@@ -98,6 +102,12 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
                 snackbarHostState = snackbarHostState
             )
         }
+        composable(Routes.DistributorOffers.path) {
+            DistributorOffersScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState
+            )
+        }
         composable(Routes.Orders.path) {
             OrdersScreen(
                 navController = navHostController,
@@ -106,6 +116,12 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
         }
         composable(Routes.DistributorAccount.path) {
             DistributorAccountScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState
+            )
+        }
+        composable(Routes.DistributorOrdersReceived.path) {
+            DistributorOrdersReceivedScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState
             )
@@ -133,6 +149,32 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
                 navController = navHostController,
                 snackbarHostState = snackbarHostState,
                 serializedLocation = backStackEntry.arguments?.getString("location")
+            )
+        }
+        composable(
+            Routes.OfferCreateOrUpdate.path,
+            arguments = listOf(navArgument("offer") {
+                nullable = true
+                type = NavType.StringType
+            })
+        ) { backStackEntry ->
+            DistributorOfferFormScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState,
+                serializedOffer = backStackEntry.arguments?.getString("offer")
+            )
+        }
+        composable(
+            Routes.OfferDetails.path,
+            arguments = listOf(navArgument("offerId") {
+                nullable = false
+                type = NavType.StringType
+            })
+        ) { backStackEntry ->
+            OfferDetailsScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState,
+                offerId = backStackEntry.arguments?.getString("offerId")!!
             )
         }
     }

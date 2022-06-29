@@ -257,7 +257,7 @@ fun DistributorRegisterContent(
             )
 
             if (loading) {
-                Button(onClick = {}) {
+                Button(onClick = {}, modifier = fieldsModifier) {
                     CircularProgressIndicator(color = MaterialTheme.colors.background)
                 }
             } else {

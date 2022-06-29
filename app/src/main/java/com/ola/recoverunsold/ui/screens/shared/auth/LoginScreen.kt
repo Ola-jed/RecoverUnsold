@@ -199,7 +199,7 @@ fun LoginScreenContent(
             )
 
             if (loading) {
-                Button(onClick = {}) {
+                Button(modifier = fieldsModifier, onClick = {}) {
                     CircularProgressIndicator(color = MaterialTheme.colors.background)
                 }
             } else {
