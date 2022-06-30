@@ -21,6 +21,9 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+import java.text.DateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.math.absoluteValue
 
 
@@ -103,6 +106,10 @@ fun LatLng.toCoordinates(): LatLong = LatLong(
     this.longitude
 )
 
+/**
+ * Create a file from an Uri
+ * A tricky process
+ */
 fun Uri.createFile(context: Context): File {
     var fileName = ""
     val contentResolver = context.contentResolver
@@ -139,4 +146,11 @@ fun copyStreamToFile(inputStream: InputStream, outputFile: File) {
             output.flush()
         }
     }
+}
+
+/**
+ * Format a date using the locale default format
+ */
+fun Date.formatDate(): String {
+    return DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault()).format(this)
 }

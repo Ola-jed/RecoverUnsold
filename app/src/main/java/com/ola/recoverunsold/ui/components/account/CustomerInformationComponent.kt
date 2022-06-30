@@ -14,8 +14,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Customer
-import java.text.DateFormat
-import java.util.Locale
+import com.ola.recoverunsold.utils.misc.formatDate
 
 @Composable
 fun CustomerInformationComponent(customer: Customer, modifier: Modifier = Modifier) {
@@ -65,10 +64,7 @@ fun CustomerInformationComponent(customer: Customer, modifier: Modifier = Modifi
                 stringResource(id = R.string.member_since_label),
                 textDecoration = TextDecoration.Underline
             )
-            Text(
-                DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault())
-                    .format(customer.createdAt)
-            )
+            Text(customer.createdAt.formatDate())
         }
     }
 }

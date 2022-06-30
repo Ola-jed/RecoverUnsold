@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.ui.components.app.ConfirmDialog
+import com.ola.recoverunsold.utils.misc.formatDate
 import java.text.DateFormat
 import java.util.Date
 import java.util.Locale
@@ -81,8 +82,7 @@ fun OfferItem(
             Text(
                 text = stringResource(
                     R.string.published_the,
-                    DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault())
-                        .format(offer.createdAt)
+                    offer.createdAt.formatDate()
                 ),
                 modifier = Modifier.padding(top = 5.dp)
             )

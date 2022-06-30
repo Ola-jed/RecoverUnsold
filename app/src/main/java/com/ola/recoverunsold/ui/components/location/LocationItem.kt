@@ -33,8 +33,7 @@ import coil.request.ImageRequest
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.ui.components.app.ConfirmDialog
-import java.text.DateFormat
-import java.util.Locale
+import com.ola.recoverunsold.utils.misc.formatDate
 
 /**
  * The component to show information about a distributor's location
@@ -85,12 +84,7 @@ fun LocationItem(
                 }
             }
             Text(
-                stringResource(R.string.published_the)
-                    .format(
-                        DateFormat
-                            .getDateInstance(DateFormat.DEFAULT, Locale.getDefault())
-                            .format(location.createdAt)
-                    ),
+                stringResource(R.string.published_the, location.createdAt.formatDate()),
                 modifier = Modifier.padding(top = 5.dp)
             )
             if (isModifiable) {
