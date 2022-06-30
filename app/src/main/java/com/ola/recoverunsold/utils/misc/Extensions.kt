@@ -1,14 +1,10 @@
 package com.ola.recoverunsold.utils.misc
 
-import android.content.ContentResolver
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
-import android.provider.DocumentsContract
-import android.provider.MediaStore
 import android.provider.OpenableColumns
-import android.util.Log
 import androidx.annotation.ColorInt
 import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
@@ -153,4 +149,11 @@ fun copyStreamToFile(inputStream: InputStream, outputFile: File) {
  */
 fun Date.formatDate(): String {
     return DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault()).format(this)
+}
+
+/**
+ * Format a date to DateTime using the default locale
+ */
+fun Date.formatDateTime(): String {
+    return DateFormat.getDateTimeInstance().format(this)
 }

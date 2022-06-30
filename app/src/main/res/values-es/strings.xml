@@ -111,4 +111,11 @@
     <string name="reset">Reiniciar</string>
     <string name="offer_deleted_successfully">Oferta eliminada con éxito</string>
     <string name="offer_deletion_failed">La eliminación de la oferta ha fallado</string>
+    <string name="pick_a_date">Elige una fecha</string>
+    <string name="pick_a_time">Elige una hora</string>
+    <string name="create_new_offer">Crear una nueva oferta</string>
+    <string name="offer_modification">Modificación de la oferta</string>
+    <string name="offer_successfully_created">Oferta creada con éxito</string>
+    <string name="start_date_time_label">Fecha y hora de inicio</string>
+    <string name="end_date_time_label">Fecha y hora de finalización</string>
 </resources>

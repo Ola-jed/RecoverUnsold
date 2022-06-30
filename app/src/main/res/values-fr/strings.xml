@@ -111,4 +111,11 @@
     <string name="reset">Réinitialiser</string>
     <string name="offer_deleted_successfully">Offre supprimée avec succès</string>
     <string name="offer_deletion_failed">La suppression de l\'offre a échoué</string>
+    <string name="pick_a_date">Choisissez une date</string>
+    <string name="pick_a_time">Choisissez une heure</string>
+    <string name="create_new_offer">Créer une nouvelle offre</string>
+    <string name="offer_modification">Modification de l\'offre</string>
+    <string name="offer_successfully_created">Offre créée avec succès</string>
+    <string name="start_date_time_label">Date et heure de début</string>
+    <string name="end_date_time_label">Date et heure de fin</string>
 </resources>

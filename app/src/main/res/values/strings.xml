@@ -114,4 +114,11 @@
     <string name="reset">Reset</string>
     <string name="offer_deleted_successfully">Offer deleted successfully</string>
     <string name="offer_deletion_failed">Offer deletion failed</string>
+    <string name="pick_a_date">Pick a date</string>
+    <string name="pick_a_time">Pick a time</string>
+    <string name="create_new_offer">Create a new offer</string>
+    <string name="offer_modification">Modification of the offer</string>
+    <string name="offer_successfully_created">Offer successfully created</string>
+    <string name="start_date_time_label">Start date and time</string>
+    <string name="end_date_time_label">End date and time</string>
 </resources>

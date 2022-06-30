@@ -1,27 +1,27 @@
 package com.ola.recoverunsold.ui.components.offer
 
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.RangeSlider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.filled.EditCalendar
+import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.FilterListOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -32,11 +32,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
+import com.ola.recoverunsold.ui.components.app.DateTimePicker
+import com.ola.recoverunsold.utils.misc.formatDateTime
 import java.util.Date
 
 // TODO : finish
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun OfferFilterComponent(
     modifier: Modifier = Modifier,
@@ -54,19 +55,20 @@ fun OfferFilterComponent(
     onReset: () -> Unit
 ) {
     var itemsAreVisible by rememberSaveable { mutableStateOf(false) }
+    var showMinDatePicker by remember { mutableStateOf(false) }
 
-    Column(modifier = modifier, horizontalAlignment = Alignment.End) {
-        Button(onClick = { itemsAreVisible = !itemsAreVisible }) {
+    Column(modifier = modifier, horizontalAlignment = Alignment.Start) {
+        TextButton(onClick = { itemsAreVisible = !itemsAreVisible }) {
             Text(stringResource(id = R.string.filters), modifier = Modifier.padding(end = 5.dp))
             if (itemsAreVisible) {
-                Icon(Icons.Default.ArrowDropUp, contentDescription = null)
+                Icon(Icons.Default.FilterListOff, contentDescription = null)
             } else {
-                Icon(Icons.Default.ArrowDropDown, contentDescription = null)
+                Icon(Icons.Default.FilterList, contentDescription = null)
             }
         }
         if (itemsAreVisible) {
             Surface(
-                elevation = 10.dp,
+                elevation = 20.dp,
                 shape = RoundedCornerShape(10.dp)
             ) {
                 Column(modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp)) {
@@ -98,10 +100,29 @@ fun OfferFilterComponent(
                         ),
                     )
 
+                    CustomTextInput(
+                        value = minDate?.formatDateTime() ?: "",
+                        readOnly = true,
+                        onValueChange = {},
+                        label = { Text(text = "Minimum date") },
+                        trailingIcon = {
+                            IconButton(onClick = { showMinDatePicker = true }) {
+                                Icon(Icons.Default.EditCalendar, contentDescription = null)
+                            }
+                        }
+                    )
+
+                    if (showMinDatePicker) {
+                        DateTimePicker(
+                            date = minDate,
+                            onDateUpdate = onMinDateChange
+                        )
+                    }
+
                     Button(
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                            .fillMaxWidth(0.7F),
+                            .fillMaxWidth(0.8F),
                         onClick = { onReset() },
                         colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
                     ) {
@@ -114,7 +135,7 @@ fun OfferFilterComponent(
                     Button(
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                            .fillMaxWidth(0.7F),
+                            .fillMaxWidth(0.8F),
                         onClick = { onApply() }
                     ) {
                         Text(text = stringResource(id = R.string.apply_filters))

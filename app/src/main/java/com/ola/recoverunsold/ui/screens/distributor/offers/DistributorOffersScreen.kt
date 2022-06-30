@@ -129,7 +129,7 @@ fun DistributorOffersScreen(
                         item {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.End
+                                horizontalArrangement = Arrangement.Start
                             ) {
                                 OfferFilterComponent(
                                     modifier = Modifier.padding(20.dp),
@@ -264,6 +264,7 @@ class DistributorOffersViewModel(
 ) : ViewModel() {
     var offerFilterQuery by mutableStateOf(OfferFilterQuery())
     var offersApiResult: ApiCallResult<Page<Offer>> by mutableStateOf(ApiCallResult.Inactive())
+    private val userId = UserObserver.user.value!!.id
 
     init {
         getOffers()
@@ -272,7 +273,6 @@ class DistributorOffersViewModel(
     fun getOffers() {
         offersApiResult = ApiCallResult.Loading()
         viewModelScope.launch {
-            val userId = UserObserver.user.value!!.id
             val response = offerServiceWrapper.getDistributorOffers(userId, offerFilterQuery)
             offersApiResult = if (response.isSuccessful) {
                 ApiCallResult.Success(_data = response.body())
