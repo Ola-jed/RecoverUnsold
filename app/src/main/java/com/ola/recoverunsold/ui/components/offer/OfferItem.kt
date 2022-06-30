@@ -28,9 +28,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.ui.components.app.ConfirmDialog
 import com.ola.recoverunsold.utils.misc.formatDate
-import java.text.DateFormat
-import java.util.Date
-import java.util.Locale
+import com.ola.recoverunsold.utils.misc.formatDateTime
 
 /**
  * A component to show information about an offer
@@ -46,7 +44,6 @@ fun OfferItem(
     onTap: () -> Unit
 ) {
     var showDeleteConfirmationDialog by rememberSaveable { mutableStateOf(false) }
-    val dateTimeFormatter = DateFormat.getDateTimeInstance()
     val startDate = offer.startDate
 
     Surface(
@@ -75,7 +72,7 @@ fun OfferItem(
             Text(
                 text = stringResource(
                     R.string.start_date_time,
-                    dateTimeFormatter.format(startDate)
+                    startDate.formatDateTime()
                 )
             )
 

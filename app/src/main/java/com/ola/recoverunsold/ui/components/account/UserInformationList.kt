@@ -21,8 +21,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Customer
 import com.ola.recoverunsold.models.Distributor
 import com.ola.recoverunsold.models.User
-import java.text.DateFormat
-import java.util.Locale
+import com.ola.recoverunsold.utils.misc.formatDate
 
 /**
  * Component to show information about users
@@ -123,9 +122,7 @@ fun UserInformationList(user: User, modifier: Modifier = Modifier) {
                 Icon(Icons.Filled.CalendarToday, contentDescription = null)
             },
             label = stringResource(id = R.string.member_since_label),
-            data = DateFormat
-                .getDateInstance(DateFormat.DEFAULT, Locale.getDefault())
-                .format(user.createdAt)
+            data = user.createdAt.formatDate()
         )
     }
 }
