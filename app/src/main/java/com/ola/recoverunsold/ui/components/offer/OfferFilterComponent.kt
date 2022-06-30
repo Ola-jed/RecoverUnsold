@@ -1,6 +1,5 @@
 package com.ola.recoverunsold.ui.components.offer
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -131,7 +130,6 @@ fun OfferFilterComponent(
                             color = MaterialTheme.colors.onError
                         )
                     }
-
                     Button(
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)

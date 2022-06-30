@@ -64,11 +64,11 @@ fun DistributorDrawer(
                     textStyle = TextStyle(fontSize = 20.sp)
                 )
 
-                Column(modifier = Modifier.padding(4.dp)) {
-                    Text(user.username, color = MaterialTheme.colors.onSecondary)
-                    Text(user.email, color = MaterialTheme.colors.onSecondary)
-                    Text(user.phone, color = MaterialTheme.colors.onSecondary)
-                }
+                Text(
+                    user.username,
+                    color = MaterialTheme.colors.onSecondary,
+                    modifier = Modifier.padding(4.dp)
+                )
             }
         }
         DrawerNavRow(
