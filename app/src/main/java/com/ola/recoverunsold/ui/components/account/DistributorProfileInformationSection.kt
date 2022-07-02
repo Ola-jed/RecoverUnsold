@@ -1,7 +1,16 @@
 package com.ola.recoverunsold.ui.components.account
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,16 +39,13 @@ fun DistributorProfileInformationSection(
     onEditingCancel: () -> Unit,
     loading: Boolean,
     onUsernameChange: (String) -> Unit,
-    onUsernameValidated: (String) -> Unit,
     onPhoneChange: (String) -> Unit,
-    onPhoneValidated: (String) -> Unit,
     onRccmChange: (String) -> Unit,
-    onRccmValidated: (String) -> Unit,
     onTaxIdChange: (String) -> Unit,
-    onTaxIdValidated: (String) -> Unit,
     onWebsiteUrlChange: (String) -> Unit,
-    onWebsiteUrlValidated: (String) -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onValidationError: (String) -> Unit,
+    onValidationSuccess: () -> Unit
 ) {
     var showDialog by rememberSaveable { mutableStateOf(false) }
 
@@ -71,15 +77,12 @@ fun DistributorProfileInformationSection(
                     taxId = taxId,
                     websiteUrl = websiteUrl,
                     onUsernameChange = onUsernameChange,
-                    onUsernameValidated = onUsernameValidated,
                     onPhoneChange = onPhoneChange,
-                    onPhoneValidated = onPhoneValidated,
                     onRccmChange = onRccmChange,
-                    onRccmValidated = onRccmValidated,
                     onTaxIdChange = onTaxIdChange,
-                    onTaxIdValidated = onTaxIdValidated,
                     onWebsiteUrlChange = onWebsiteUrlChange,
-                    onWebsiteUrlValidated = onWebsiteUrlValidated
+                    onValidationSuccess = onValidationSuccess,
+                    onValidationError = onValidationError
                 )
 
                 Row(

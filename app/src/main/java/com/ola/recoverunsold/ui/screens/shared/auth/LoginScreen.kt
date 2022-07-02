@@ -1,6 +1,5 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -82,10 +81,7 @@ fun LoginScreen(
             onEmailChange = { loginViewModel.email = it },
             onPasswordChange = { loginViewModel.password = it },
             onSubmit = {
-                Log.e("eeeeeeeeeeeeeeeeeeeeeeeeeeeee",loginViewModel.formState.toString())
-
                 if (!loginViewModel.formState.isValid) {
-                    Log.e("eeeeeeeeeeeeeeeeeeeeeeeeeeeee","e")
                     coroutineScope.launch {
                         snackbarHostState.showSnackbar(
                             message = loginViewModel.formState.errorMessage
@@ -227,7 +223,7 @@ fun LoginScreenContent(
             )
 
             if (loading) {
-                Button(modifier = fieldsModifier, onClick = {}) {
+                Button(modifier = fieldsModifier, onClick = {}, enabled = false) {
                     CircularProgressIndicator(color = MaterialTheme.colors.background)
                 }
             } else {

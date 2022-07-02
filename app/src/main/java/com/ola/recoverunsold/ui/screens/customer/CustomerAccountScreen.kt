@@ -22,8 +22,8 @@ import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.api.requests.CustomerUpdateRequest
 import com.ola.recoverunsold.api.services.AccountService
 import com.ola.recoverunsold.models.Customer
-import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.account.CustomerProfileInformationSection
+import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.misc.logout
@@ -31,6 +31,7 @@ import com.ola.recoverunsold.utils.misc.nullIfBlank
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
+import com.ola.recoverunsold.utils.validation.FormState
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.get
 
@@ -58,31 +59,37 @@ fun CustomerAccountScreen(
     ) {
         CustomerProfileInformationSection(
             customer = user!! as Customer,
-            username = customerAccountServiceViewModel.usernameTextField,
-            firstName = customerAccountServiceViewModel.firstNameTextField,
-            lastName = customerAccountServiceViewModel.lastNameTextField,
+            username = customerAccountServiceViewModel.username,
+            firstName = customerAccountServiceViewModel.firstName,
+            lastName = customerAccountServiceViewModel.lastName,
             isEditing = isEditing,
             onEditingStart = { isEditing = true },
             onEditingEnd = {
-                customerAccountServiceViewModel.updateCustomer()
-                isEditing = false
+                if (!customerAccountServiceViewModel.formState.isValid) {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = customerAccountServiceViewModel.formState.errorMessage
+                                ?: Strings.get(R.string.invalid_data),
+                            actionLabel = Strings.get(R.string.ok),
+                            duration = SnackbarDuration.Long
+                        )
+                    }
+                } else {
+                    customerAccountServiceViewModel.updateCustomer()
+                    isEditing = false
+                }
             },
             onEditingCancel = { isEditing = false },
             loading = customerAccountServiceViewModel.accountApiCallResult.status == ApiStatus.LOADING,
-            onUsernameChange = { customerAccountServiceViewModel.usernameTextField = it },
-            onUsernameValidated = { customerAccountServiceViewModel.username = it },
-            onFirstNameChange = { customerAccountServiceViewModel.firstNameTextField = it },
-            onFirstNameValidated = { customerAccountServiceViewModel.firstName = it },
-            onLastNameChange = { customerAccountServiceViewModel.lastNameTextField = it },
-            onLastNameValidated = { customerAccountServiceViewModel.lastName = it },
+            onUsernameChange = { customerAccountServiceViewModel.username = it },
+            onFirstNameChange = { customerAccountServiceViewModel.firstName = it },
+            onLastNameChange = { customerAccountServiceViewModel.lastName = it },
             onDelete = {
                 customerAccountServiceViewModel.deleteCustomer {
                     coroutineScope.launch {
                         context.logout()
                         navController.navigate(Routes.Home.path) {
-                            popUpTo(Routes.Home.path) {
-                                inclusive = true
-                            }
+                            popUpTo(Routes.Home.path) { inclusive = true }
                         }
                         snackbarHostState.showSnackbar(
                             Strings.get(R.string.account_deleted_successfully),
@@ -91,6 +98,21 @@ fun CustomerAccountScreen(
                         )
                     }
                 }
+            },
+            onValidationSuccess = {
+                customerAccountServiceViewModel.formState =
+                    customerAccountServiceViewModel.formState
+                        .copy(
+                            isValid = true,
+                            errorMessage = null
+                        )
+            },
+            onValidationError = {
+                customerAccountServiceViewModel.formState =
+                    customerAccountServiceViewModel.formState.copy(
+                        isValid = false,
+                        errorMessage = it
+                    )
             }
         )
     }
@@ -103,19 +125,13 @@ class CustomerAccountViewModel(
 ) : ViewModel() {
     private val customer = (UserObserver.user.value!! as Customer)
     private val token = TokenStore.get()!!
-
-    var usernameTextField by mutableStateOf(customer.username)
-    var firstNameTextField by mutableStateOf(customer.firstName ?: "")
-    var lastNameTextField by mutableStateOf(customer.lastName ?: "")
-
     var username by mutableStateOf(customer.username)
     var firstName by mutableStateOf(customer.firstName ?: "")
     var lastName by mutableStateOf(customer.lastName ?: "")
-
     var accountApiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive())
+    var formState by mutableStateOf(FormState())
 
     fun updateCustomer() {
-        if (username.isBlank()) return
         accountApiCallResult = ApiCallResult.Loading()
         viewModelScope.launch {
             val response = accountService.updateCustomer(

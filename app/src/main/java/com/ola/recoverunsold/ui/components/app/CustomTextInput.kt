@@ -43,7 +43,6 @@ fun CustomTextInput(
     shape: Shape = MaterialTheme.shapes.small,
     colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(),
     validator: Validator? = null,
-    onValidatedValue: ((String) -> Unit)? = null,
     onValidationError: ((String) -> Unit)? = null,
     onValidationSuccess: (() -> Unit)? = null
 ) {
@@ -64,9 +63,6 @@ fun CustomTextInput(
             value = value,
             onValueChange = {
                 onValueChange(it)
-                if ((it.isBlank() || validator?.isValid(it.trimEnd()) != false) && onValidatedValue != null) {
-                    onValidatedValue(it.trimEnd())
-                }
                 if (!valueIsInvalid && it.isNotBlank()) {
                     onValidationSuccess?.invoke()
                 }

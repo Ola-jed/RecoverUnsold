@@ -28,12 +28,11 @@ fun CustomerProfileInformationSection(
     onEditingCancel: () -> Unit,
     loading: Boolean,
     onUsernameChange: (String) -> Unit,
-    onUsernameValidated: (String) -> Unit,
     onFirstNameChange: (String) -> Unit,
-    onFirstNameValidated: (String) -> Unit,
     onLastNameChange: (String) -> Unit,
-    onLastNameValidated: (String) -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onValidationError: (String) -> Unit,
+    onValidationSuccess: () -> Unit
 ) {
     var showDialog by rememberSaveable { mutableStateOf(false) }
 
@@ -63,11 +62,10 @@ fun CustomerProfileInformationSection(
                     firstName = firstName,
                     lastName = lastName,
                     onUsernameChange = onUsernameChange,
-                    onUsernameValidated = onUsernameValidated,
                     onFirstNameChange = onFirstNameChange,
-                    onFirstNameValidated = onFirstNameValidated,
                     onLastNameChange = onLastNameChange,
-                    onLastNameValidated = onLastNameValidated
+                    onValidationSuccess = onValidationSuccess,
+                    onValidationError = onValidationError
                 )
 
                 Row(

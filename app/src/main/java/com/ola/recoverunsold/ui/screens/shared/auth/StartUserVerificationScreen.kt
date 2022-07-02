@@ -1,12 +1,29 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.runtime.*
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -30,9 +47,11 @@ import com.ola.recoverunsold.ui.components.app.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.EmailValidator
+import com.ola.recoverunsold.utils.validation.FormState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.get
+import kotlin.ranges.contains
 
 @Composable
 fun StartUserVerificationScreen(
@@ -46,17 +65,41 @@ fun StartUserVerificationScreen(
         scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
     ) { padding ->
         StartUserVerificationContent(
-            email = userVerificationViewModel.emailFieldText,
-            onEmailChange = { userVerificationViewModel.emailFieldText = it },
-            onEmailValidated = { userVerificationViewModel.email = it },
-            onSubmit = { userVerificationViewModel.submit() },
+            email = userVerificationViewModel.email,
+            onEmailChange = { userVerificationViewModel.email = it },
+            onSubmit = {
+                if (!userVerificationViewModel.formState.isValid) {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = userVerificationViewModel.formState.errorMessage
+                                ?: Strings.get(R.string.invalid_data),
+                            actionLabel = Strings.get(R.string.ok),
+                            duration = SnackbarDuration.Long
+                        )
+                    }
+                } else {
+                    userVerificationViewModel.submit()
+                }
+            },
             loading = userVerificationViewModel.apiCallResult.status == ApiStatus.LOADING,
             errorMessage = userVerificationViewModel.errorMessage(),
             navController = navController,
             snackbarHostState = snackbarHostState,
             coroutineScope = coroutineScope,
             modifier = Modifier.padding(padding),
-            isSuccessful = userVerificationViewModel.apiCallResult.status == ApiStatus.SUCCESS
+            isSuccessful = userVerificationViewModel.apiCallResult.status == ApiStatus.SUCCESS,
+            onValidationSuccess = {
+                userVerificationViewModel.formState = userVerificationViewModel.formState.copy(
+                    isValid = true,
+                    errorMessage = null
+                )
+            },
+            onValidationError = {
+                userVerificationViewModel.formState = userVerificationViewModel.formState.copy(
+                    isValid = false,
+                    errorMessage = it
+                )
+            }
         )
     }
 }
@@ -66,13 +109,14 @@ fun StartUserVerificationContent(
     modifier: Modifier = Modifier,
     email: String,
     onEmailChange: (String) -> Unit,
-    onEmailValidated: (String) -> Unit,
     onSubmit: () -> Unit,
     loading: Boolean,
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope,
     errorMessage: String? = null,
+    onValidationError: (String) -> Unit,
+    onValidationSuccess: () -> Unit,
     isSuccessful: Boolean
 ) {
     val focusManager = LocalFocusManager.current
@@ -108,11 +152,16 @@ fun StartUserVerificationContent(
             ),
             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             validator = EmailValidator(),
-            onValidatedValue = onEmailValidated
+            onValidationSuccess = onValidationSuccess,
+            onValidationError = onValidationError
         )
 
         if (loading) {
-            Button(onClick = {}) {
+            Button(
+                onClick = {},
+                modifier = fieldsModifier,
+                enabled = false
+            ) {
                 CircularProgressIndicator(color = MaterialTheme.colors.background)
             }
         } else {
@@ -129,6 +178,7 @@ fun StartUserVerificationContent(
             route = Routes.Login.path,
             text = R.string.login_action
         )
+
         NavigationTextButton(
             navController = navController,
             route = Routes.ConfirmUserVerification.path,
@@ -167,11 +217,10 @@ class StartUserVerificationViewModel(
     )
 ) : ViewModel() {
     var apiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive())
-    var emailFieldText by mutableStateOf("")
     var email by mutableStateOf("")
+    var formState by mutableStateOf(FormState())
 
     fun submit() {
-        if (email.isBlank()) return
         apiCallResult = ApiCallResult.Loading()
         viewModelScope.launch {
             val response = userVerificationService.startUserVerification(

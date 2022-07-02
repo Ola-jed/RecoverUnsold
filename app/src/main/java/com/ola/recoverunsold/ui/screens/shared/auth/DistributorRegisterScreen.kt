@@ -37,6 +37,7 @@ import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.misc.nullIfBlank
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.EmailValidator
+import com.ola.recoverunsold.utils.validation.FormState
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import com.ola.recoverunsold.utils.validation.PhoneValidator
 import kotlinx.coroutines.CoroutineScope
@@ -55,28 +56,34 @@ fun DistributorRegisterScreen(
         scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
     ) { padding ->
         DistributorRegisterContent(
-            email = distributorRegisterViewModel.emailFieldText,
-            password = distributorRegisterViewModel.passwordFieldText,
-            username = distributorRegisterViewModel.usernameFieldText,
-            phone = distributorRegisterViewModel.phoneFieldText,
-            rccm = distributorRegisterViewModel.rccmFieldText,
-            taxId = distributorRegisterViewModel.taxIdFieldText,
-            websiteUrl = distributorRegisterViewModel.websiteUrlFieldText,
-            onUsernameChange = { distributorRegisterViewModel.usernameFieldText = it },
-            onUsernameValidated = { distributorRegisterViewModel.username = it },
-            onEmailChange = { distributorRegisterViewModel.emailFieldText = it },
-            onEmailValidated = { distributorRegisterViewModel.email = it },
-            onPasswordChange = { distributorRegisterViewModel.passwordFieldText = it },
-            onPasswordValidated = { distributorRegisterViewModel.password = it },
-            onPhoneChange = { distributorRegisterViewModel.phoneFieldText = it },
-            onPhoneValidated = { distributorRegisterViewModel.phone = it },
-            onRccmChange = { distributorRegisterViewModel.rccmFieldText = it },
-            onRccmValidated = { distributorRegisterViewModel.rccm = it },
-            onTaxIdChange = { distributorRegisterViewModel.taxIdFieldText = it },
-            onTaxIdValidated = { distributorRegisterViewModel.taxId = it },
-            onWebsiteUrlChange = { distributorRegisterViewModel.websiteUrlFieldText = it },
-            onWebsiteUrlValidated = { distributorRegisterViewModel.websiteUrl = it },
-            onSubmit = { distributorRegisterViewModel.register() },
+            email = distributorRegisterViewModel.email,
+            password = distributorRegisterViewModel.password,
+            username = distributorRegisterViewModel.username,
+            phone = distributorRegisterViewModel.phone,
+            rccm = distributorRegisterViewModel.rccm,
+            taxId = distributorRegisterViewModel.taxId,
+            websiteUrl = distributorRegisterViewModel.websiteUrl,
+            onUsernameChange = { distributorRegisterViewModel.username = it },
+            onEmailChange = { distributorRegisterViewModel.email = it },
+            onPasswordChange = { distributorRegisterViewModel.password = it },
+            onPhoneChange = { distributorRegisterViewModel.phone = it },
+            onRccmChange = { distributorRegisterViewModel.rccm = it },
+            onTaxIdChange = { distributorRegisterViewModel.taxId = it },
+            onWebsiteUrlChange = { distributorRegisterViewModel.websiteUrl = it },
+            onSubmit = {
+                if (!distributorRegisterViewModel.formState.isValid) {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = distributorRegisterViewModel.formState.errorMessage
+                                ?: Strings.get(R.string.invalid_data),
+                            actionLabel = Strings.get(R.string.ok),
+                            duration = SnackbarDuration.Long
+                        )
+                    }
+                } else {
+                    distributorRegisterViewModel.register()
+                }
+            },
             loading = distributorRegisterViewModel.apiCallResult.status == ApiStatus.LOADING,
             errorMessage = distributorRegisterViewModel.errorMessage(),
             navController = navController,
@@ -84,6 +91,20 @@ fun DistributorRegisterScreen(
             coroutineScope = coroutineScope,
             modifier = Modifier.padding(padding),
             isSuccessful = distributorRegisterViewModel.apiCallResult.status == ApiStatus.SUCCESS,
+            onValidationSuccess = {
+                distributorRegisterViewModel.formState =
+                    distributorRegisterViewModel.formState.copy(
+                        isValid = true,
+                        errorMessage = null
+                    )
+            },
+            onValidationError = {
+                distributorRegisterViewModel.formState =
+                    distributorRegisterViewModel.formState.copy(
+                        isValid = false,
+                        errorMessage = it
+                    )
+            }
         )
     }
 }
@@ -100,19 +121,12 @@ fun DistributorRegisterContent(
     taxId: String,
     websiteUrl: String,
     onUsernameChange: (String) -> Unit,
-    onUsernameValidated: (String) -> Unit,
     onEmailChange: (String) -> Unit,
-    onEmailValidated: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onPasswordValidated: (String) -> Unit,
     onPhoneChange: (String) -> Unit,
-    onPhoneValidated: (String) -> Unit,
     onRccmChange: (String) -> Unit,
-    onRccmValidated: (String) -> Unit,
     onTaxIdChange: (String) -> Unit,
-    onTaxIdValidated: (String) -> Unit,
     onWebsiteUrlChange: (String) -> Unit,
-    onWebsiteUrlValidated: (String) -> Unit,
     onSubmit: () -> Unit,
     loading: Boolean,
     navController: NavController,
@@ -120,6 +134,8 @@ fun DistributorRegisterContent(
     coroutineScope: CoroutineScope,
     errorMessage: String? = null,
     isSuccessful: Boolean = false,
+    onValidationError: (String) -> Unit,
+    onValidationSuccess: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val fieldsModifier = modifier
@@ -157,7 +173,8 @@ fun DistributorRegisterContent(
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 validator = IsRequiredValidator(),
-                onValidatedValue = onUsernameValidated
+                onValidationSuccess = onValidationSuccess,
+                onValidationError = onValidationError
             )
 
             CustomTextInput(
@@ -173,7 +190,8 @@ fun DistributorRegisterContent(
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 validator = EmailValidator(),
-                onValidatedValue = onEmailValidated
+                onValidationSuccess = onValidationSuccess,
+                onValidationError = onValidationError
             )
 
             CustomTextInput(
@@ -189,7 +207,8 @@ fun DistributorRegisterContent(
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 validator = PhoneValidator(),
-                onValidatedValue = onPhoneValidated
+                onValidationSuccess = onValidationSuccess,
+                onValidationError = onValidationError
             )
 
             CustomTextInput(
@@ -206,7 +225,8 @@ fun DistributorRegisterContent(
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 validator = IsRequiredValidator(),
-                onValidatedValue = onPasswordValidated
+                onValidationSuccess = onValidationSuccess,
+                onValidationError = onValidationError
             )
 
             CustomTextInput(
@@ -222,7 +242,8 @@ fun DistributorRegisterContent(
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 validator = IsRequiredValidator(),
-                onValidatedValue = onTaxIdValidated
+                onValidationSuccess = onValidationSuccess,
+                onValidationError = onValidationError
             )
 
             CustomTextInput(
@@ -238,7 +259,8 @@ fun DistributorRegisterContent(
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 validator = IsRequiredValidator(),
-                onValidatedValue = onRccmValidated
+                onValidationSuccess = onValidationSuccess,
+                onValidationError = onValidationError
             )
 
             CustomTextInput(
@@ -253,11 +275,10 @@ fun DistributorRegisterContent(
                     keyboardType = KeyboardType.Uri
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                onValidatedValue = onWebsiteUrlValidated
             )
 
             if (loading) {
-                Button(onClick = {}, modifier = fieldsModifier) {
+                Button(modifier = fieldsModifier, enabled = false, onClick = {}) {
                     CircularProgressIndicator(color = MaterialTheme.colors.background)
                 }
             } else {
@@ -319,13 +340,6 @@ class DistributorRegisterViewModel(
     ),
 ) : ViewModel() {
     var apiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive())
-    var emailFieldText by mutableStateOf("")
-    var phoneFieldText by mutableStateOf("")
-    var passwordFieldText by mutableStateOf("")
-    var usernameFieldText by mutableStateOf("")
-    var taxIdFieldText by mutableStateOf("")
-    var rccmFieldText by mutableStateOf("")
-    var websiteUrlFieldText by mutableStateOf("")
     var email by mutableStateOf("")
     var phone by mutableStateOf("")
     var password by mutableStateOf("")
@@ -333,14 +347,9 @@ class DistributorRegisterViewModel(
     var taxId by mutableStateOf("")
     var rccm by mutableStateOf("")
     var websiteUrl by mutableStateOf("")
+    var formState by mutableStateOf(FormState())
 
     fun register() {
-        if (email.isBlank()
-            || password.isBlank()
-            || username.isBlank()
-            || taxId.isBlank()
-            || rccm.isBlank()
-        ) return
         apiCallResult = ApiCallResult.Loading()
         viewModelScope.launch {
             val response = authService.registerDistributor(

@@ -31,6 +31,7 @@ import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.resources.Strings
+import com.ola.recoverunsold.utils.validation.FormState
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -48,19 +49,42 @@ fun PasswordResetScreen(
     ) { padding ->
         PasswordResetContent(
             modifier = Modifier.padding(padding),
-            token = passwordResetViewModel.tokenFieldText,
-            onTokenChange = { passwordResetViewModel.tokenFieldText = it },
-            onTokenValidated = { passwordResetViewModel.token = it },
-            password = passwordResetViewModel.passwordFieldText,
+            token = passwordResetViewModel.token,
+            onTokenChange = { passwordResetViewModel.token = it },
+            password = passwordResetViewModel.password,
             onPasswordChange = { passwordResetViewModel.password = it },
-            onPasswordValidated = { passwordResetViewModel.password = it },
-            onSubmit = { passwordResetViewModel.submit() },
+            onSubmit = {
+                if (!passwordResetViewModel.formState.isValid) {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = passwordResetViewModel.formState.errorMessage
+                                ?: Strings.get(R.string.invalid_data),
+                            actionLabel = Strings.get(R.string.ok),
+                            duration = SnackbarDuration.Long
+                        )
+                    }
+                } else {
+                    passwordResetViewModel.submit()
+                }
+            },
             loading = passwordResetViewModel.apiCallResult.status == ApiStatus.LOADING,
             errorMessage = passwordResetViewModel.errorMessage(),
             navController = navController,
             snackbarHostState = snackbarHostState,
             coroutineScope = coroutineScope,
             isSuccessful = passwordResetViewModel.apiCallResult.status == ApiStatus.SUCCESS,
+            onValidationSuccess = {
+                passwordResetViewModel.formState = passwordResetViewModel.formState.copy(
+                    isValid = true,
+                    errorMessage = null
+                )
+            },
+            onValidationError = {
+                passwordResetViewModel.formState = passwordResetViewModel.formState.copy(
+                    isValid = false,
+                    errorMessage = it
+                )
+            }
         )
     }
 }
@@ -70,16 +94,16 @@ fun PasswordResetContent(
     modifier: Modifier = Modifier,
     token: String,
     onTokenChange: (String) -> Unit,
-    onTokenValidated: (String) -> Unit,
     password: String,
     onPasswordChange: (String) -> Unit,
-    onPasswordValidated: (String) -> Unit,
     onSubmit: () -> Unit,
     loading: Boolean,
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope,
     errorMessage: String? = null,
+    onValidationError: (String) -> Unit,
+    onValidationSuccess: () -> Unit,
     isSuccessful: Boolean
 ) {
     val focusManager = LocalFocusManager.current
@@ -115,7 +139,8 @@ fun PasswordResetContent(
             ),
             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             validator = IsRequiredValidator(),
-            onValidatedValue = onTokenValidated
+            onValidationSuccess = onValidationSuccess,
+            onValidationError = onValidationError
         )
 
         CustomTextInput(
@@ -132,11 +157,12 @@ fun PasswordResetContent(
             ),
             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             validator = IsRequiredValidator(),
-            onValidatedValue = onPasswordValidated
+            onValidationSuccess = onValidationSuccess,
+            onValidationError = onValidationError
         )
 
         if (loading) {
-            Button(onClick = {}) {
+            Button(onClick = {}, enabled = false, modifier = fieldsModifier) {
                 CircularProgressIndicator(color = MaterialTheme.colors.background)
             }
         } else {
@@ -153,6 +179,7 @@ fun PasswordResetContent(
             route = Routes.Login.path,
             text = R.string.login_action
         )
+
         NavigationTextButton(
             navController = navController,
             route = Routes.ForgotPassword.path,
@@ -185,13 +212,11 @@ class PasswordResetViewModel(
     )
 ) : ViewModel() {
     var apiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive())
-    var tokenFieldText by mutableStateOf("")
     var token by mutableStateOf("")
-    var passwordFieldText by mutableStateOf("")
     var password by mutableStateOf("")
+    var formState by mutableStateOf(FormState())
 
     fun submit() {
-        if (token.isBlank() || password.isBlank()) return
         apiCallResult = ApiCallResult.Loading()
         viewModelScope.launch {
             val response = forgotPasswordService.resetPassword(

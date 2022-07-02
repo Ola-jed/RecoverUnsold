@@ -45,19 +45,14 @@ inline fun <reified T : User> UserUpdateComponent(
     taxId: String = "",
     websiteUrl: String = "",
     noinline onUsernameChange: (String) -> Unit,
-    noinline onUsernameValidated: (String) -> Unit,
     noinline onFirstNameChange: (String) -> Unit = {},
-    noinline onFirstNameValidated: (String) -> Unit = {},
     noinline onLastNameChange: (String) -> Unit = {},
-    noinline onLastNameValidated: (String) -> Unit = {},
     noinline onPhoneChange: (String) -> Unit = {},
-    noinline onPhoneValidated: (String) -> Unit = {},
     noinline onRccmChange: (String) -> Unit = {},
-    noinline onRccmValidated: (String) -> Unit = {},
     noinline onTaxIdChange: (String) -> Unit = {},
-    noinline onTaxIdValidated: (String) -> Unit = {},
     noinline onWebsiteUrlChange: (String) -> Unit = {},
-    noinline onWebsiteUrlValidated: (String) -> Unit = {}
+    noinline onValidationError: (String) -> Unit,
+    noinline onValidationSuccess: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val fieldsModifier = modifier
@@ -80,7 +75,8 @@ inline fun <reified T : User> UserUpdateComponent(
             ),
             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             validator = IsRequiredValidator(),
-            onValidatedValue = onUsernameValidated
+            onValidationSuccess = onValidationSuccess,
+            onValidationError = onValidationError
         )
 
         if (T::class == Distributor::class) {
@@ -96,7 +92,8 @@ inline fun <reified T : User> UserUpdateComponent(
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 validator = PhoneValidator(),
-                onValidatedValue = onPhoneValidated
+                onValidationSuccess = onValidationSuccess,
+                onValidationError = onValidationError
             )
 
             CustomTextInput(
@@ -111,7 +108,8 @@ inline fun <reified T : User> UserUpdateComponent(
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 validator = IsRequiredValidator(),
-                onValidatedValue = onTaxIdValidated
+                onValidationSuccess = onValidationSuccess,
+                onValidationError = onValidationError
             )
 
             CustomTextInput(
@@ -126,7 +124,8 @@ inline fun <reified T : User> UserUpdateComponent(
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 validator = IsRequiredValidator(),
-                onValidatedValue = onRccmValidated
+                onValidationSuccess = onValidationSuccess,
+                onValidationError = onValidationError
             )
 
             CustomTextInput(
@@ -140,7 +139,8 @@ inline fun <reified T : User> UserUpdateComponent(
                     keyboardType = KeyboardType.Uri
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                onValidatedValue = onWebsiteUrlValidated
+                onValidationSuccess = onValidationSuccess,
+                onValidationError = onValidationError
             )
         } else if (T::class == Customer::class) {
             CustomTextInput(
@@ -155,7 +155,8 @@ inline fun <reified T : User> UserUpdateComponent(
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 validator = IsRequiredValidator(),
-                onValidatedValue = onFirstNameValidated
+                onValidationSuccess = onValidationSuccess,
+                onValidationError = onValidationError
             )
 
             CustomTextInput(
@@ -170,7 +171,8 @@ inline fun <reified T : User> UserUpdateComponent(
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 validator = IsRequiredValidator(),
-                onValidatedValue = onLastNameValidated
+                onValidationSuccess = onValidationSuccess,
+                onValidationError = onValidationError
             )
         }
     }

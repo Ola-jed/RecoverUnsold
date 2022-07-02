@@ -49,6 +49,7 @@ import com.ola.recoverunsold.utils.misc.nullIfBlank
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
+import com.ola.recoverunsold.utils.validation.FormState
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.get
 
@@ -98,9 +99,7 @@ fun DistributorAccountScreen(
                 modifier = Modifier
                     .padding(vertical = 8.dp, horizontal = 8.dp)
                     .clip(RoundedCornerShape(50)),
-                indicator = {
-                    Box {}
-                }
+                indicator = { Box {} }
             ) {
                 tabTitles.forEachIndexed { index, text ->
                     val selected = tabIndex == index
@@ -131,29 +130,35 @@ fun DistributorAccountScreen(
             when (tabIndex) {
                 profileIndex -> DistributorProfileInformationSection(
                     distributor = user!! as Distributor,
-                    username = distributorAccountViewModel.usernameFieldText,
-                    phone = distributorAccountViewModel.phoneFieldText,
+                    username = distributorAccountViewModel.username,
+                    phone = distributorAccountViewModel.phone,
                     rccm = distributorAccountViewModel.rccm,
                     taxId = distributorAccountViewModel.taxId,
-                    websiteUrl = distributorAccountViewModel.websiteUrlFieldText,
+                    websiteUrl = distributorAccountViewModel.websiteUrl,
                     isEditing = isEditing,
                     onEditingStart = { isEditing = true },
                     onEditingEnd = {
-                        distributorAccountViewModel.updateDistributor()
-                        isEditing = false
+                        if (!distributorAccountViewModel.formState.isValid) {
+                            coroutineScope.launch {
+                                snackbarHostState.showSnackbar(
+                                    message = distributorAccountViewModel.formState.errorMessage
+                                        ?: Strings.get(R.string.invalid_data),
+                                    actionLabel = Strings.get(R.string.ok),
+                                    duration = SnackbarDuration.Long
+                                )
+                            }
+                        } else {
+                            distributorAccountViewModel.updateDistributor()
+                            isEditing = false
+                        }
                     },
                     onEditingCancel = { isEditing = false },
                     loading = distributorAccountViewModel.accountApiCallResult.status == ApiStatus.LOADING,
-                    onUsernameChange = { distributorAccountViewModel.usernameFieldText = it },
-                    onUsernameValidated = { distributorAccountViewModel.username = it },
-                    onPhoneChange = { distributorAccountViewModel.phoneFieldText = it },
-                    onPhoneValidated = { distributorAccountViewModel.phone = it },
-                    onRccmChange = { distributorAccountViewModel.rccmFieldText = it },
-                    onRccmValidated = { distributorAccountViewModel.rccm = it },
-                    onTaxIdChange = { distributorAccountViewModel.taxIdFieldText = it },
-                    onTaxIdValidated = { distributorAccountViewModel.taxId = it },
-                    onWebsiteUrlChange = { distributorAccountViewModel.websiteUrlFieldText = it },
-                    onWebsiteUrlValidated = { distributorAccountViewModel.websiteUrl = it },
+                    onUsernameChange = { distributorAccountViewModel.username = it },
+                    onPhoneChange = { distributorAccountViewModel.phone = it },
+                    onRccmChange = { distributorAccountViewModel.rccm = it },
+                    onTaxIdChange = { distributorAccountViewModel.taxId = it },
+                    onWebsiteUrlChange = { distributorAccountViewModel.websiteUrl = it },
                     onDelete = {
                         distributorAccountViewModel.deleteDistributor {
                             coroutineScope.launch {
@@ -170,6 +175,21 @@ fun DistributorAccountScreen(
                                 )
                             }
                         }
+                    },
+                    onValidationSuccess = {
+                        distributorAccountViewModel.formState =
+                            distributorAccountViewModel.formState
+                                .copy(
+                                    isValid = true,
+                                    errorMessage = null
+                                )
+                    },
+                    onValidationError = {
+                        distributorAccountViewModel.formState =
+                            distributorAccountViewModel.formState.copy(
+                                isValid = false,
+                                errorMessage = it
+                            )
                     }
                 )
                 locationsIndex -> DistributorLocationsScreen(
@@ -212,21 +232,15 @@ class DistributorAccountViewModel(
 ) : ViewModel() {
     private val distributor = (UserObserver.user.value!! as Distributor)
     private val token = TokenStore.get()!!
-    var phoneFieldText by mutableStateOf(distributor.phone)
-    var usernameFieldText by mutableStateOf(distributor.username)
-    var taxIdFieldText by mutableStateOf(distributor.taxId)
-    var rccmFieldText by mutableStateOf(distributor.rccm)
-    var websiteUrlFieldText by mutableStateOf(distributor.websiteUrl ?: "")
     var phone by mutableStateOf(distributor.phone)
     var username by mutableStateOf(distributor.username)
     var taxId by mutableStateOf(distributor.taxId)
     var rccm by mutableStateOf(distributor.rccm)
     var websiteUrl by mutableStateOf(distributor.websiteUrl ?: "")
-
     var accountApiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive())
+    var formState by mutableStateOf(FormState())
 
     fun updateDistributor() {
-        if (phone.isBlank() || username.isBlank() || taxId.isBlank() || rccm.isBlank()) return
         accountApiCallResult = ApiCallResult.Loading()
         viewModelScope.launch {
             val response = accountService.updateDistributor(
@@ -240,13 +254,15 @@ class DistributorAccountViewModel(
                 )
             )
             accountApiCallResult = if (response.isSuccessful) {
-                UserObserver.update((UserObserver.user.value as Distributor).copy(
-                    username = username,
-                    phone = phone,
-                    taxId = taxId,
-                    rccm = rccm,
-                    websiteUrl = websiteUrl.nullIfBlank()
-                ))
+                UserObserver.update(
+                    (UserObserver.user.value as Distributor).copy(
+                        username = username,
+                        phone = phone,
+                        taxId = taxId,
+                        rccm = rccm,
+                        websiteUrl = websiteUrl.nullIfBlank()
+                    )
+                )
                 ApiCallResult.Success(_data = Unit)
             } else {
                 ApiCallResult.Error(code = response.code())

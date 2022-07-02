@@ -46,6 +46,7 @@ import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.resources.Strings
+import com.ola.recoverunsold.utils.validation.FormState
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -65,16 +66,40 @@ fun UserVerificationScreen(
     ) { padding ->
         UserVerificationContent(
             modifier = Modifier.padding(padding),
-            token = userVerificationViewModel.tokenFieldText,
-            onTokenChange = { userVerificationViewModel.tokenFieldText = it },
-            onTokenValidated = { userVerificationViewModel.token = it },
-            onSubmit = { userVerificationViewModel.submit() },
+            token = userVerificationViewModel.token,
+            onTokenChange = { userVerificationViewModel.token = it },
+            onSubmit = {
+                if (!userVerificationViewModel.formState.isValid) {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = userVerificationViewModel.formState.errorMessage
+                                ?: Strings.get(R.string.invalid_data),
+                            actionLabel = Strings.get(R.string.ok),
+                            duration = SnackbarDuration.Long
+                        )
+                    }
+                } else {
+                    userVerificationViewModel.submit()
+                }
+            },
             loading = userVerificationViewModel.apiCallResult.status == ApiStatus.LOADING,
             navController = navController,
             snackbarHostState = snackbarHostState,
             coroutineScope = coroutineScope,
             errorMessage = userVerificationViewModel.errorMessage(),
-            isSuccessful = userVerificationViewModel.apiCallResult.status == ApiStatus.SUCCESS
+            isSuccessful = userVerificationViewModel.apiCallResult.status == ApiStatus.SUCCESS,
+            onValidationSuccess = {
+                userVerificationViewModel.formState = userVerificationViewModel.formState.copy(
+                    isValid = true,
+                    errorMessage = null
+                )
+            },
+            onValidationError = {
+                userVerificationViewModel.formState = userVerificationViewModel.formState.copy(
+                    isValid = false,
+                    errorMessage = it
+                )
+            }
         )
     }
 }
@@ -84,13 +109,14 @@ fun UserVerificationContent(
     modifier: Modifier = Modifier,
     token: String,
     onTokenChange: (String) -> Unit,
-    onTokenValidated: (String) -> Unit,
     onSubmit: () -> Unit,
     loading: Boolean,
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope,
     errorMessage: String? = null,
+    onValidationError: (String) -> Unit,
+    onValidationSuccess: () -> Unit,
     isSuccessful: Boolean
 ) {
     val focusManager = LocalFocusManager.current
@@ -127,11 +153,12 @@ fun UserVerificationContent(
             ),
             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             validator = IsRequiredValidator(),
-            onValidatedValue = onTokenValidated
+            onValidationSuccess = onValidationSuccess,
+            onValidationError = onValidationError
         )
 
         if (loading) {
-            Button(onClick = {}) {
+            Button(onClick = {}, enabled = false, modifier = fieldsModifier) {
                 CircularProgressIndicator(color = MaterialTheme.colors.background)
             }
         } else {
@@ -148,6 +175,7 @@ fun UserVerificationContent(
             route = Routes.Login.path,
             text = R.string.login_action
         )
+
         NavigationTextButton(
             navController = navController,
             route = Routes.StartUserVerification.path,
@@ -180,11 +208,10 @@ class UserVerificationViewModel(
     )
 ) : ViewModel() {
     var apiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive())
-    var tokenFieldText by mutableStateOf("")
     var token by mutableStateOf("")
+    var formState by mutableStateOf(FormState())
 
     fun submit() {
-        if (token.isBlank()) return
         apiCallResult = ApiCallResult.Loading()
         viewModelScope.launch {
             val response = userVerificationService.confirmUserVerification(
