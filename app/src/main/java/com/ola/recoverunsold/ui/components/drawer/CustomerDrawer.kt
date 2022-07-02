@@ -70,7 +70,7 @@ fun CustomerDrawer(
                 Text(
                     user.username,
                     color = MaterialTheme.colors.onSecondary,
-                    modifier = Modifier.padding(4.dp)
+                    modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
         }

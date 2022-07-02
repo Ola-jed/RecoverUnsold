@@ -23,12 +23,10 @@ fun UserAccountHeader(
     name: String,
     modifier: Modifier = Modifier,
     size: Dp = 40.dp,
-    textStyle: TextStyle = MaterialTheme.typography.subtitle1,
+    textStyle: TextStyle = MaterialTheme.typography.h4,
 ) {
     Box(modifier.size(size), contentAlignment = Alignment.Center) {
-        val color = remember(id, name) {
-            Color("$id / $name".toHslColor())
-        }
+        val color = remember(id, name) { Color("$id / $name".toHslColor()) }
         val initials = name.split(" ").joinToString("") { it.first().toString() }
         Canvas(modifier = Modifier.fillMaxSize()) {
             drawCircle(SolidColor(color))

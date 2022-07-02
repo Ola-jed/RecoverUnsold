@@ -13,10 +13,6 @@ object UserObserver {
         userFlow.value = user
     }
 
-    fun update(provider: () -> User?) {
-        userFlow.value = provider()
-    }
-
     fun remove() {
         update(null)
     }
