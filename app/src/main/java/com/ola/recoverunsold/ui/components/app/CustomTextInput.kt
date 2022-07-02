@@ -94,8 +94,7 @@ fun CustomTextInput(
                 style = MaterialTheme.typography.caption,
                 modifier = Modifier.padding(start = 16.dp)
             )
-        }
-        if (value.isBlank()) {
+        } else if (value.isBlank()) {
             onValidationError?.invoke(Strings.get(R.string.invalid_data))
         }
     }

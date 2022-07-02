@@ -36,12 +36,6 @@ fun CustomerProfileInformationSection(
 ) {
     var showDialog by rememberSaveable { mutableStateOf(false) }
 
-    Text(
-        stringResource(R.string.profile_information_label),
-        modifier = Modifier
-            .padding(vertical = 10.dp),
-        fontSize = 17.sp
-    )
     if (loading) {
         Box(
             modifier = Modifier
@@ -57,6 +51,13 @@ fun CustomerProfileInformationSection(
     } else {
         if (isEditing) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    stringResource(R.string.profile_information_label),
+                    modifier = Modifier
+                        .padding(vertical = 10.dp),
+                    fontSize = 17.sp
+                )
+
                 UserUpdateComponent<Customer>(
                     username = username,
                     firstName = firstName,
@@ -94,11 +95,21 @@ fun CustomerProfileInformationSection(
             }
         } else {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    stringResource(R.string.profile_information_label),
+                    modifier = Modifier
+                        .padding(vertical = 10.dp),
+                    fontSize = 17.sp
+                )
+
                 UserInformationList(user = customer)
+
                 val buttonsModifier = Modifier.fillMaxWidth(fraction = 0.75F)
+
                 Button(modifier = buttonsModifier, onClick = onEditingStart) {
                     Text(stringResource(R.string.edit_my_profile))
                 }
+
                 Button(
                     modifier = buttonsModifier,
                     onClick = { showDialog = true },

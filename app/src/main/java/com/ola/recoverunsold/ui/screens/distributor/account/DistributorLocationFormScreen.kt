@@ -49,6 +49,7 @@ import com.ola.recoverunsold.utils.misc.nullIfBlank
 import com.ola.recoverunsold.utils.misc.toCoordinates
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
+import com.ola.recoverunsold.utils.validation.FormState
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -95,20 +96,44 @@ fun DistributorLocationFormScreen(
             errorMessage = distributorLocationFormViewModel.errorMessage(),
             isSuccessful = distributorLocationFormViewModel.apiCallResult.status == ApiStatus.SUCCESS,
             onImagePicked = { distributorLocationFormViewModel.imageUri = it },
-            onNameChange = { distributorLocationFormViewModel.nameFieldText = it },
-            onNameValidated = { distributorLocationFormViewModel.name = it },
+            onNameChange = { distributorLocationFormViewModel.name = it },
             onIndicationChange = { distributorLocationFormViewModel.indication = it },
             onLatLngUpdate = { distributorLocationFormViewModel.latLong = it.toCoordinates() },
             onSubmit = {
-                if (location == null) {
-                    distributorLocationFormViewModel.create(context)
+                if (!distributorLocationFormViewModel.formState.isValid) {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = distributorLocationFormViewModel.formState.errorMessage
+                                ?: Strings.get(R.string.invalid_data),
+                            actionLabel = Strings.get(R.string.ok),
+                            duration = SnackbarDuration.Long
+                        )
+                    }
                 } else {
-                    distributorLocationFormViewModel.update(context)
+                    if (location == null) {
+                        distributorLocationFormViewModel.create(context)
+                    } else {
+                        distributorLocationFormViewModel.update(context)
+                    }
                 }
             },
             snackbarHostState = snackbarHostState,
             coroutineScope = coroutineScope,
-            navController = navController
+            navController = navController,
+            onValidationSuccess = {
+                distributorLocationFormViewModel.formState =
+                    distributorLocationFormViewModel.formState.copy(
+                        isValid = true,
+                        errorMessage = null
+                    )
+            },
+            onValidationError = {
+                distributorLocationFormViewModel.formState =
+                    distributorLocationFormViewModel.formState.copy(
+                        isValid = false,
+                        errorMessage = it
+                    )
+            }
         )
     }
 }
@@ -125,13 +150,14 @@ fun DistributorLocationFormScreenContent(
     errorMessage: String?,
     onImagePicked: (Uri) -> Unit,
     onNameChange: (String) -> Unit,
-    onNameValidated: (String) -> Unit,
     onIndicationChange: (String) -> Unit,
     onLatLngUpdate: (LatLng) -> Unit,
     onSubmit: () -> Unit,
     snackbarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope,
-    navController: NavController
+    navController: NavController,
+    onValidationError: (String) -> Unit,
+    onValidationSuccess: () -> Unit
 ) {
     var currentIndex by remember { mutableStateOf(0) }
     val maxIndex = 2
@@ -163,7 +189,8 @@ fun DistributorLocationFormScreenContent(
                     ),
                     keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     validator = IsRequiredValidator(),
-                    onValidatedValue = onNameValidated
+                    onValidationSuccess = onValidationSuccess,
+                    onValidationError = onValidationError
                 )
 
                 CustomTextInput(
@@ -179,14 +206,18 @@ fun DistributorLocationFormScreenContent(
                     ),
                     singleLine = false,
                     keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                    onValidationSuccess = onValidationSuccess,
+                    onValidationError = onValidationError
                 )
             }
+
             1 -> ImagePicker(
                 modifier = fieldsModifier
                     .height((LocalConfiguration.current.screenHeightDp * 0.25).dp),
                 imageUri = imageUri,
                 onImagePicked = onImagePicked
             )
+
             2 -> Column(modifier = Modifier.padding(top = 10.dp)) {
                 Text(
                     stringResource(id = R.string.choose_location_on_map),
@@ -301,17 +332,15 @@ class DistributorLocationFormViewModel(
     private val location: Location?
 ) : ViewModel() {
     var apiCallResult: ApiCallResult<Location> by mutableStateOf(ApiCallResult.Inactive())
-    var nameFieldText by mutableStateOf(location?.name ?: "")
     var name by mutableStateOf(location?.name ?: "")
     var indication by mutableStateOf(location?.indication ?: "")
     var imageUri by mutableStateOf<Uri?>(null)
     var latLong by mutableStateOf(location?.coordinates ?: LatLong.zero())
+    var formState by mutableStateOf(FormState())
+    val token = TokenStore.get()!!
 
     fun create(context: Context) {
-        if (name.isBlank()) return
-
         apiCallResult = ApiCallResult.Loading()
-        val token = TokenStore.get()!!
         val locationRequest = LocationCreateOrUpdateRequest(
             name = name,
             indication = indication.nullIfBlank(),
@@ -342,10 +371,7 @@ class DistributorLocationFormViewModel(
     }
 
     fun update(context: Context) {
-        if (name.isBlank()) return
-
         apiCallResult = ApiCallResult.Loading()
-        val token = TokenStore.get()!!
         val locationRequest = LocationCreateOrUpdateRequest(
             name = name,
             indication = indication.nullIfBlank(),
