@@ -1,3 +1,6 @@
 package com.ola.recoverunsold.utils.validation
 
-data class FormState(var isValid: Boolean = true, var errorMessage: String? = null)
+/**
+ * Data class to store our forms states
+ */
+data class FormState(var isValid: Boolean = false, var errorMessage: String? = null)

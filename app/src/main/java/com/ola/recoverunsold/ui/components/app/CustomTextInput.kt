@@ -18,6 +18,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.ola.recoverunsold.R
+import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.Validator
 
 @Composable
@@ -41,10 +43,11 @@ fun CustomTextInput(
     shape: Shape = MaterialTheme.shapes.small,
     colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(),
     validator: Validator? = null,
-    onValidatedValue: ((String) -> Unit)? = null
+    onValidatedValue: ((String) -> Unit)? = null,
+    onValidationError: ((String) -> Unit)? = null,
+    onValidationSuccess: (() -> Unit)? = null
 ) {
-    val valueIsInvalid =
-        value.isNotBlank() && validator?.isValid(value.trimEnd()) == false
+    val valueIsInvalid = value.isNotBlank() && validator?.isValid(value.trimEnd()) == false
     Column(
         modifier = Modifier
             .padding(
@@ -63,6 +66,9 @@ fun CustomTextInput(
                 onValueChange(it)
                 if ((it.isBlank() || validator?.isValid(it.trimEnd()) != false) && onValidatedValue != null) {
                     onValidatedValue(it.trimEnd())
+                }
+                if (!valueIsInvalid && it.isNotBlank()) {
+                    onValidationSuccess?.invoke()
                 }
             },
             modifier = modifier,
@@ -83,12 +89,18 @@ fun CustomTextInput(
         )
 
         if (valueIsInvalid) {
+            if (onValidationError != null) {
+                onValidationError(validator?.errorMessage(value) ?: "")
+            }
             Text(
                 text = validator?.errorMessage(value) ?: "",
                 color = MaterialTheme.colors.error,
                 style = MaterialTheme.typography.caption,
                 modifier = Modifier.padding(start = 16.dp)
             )
+        }
+        if (value.isBlank()) {
+            onValidationError?.invoke(Strings.get(R.string.invalid_data))
         }
     }
 }

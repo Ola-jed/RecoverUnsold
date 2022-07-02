@@ -1,5 +1,6 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -56,6 +57,7 @@ import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
 import com.ola.recoverunsold.utils.validation.EmailValidator
+import com.ola.recoverunsold.utils.validation.FormState
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -75,30 +77,42 @@ fun LoginScreen(
         scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
     ) { padding ->
         LoginScreenContent(
-            email = loginViewModel.emailFieldText,
-            password = loginViewModel.passwordFieldText,
-            onEmailChange = { loginViewModel.emailFieldText = it },
-            onEmailValidated = { loginViewModel.email = it },
-            onPasswordChange = { loginViewModel.passwordFieldText = it },
-            onPasswordValidated = { loginViewModel.password = it },
+            email = loginViewModel.email,
+            password = loginViewModel.password,
+            onEmailChange = { loginViewModel.email = it },
+            onPasswordChange = { loginViewModel.password = it },
             onSubmit = {
-                loginViewModel.login {
-                    val token = (loginViewModel.apiCallResult as ApiCallResult.Success)._data
+                Log.e("eeeeeeeeeeeeeeeeeeeeeeeeeeeee",loginViewModel.formState.toString())
+
+                if (!loginViewModel.formState.isValid) {
+                    Log.e("eeeeeeeeeeeeeeeeeeeeeeeeeeeee","e")
                     coroutineScope.launch {
-                        if (token != null) {
-                            tokenStore.removeToken()
-                            tokenStore.storeToken(token)
-                            TokenStore.init { token }
-                            val accountService: AccountService = get(AccountService::class.java)
-                            val response = if (token.role == TokenRoles.CUSTOMER) {
-                                accountService.getCustomer(token.bearerToken)
-                            } else {
-                                accountService.getDistributor(token.bearerToken)
-                            }
-                            if (response.isSuccessful) {
-                                val user = response.body()
-                                if (user != null) {
-                                    UserObserver.update(user)
+                        snackbarHostState.showSnackbar(
+                            message = loginViewModel.formState.errorMessage
+                                ?: Strings.get(R.string.invalid_data),
+                            actionLabel = Strings.get(R.string.ok),
+                            duration = SnackbarDuration.Long
+                        )
+                    }
+                } else {
+                    loginViewModel.login {
+                        val token = (loginViewModel.apiCallResult as ApiCallResult.Success)._data
+                        coroutineScope.launch {
+                            if (token != null) {
+                                tokenStore.removeToken()
+                                tokenStore.storeToken(token)
+                                TokenStore.init { token }
+                                val accountService: AccountService = get(AccountService::class.java)
+                                val response = if (token.role == TokenRoles.CUSTOMER) {
+                                    accountService.getCustomer(token.bearerToken)
+                                } else {
+                                    accountService.getDistributor(token.bearerToken)
+                                }
+                                if (response.isSuccessful) {
+                                    val user = response.body()
+                                    if (user != null) {
+                                        UserObserver.update(user)
+                                    }
                                 }
                             }
                         }
@@ -112,6 +126,18 @@ fun LoginScreen(
             coroutineScope = coroutineScope,
             modifier = Modifier.padding(padding),
             isSuccessful = loginViewModel.apiCallResult.status == ApiStatus.SUCCESS,
+            onValidationSuccess = {
+                loginViewModel.formState = loginViewModel.formState.copy(
+                    isValid = true,
+                    errorMessage = null
+                )
+            },
+            onValidationError = {
+                loginViewModel.formState = loginViewModel.formState.copy(
+                    isValid = false,
+                    errorMessage = it
+                )
+            }
         )
     }
 }
@@ -122,15 +148,15 @@ fun LoginScreenContent(
     email: String,
     password: String,
     onEmailChange: (String) -> Unit,
-    onEmailValidated: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onPasswordValidated: (String) -> Unit,
     onSubmit: () -> Unit,
     loading: Boolean,
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope,
     errorMessage: String? = null,
+    onValidationError: (String) -> Unit,
+    onValidationSuccess: () -> Unit,
     isSuccessful: Boolean
 ) {
     val focusManager = LocalFocusManager.current
@@ -169,7 +195,8 @@ fun LoginScreenContent(
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 validator = EmailValidator(),
-                onValidatedValue = onEmailValidated
+                onValidationSuccess = onValidationSuccess,
+                onValidationError = onValidationError
             )
 
             CustomTextInput(
@@ -186,7 +213,8 @@ fun LoginScreenContent(
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 validator = IsRequiredValidator(),
-                onValidatedValue = onPasswordValidated
+                onValidationSuccess = onValidationSuccess,
+                onValidationError = onValidationError
             )
 
             NavigationTextButton(
@@ -252,13 +280,11 @@ fun LoginScreenContent(
 class LoginViewModel(private val authService: AuthService = get(AuthService::class.java)) :
     ViewModel() {
     var apiCallResult: ApiCallResult<Token> by mutableStateOf(ApiCallResult.Inactive())
-    var emailFieldText by mutableStateOf("")
-    var passwordFieldText by mutableStateOf("")
     var email by mutableStateOf("")
     var password by mutableStateOf("")
+    var formState by mutableStateOf(FormState())
 
     fun login(onSuccess: () -> Unit = {}) {
-        if (email.isBlank() || password.isBlank()) return
         apiCallResult = ApiCallResult.Loading()
         viewModelScope.launch {
             val response = authService.login(LoginRequest(email = email, password = password))
