@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.ui.components.app.ConfirmDialog
+import com.ola.recoverunsold.ui.components.app.ImageSlider
 import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.formatDateTime
 
@@ -45,6 +47,7 @@ fun OfferItem(
 ) {
     var showDeleteConfirmationDialog by rememberSaveable { mutableStateOf(false) }
     val startDate = offer.startDate
+    val productsImagesUris = offer.products?.flatMap { it.images }?.map { it.url }
 
     Surface(
         modifier = modifier.clickable { onTap() },
@@ -56,6 +59,13 @@ fun OfferItem(
                 .fillMaxSize()
                 .padding(10.dp)
         ) {
+            if (!productsImagesUris.isNullOrEmpty()) {
+                ImageSlider(
+                    modifier = Modifier.fillMaxWidth(),
+                    imageUris = productsImagesUris
+                )
+            }
+
             Text(
                 text = stringResource(R.string.total_amount, offer.price.toString())
             )
