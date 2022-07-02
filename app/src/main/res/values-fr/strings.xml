@@ -118,4 +118,5 @@
     <string name="offer_successfully_created">Offre créée avec succès</string>
     <string name="start_date_time_label">Date et heure de début</string>
     <string name="end_date_time_label">Date et heure de fin</string>
+    <string name="name_field_required_message">Le champ \"nom\" est requis</string>
 </resources>
