@@ -119,4 +119,12 @@
     <string name="start_date_time_label">Fecha y hora de inicio</string>
     <string name="end_date_time_label">Fecha y hora de finalización</string>
     <string name="name_field_required_message">El campo \"nombre\" es obligatorio</string>
+    <string name="minimum_date_label">Fecha mínima</string>
+    <string name="maximum_date_label">Fecha máxima</string>
+    <string name="price_label">Precio</string>
+    <string name="date_label">Fechas</string>
+    <string name="ongoing_label">En curso</string>
+    <string name="expired_label">Caducado</string>
+    <string name="status_label">Estado</string>
+    <string name="no_offers_found">No se han encontrado ofertas</string>
 </resources>

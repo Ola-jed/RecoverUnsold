@@ -8,8 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.ola.recoverunsold.ui.screens.customer.CustomerAccountScreen
-import com.ola.recoverunsold.ui.screens.customer.DistributorsScreen
-import com.ola.recoverunsold.ui.screens.customer.OffersScreen
+import com.ola.recoverunsold.ui.screens.shared.DistributorsScreen
+import com.ola.recoverunsold.ui.screens.shared.OffersScreen
 import com.ola.recoverunsold.ui.screens.customer.OrdersScreen
 import com.ola.recoverunsold.ui.screens.distributor.account.DistributorAccountScreen
 import com.ola.recoverunsold.ui.screens.distributor.account.DistributorLocationFormScreen

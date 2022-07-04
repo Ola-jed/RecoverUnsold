@@ -123,9 +123,7 @@ fun DistributorDrawer(
                     coroutineScope.launch {
                         context.logout()
                         navController.navigate(Routes.Login.path) {
-                            popUpTo(Routes.Login.path) {
-                                inclusive = true
-                            }
+                            popUpTo(Routes.Login.path) { inclusive = true }
                         }
                         snackbarHostState.showSnackbar(
                             Strings.get(R.string.logout_successfull),

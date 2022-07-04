@@ -18,6 +18,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.math.absoluteValue
@@ -155,5 +156,13 @@ fun Date.formatDate(): String {
  * Format a date to DateTime using the default locale
  */
 fun Date.formatDateTime(): String {
-    return DateFormat.getDateTimeInstance().format(this)
+    return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault())
+        .format(this)
+}
+
+/**
+ * Format a date following a format for storing and exchanging dates
+ */
+fun Date.format(format: String = "yyyy-MM-dd'T'HH:mm:ss.SSS"): String {
+    return SimpleDateFormat(format).format(this)
 }

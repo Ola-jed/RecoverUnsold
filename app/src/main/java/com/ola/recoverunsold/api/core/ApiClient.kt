@@ -25,9 +25,9 @@ object ApiClient {
 
     private val httpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
-            .connectTimeout(1, TimeUnit.MINUTES)
-            .readTimeout(1, TimeUnit.MINUTES)
-            .writeTimeout(1, TimeUnit.MINUTES)
+            .connectTimeout(2, TimeUnit.MINUTES)
+            .readTimeout(2, TimeUnit.MINUTES)
+            .writeTimeout(2, TimeUnit.MINUTES)
             .addInterceptor(logger)
             .build()
     }
@@ -38,10 +38,12 @@ object ApiClient {
             type: Type,
             annotations: Array<out Annotation>,
             retrofit: Retrofit
-        ) = object :
-            Converter<ResponseBody, Any?> {
-            val nextResponseBodyConverter =
-                retrofit.nextResponseBodyConverter<Any?>(converterFactory(), type, annotations)
+        ) = object : Converter<ResponseBody, Any?> {
+            val nextResponseBodyConverter = retrofit.nextResponseBodyConverter<Any?>(
+                converterFactory(),
+                type,
+                annotations
+            )
 
             override fun convert(value: ResponseBody) = if (value.contentLength() != 0L) {
                 nextResponseBodyConverter.convert(value)

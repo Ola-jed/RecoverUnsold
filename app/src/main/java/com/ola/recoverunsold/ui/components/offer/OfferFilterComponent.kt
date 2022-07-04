@@ -1,16 +1,18 @@
 package com.ola.recoverunsold.ui.components.offer
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ExposedDropdownMenuBox
+import androidx.compose.material.ExposedDropdownMenuDefaults
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
@@ -35,8 +37,7 @@ import com.ola.recoverunsold.ui.components.app.DateTimePicker
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import java.util.Date
 
-// TODO : finish
-
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun OfferFilterComponent(
     modifier: Modifier = Modifier,
@@ -49,15 +50,26 @@ fun OfferFilterComponent(
     onMaxPriceChange: (Double) -> Unit,
     onMinDateChange: (Date) -> Unit,
     onMaxDateChange: (Date) -> Unit,
-    onActiveChange: (Boolean) -> Unit,
+    onActiveChange: (Boolean?) -> Unit,
     onApply: () -> Unit,
     onReset: () -> Unit
 ) {
+    val activeLabelsMapping = mapOf(
+        stringResource(id = R.string.ongoing_label) to true,
+        stringResource(id = R.string.expired_label) to false,
+        stringResource(id = R.string.n_a) to null
+    )
+    var showDropDownActiveLabels by rememberSaveable { mutableStateOf(false) }
+    val currentDropdownActiveLabel by mutableStateOf(activeLabelsMapping.filter { it.value == active }.keys.first())
     var itemsAreVisible by rememberSaveable { mutableStateOf(false) }
     var showMinDatePicker by remember { mutableStateOf(false) }
+    var showMaxDatePicker by remember { mutableStateOf(false) }
 
-    Column(modifier = modifier, horizontalAlignment = Alignment.Start) {
-        TextButton(onClick = { itemsAreVisible = !itemsAreVisible }) {
+
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        TextButton(
+            modifier = Modifier.align(Alignment.Start),
+            onClick = { itemsAreVisible = !itemsAreVisible }) {
             Text(stringResource(id = R.string.filters), modifier = Modifier.padding(end = 5.dp))
             if (itemsAreVisible) {
                 Icon(Icons.Default.FilterListOff, contentDescription = null)
@@ -66,78 +78,133 @@ fun OfferFilterComponent(
             }
         }
         if (itemsAreVisible) {
-            Surface(
-                elevation = 20.dp,
-                shape = RoundedCornerShape(10.dp)
-            ) {
-                Column(modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp)) {
-                    CustomTextInput(
-                        value = minPrice?.toInt()?.toString() ?: "",
-                        onValueChange = {
-                            if (it.isNotBlank()) {
-                                onMinPriceChange(it.toDouble())
-                            }
-                        },
-                        label = { Text(text = stringResource(R.string.minimum_price_label)) },
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Done,
-                            keyboardType = KeyboardType.Number
-                        ),
-                    )
+            Column(modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp)) {
+                Text(
+                    stringResource(id = R.string.price_label),
+                    style = MaterialTheme.typography.h6
+                )
 
-                    CustomTextInput(
-                        value = maxPrice?.toInt()?.toString() ?: "",
-                        onValueChange = {
-                            if (it.isNotBlank()) {
-                                onMaxPriceChange(it.toDouble())
-                            }
-                        },
-                        label = { Text(text = stringResource(R.string.maximum_price_label)) },
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Done,
-                            keyboardType = KeyboardType.Number
-                        ),
-                    )
+                CustomTextInput(
+                    value = minPrice?.toInt()?.toString() ?: "",
+                    onValueChange = {
+                        if (it.isNotBlank()) {
+                            onMinPriceChange(it.toDouble())
+                        }
+                    },
+                    label = { Text(text = stringResource(R.string.minimum_price_label)) },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Number
+                    ),
+                )
 
+                CustomTextInput(
+                    value = maxPrice?.toInt()?.toString() ?: "",
+                    onValueChange = {
+                        if (it.isNotBlank()) {
+                            onMaxPriceChange(it.toDouble())
+                        }
+                    },
+                    label = { Text(text = stringResource(R.string.maximum_price_label)) },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Number
+                    ),
+                )
+
+                Text(
+                    stringResource(id = R.string.date_label),
+                    style = MaterialTheme.typography.h6
+                )
+
+                CustomTextInput(
+                    modifier = Modifier.clickable { showMinDatePicker = true },
+                    value = minDate?.formatDateTime() ?: "",
+                    readOnly = true,
+                    enabled = false,
+                    onValueChange = {},
+                    label = { Text(text = stringResource(R.string.minimum_date_label)) },
+                    trailingIcon = {
+                        Icon(Icons.Default.EditCalendar, contentDescription = null)
+                    }
+                )
+
+                CustomTextInput(
+                    modifier = Modifier.clickable { showMaxDatePicker = true },
+                    value = maxDate?.formatDateTime() ?: "",
+                    readOnly = true,
+                    enabled = false,
+                    onValueChange = {},
+                    label = { Text(text = stringResource(R.string.maximum_date_label)) },
+                    trailingIcon = {
+                        Icon(Icons.Default.EditCalendar, contentDescription = null)
+                    }
+                )
+
+                ExposedDropdownMenuBox(
+                    expanded = showDropDownActiveLabels,
+                    onExpandedChange = {
+                        showDropDownActiveLabels = !showDropDownActiveLabels
+                    }
+                ) {
                     CustomTextInput(
-                        value = minDate?.formatDateTime() ?: "",
+                        modifier = Modifier,
+                        value = currentDropdownActiveLabel,
                         readOnly = true,
                         onValueChange = {},
-                        label = { Text(text = "Minimum date") },
+                        label = { Text(text = stringResource(R.string.status_label)) },
                         trailingIcon = {
-                            IconButton(onClick = { showMinDatePicker = true }) {
-                                Icon(Icons.Default.EditCalendar, contentDescription = null)
-                            }
-                        }
+                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                expanded = showDropDownActiveLabels
+                            )
+                        },
+                        colors = ExposedDropdownMenuDefaults.textFieldColors()
                     )
 
-                    if (showMinDatePicker) {
-                        DateTimePicker(
-                            date = minDate,
-                            onDateUpdate = onMinDateChange
-                        )
+                    ExposedDropdownMenu(
+                        expanded = showDropDownActiveLabels,
+                        onDismissRequest = {
+                            showDropDownActiveLabels = false
+                        }
+                    ) {
+                        activeLabelsMapping.forEach {
+                            DropdownMenuItem(onClick = {
+                                onActiveChange(it.value)
+                                showDropDownActiveLabels = false
+                            }) {
+                                Text(text = it.key)
+                            }
+                        }
                     }
+                }
 
-                    Button(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .fillMaxWidth(0.8F),
-                        onClick = { onReset() },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.reset),
-                            color = MaterialTheme.colors.onError
-                        )
-                    }
-                    Button(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .fillMaxWidth(0.8F),
-                        onClick = { onApply() }
-                    ) {
-                        Text(text = stringResource(id = R.string.apply_filters))
-                    }
+                if (showMinDatePicker) {
+                    DateTimePicker(date = minDate, onDateUpdate = onMinDateChange)
+                }
+
+                if (showMaxDatePicker) {
+                    DateTimePicker(date = maxDate, onDateUpdate = onMaxDateChange)
+                }
+
+                Button(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth(0.85F),
+                    onClick = { onReset() },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.reset),
+                        color = MaterialTheme.colors.onError
+                    )
+                }
+                Button(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth(0.85F),
+                    onClick = { onApply() }
+                ) {
+                    Text(text = stringResource(id = R.string.apply_filters))
                 }
             }
         }

@@ -67,7 +67,8 @@ fun OfferItem(
             }
 
             Text(
-                text = stringResource(R.string.total_amount, offer.price.toString())
+                text = stringResource(R.string.total_amount, offer.price.toString()),
+                modifier = Modifier.padding(top = 10.dp)
             )
 
             if (offer.beneficiaries != null) {

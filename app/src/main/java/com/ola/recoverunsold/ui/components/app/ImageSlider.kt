@@ -50,7 +50,7 @@ fun ImageSlider(
             contentScale = ContentScale.Crop,
             contentDescription = null,
             modifier = Modifier
-                .fillMaxWidth(0.7F)
+                .fillMaxWidth(0.8F)
                 .padding(end = 5.dp)
                 .clip(RoundedCornerShape(10.dp)),
         )

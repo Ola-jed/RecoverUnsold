@@ -1,5 +1,6 @@
 package com.ola.recoverunsold.api.query
 
+import com.ola.recoverunsold.utils.misc.format
 import java.util.Date
 
 data class OfferFilterQuery(
@@ -21,10 +22,10 @@ data class OfferFilterQuery(
             resultMap["maxPrice"] = maxPrice!!.toString()
         }
         if (minDate != null) {
-            resultMap["minDate"] = minDate!!.toString()
+            resultMap["minDate"] = minDate!!.format()
         }
         if (maxDate != null) {
-            resultMap["maxDate"] = maxDate!!.toString()
+            resultMap["maxDate"] = maxDate!!.format()
         }
         if (active != null) {
             resultMap["active"] = active!!.toString()

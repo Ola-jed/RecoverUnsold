@@ -1,4 +1,4 @@
-package com.ola.recoverunsold.ui.screens.distributor.offers
+package com.ola.recoverunsold.ui.screens.shared
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,15 +10,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,19 +43,16 @@ import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.offer.OfferFilterComponent
 import com.ola.recoverunsold.ui.components.offer.OfferItem
 import com.ola.recoverunsold.ui.navigation.Routes
-import com.ola.recoverunsold.utils.misc.jsonSerialize
-import com.ola.recoverunsold.utils.misc.remove
 import com.ola.recoverunsold.utils.resources.Strings
-import com.ola.recoverunsold.utils.store.TokenStore
-import com.ola.recoverunsold.utils.store.UserObserver
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.get
 
+// TODO : Get offers near to this user
 @Composable
-fun DistributorOffersScreen(
+fun OffersScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
-    distributorOffersViewModel: DistributorOffersViewModel = viewModel()
+    offersViewModel: OffersViewModel = viewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
@@ -72,18 +65,9 @@ fun DistributorOffersScreen(
                 scaffoldState = scaffoldState
             )
         },
-        drawerContent = DrawerContent(navController, snackbarHostState),
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
-                navController.navigate(
-                    Routes.OfferCreateOrUpdate.path.remove("{offer}")
-                )
-            }) {
-                Icon(Icons.Default.Add, contentDescription = null)
-            }
-        }
+        drawerContent = DrawerContent(navController, snackbarHostState)
     ) { paddingValues ->
-        when (distributorOffersViewModel.offersApiResult.status) {
+        when (offersViewModel.offersApiResult.status) {
             ApiStatus.LOADING -> {
                 Box(modifier = Modifier.fillMaxSize()) {
                     CircularProgressIndicator(
@@ -96,27 +80,26 @@ fun DistributorOffersScreen(
                 LaunchedEffect(snackbarHostState) {
                     coroutineScope.launch {
                         snackbarHostState.showSnackbar(
-                            message = distributorOffersViewModel.errorMessage()
+                            message = offersViewModel.errorMessage()
                                 ?: Strings.get(R.string.unknown_error_occured),
                             actionLabel = Strings.get(R.string.ok),
                             duration = SnackbarDuration.Long
                         ).also {
-                            distributorOffersViewModel.resetFilter()
-                            distributorOffersViewModel.getOffers()
+                            offersViewModel.resetFilter()
+                            offersViewModel.getOffers()
                         }
                     }
                 }
             }
             else -> {
-                val offers = distributorOffersViewModel.offersApiResult.data!!
-
+                val offers = offersViewModel.offersApiResult.data!!
                 if (offers.items.isEmpty()) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            stringResource(R.string.no_offer_published),
+                            stringResource(R.string.no_offers_found),
                             style = MaterialTheme.typography.h6,
                             modifier = Modifier.padding(horizontal = 10.dp)
                         )
@@ -136,47 +119,47 @@ fun DistributorOffersScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(20.dp),
-                                    minPrice = distributorOffersViewModel.offerFilterQuery.minPrice,
-                                    maxPrice = distributorOffersViewModel.offerFilterQuery.maxPrice,
-                                    minDate = distributorOffersViewModel.offerFilterQuery.minDate,
-                                    maxDate = distributorOffersViewModel.offerFilterQuery.maxDate,
-                                    active = distributorOffersViewModel.offerFilterQuery.active,
+                                    minPrice = offersViewModel.offerFilterQuery.minPrice,
+                                    maxPrice = offersViewModel.offerFilterQuery.maxPrice,
+                                    minDate = offersViewModel.offerFilterQuery.minDate,
+                                    maxDate = offersViewModel.offerFilterQuery.maxDate,
+                                    active = offersViewModel.offerFilterQuery.active,
                                     onMinPriceChange = {
-                                        distributorOffersViewModel.offerFilterQuery =
-                                            distributorOffersViewModel.offerFilterQuery.copy(
+                                        offersViewModel.offerFilterQuery =
+                                            offersViewModel.offerFilterQuery.copy(
                                                 minPrice = it
                                             )
                                     },
                                     onMaxPriceChange = {
-                                        distributorOffersViewModel.offerFilterQuery =
-                                            distributorOffersViewModel.offerFilterQuery.copy(
+                                        offersViewModel.offerFilterQuery =
+                                            offersViewModel.offerFilterQuery.copy(
                                                 maxPrice = it
                                             )
                                     },
                                     onMinDateChange = {
-                                        distributorOffersViewModel.offerFilterQuery =
-                                            distributorOffersViewModel.offerFilterQuery.copy(
+                                        offersViewModel.offerFilterQuery =
+                                            offersViewModel.offerFilterQuery.copy(
                                                 minDate = it
                                             )
                                     },
                                     onMaxDateChange = {
-                                        distributorOffersViewModel.offerFilterQuery =
-                                            distributorOffersViewModel.offerFilterQuery.copy(
+                                        offersViewModel.offerFilterQuery =
+                                            offersViewModel.offerFilterQuery.copy(
                                                 maxDate = it
                                             )
                                     },
                                     onActiveChange = {
-                                        distributorOffersViewModel.offerFilterQuery =
-                                            distributorOffersViewModel.offerFilterQuery.copy(
+                                        offersViewModel.offerFilterQuery =
+                                            offersViewModel.offerFilterQuery.copy(
                                                 active = it
                                             )
                                     },
                                     onApply = {
-                                        distributorOffersViewModel.getOffers()
+                                        offersViewModel.getOffers()
                                     },
                                     onReset = {
-                                        distributorOffersViewModel.resetFilter()
-                                        distributorOffersViewModel.getOffers()
+                                        offersViewModel.resetFilter()
+                                        offersViewModel.getOffers()
                                     }
                                 )
                             }
@@ -188,45 +171,12 @@ fun DistributorOffersScreen(
                                     .fillParentMaxWidth()
                                     .padding(horizontal = 20.dp, vertical = 10.dp),
                                 offer = item,
-                                isEditable = true,
                                 onTap = {
                                     navController.navigate(
                                         Routes.OfferDetails.path.replace(
                                             "{offerId}",
                                             item.id
                                         )
-                                    )
-                                },
-                                onEdit = {
-                                    navController.navigate(
-                                        Routes.OfferCreateOrUpdate.path.replace(
-                                            "{offer}",
-                                            item.jsonSerialize()
-                                        )
-                                    )
-                                },
-                                onDelete = {
-                                    distributorOffersViewModel.deleteOffer(
-                                        offer = item,
-                                        onSuccess = {
-                                            coroutineScope.launch {
-                                                snackbarHostState.showSnackbar(
-                                                    message = Strings.get(R.string.offer_deleted_successfully),
-                                                    actionLabel = Strings.get(R.string.ok),
-                                                    duration = SnackbarDuration.Long
-                                                )
-                                            }
-                                            distributorOffersViewModel.getOffers()
-                                        },
-                                        onFailure = {
-                                            coroutineScope.launch {
-                                                snackbarHostState.showSnackbar(
-                                                    message = Strings.get(R.string.offer_deletion_failed),
-                                                    actionLabel = Strings.get(R.string.ok),
-                                                    duration = SnackbarDuration.Long
-                                                )
-                                            }
-                                        }
                                     )
                                 }
                             )
@@ -240,12 +190,12 @@ fun DistributorOffersScreen(
                                 horizontalArrangement = Arrangement.SpaceEvenly
                             ) {
                                 if (offers.pageNumber > 1) {
-                                    Button(onClick = { distributorOffersViewModel.getPrevious() }) {
+                                    Button(onClick = { offersViewModel.getPrevious() }) {
                                         Text(stringResource(id = R.string.previous))
                                     }
                                 }
                                 if (offers.hasNext) {
-                                    Button(onClick = { distributorOffersViewModel.getNext() }) {
+                                    Button(onClick = { offersViewModel.getNext() }) {
                                         Text(stringResource(id = R.string.next))
                                     }
                                 }
@@ -258,21 +208,16 @@ fun DistributorOffersScreen(
     }
 }
 
-class DistributorOffersViewModel(
+class OffersViewModel(
     private val offerServiceWrapper: OfferServiceWrapper = get(OfferServiceWrapper::class.java)
 ) : ViewModel() {
-    var offerFilterQuery by mutableStateOf(OfferFilterQuery())
+    var offerFilterQuery by mutableStateOf(OfferFilterQuery(active = true))
     var offersApiResult: ApiCallResult<Page<Offer>> by mutableStateOf(ApiCallResult.Inactive())
-    private val userId = UserObserver.user.value!!.id
-
-    init {
-        getOffers()
-    }
 
     fun getOffers() {
         offersApiResult = ApiCallResult.Loading()
         viewModelScope.launch {
-            val response = offerServiceWrapper.getDistributorOffers(userId, offerFilterQuery)
+            val response = offerServiceWrapper.getOffers(offerFilterQuery)
             offersApiResult = if (response.isSuccessful) {
                 ApiCallResult.Success(_data = response.body())
             } else {
@@ -292,19 +237,7 @@ class DistributorOffersViewModel(
     }
 
     fun resetFilter() {
-        offerFilterQuery = OfferFilterQuery()
-    }
-
-    fun deleteOffer(offer: Offer, onSuccess: () -> Unit, onFailure: () -> Unit) {
-        val token = TokenStore.get()!!
-        viewModelScope.launch {
-            val response = offerServiceWrapper.deleteOffer(token.bearerToken, offer.id)
-            if (response.isSuccessful) {
-                onSuccess()
-            } else {
-                onFailure()
-            }
-        }
+        offerFilterQuery = OfferFilterQuery(active = true)
     }
 
     fun errorMessage(): String? {
@@ -317,4 +250,3 @@ class DistributorOffersViewModel(
         return null
     }
 }
-
