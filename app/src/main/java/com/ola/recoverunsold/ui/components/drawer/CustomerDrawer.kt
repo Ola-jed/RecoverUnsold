@@ -40,8 +40,6 @@ import com.ola.recoverunsold.utils.misc.logout
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
 
-// TODO : nav
-
 @Composable
 fun CustomerDrawer(
     user: Customer,
@@ -103,7 +101,7 @@ fun CustomerDrawer(
         )
         DrawerNavRow(
             navController = navController,
-            route = Routes.Login.path,
+            route = Routes.Orders.path,
             text = R.string.orders,
             leadingIcon = {
                 Icon(imageVector = Icons.Outlined.History, contentDescription = null)
