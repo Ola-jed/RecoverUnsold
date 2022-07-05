@@ -1,13 +1,29 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.*
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -30,12 +46,14 @@ import com.ola.recoverunsold.api.services.ForgotPasswordService
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
+import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.FormState
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.get
+import kotlin.ranges.contains
 
 @Composable
 fun PasswordResetScreen(
@@ -56,11 +74,9 @@ fun PasswordResetScreen(
             onSubmit = {
                 if (!passwordResetViewModel.formState.isValid) {
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar(
+                        snackbarHostState.show(
                             message = passwordResetViewModel.formState.errorMessage
-                                ?: Strings.get(R.string.invalid_data),
-                            actionLabel = Strings.get(R.string.ok),
-                            duration = SnackbarDuration.Long
+                                ?: Strings.get(R.string.invalid_data)
                         )
                     }
                 } else {
@@ -189,11 +205,7 @@ fun PasswordResetContent(
         if (errorMessage != null) {
             LaunchedEffect(snackbarHostState) {
                 coroutineScope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = errorMessage,
-                        actionLabel = Strings.get(R.string.ok),
-                        duration = SnackbarDuration.Long
-                    )
+                    snackbarHostState.show(message = errorMessage)
                 }
             }
         }

@@ -33,24 +33,28 @@ class App : Application() {
 
     private suspend fun loadTokenAndUser() {
         val storedToken = TokenStore(applicationContext).token().firstOrNull()?.toApiToken()
-        if (storedToken != null) {
-            val token = TokenStore.getOr { storedToken }
-            if (token.expirationDate.before(Date())) {
-                TokenStore(applicationContext).removeToken()
-                return
-            }
-            val accountService: AccountService = get(AccountService::class.java)
-            val response = if (token.role == TokenRoles.CUSTOMER) {
-                accountService.getCustomer(token.bearerToken)
-            } else {
-                accountService.getDistributor(token.bearerToken)
-            }
-            if (response.isSuccessful) {
-                val user = response.body()
-                if (user != null) {
-                    UserObserver.update(user)
+        try {
+            if (storedToken != null) {
+                val token = TokenStore.getOr { storedToken }
+                if (token.expirationDate.before(Date())) {
+                    TokenStore(applicationContext).removeToken()
+                    return
+                }
+                val accountService: AccountService = get(AccountService::class.java)
+                val response = if (token.role == TokenRoles.CUSTOMER) {
+                    accountService.getCustomer(token.bearerToken)
+                } else {
+                    accountService.getDistributor(token.bearerToken)
+                }
+                if (response.isSuccessful) {
+                    val user = response.body()
+                    if (user != null) {
+                        UserObserver.update(user)
+                    }
                 }
             }
+        } catch (e: Exception) {
+            // Nothing
         }
     }
 }

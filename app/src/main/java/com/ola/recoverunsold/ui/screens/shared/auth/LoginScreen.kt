@@ -13,7 +13,6 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -52,6 +51,7 @@ import com.ola.recoverunsold.ui.components.app.AppHero
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
+import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
@@ -83,11 +83,9 @@ fun LoginScreen(
             onSubmit = {
                 if (!loginViewModel.formState.isValid) {
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar(
+                        snackbarHostState.show(
                             message = loginViewModel.formState.errorMessage
-                                ?: Strings.get(R.string.invalid_data),
-                            actionLabel = Strings.get(R.string.ok),
-                            duration = SnackbarDuration.Long
+                                ?: Strings.get(R.string.invalid_data)
                         )
                     }
                 } else {
@@ -250,11 +248,7 @@ fun LoginScreenContent(
             if (errorMessage != null) {
                 LaunchedEffect(snackbarHostState) {
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar(
-                            message = errorMessage,
-                            actionLabel = Strings.get(R.string.ok),
-                            duration = SnackbarDuration.Long
-                        )
+                        snackbarHostState.show(message = errorMessage)
                     }
                 }
             }
@@ -272,7 +266,6 @@ fun LoginScreenContent(
     }
 }
 
-
 class LoginViewModel(private val authService: AuthService = get(AuthService::class.java)) :
     ViewModel() {
     var apiCallResult: ApiCallResult<Token> by mutableStateOf(ApiCallResult.Inactive())
@@ -286,12 +279,9 @@ class LoginViewModel(private val authService: AuthService = get(AuthService::cla
             val response = authService.login(LoginRequest(email = email, password = password))
             apiCallResult = if (response.isSuccessful) {
                 val token = response.body()
-                ApiCallResult.Success(_data = token)
+                ApiCallResult.Success(_data = token).also { onSuccess() }
             } else {
                 ApiCallResult.Error(code = response.code())
-            }
-            if (apiCallResult is ApiCallResult.Success) {
-                onSuccess()
             }
         }
     }

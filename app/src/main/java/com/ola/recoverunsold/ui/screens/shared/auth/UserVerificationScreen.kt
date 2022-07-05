@@ -12,7 +12,6 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -45,6 +44,7 @@ import com.ola.recoverunsold.api.services.UserVerificationService
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
+import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.FormState
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
@@ -71,11 +71,9 @@ fun UserVerificationScreen(
             onSubmit = {
                 if (!userVerificationViewModel.formState.isValid) {
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar(
+                        snackbarHostState.show(
                             message = userVerificationViewModel.formState.errorMessage
-                                ?: Strings.get(R.string.invalid_data),
-                            actionLabel = Strings.get(R.string.ok),
-                            duration = SnackbarDuration.Long
+                                ?: Strings.get(R.string.invalid_data)
                         )
                     }
                 } else {
@@ -185,11 +183,7 @@ fun UserVerificationContent(
         if (errorMessage != null) {
             LaunchedEffect(snackbarHostState) {
                 coroutineScope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = errorMessage,
-                        actionLabel = Strings.get(R.string.ok),
-                        duration = SnackbarDuration.Long
-                    )
+                    snackbarHostState.show(message = errorMessage)
                 }
             }
         }

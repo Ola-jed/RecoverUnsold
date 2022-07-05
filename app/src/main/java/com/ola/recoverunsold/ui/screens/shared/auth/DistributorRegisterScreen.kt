@@ -1,14 +1,36 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Numbers
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -35,6 +57,7 @@ import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.misc.nullIfBlank
+import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.EmailValidator
 import com.ola.recoverunsold.utils.validation.FormState
@@ -43,6 +66,7 @@ import com.ola.recoverunsold.utils.validation.PhoneValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.get
+import kotlin.ranges.contains
 
 @Composable
 fun DistributorRegisterScreen(
@@ -73,11 +97,9 @@ fun DistributorRegisterScreen(
             onSubmit = {
                 if (!distributorRegisterViewModel.formState.isValid) {
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar(
+                        snackbarHostState.show(
                             message = distributorRegisterViewModel.formState.errorMessage
-                                ?: Strings.get(R.string.invalid_data),
-                            actionLabel = Strings.get(R.string.ok),
-                            duration = SnackbarDuration.Long
+                                ?: Strings.get(R.string.invalid_data)
                         )
                     }
                 } else {
@@ -307,11 +329,7 @@ fun DistributorRegisterContent(
             if (errorMessage != null) {
                 LaunchedEffect(snackbarHostState) {
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar(
-                            message = errorMessage,
-                            actionLabel = Strings.get(R.string.ok),
-                            duration = SnackbarDuration.Long
-                        )
+                        snackbarHostState.show(message = errorMessage)
                     }
                 }
             }
@@ -319,10 +337,8 @@ fun DistributorRegisterContent(
             if (isSuccessful) {
                 LaunchedEffect(snackbarHostState) {
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar(
-                            message = Strings.get(R.string.code_sent_successfully),
-                            actionLabel = Strings.get(R.string.ok),
-                            duration = SnackbarDuration.Long
+                        snackbarHostState.show(
+                            message = Strings.get(R.string.code_sent_successfully)
                         )
                     }
                 }

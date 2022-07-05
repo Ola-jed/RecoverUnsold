@@ -14,7 +14,6 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -45,6 +44,7 @@ import com.ola.recoverunsold.ui.components.location.LocationItem
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.misc.jsonSerialize
 import com.ola.recoverunsold.utils.misc.remove
+import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import kotlinx.coroutines.launch
@@ -71,11 +71,9 @@ fun DistributorLocationsScreen(
             ApiStatus.ERROR -> {
                 LaunchedEffect(snackbarHostState) {
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar(
+                        snackbarHostState.show(
                             message = locationsSectionViewModel.errorMessage()
-                                ?: Strings.get(R.string.unknown_error_occured),
-                            actionLabel = Strings.get(R.string.ok),
-                            duration = SnackbarDuration.Long
+                                ?: Strings.get(R.string.unknown_error_occured)
                         )
                     }
                 }
@@ -125,20 +123,16 @@ fun DistributorLocationsScreen(
                                             location = item,
                                             onSuccess = {
                                                 coroutineScope.launch {
-                                                    snackbarHostState.showSnackbar(
-                                                        message = Strings.get(R.string.location_deleted_successfully),
-                                                        actionLabel = Strings.get(R.string.ok),
-                                                        duration = SnackbarDuration.Long
+                                                    snackbarHostState.show(
+                                                        message = Strings.get(R.string.location_deleted_successfully)
                                                     )
                                                 }
                                                 locationsSectionViewModel.getLocations()
                                             },
                                             onFailure = {
                                                 coroutineScope.launch {
-                                                    snackbarHostState.showSnackbar(
-                                                        message = Strings.get(R.string.location_deletion_failed),
-                                                        actionLabel = Strings.get(R.string.ok),
-                                                        duration = SnackbarDuration.Long
+                                                    snackbarHostState.show(
+                                                        message = Strings.get(R.string.location_deletion_failed)
                                                     )
                                                 }
                                             }

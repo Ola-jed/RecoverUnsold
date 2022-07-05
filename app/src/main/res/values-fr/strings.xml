@@ -127,4 +127,12 @@
     <string name="expired_label">Expirées</string>
     <string name="status_label">Statut</string>
     <string name="no_offers_found">Aucune offre trouvée</string>
+    <string name="offer_not_found">Offre introuvable</string>
+    <string name="retry">Réessayer</string>
+    <string name="delete_product_question">Voulez-vous supprimer ce produit ?</string>
+    <string name="delete_product_label">Suppression du produit</string>
+    <string name="pick_up_point">Point de retrait</string>
+    <string name="products_label">Produits</string>
+    <string name="offer_details">Détails de l\'offre</string>
+    <string name="view_location_on_maps">Voir le lieu sur Maps</string>
 </resources>

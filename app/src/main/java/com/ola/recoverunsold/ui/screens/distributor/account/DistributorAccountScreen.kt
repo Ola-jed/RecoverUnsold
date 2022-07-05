@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
@@ -40,12 +39,13 @@ import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.api.requests.DistributorUpdateRequest
 import com.ola.recoverunsold.api.services.AccountService
 import com.ola.recoverunsold.models.Distributor
-import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.account.DistributorProfileInformationSection
+import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.misc.logout
 import com.ola.recoverunsold.utils.misc.nullIfBlank
+import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
@@ -140,11 +140,9 @@ fun DistributorAccountScreen(
                     onEditingEnd = {
                         if (!distributorAccountViewModel.formState.isValid) {
                             coroutineScope.launch {
-                                snackbarHostState.showSnackbar(
+                                snackbarHostState.show(
                                     message = distributorAccountViewModel.formState.errorMessage
-                                        ?: Strings.get(R.string.invalid_data),
-                                    actionLabel = Strings.get(R.string.ok),
-                                    duration = SnackbarDuration.Long
+                                        ?: Strings.get(R.string.invalid_data)
                                 )
                             }
                         } else {
@@ -168,10 +166,8 @@ fun DistributorAccountScreen(
                                         inclusive = true
                                     }
                                 }
-                                snackbarHostState.showSnackbar(
-                                    Strings.get(R.string.account_deleted_successfully),
-                                    Strings.get(R.string.ok),
-                                    duration = SnackbarDuration.Long
+                                snackbarHostState.show(
+                                    Strings.get(R.string.account_deleted_successfully)
                                 )
                             }
                         }
@@ -203,10 +199,8 @@ fun DistributorAccountScreen(
             if (distributorAccountViewModel.accountApiCallResult.status == ApiStatus.SUCCESS) {
                 LaunchedEffect(snackbarHostState) {
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar(
-                            message = Strings.get(R.string.account_updated_successfully),
-                            actionLabel = Strings.get(R.string.ok),
-                            duration = SnackbarDuration.Long
+                        snackbarHostState.show(
+                            message = Strings.get(R.string.account_updated_successfully)
                         )
                     }
                 }
@@ -215,10 +209,8 @@ fun DistributorAccountScreen(
             if (distributorAccountViewModel.errorMessage() != null) {
                 LaunchedEffect(snackbarHostState) {
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar(
-                            message = distributorAccountViewModel.errorMessage()!!,
-                            actionLabel = Strings.get(R.string.ok),
-                            duration = SnackbarDuration.Long
+                        snackbarHostState.show(
+                            message = distributorAccountViewModel.errorMessage()!!
                         )
                     }
                 }

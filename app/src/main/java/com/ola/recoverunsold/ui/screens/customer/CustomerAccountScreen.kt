@@ -1,7 +1,6 @@
 package com.ola.recoverunsold.ui.screens.customer
 
 import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -28,6 +27,7 @@ import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.misc.logout
 import com.ola.recoverunsold.utils.misc.nullIfBlank
+import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
@@ -67,11 +67,9 @@ fun CustomerAccountScreen(
             onEditingEnd = {
                 if (!customerAccountServiceViewModel.formState.isValid) {
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar(
+                        snackbarHostState.show(
                             message = customerAccountServiceViewModel.formState.errorMessage
-                                ?: Strings.get(R.string.invalid_data),
-                            actionLabel = Strings.get(R.string.ok),
-                            duration = SnackbarDuration.Long
+                                ?: Strings.get(R.string.invalid_data)
                         )
                     }
                 } else {
@@ -91,10 +89,8 @@ fun CustomerAccountScreen(
                         navController.navigate(Routes.Home.path) {
                             popUpTo(Routes.Home.path) { inclusive = true }
                         }
-                        snackbarHostState.showSnackbar(
-                            Strings.get(R.string.account_deleted_successfully),
-                            Strings.get(R.string.ok),
-                            duration = SnackbarDuration.Long
+                        snackbarHostState.show(
+                            message = Strings.get(R.string.account_deleted_successfully)
                         )
                     }
                 }

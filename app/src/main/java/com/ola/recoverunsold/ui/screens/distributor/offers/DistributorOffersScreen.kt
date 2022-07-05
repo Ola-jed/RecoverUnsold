@@ -9,12 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -43,12 +41,14 @@ import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.ui.components.app.AppBar
+import com.ola.recoverunsold.ui.components.app.LoadingIndicator
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.offer.OfferFilterComponent
 import com.ola.recoverunsold.ui.components.offer.OfferItem
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.misc.jsonSerialize
 import com.ola.recoverunsold.utils.misc.remove
+import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
@@ -84,26 +84,26 @@ fun DistributorOffersScreen(
         }
     ) { paddingValues ->
         when (distributorOffersViewModel.offersApiResult.status) {
-            ApiStatus.LOADING -> {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    CircularProgressIndicator(
-                        color = MaterialTheme.colors.primary,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            }
+            ApiStatus.LOADING -> LoadingIndicator()
             ApiStatus.ERROR -> {
-                LaunchedEffect(snackbarHostState) {
-                    coroutineScope.launch {
-                        snackbarHostState.showSnackbar(
-                            message = distributorOffersViewModel.errorMessage()
-                                ?: Strings.get(R.string.unknown_error_occured),
-                            actionLabel = Strings.get(R.string.ok),
-                            duration = SnackbarDuration.Long
-                        ).also {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Button(
+                        onClick = {
                             distributorOffersViewModel.resetFilter()
                             distributorOffersViewModel.getOffers()
-                        }
+                        },
+                        modifier = Modifier.align(Alignment.Center)
+                    ) {
+                        Text(stringResource(id = R.string.retry))
+                    }
+                }
+
+                LaunchedEffect(snackbarHostState) {
+                    coroutineScope.launch {
+                        snackbarHostState.show(
+                            message = distributorOffersViewModel.errorMessage()
+                                ?: Strings.get(R.string.unknown_error_occured)
+                        )
                     }
                 }
             }
@@ -210,20 +210,16 @@ fun DistributorOffersScreen(
                                         offer = item,
                                         onSuccess = {
                                             coroutineScope.launch {
-                                                snackbarHostState.showSnackbar(
-                                                    message = Strings.get(R.string.offer_deleted_successfully),
-                                                    actionLabel = Strings.get(R.string.ok),
-                                                    duration = SnackbarDuration.Long
+                                                snackbarHostState.show(
+                                                    message = Strings.get(R.string.offer_deleted_successfully)
                                                 )
                                             }
                                             distributorOffersViewModel.getOffers()
                                         },
                                         onFailure = {
                                             coroutineScope.launch {
-                                                snackbarHostState.showSnackbar(
-                                                    message = Strings.get(R.string.offer_deletion_failed),
-                                                    actionLabel = Strings.get(R.string.ok),
-                                                    duration = SnackbarDuration.Long
+                                                snackbarHostState.show(
+                                                    message = Strings.get(R.string.offer_deletion_failed)
                                                 )
                                             }
                                         }

@@ -4,9 +4,13 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.AppRegistration
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Login
+import androidx.compose.material.icons.outlined.ShoppingBag
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -24,54 +28,42 @@ fun VisitorDrawer(navController: NavController): @Composable ColumnScope.() -> U
             navController = navController,
             route = Routes.Home.path,
             text = R.string.home,
-            leadingIcon = {
-                Icon(imageVector = Icons.Outlined.Home, contentDescription = null)
-            },
+            leadingIcon = Icons.Outlined.Home,
             modifier = Modifier.padding(vertical = 5.dp)
         )
         DrawerNavRow(
             navController = navController,
             route = Routes.Distributors.path,
             text = R.string.distributors,
-            leadingIcon = {
-                Icon(imageVector = Icons.Outlined.ShoppingCart, contentDescription = null)
-            },
+            leadingIcon = Icons.Outlined.ShoppingCart,
             modifier = Modifier.padding(vertical = 5.dp)
         )
         DrawerNavRow(
             navController = navController,
             route = Routes.Offers.path,
             text = R.string.offers,
-            leadingIcon = {
-                Icon(imageVector = Icons.Outlined.ShoppingBag, contentDescription = null)
-            },
+            leadingIcon = Icons.Outlined.ShoppingBag,
             modifier = Modifier.padding(vertical = 5.dp)
         )
         DrawerNavRow(
             navController = navController,
             route = Routes.Login.path,
             text = R.string.login_action,
-            leadingIcon = {
-                Icon(imageVector = Icons.Outlined.Login, contentDescription = null)
-            },
+            leadingIcon = Icons.Outlined.Login,
             modifier = Modifier.padding(vertical = 5.dp)
         )
         DrawerNavRow(
             navController = navController,
             route = Routes.Register.path,
             text = R.string.register_action,
-            leadingIcon = {
-                Icon(imageVector = Icons.Outlined.AppRegistration, contentDescription = null)
-            },
+            leadingIcon = Icons.Outlined.AppRegistration,
             modifier = Modifier.padding(vertical = 5.dp)
         )
         DrawerNavRow(
             navController = navController,
             route = Routes.About.path,
             text = R.string.about,
-            leadingIcon = {
-                Icon(imageVector = Icons.Outlined.Info, contentDescription = null)
-            },
+            leadingIcon = Icons.Outlined.Info,
             modifier = Modifier.padding(vertical = 5.dp)
         )
     }

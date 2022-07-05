@@ -32,6 +32,12 @@ fun LocationMap(
     val context = LocalContext.current
     val locationPermissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
     val lifecycleOwner = LocalLifecycleOwner.current
+    val cameraPositionState = rememberCameraPositionState {
+        position = (CameraPosition.fromLatLngZoom(
+            latLngData,
+            25f
+        ))
+    }
 
     DisposableEffect(key1 = lifecycleOwner, effect = {
         val observer = LifecycleEventObserver { _, event ->
@@ -53,24 +59,14 @@ fun LocationMap(
         else -> {}
     }
 
-
     GoogleMap(
         modifier = modifier.fillMaxWidth(),
-        cameraPositionState = remember {
-            CameraPositionState(
-                position = (CameraPosition.fromLatLngZoom(
-                    latLngData,
-                    25f
-                ))
-            )
-        },
+        cameraPositionState = cameraPositionState,
         onMapLongClick = {
             latLngData = it
             onLatLngUpdate(it)
         },
-        properties = MapProperties(
-            mapType = MapType.HYBRID
-        )
+        properties = MapProperties(mapType = MapType.HYBRID)
     ) {
         Marker(
             state = MarkerState(position = latLngData)

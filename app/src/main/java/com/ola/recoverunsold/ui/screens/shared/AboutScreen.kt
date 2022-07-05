@@ -16,6 +16,7 @@ import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 fun AboutScreen(navController: NavController, snackbarHostState: SnackbarHostState) {
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {

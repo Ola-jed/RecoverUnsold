@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
@@ -39,10 +37,12 @@ import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.ui.components.app.AppBar
+import com.ola.recoverunsold.ui.components.app.LoadingIndicator
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.offer.OfferFilterComponent
 import com.ola.recoverunsold.ui.components.offer.OfferItem
 import com.ola.recoverunsold.ui.navigation.Routes
+import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.get
@@ -68,26 +68,26 @@ fun OffersScreen(
         drawerContent = DrawerContent(navController, snackbarHostState)
     ) { paddingValues ->
         when (offersViewModel.offersApiResult.status) {
-            ApiStatus.LOADING -> {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    CircularProgressIndicator(
-                        color = MaterialTheme.colors.primary,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            }
+            ApiStatus.LOADING -> LoadingIndicator()
             ApiStatus.ERROR -> {
-                LaunchedEffect(snackbarHostState) {
-                    coroutineScope.launch {
-                        snackbarHostState.showSnackbar(
-                            message = offersViewModel.errorMessage()
-                                ?: Strings.get(R.string.unknown_error_occured),
-                            actionLabel = Strings.get(R.string.ok),
-                            duration = SnackbarDuration.Long
-                        ).also {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Button(
+                        onClick = {
                             offersViewModel.resetFilter()
                             offersViewModel.getOffers()
-                        }
+                        },
+                        modifier = Modifier.align(Alignment.Center)
+                    ) {
+                        Text(stringResource(id = R.string.retry))
+                    }
+                }
+
+                LaunchedEffect(snackbarHostState) {
+                    coroutineScope.launch {
+                        snackbarHostState.show(
+                            message = offersViewModel.errorMessage()
+                                ?: Strings.get(R.string.unknown_error_occured)
+                        )
                     }
                 }
             }
@@ -213,6 +213,10 @@ class OffersViewModel(
 ) : ViewModel() {
     var offerFilterQuery by mutableStateOf(OfferFilterQuery(active = true))
     var offersApiResult: ApiCallResult<Page<Offer>> by mutableStateOf(ApiCallResult.Inactive())
+
+    init {
+        getOffers()
+    }
 
     fun getOffers() {
         offersApiResult = ApiCallResult.Loading()

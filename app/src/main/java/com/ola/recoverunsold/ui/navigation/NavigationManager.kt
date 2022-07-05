@@ -8,8 +8,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.ola.recoverunsold.ui.screens.customer.CustomerAccountScreen
-import com.ola.recoverunsold.ui.screens.shared.DistributorsScreen
-import com.ola.recoverunsold.ui.screens.shared.OffersScreen
 import com.ola.recoverunsold.ui.screens.customer.OrdersScreen
 import com.ola.recoverunsold.ui.screens.distributor.account.DistributorAccountScreen
 import com.ola.recoverunsold.ui.screens.distributor.account.DistributorLocationFormScreen
@@ -17,9 +15,20 @@ import com.ola.recoverunsold.ui.screens.distributor.offers.DistributorOfferFormS
 import com.ola.recoverunsold.ui.screens.distributor.offers.DistributorOffersScreen
 import com.ola.recoverunsold.ui.screens.distributor.orders.DistributorOrdersReceivedScreen
 import com.ola.recoverunsold.ui.screens.shared.AboutScreen
+import com.ola.recoverunsold.ui.screens.shared.DistributorsScreen
 import com.ola.recoverunsold.ui.screens.shared.HomeScreen
 import com.ola.recoverunsold.ui.screens.shared.OfferDetailsScreen
-import com.ola.recoverunsold.ui.screens.shared.auth.*
+import com.ola.recoverunsold.ui.screens.shared.OffersScreen
+import com.ola.recoverunsold.ui.screens.shared.auth.CustomerRegisterScreen
+import com.ola.recoverunsold.ui.screens.shared.auth.DistributorRegisterScreen
+import com.ola.recoverunsold.ui.screens.shared.auth.ForgotPasswordScreen
+import com.ola.recoverunsold.ui.screens.shared.auth.LoginScreen
+import com.ola.recoverunsold.ui.screens.shared.auth.PasswordResetScreen
+import com.ola.recoverunsold.ui.screens.shared.auth.PasswordResetSuccessScreen
+import com.ola.recoverunsold.ui.screens.shared.auth.RegisterScreen
+import com.ola.recoverunsold.ui.screens.shared.auth.StartUserVerificationScreen
+import com.ola.recoverunsold.ui.screens.shared.auth.UserVerificationScreen
+import com.ola.recoverunsold.ui.screens.shared.auth.UserVerificationSuccessScreen
 
 @Composable
 fun NavigationManager(navHostController: NavHostController, snackbarHostState: SnackbarHostState) {

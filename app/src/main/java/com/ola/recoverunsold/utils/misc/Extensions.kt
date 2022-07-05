@@ -6,11 +6,16 @@ import android.net.NetworkCapabilities
 import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.annotation.ColorInt
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.SnackbarResult
 import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
+import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.LatLong
+import com.ola.recoverunsold.utils.resources.Strings
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -22,11 +27,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.math.absoluteValue
-
-
-/**
- * Extensions methods for our classes
- */
 
 /**
  * Convert a color string to Hsl
@@ -86,6 +86,18 @@ fun Context.hasNetwork(): Boolean {
         }
     }
     return false
+}
+
+/**
+ * Shortcut for snackbar showing
+ * Because the duration is always long and the dismiss message "OK"
+ */
+suspend fun SnackbarHostState.show(message : String): SnackbarResult {
+    return showSnackbar(
+        message = message,
+        actionLabel = Strings.get(R.string.ok),
+        duration = SnackbarDuration.Long
+    )
 }
 
 /**

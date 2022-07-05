@@ -9,6 +9,7 @@ data class Offer(
     val beneficiaries: Int?,
     val price: Double,
     val createdAt: Date,
+    val distributorId: String,
     val location: Location?,
     val products: List<Product>?
 )

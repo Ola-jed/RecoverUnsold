@@ -19,7 +19,6 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -66,6 +65,7 @@ import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.misc.createFile
 import com.ola.recoverunsold.utils.misc.jsonDeserialize
 import com.ola.recoverunsold.utils.misc.nullIfBlank
+import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.misc.toCoordinates
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
@@ -122,11 +122,9 @@ fun DistributorLocationFormScreen(
             onSubmit = {
                 if (!distributorLocationFormViewModel.formState.isValid) {
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar(
+                        snackbarHostState.show(
                             message = distributorLocationFormViewModel.formState.errorMessage
-                                ?: Strings.get(R.string.invalid_data),
-                            actionLabel = Strings.get(R.string.ok),
-                            duration = SnackbarDuration.Long
+                                ?: Strings.get(R.string.invalid_data)
                         )
                     }
                 } else {
@@ -262,10 +260,8 @@ fun DistributorLocationFormScreenContent(
                     onLatLngUpdate = onLatLngUpdate,
                     onLocationFetchFailed = {
                         coroutineScope.launch {
-                            snackbarHostState.showSnackbar(
-                                message = Strings.get(R.string.location_fetch_failed),
-                                actionLabel = Strings.get(R.string.ok),
-                                duration = SnackbarDuration.Long
+                            snackbarHostState.show(
+                                message = Strings.get(R.string.location_fetch_failed)
                             )
                         }
                     }
@@ -292,10 +288,8 @@ fun DistributorLocationFormScreenContent(
                 Button(onClick = {
                     if (name.isBlank()) {
                         coroutineScope.launch {
-                            snackbarHostState.showSnackbar(
-                                message = Strings.get(R.string.name_field_required_message),
-                                actionLabel = Strings.get(R.string.ok),
-                                duration = SnackbarDuration.Long
+                            snackbarHostState.show(
+                                message = Strings.get(R.string.name_field_required_message)
                             )
                         }
                     } else {
@@ -324,10 +318,8 @@ fun DistributorLocationFormScreenContent(
         if (errorMessage != null) {
             LaunchedEffect(snackbarHostState) {
                 coroutineScope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = errorMessage,
-                        actionLabel = Strings.get(R.string.ok),
-                        duration = SnackbarDuration.Long
+                    snackbarHostState.show(
+                        message = errorMessage
                     )
                 }
             }
@@ -337,10 +329,8 @@ fun DistributorLocationFormScreenContent(
             LaunchedEffect(snackbarHostState) {
                 navController.navigate(Routes.DistributorAccount.path)
                 coroutineScope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = Strings.get(R.string.location_published_successfully),
-                        actionLabel = Strings.get(R.string.ok),
-                        duration = SnackbarDuration.Long
+                    snackbarHostState.show(
+                        message = Strings.get(R.string.location_published_successfully)
                     )
                 }
             }
@@ -350,7 +340,6 @@ fun DistributorLocationFormScreenContent(
 
 class DistributorLocationFormViewModelFactory(private val location: Location?) :
     ViewModelProvider.NewInstanceFactory() {
-
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return DistributorLocationFormViewModel(location = location) as T
