@@ -12,7 +12,7 @@ import com.ola.recoverunsold.utils.resources.googleFontProvider
 
 @OptIn(ExperimentalTextApi::class)
 private val appFontFamily = FontFamily(
-    Font(googleFont = GoogleFont("Open Sans"),fontProvider = googleFontProvider)
+    Font(googleFont = GoogleFont("Open Sans"), fontProvider = googleFontProvider)
 )
 
 val Typography = Typography(
