@@ -195,7 +195,7 @@ fun OfferDetailsScreen(
                                 .fillMaxWidth()
                                 .padding(horizontal = 20.dp, vertical = 10.dp),
                             location = offer.location,
-                            isModifiable = true
+                            isModifiable = offer.distributorId == offerDetailsViewModel.currentUserId
                         )
 
                         val context = LocalContext.current
