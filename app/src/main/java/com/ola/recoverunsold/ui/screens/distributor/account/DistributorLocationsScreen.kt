@@ -20,35 +20,23 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
-import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.core.ApiStatus
-import com.ola.recoverunsold.api.core.StatusCode
-import com.ola.recoverunsold.api.query.PaginationQuery
-import com.ola.recoverunsold.api.services.wrappers.LocationServiceWrapper
-import com.ola.recoverunsold.models.Location
-import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.ui.components.location.LocationItem
 import com.ola.recoverunsold.ui.navigation.Routes
+import com.ola.recoverunsold.ui.screens.viewmodels.LocationsSectionViewModel
 import com.ola.recoverunsold.utils.misc.jsonSerialize
 import com.ola.recoverunsold.utils.misc.remove
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
-import com.ola.recoverunsold.utils.store.TokenStore
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent.get
 
 @Composable
 fun DistributorLocationsScreen(
@@ -168,60 +156,5 @@ fun DistributorLocationsScreen(
                 }
             }
         }
-    }
-}
-
-class LocationsSectionViewModel(
-    private val locationServiceWrapper: LocationServiceWrapper = get(LocationServiceWrapper::class.java)
-) : ViewModel() {
-    private val token = TokenStore.get()!!
-    var locationsGetResponse: ApiCallResult<Page<Location>> by mutableStateOf(ApiCallResult.Inactive())
-    private var paginationQuery by mutableStateOf(PaginationQuery())
-
-    init {
-        getLocations()
-    }
-
-    fun getLocations() {
-        locationsGetResponse = ApiCallResult.Loading()
-        viewModelScope.launch {
-            val response = locationServiceWrapper.getLocations(token.bearerToken, paginationQuery)
-            locationsGetResponse = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
-        }
-    }
-
-    fun getNext() {
-        paginationQuery = paginationQuery.inc()
-        getLocations()
-    }
-
-    fun getPrevious() {
-        paginationQuery = paginationQuery.dec()
-        getLocations()
-    }
-
-    fun deleteLocation(location: Location, onSuccess: () -> Unit, onFailure: () -> Unit) {
-        viewModelScope.launch {
-            val response = locationServiceWrapper.deleteLocation(token.bearerToken, location.id)
-            if (response.isSuccessful) {
-                onSuccess()
-            } else {
-                onFailure()
-            }
-        }
-    }
-
-    fun errorMessage(): String? {
-        if (locationsGetResponse.status == ApiStatus.ERROR) {
-            return when (locationsGetResponse.statusCode) {
-                StatusCode.Unauthorized.code -> Strings.get(R.string.not_authenticated_full_message)
-                else -> Strings.get(R.string.unknown_error_occured)
-            }
-        }
-        return null
     }
 }

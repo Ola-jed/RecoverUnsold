@@ -27,10 +27,7 @@ import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -40,33 +37,22 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
-import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.core.ApiStatus
-import com.ola.recoverunsold.api.core.StatusCode
-import com.ola.recoverunsold.api.requests.DistributorRegisterRequest
-import com.ola.recoverunsold.api.requests.UserVerificationStartRequest
-import com.ola.recoverunsold.api.services.AuthService
-import com.ola.recoverunsold.api.services.UserVerificationService
 import com.ola.recoverunsold.ui.components.app.AppHero
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
-import com.ola.recoverunsold.utils.misc.nullIfBlank
+import com.ola.recoverunsold.ui.screens.viewmodels.DistributorRegisterViewModel
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.EmailValidator
-import com.ola.recoverunsold.utils.validation.FormState
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import com.ola.recoverunsold.utils.validation.PhoneValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent.get
-import kotlin.ranges.contains
 
 @Composable
 fun DistributorRegisterScreen(
@@ -345,59 +331,5 @@ fun DistributorRegisterContent(
                 navController.navigate(Routes.ConfirmUserVerification.path)
             }
         }
-    }
-}
-
-
-class DistributorRegisterViewModel(
-    private val authService: AuthService = get(AuthService::class.java),
-    private val userVerificationService: UserVerificationService = get(
-        UserVerificationService::class.java
-    ),
-) : ViewModel() {
-    var apiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive())
-    var email by mutableStateOf("")
-    var phone by mutableStateOf("")
-    var password by mutableStateOf("")
-    var username by mutableStateOf("")
-    var taxId by mutableStateOf("")
-    var rccm by mutableStateOf("")
-    var websiteUrl by mutableStateOf("")
-    var formState by mutableStateOf(FormState())
-
-    fun register() {
-        apiCallResult = ApiCallResult.Loading()
-        viewModelScope.launch {
-            val response = authService.registerDistributor(
-                DistributorRegisterRequest(
-                    email,
-                    taxId,
-                    password,
-                    phone,
-                    rccm,
-                    username,
-                    websiteUrl.nullIfBlank()
-                )
-            )
-            apiCallResult = if (response.isSuccessful) {
-                val userVerificationResponse = userVerificationService.startUserVerification(
-                    UserVerificationStartRequest(email)
-                )
-                if (userVerificationResponse.isSuccessful) {
-                    ApiCallResult.Success(Unit)
-                } else {
-                    ApiCallResult.Error(code = StatusCode.Unknown.code)
-                }
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
-        }
-    }
-
-    fun errorMessage(): String? = when (apiCallResult.statusCode) {
-        StatusCode.BadRequest.code -> Strings.get(R.string.invalid_data)
-        StatusCode.Unknown.code -> Strings.get(R.string.register_success_verification_failed)
-        in 400..600 -> Strings.get(R.string.unknown_error_occured)
-        else -> null
     }
 }

@@ -21,10 +21,7 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -34,34 +31,27 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.core.ApiStatus
-import com.ola.recoverunsold.api.core.StatusCode
-import com.ola.recoverunsold.api.requests.LoginRequest
-import com.ola.recoverunsold.api.responses.Token
 import com.ola.recoverunsold.api.responses.TokenRoles
 import com.ola.recoverunsold.api.services.AccountService
-import com.ola.recoverunsold.api.services.AuthService
 import com.ola.recoverunsold.ui.components.app.AppHero
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
+import com.ola.recoverunsold.ui.screens.viewmodels.LoginViewModel
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
 import com.ola.recoverunsold.utils.validation.EmailValidator
-import com.ola.recoverunsold.utils.validation.FormState
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.get
-import kotlin.ranges.contains
 
 @Composable
 fun LoginScreen(
@@ -263,34 +253,5 @@ fun LoginScreenContent(
                 }
             }
         }
-    }
-}
-
-class LoginViewModel(private val authService: AuthService = get(AuthService::class.java)) :
-    ViewModel() {
-    var apiCallResult: ApiCallResult<Token> by mutableStateOf(ApiCallResult.Inactive())
-    var email by mutableStateOf("")
-    var password by mutableStateOf("")
-    var formState by mutableStateOf(FormState())
-
-    fun login(onSuccess: () -> Unit = {}) {
-        apiCallResult = ApiCallResult.Loading()
-        viewModelScope.launch {
-            val response = authService.login(LoginRequest(email = email, password = password))
-            apiCallResult = if (response.isSuccessful) {
-                val token = response.body()
-                ApiCallResult.Success(_data = token).also { onSuccess() }
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
-        }
-    }
-
-    fun errorMessage(): String? = when (apiCallResult.statusCode) {
-        StatusCode.Unauthorized.code -> Strings.get(R.string.invalid_credentials)
-        StatusCode.Forbidden.code -> Strings.get(R.string.account_not_verified)
-        StatusCode.BadRequest.code -> Strings.get(R.string.invalid_data)
-        in 400..600 -> Strings.get(R.string.unknown_error_occured)
-        else -> null
     }
 }

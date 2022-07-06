@@ -28,7 +28,7 @@ fun RegisterScreen(navController: NavController, snackbarHostState: SnackbarHost
 @Composable
 fun RegisterScreenContent(
     modifier: Modifier = Modifier,
-    navController: NavController,
+    navController: NavController
 ) {
     Column(
         modifier = modifier
