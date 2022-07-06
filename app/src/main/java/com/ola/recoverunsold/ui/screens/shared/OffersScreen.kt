@@ -16,36 +16,25 @@ import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
-import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.core.ApiStatus
-import com.ola.recoverunsold.api.core.StatusCode
-import com.ola.recoverunsold.api.query.OfferFilterQuery
-import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
-import com.ola.recoverunsold.models.Offer
-import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.offer.OfferFilterComponent
 import com.ola.recoverunsold.ui.components.offer.OfferItem
 import com.ola.recoverunsold.ui.navigation.Routes
+import com.ola.recoverunsold.ui.screens.viewmodels.OffersViewModel
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent.get
 
 // TODO : Get offers near to this user
 @Composable
@@ -205,52 +194,5 @@ fun OffersScreen(
                 }
             }
         }
-    }
-}
-
-class OffersViewModel(
-    private val offerServiceWrapper: OfferServiceWrapper = get(OfferServiceWrapper::class.java)
-) : ViewModel() {
-    var offerFilterQuery by mutableStateOf(OfferFilterQuery(active = true))
-    var offersApiResult: ApiCallResult<Page<Offer>> by mutableStateOf(ApiCallResult.Inactive())
-
-    init {
-        getOffers()
-    }
-
-    fun getOffers() {
-        offersApiResult = ApiCallResult.Loading()
-        viewModelScope.launch {
-            val response = offerServiceWrapper.getOffers(offerFilterQuery)
-            offersApiResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
-        }
-    }
-
-    fun getNext() {
-        offerFilterQuery = offerFilterQuery.inc()
-        getOffers()
-    }
-
-    fun getPrevious() {
-        offerFilterQuery = offerFilterQuery.dec()
-        getOffers()
-    }
-
-    fun resetFilter() {
-        offerFilterQuery = OfferFilterQuery(active = true)
-    }
-
-    fun errorMessage(): String? {
-        if (offersApiResult.status == ApiStatus.ERROR) {
-            return when (offersApiResult.statusCode) {
-                StatusCode.Unauthorized.code -> Strings.get(R.string.not_authenticated_full_message)
-                else -> Strings.get(R.string.unknown_error_occured)
-            }
-        }
-        return null
     }
 }

@@ -24,10 +24,7 @@ import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -35,28 +32,22 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
-import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.core.ApiStatus
-import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
-import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
 import com.ola.recoverunsold.ui.components.app.SubtitleWithIcon
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.location.LocationItem
 import com.ola.recoverunsold.ui.components.product.ProductItem
+import com.ola.recoverunsold.ui.screens.viewmodels.OfferDetailsViewModel
+import com.ola.recoverunsold.ui.screens.viewmodels.OfferDetailsViewModelFactory
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
-import com.ola.recoverunsold.utils.store.UserObserver
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent.get
 import java.util.Date
 
 // TODO: handle product update and delete for distributors
@@ -222,44 +213,5 @@ fun OfferDetailsScreen(
                 }
             }
         }
-    }
-}
-
-
-class OfferDetailsViewModelFactory(private val offerId: String) :
-    ViewModelProvider.NewInstanceFactory() {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return OfferDetailsViewModel(offerId = offerId) as T
-    }
-}
-
-class OfferDetailsViewModel(
-    private val offerServiceWrapper: OfferServiceWrapper = get(OfferServiceWrapper::class.java),
-    private val offerId: String
-) : ViewModel() {
-    var offerApiCallResult: ApiCallResult<Offer> by mutableStateOf(ApiCallResult.Inactive())
-    val currentUserId = UserObserver.user.value?.id ?: ""
-
-    init {
-        getOffer()
-    }
-
-    fun getOffer() {
-        offerApiCallResult = ApiCallResult.Loading()
-        viewModelScope.launch {
-            val response = offerServiceWrapper.getOffer(offerId)
-            offerApiCallResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
-        }
-    }
-
-    fun errorMessage(): String? = when (offerApiCallResult.statusCode) {
-        404 -> Strings.get(R.string.offer_not_found)
-        in 400..600 -> Strings.get(R.string.unknown_error_occured)
-        else -> null
     }
 }
