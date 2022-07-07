@@ -44,9 +44,10 @@ fun CustomTextInput(
     colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(),
     validator: Validator? = null,
     onValidationError: ((String) -> Unit)? = null,
-    onValidationSuccess: (() -> Unit)? = null
+    onValidationSuccess: (() -> Unit)? = null,
+    canBeEmpty: Boolean = false
 ) {
-    val valueIsInvalid = value.isNotBlank() && validator?.isValid(value.trimEnd()) == false
+    val valueIsInvalid = (!canBeEmpty && value.isNotBlank()) && validator?.isValid(value.trimEnd()) == false
     Column(
         modifier = Modifier
             .padding(
@@ -90,7 +91,7 @@ fun CustomTextInput(
                 style = MaterialTheme.typography.caption,
                 modifier = Modifier.padding(start = 16.dp)
             )
-        } else if (value.isBlank()) {
+        } else if (value.isBlank() && !canBeEmpty) {
             onValidationError?.invoke(Strings.get(R.string.invalid_data))
         }
     }

@@ -233,18 +233,6 @@ fun DistributorOfferFormContent(
 
         CustomTextInput(
             modifier = fieldsModifier,
-            value = if (beneficiaries == 0) "" else beneficiaries.toString(),
-            onValueChange = { onBeneficiariesChange(it.toSecureInt()) },
-            label = { Text(text = stringResource(R.string.number_of_beneficiaries)) },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Number
-            ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
-        )
-
-        CustomTextInput(
-            modifier = fieldsModifier,
             value = price.formatWithoutTrailingZeros(),
             onValueChange = { onPriceChange(it.toSecureDouble()) },
             label = { Text(text = stringResource(R.string.price_label)) },
@@ -288,6 +276,22 @@ fun DistributorOfferFormContent(
                 }
             }
         }
+
+        CustomTextInput(
+            modifier = fieldsModifier,
+            value = if (beneficiaries == 0) "" else beneficiaries.toString(),
+            onValueChange = { onBeneficiariesChange(it.toSecureInt()) },
+            label = { Text(text = stringResource(R.string.number_of_beneficiaries)) },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Number
+            ),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+            validator = IntegerValidator(required = false),
+            onValidationSuccess = onValidationSuccess,
+            onValidationError = onValidationError,
+            canBeEmpty = true
+        )
 
         Button(modifier = fieldsModifier, onClick = onSubmit, enabled = !loading) {
             if (loading) {
