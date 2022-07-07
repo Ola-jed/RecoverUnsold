@@ -138,4 +138,14 @@
     <string name="existing_locations_fetch_failed">Une erreur s\'est produite lors de la récupération des sites existants</string>
     <string name="create_new_offer_label">Créer une nouvelle offre</string>
     <string name="update_offer_label">Mise à jour de l\'offre</string>
+    <string name="number_of_beneficiaries">Nombre de bénéficiaires (facultatif)</string>
+    <string name="invalid_start_date">Date de début invalide</string>
+    <string name="invalid_end_date">Date de fin invalide</string>
+    <string name="end_date_after_start_date">La date de fin doit être postérieure à la date de début</string>
+    <string name="offer_published_successfully">Offre publiée avec succès</string>
+    <string name="offer_updated_successfully">L\'offre a été mise à jour avec succès</string>
+    <string name="location">Site</string>
+    <string name="unspecified">Non spécifié</string>
+    <string name="invalid_integer">Nombre entier invalide</string>
+    <string name="invalid_decimal">Nombre décimal invalide</string>
 </resources>

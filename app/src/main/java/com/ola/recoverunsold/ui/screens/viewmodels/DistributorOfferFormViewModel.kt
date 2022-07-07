@@ -7,8 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.ola.recoverunsold.R
+import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.core.ApiStatus
+import com.ola.recoverunsold.api.core.StatusCode
 import com.ola.recoverunsold.api.query.PaginationQuery
+import com.ola.recoverunsold.api.requests.OfferCreateRequest
+import com.ola.recoverunsold.api.requests.OfferUpdateRequest
 import com.ola.recoverunsold.api.requests.ProductCreateRequest
 import com.ola.recoverunsold.api.services.wrappers.LocationServiceWrapper
 import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
@@ -37,11 +41,12 @@ class DistributorOfferFormViewModel(
     ),
     private val offer: Offer?
 ) : ViewModel() {
-    private val token = TokenStore.get()!!
+    private val bearerToken = TokenStore.get()!!.bearerToken
+    private var locationPaginationQuery by mutableStateOf(PaginationQuery(perPage = 50))
+    private var locationsResponse by mutableStateOf(ApiStatus.INACTIVE)
     var formState by mutableStateOf(FormState())
-    var locationPaginationQuery by mutableStateOf(PaginationQuery())
-    var locationsResponse by mutableStateOf(ApiStatus.INACTIVE)
     var locations: List<Location> by mutableStateOf(emptyList())
+    var offerResponse: ApiCallResult<Offer> by mutableStateOf(ApiCallResult.Inactive())
 
     var startDate by mutableStateOf(offer?.startDate)
     var endDate by mutableStateOf(
@@ -50,7 +55,7 @@ class DistributorOfferFormViewModel(
                 offer.startDate.toInstant().plusSeconds(offer.duration.toLong())
             )
         } else {
-           null
+            null
         }
     )
     var beneficiaries by mutableStateOf(offer?.beneficiaries ?: 0)
@@ -66,28 +71,75 @@ class DistributorOfferFormViewModel(
         locationsResponse = ApiStatus.LOADING
         viewModelScope.launch {
             val response = locationServiceWrapper.getLocations(
-                token.bearerToken,
+                bearerToken,
                 locationPaginationQuery
             )
             if (response.isSuccessful) {
                 val responsePage = response.body()!!
-                if (responsePage.hasNext) {
-                    locations = locations.plus(responsePage.items)
-                    locationPaginationQuery = locationPaginationQuery++
-                    fetchPublishedLocations()
-                } else {
-                    locations = locations.plus(responsePage.items)
-                }
+                locations = locations.plus(responsePage.items)
+                locationPaginationQuery = locationPaginationQuery++
+                locationsResponse = ApiStatus.SUCCESS
             } else {
                 locationsResponse = ApiStatus.ERROR
             }
         }
     }
 
-    fun errorMessage(): String? {
-        if(locationsResponse == ApiStatus.ERROR) {
-            return Strings.get(R.string.existing_locations_fetch_failed)
+    fun create() {
+        offerResponse = ApiCallResult.Loading()
+        val offerCreateRequest = OfferCreateRequest(
+            startDate = startDate!!,
+            duration = (endDate!!.time.toULong() - startDate!!.time.toULong()) / 1000UL,
+            beneficiaries = if (beneficiaries == 0) null else beneficiaries,
+            price = price,
+            locationId = location!!.id
+        )
+        viewModelScope.launch {
+            val response = offerServiceWrapper.createOffer(bearerToken, offerCreateRequest)
+            offerResponse = if (response.isSuccessful) {
+                ApiCallResult.Success(_data = response.body())
+            } else {
+                ApiCallResult.Error(code = response.code())
+            }
         }
-        return null;
+    }
+
+    fun update() {
+        offerResponse = ApiCallResult.Loading()
+        val offerUpdateRequest = OfferUpdateRequest(
+            startDate = startDate!!,
+            duration = (endDate!!.time.toULong() - startDate!!.time.toULong()) / 1000UL,
+            beneficiaries = if (beneficiaries == 0) null else beneficiaries,
+            price = price,
+            locationId = location!!.id
+        )
+        viewModelScope.launch {
+            val response = offerServiceWrapper.updateOffer(
+                bearerToken,
+                offer!!.id,
+                offerUpdateRequest
+            )
+            offerResponse = if (response.isSuccessful) {
+                ApiCallResult.Success(_data = offer)
+            } else {
+                ApiCallResult.Error(code = response.code())
+            }
+        }
+    }
+
+    fun errorMessage(): String? {
+        return when {
+            locationsResponse == ApiStatus.ERROR -> {
+                Strings.get(R.string.existing_locations_fetch_failed)
+            }
+            offerResponse.status == ApiStatus.ERROR -> {
+                when (offerResponse.statusCode) {
+                    StatusCode.Unauthorized.code -> Strings.get(R.string.not_authenticated_full_message)
+                    StatusCode.BadRequest.code -> Strings.get(R.string.invalid_data)
+                    else -> Strings.get(R.string.unknown_error_occured)
+                }
+            }
+            else -> null
+        }
     }
 }

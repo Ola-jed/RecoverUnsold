@@ -11,6 +11,9 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.util.Date
 
+/**
+ * Component to show the date picker and immediately after the time picker
+ */
 @Composable
 fun DateTimePicker(
     date: Date? = null,
@@ -27,7 +30,6 @@ fun DateTimePicker(
             date = localDate,
             onDateUpdated = {
                 localDate = it
-                onDateUpdate(buildDate(localDate, localTime))
                 showDatePicker = false
                 showTimePicker = true
             },

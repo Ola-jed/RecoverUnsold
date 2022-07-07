@@ -210,16 +210,12 @@ fun LoginScreenContent(
                     .align(Alignment.Start)
             )
 
-            if (loading) {
-                Button(modifier = fieldsModifier, onClick = {}, enabled = false) {
+            Button(modifier = fieldsModifier, onClick = onSubmit, enabled = !loading) {
+                if (loading) {
                     CircularProgressIndicator(color = MaterialTheme.colors.background)
-                }
-            } else {
-                Button(
-                    onClick = onSubmit,
-                    modifier = fieldsModifier,
-                ) {
+                } else {
                     Text(stringResource(R.string.login_action), modifier = Modifier.padding(5.dp))
+
                 }
             }
 

@@ -50,11 +50,7 @@ fun CustomTextInput(
     Column(
         modifier = Modifier
             .padding(
-                bottom = if (!valueIsInvalid) {
-                    10.dp
-                } else {
-                    0.dp
-                }
+                bottom = if (valueIsInvalid) 0.dp else 10.dp
             )
     ) {
         OutlinedTextField(

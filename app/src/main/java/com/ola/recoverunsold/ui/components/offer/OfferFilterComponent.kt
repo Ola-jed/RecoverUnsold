@@ -35,6 +35,8 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.DateTimePicker
 import com.ola.recoverunsold.utils.misc.formatDateTime
+import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
+import com.ola.recoverunsold.utils.misc.toSecureDouble
 import java.util.Date
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -85,10 +87,10 @@ fun OfferFilterComponent(
                 )
 
                 CustomTextInput(
-                    value = minPrice?.toInt()?.toString() ?: "",
+                    value = minPrice.formatWithoutTrailingZeros(),
                     onValueChange = {
                         if (it.isNotBlank()) {
-                            onMinPriceChange(it.toDouble())
+                            onMinPriceChange(it.toSecureDouble())
                         }
                     },
                     label = { Text(text = stringResource(R.string.minimum_price_label)) },
@@ -99,10 +101,10 @@ fun OfferFilterComponent(
                 )
 
                 CustomTextInput(
-                    value = maxPrice?.toInt()?.toString() ?: "",
+                    value = maxPrice.formatWithoutTrailingZeros(),
                     onValueChange = {
                         if (it.isNotBlank()) {
-                            onMaxPriceChange(it.toDouble())
+                            onMaxPriceChange(it.toSecureDouble())
                         }
                     },
                     label = { Text(text = stringResource(R.string.maximum_price_label)) },

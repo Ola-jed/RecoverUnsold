@@ -45,6 +45,7 @@ import com.ola.recoverunsold.ui.components.product.ProductItem
 import com.ola.recoverunsold.ui.screens.viewmodels.OfferDetailsViewModel
 import com.ola.recoverunsold.ui.screens.viewmodels.OfferDetailsViewModelFactory
 import com.ola.recoverunsold.utils.misc.formatDateTime
+import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
@@ -114,7 +115,10 @@ fun OfferDetailsScreen(
                     )
 
                     Text(
-                        text = stringResource(R.string.total_amount, offer.price.toString()),
+                        text = stringResource(
+                            R.string.total_amount,
+                            offer.price.formatWithoutTrailingZeros()
+                        ),
                         modifier = Modifier.padding(top = 10.dp)
                     )
 

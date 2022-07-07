@@ -3,10 +3,20 @@ package com.ola.recoverunsold.ui.screens.distributor.offers
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ExposedDropdownMenuBox
+import androidx.compose.material.ExposedDropdownMenuDefaults
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
@@ -14,31 +24,45 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EditCalendar
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
+import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.api.requests.ProductCreateRequest
 import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.models.Offer
-import com.ola.recoverunsold.models.Product
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.DateTimePicker
+import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorOfferFormViewModel
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorOfferFormViewModelFactory
 import com.ola.recoverunsold.utils.misc.formatDateTime
+import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 import com.ola.recoverunsold.utils.misc.jsonDeserialize
+import com.ola.recoverunsold.utils.misc.show
+import com.ola.recoverunsold.utils.misc.toSecureDouble
+import com.ola.recoverunsold.utils.misc.toSecureInt
+import com.ola.recoverunsold.utils.resources.Strings
+import com.ola.recoverunsold.utils.validation.IntegerValidator
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Date
 
 // TODO : finish
@@ -68,8 +92,7 @@ fun DistributorOfferFormScreen(
         }
     ) { paddingValues ->
         DistributorOfferFormContent(
-            modifier = Modifier
-                .padding(paddingValues),
+            modifier = Modifier.padding(paddingValues),
             formType = if (offer == null) FormType.Create else FormType.Update,
             startDate = distributorOfferFormViewModel.startDate,
             endDate = distributorOfferFormViewModel.endDate,
@@ -83,16 +106,54 @@ fun DistributorOfferFormScreen(
             onBeneficiariesChange = { distributorOfferFormViewModel.beneficiaries = it },
             onPriceChange = { distributorOfferFormViewModel.price = it },
             onLocationChange = { distributorOfferFormViewModel.location = it },
-            onSubmit = {/* TODO */ },
-            loading = false,
+            onSubmit = {
+                if (!distributorOfferFormViewModel.formState.isValid) {
+                    coroutineScope.launch {
+                        snackbarHostState.show(
+                            message = distributorOfferFormViewModel.formState.errorMessage
+                                ?: Strings.get(R.string.invalid_data)
+                        )
+                    }
+                } else {
+                    if (offer == null) {
+                        distributorOfferFormViewModel.create()
+                    } else {
+                        distributorOfferFormViewModel.update()
+                    }
+                }
+            },
+            loading = distributorOfferFormViewModel.offerResponse.status == ApiStatus.LOADING,
             snackbarHostState = snackbarHostState,
             coroutineScope = coroutineScope,
             errorMessage = distributorOfferFormViewModel.errorMessage(),
-            isSuccessful = false
+            onValidationSuccess = {
+                distributorOfferFormViewModel.formState = distributorOfferFormViewModel.formState
+                    .copy(
+                        isValid = true,
+                        errorMessage = null
+                    )
+            },
+            onValidationError = {
+                distributorOfferFormViewModel.formState = distributorOfferFormViewModel.formState
+                    .copy(
+                        isValid = false,
+                        errorMessage = it
+                    )
+            },
+            isSuccessful = distributorOfferFormViewModel.offerResponse.status == ApiStatus.SUCCESS,
+            onSuccess = {
+                navController.navigate(
+                    Routes.OfferDetails.path.replace(
+                        "{offerId}",
+                        distributorOfferFormViewModel.offerResponse.data!!.id
+                    )
+                )
+            }
         )
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DistributorOfferFormContent(
     modifier: Modifier,
@@ -110,27 +171,43 @@ fun DistributorOfferFormContent(
     onPriceChange: (Double) -> Unit,
     onLocationChange: (Location) -> Unit,
     onSubmit: () -> Unit,
+    onValidationError: (String) -> Unit,
+    onValidationSuccess: () -> Unit,
     loading: Boolean,
     snackbarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope,
     errorMessage: String? = null,
-    isSuccessful: Boolean
+    isSuccessful: Boolean,
+    onSuccess: () -> Unit
 ) {
-    var showStartDatePicker by rememberSaveable { mutableStateOf(false) }
-    var showEndDatePicker by rememberSaveable { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
+    var showStartDatePicker by remember { mutableStateOf(false) }
+    var showEndDatePicker by remember { mutableStateOf(false) }
+    var showLocationsDropdown by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        when (formType) {
-            FormType.Create -> Text(stringResource(id = R.string.create_new_offer))
-            FormType.Update -> Text(stringResource(id = R.string.update_offer_label))
-        }
+        val fieldsModifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+
+        Text(
+            text = when (formType) {
+                FormType.Create -> stringResource(id = R.string.create_new_offer)
+                FormType.Update -> stringResource(id = R.string.update_offer_label)
+            },
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 15.dp, bottom = 25.dp),
+            style = MaterialTheme.typography.h6,
+            fontWeight = FontWeight.Bold
+        )
 
         CustomTextInput(
-            modifier = Modifier.clickable { showStartDatePicker = true },
+            modifier = fieldsModifier.clickable { showStartDatePicker = true },
             value = startDate?.formatDateTime() ?: "",
             readOnly = true,
             enabled = false,
@@ -138,46 +215,133 @@ fun DistributorOfferFormContent(
             label = { Text(text = stringResource(R.string.start_date_time_label)) },
             trailingIcon = {
                 Icon(Icons.Default.EditCalendar, contentDescription = null)
-            },
+            }
+        )
 
+        CustomTextInput(
+            modifier = fieldsModifier.clickable { showEndDatePicker = true },
+            value = endDate?.formatDateTime() ?: "",
+            readOnly = true,
+            enabled = false,
+            onValueChange = {},
+            label = { Text(text = stringResource(R.string.end_date_time_label)) },
+            trailingIcon = {
+                Icon(Icons.Default.EditCalendar, contentDescription = null)
+            }
+        )
+
+        CustomTextInput(
+            modifier = fieldsModifier,
+            value = if (beneficiaries == 0) "" else beneficiaries.toString(),
+            onValueChange = { onBeneficiariesChange(it.toSecureInt()) },
+            label = { Text(text = stringResource(R.string.number_of_beneficiaries)) },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Number
+            ),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+            validator = IntegerValidator(),
+            onValidationSuccess = onValidationSuccess,
+            onValidationError = onValidationError
+        )
+
+        CustomTextInput(
+            modifier = fieldsModifier,
+            value = price.formatWithoutTrailingZeros(),
+            onValueChange = { onPriceChange(it.toSecureDouble()) },
+            label = { Text(text = stringResource(R.string.price_label)) },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Number
+            ),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+            validator = IntegerValidator(),
+            onValidationSuccess = onValidationSuccess,
+            onValidationError = onValidationError
+        )
+
+        ExposedDropdownMenuBox(
+            expanded = showLocationsDropdown,
+            onExpandedChange = { showLocationsDropdown = !showLocationsDropdown }
+        ) {
+            CustomTextInput(
+                modifier = fieldsModifier,
+                value = location?.name ?: "",
+                readOnly = true,
+                onValueChange = {},
+                label = { Text(text = stringResource(R.string.location)) },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = showLocationsDropdown)
+                },
+                colors = ExposedDropdownMenuDefaults.textFieldColors()
             )
 
-        CustomTextInput(
-            modifier = Modifier.clickable { showEndDatePicker = true },
-            value = endDate?.formatDateTime() ?: "",
-            readOnly = true,
-            enabled = false,
-            onValueChange = {},
-            label = { Text(text = stringResource(R.string.end_date_time_label)) },
-            trailingIcon = {
-                Icon(Icons.Default.EditCalendar, contentDescription = null)
+            ExposedDropdownMenu(
+                expanded = showLocationsDropdown,
+                onDismissRequest = { showLocationsDropdown = false }
+            ) {
+                locations.forEach {
+                    DropdownMenuItem(onClick = {
+                        onLocationChange(it)
+                        showLocationsDropdown = false
+                    }) {
+                        Text(text = it.name)
+                    }
+                }
             }
-        )
+        }
 
-        CustomTextInput(
-            modifier = Modifier.clickable { showEndDatePicker = true },
-            value = endDate?.formatDateTime() ?: "",
-            readOnly = true,
-            enabled = false,
-            onValueChange = {},
-            label = { Text(text = stringResource(R.string.end_date_time_label)) },
-            trailingIcon = {
-                Icon(Icons.Default.EditCalendar, contentDescription = null)
+        Button(modifier = fieldsModifier, onClick = onSubmit, enabled = !loading) {
+            if (loading) {
+                CircularProgressIndicator(color = MaterialTheme.colors.background)
+            } else {
+                Text(stringResource(R.string.submit), modifier = Modifier.padding(5.dp))
             }
-        )
+        }
 
         if (showStartDatePicker) {
-            DateTimePicker(onDateUpdate = onStartDateChange, date = startDate)
+            DateTimePicker(
+                onDateUpdate = {
+                    onStartDateChange(it)
+                    showStartDatePicker = false
+                },
+                date = startDate
+            )
         }
+
         if (showEndDatePicker) {
-            DateTimePicker(onDateUpdate = onEndDateChange, date = endDate)
+            DateTimePicker(
+                onDateUpdate = {
+                    onEndDateChange(it)
+                    showEndDatePicker = false
+                },
+                date = endDate
+            )
         }
 
+        if (errorMessage != null) {
+            LaunchedEffect(snackbarHostState) {
+                coroutineScope.launch {
+                    snackbarHostState.show(message = errorMessage)
+                }
+            }
+        }
 
+        if (isSuccessful) {
+            LaunchedEffect(snackbarHostState) {
+                coroutineScope.launch {
+                    snackbarHostState.show(
+                        message = when (formType) {
+                            FormType.Create -> Strings.get(R.string.offer_published_successfully)
+                            FormType.Update -> Strings.get(R.string.offer_updated_successfully)
+                        }
+                    )
+                    delay(1000)
+                    onSuccess()
+                }
+            }
+        }
     }
 }
 
-enum class FormType {
-    Create,
-    Update
-}
+enum class FormType { Create, Update }

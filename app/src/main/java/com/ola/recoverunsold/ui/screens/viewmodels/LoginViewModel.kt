@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
+import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.api.core.StatusCode
 import com.ola.recoverunsold.api.requests.LoginRequest
 import com.ola.recoverunsold.api.responses.Token
@@ -30,9 +31,12 @@ class LoginViewModel(
             val response = authService.login(LoginRequest(email = email, password = password))
             apiCallResult = if (response.isSuccessful) {
                 val token = response.body()
-                ApiCallResult.Success(_data = token).also { onSuccess() }
+                ApiCallResult.Success(_data = token)
             } else {
                 ApiCallResult.Error(code = response.code())
+            }
+            if (apiCallResult.status == ApiStatus.SUCCESS) {
+                onSuccess()
             }
         }
     }

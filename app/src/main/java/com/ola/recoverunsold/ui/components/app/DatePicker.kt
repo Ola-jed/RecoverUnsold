@@ -21,7 +21,7 @@ fun DatePicker(
     val datePickerDialog = DatePickerDialog(
         LocalContext.current,
         { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            internalDate = LocalDate.of(year, month, dayOfMonth)
+            internalDate = LocalDate.of(year, month + 1, dayOfMonth)
             onDateUpdated(internalDate)
         }, internalDate.year, internalDate.monthValue, internalDate.dayOfMonth
     )

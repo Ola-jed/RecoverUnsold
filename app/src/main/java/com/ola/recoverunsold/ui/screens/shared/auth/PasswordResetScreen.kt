@@ -166,12 +166,10 @@ fun PasswordResetContent(
             onValidationError = onValidationError
         )
 
-        if (loading) {
-            Button(onClick = {}, enabled = false, modifier = fieldsModifier) {
+        Button(modifier = fieldsModifier, onClick = onSubmit, enabled = !loading) {
+            if (loading) {
                 CircularProgressIndicator(color = MaterialTheme.colors.background)
-            }
-        } else {
-            Button(onClick = onSubmit, modifier = fieldsModifier) {
+            } else {
                 Text(
                     stringResource(R.string.reset_password_message),
                     modifier = Modifier.padding(vertical = 5.dp)

@@ -28,6 +28,9 @@ import java.util.Date
 import java.util.Locale
 import kotlin.math.absoluteValue
 
+private val dateTimeFormatter = DateFormat
+    .getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault())
+
 /**
  * Convert a color string to Hsl
  */
@@ -92,7 +95,7 @@ fun Context.hasNetwork(): Boolean {
  * Shortcut for snackbar showing
  * Because the duration is always long and the dismiss message "OK"
  */
-suspend fun SnackbarHostState.show(message : String): SnackbarResult {
+suspend fun SnackbarHostState.show(message: String): SnackbarResult {
     return showSnackbar(
         message = message,
         actionLabel = Strings.get(R.string.ok),
@@ -167,14 +170,74 @@ fun Date.formatDate(): String {
 /**
  * Format a date to DateTime using the default locale
  */
-fun Date.formatDateTime(): String {
-    return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault())
-        .format(this)
-}
+fun Date.formatDateTime(): String = dateTimeFormatter.format(this)
+
+/**
+ * Parse a string to a Date object using the defined format in the app
+ */
+fun String.toDate(): Date? = dateTimeFormatter.parse(this)
 
 /**
  * Format a date following a format for storing and exchanging dates
  */
 fun Date.format(format: String = "yyyy-MM-dd'T'HH:mm:ss.SSS"): String {
     return SimpleDateFormat(format).format(this)
+}
+
+/**
+ * Format decimal numbers without the zeros at the end
+ */
+fun Number?.formatWithoutTrailingZeros(): String {
+    // Special case : 0/0.00/00.00000 ...
+    if (this?.toLong() == 0L) {
+        return "0"
+    }
+    // Integral number
+    val toString = this?.toString()
+    if (toString?.contains('.') == false) {
+        return toString
+    }
+    // No decimal part
+    if (toString?.split('.')?.get(1)?.toInt() == 0) {
+        return toString.split('.')[0]
+    }
+    // An empty decimal part
+    if(toString?.endsWith('.') == true) {
+        return "$toString.0"
+    }
+    return toString?.replace("^(\\d+\\.\\d*?[1-9])0+\$", "$1") ?: ""
+}
+
+/**
+ * Convert a String to double without throwing an exception
+ * Handling edge cases such as blank String
+ */
+fun String?.toSecureDouble(): Double {
+    if (this.isNullOrBlank()) return 0.0
+    return try {
+        this.toDouble()
+    } catch (e: Exception) {
+        if (this.endsWith('.')) {
+            return ("${this}0").toSecureDouble()
+        }
+
+        0.0
+    }
+}
+
+/**
+ * Convert a String to double without throwing an exception
+ * Handling edge cases such as blank String
+ */
+fun String?.toSecureInt(): Int {
+    if (this.isNullOrBlank()) return 0
+    return try {
+        this.toInt()
+    } catch (e: Exception) {
+        if (!this.last().isDigit()) {
+            return this.dropLast(1).toSecureInt()
+        }
+
+        0
+    }
 }

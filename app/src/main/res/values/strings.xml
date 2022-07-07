@@ -141,4 +141,14 @@
     <string name="existing_locations_fetch_failed">An error occured while retrieving the existing locations</string>
     <string name="create_new_offer_label">Create a new offer</string>
     <string name="update_offer_label">Update the offer</string>
+    <string name="number_of_beneficiaries">Number of beneficiaries (optional)</string>
+    <string name="invalid_start_date">Invalid start date</string>
+    <string name="invalid_end_date">Invalid end date</string>
+    <string name="end_date_after_start_date">The end date must be after the start date</string>
+    <string name="offer_published_successfully">Offer published successfully</string>
+    <string name="offer_updated_successfully">Offer updated successfully</string>
+    <string name="location">Location</string>
+    <string name="unspecified">Unspecified</string>
+    <string name="invalid_integer">Invalid integer</string>
+    <string name="invalid_decimal">Invalid decimal number</string>
 </resources>
