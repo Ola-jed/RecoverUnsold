@@ -65,7 +65,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date
 
-// TODO : finish
+// TODO : finish with products
 
 @Composable
 fun DistributorOfferFormScreen(

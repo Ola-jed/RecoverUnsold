@@ -23,6 +23,7 @@ import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.validation.FormState
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent
+import java.text.SimpleDateFormat
 import java.util.Date
 
 class DistributorOfferFormViewModelFactory(private val offer: Offer?) :
@@ -107,7 +108,7 @@ class DistributorOfferFormViewModel(
     fun update() {
         offerResponse = ApiCallResult.Loading()
         val offerUpdateRequest = OfferUpdateRequest(
-            startDate = startDate!!,
+            startDate = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(startDate!!),
             duration = (endDate!!.time.toULong() - startDate!!.time.toULong()) / 1000UL,
             beneficiaries = if (beneficiaries == 0) null else beneficiaries,
             price = price,

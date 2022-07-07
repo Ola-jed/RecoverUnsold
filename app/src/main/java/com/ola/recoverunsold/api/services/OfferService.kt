@@ -1,11 +1,13 @@
 package com.ola.recoverunsold.api.services
 
 import com.ola.recoverunsold.api.core.ApiConstants
+import com.ola.recoverunsold.api.requests.OfferUpdateRequest
 import com.ola.recoverunsold.api.requests.ProductCreateRequest
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.Page
 import okhttp3.RequestBody
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -46,15 +48,10 @@ interface OfferService : BaseApiService {
     ): Response<Offer>
 
     @PUT(ApiConstants.offersUrl + "/{id}")
-    @Multipart
     suspend fun updateOffer(
         @Header("Authorization") authorization: String,
         @Path("id") id: String,
-        @Part("startDate") startDate: RequestBody,
-        @Part("duration") duration: RequestBody,
-        @Part("beneficiaries") beneficiaries: RequestBody? = null,
-        @Part("price") price: RequestBody,
-        @Part("locationId") locationId: RequestBody
+        @Body offerUpdateRequest: OfferUpdateRequest
     ): NoContentResponse
 
     @DELETE(ApiConstants.offersUrl + "/{id}")

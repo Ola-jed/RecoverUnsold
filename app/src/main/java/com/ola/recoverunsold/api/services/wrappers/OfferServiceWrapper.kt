@@ -52,11 +52,7 @@ class OfferServiceWrapper(private val offerService: OfferService) {
         return offerService.updateOffer(
             token,
             id,
-            formatter.format(offerUpdateRequest.startDate).toMultipartRequestBody(),
-            offerUpdateRequest.duration.toMultipartRequestBody(),
-            offerUpdateRequest.beneficiaries?.toMultipartRequestBody(),
-            offerUpdateRequest.price.toMultipartRequestBody(),
-            offerUpdateRequest.locationId.toMultipartRequestBody()
+            offerUpdateRequest
         )
     }
 
