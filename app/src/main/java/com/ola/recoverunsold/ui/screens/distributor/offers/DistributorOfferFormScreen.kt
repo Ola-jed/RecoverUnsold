@@ -142,6 +142,7 @@ fun DistributorOfferFormScreen(
             },
             isSuccessful = distributorOfferFormViewModel.offerResponse.status == ApiStatus.SUCCESS,
             onSuccess = {
+                navController.popBackStack()
                 navController.navigate(
                     Routes.OfferDetails.path.replace(
                         "{offerId}",
@@ -239,10 +240,7 @@ fun DistributorOfferFormContent(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Number
             ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = IntegerValidator(),
-            onValidationSuccess = onValidationSuccess,
-            onValidationError = onValidationError
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
         )
 
         CustomTextInput(
