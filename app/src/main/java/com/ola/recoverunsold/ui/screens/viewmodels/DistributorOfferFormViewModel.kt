@@ -43,14 +43,14 @@ class DistributorOfferFormViewModel(
     var locationsResponse by mutableStateOf(ApiStatus.INACTIVE)
     var locations: List<Location> by mutableStateOf(emptyList())
 
-    var startDate by mutableStateOf(offer?.startDate ?: Date())
+    var startDate by mutableStateOf(offer?.startDate)
     var endDate by mutableStateOf(
         if (offer != null) {
             Date.from(
                 offer.startDate.toInstant().plusSeconds(offer.duration.toLong())
             )
         } else {
-            Date()
+           null
         }
     )
     var beneficiaries by mutableStateOf(offer?.beneficiaries ?: 0)
