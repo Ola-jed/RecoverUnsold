@@ -138,15 +138,38 @@ fun DistributorOfferFormContent(
             label = { Text(text = stringResource(R.string.start_date_time_label)) },
             trailingIcon = {
                 Icon(Icons.Default.EditCalendar, contentDescription = null)
+            },
+
+            )
+
+        CustomTextInput(
+            modifier = Modifier.clickable { showEndDatePicker = true },
+            value = endDate?.formatDateTime() ?: "",
+            readOnly = true,
+            enabled = false,
+            onValueChange = {},
+            label = { Text(text = stringResource(R.string.end_date_time_label)) },
+            trailingIcon = {
+                Icon(Icons.Default.EditCalendar, contentDescription = null)
             }
         )
 
-
+        CustomTextInput(
+            modifier = Modifier.clickable { showEndDatePicker = true },
+            value = endDate?.formatDateTime() ?: "",
+            readOnly = true,
+            enabled = false,
+            onValueChange = {},
+            label = { Text(text = stringResource(R.string.end_date_time_label)) },
+            trailingIcon = {
+                Icon(Icons.Default.EditCalendar, contentDescription = null)
+            }
+        )
 
         if (showStartDatePicker) {
             DateTimePicker(onDateUpdate = onStartDateChange, date = startDate)
         }
-        if(showEndDatePicker) {
+        if (showEndDatePicker) {
             DateTimePicker(onDateUpdate = onEndDateChange, date = endDate)
         }
 
