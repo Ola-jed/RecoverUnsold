@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.api.query.PaginationQuery
 import com.ola.recoverunsold.api.requests.ProductCreateRequest
@@ -13,6 +14,7 @@ import com.ola.recoverunsold.api.services.wrappers.LocationServiceWrapper
 import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
 import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.models.Offer
+import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.validation.FormState
 import kotlinx.coroutines.launch
@@ -53,7 +55,7 @@ class DistributorOfferFormViewModel(
     )
     var beneficiaries by mutableStateOf(offer?.beneficiaries ?: 0)
     var price by mutableStateOf(offer?.price ?: 0.0)
-    var locationId by mutableStateOf(offer?.location?.id ?: "")
+    var location by mutableStateOf(offer?.location)
     var products by mutableStateOf(emptyList<ProductCreateRequest>())
 
     init {
@@ -63,8 +65,10 @@ class DistributorOfferFormViewModel(
     private fun fetchPublishedLocations() {
         locationsResponse = ApiStatus.LOADING
         viewModelScope.launch {
-            val response =
-                locationServiceWrapper.getLocations(token.bearerToken, locationPaginationQuery)
+            val response = locationServiceWrapper.getLocations(
+                token.bearerToken,
+                locationPaginationQuery
+            )
             if (response.isSuccessful) {
                 val responsePage = response.body()!!
                 if (responsePage.hasNext) {
@@ -80,5 +84,10 @@ class DistributorOfferFormViewModel(
         }
     }
 
-
+    fun errorMessage(): String? {
+        if(locationsResponse == ApiStatus.ERROR) {
+            return Strings.get(R.string.existing_locations_fetch_failed)
+        }
+        return null;
+    }
 }

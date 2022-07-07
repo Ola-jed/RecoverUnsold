@@ -135,4 +135,7 @@
     <string name="products_label">Productos</string>
     <string name="offer_details">Detalles de la oferta</string>
     <string name="view_location_on_maps">Ver la ubicación en Maps</string>
+    <string name="existing_locations_fetch_failed">Se ha producido un error al recuperar los sitios existentes</string>
+    <string name="create_new_offer_label">Crear una nueva oferta</string>
+    <string name="update_offer_label">Actualización de la oferta</string>
 </resources>
