@@ -66,6 +66,7 @@ fun LoginScreen(
         scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
     ) { padding ->
         LoginScreenContent(
+            modifier = Modifier.padding(padding),
             email = loginViewModel.email,
             password = loginViewModel.password,
             onEmailChange = { loginViewModel.email = it },
@@ -108,7 +109,6 @@ fun LoginScreen(
             navController = navController,
             snackbarHostState = snackbarHostState,
             coroutineScope = coroutineScope,
-            modifier = Modifier.padding(padding),
             isSuccessful = loginViewModel.apiCallResult.status == ApiStatus.SUCCESS,
             onValidationSuccess = {
                 loginViewModel.formState = loginViewModel.formState.copy(

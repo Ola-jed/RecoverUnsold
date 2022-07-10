@@ -322,13 +322,13 @@ fun DistributorRegisterContent(
 
             if (isSuccessful) {
                 LaunchedEffect(snackbarHostState) {
+                    navController.navigate(Routes.ConfirmUserVerification.path)
                     coroutineScope.launch {
                         snackbarHostState.show(
                             message = Strings.get(R.string.code_sent_successfully)
                         )
                     }
                 }
-                navController.navigate(Routes.ConfirmUserVerification.path)
             }
         }
     }

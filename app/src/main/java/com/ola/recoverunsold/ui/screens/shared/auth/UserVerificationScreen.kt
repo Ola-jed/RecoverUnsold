@@ -1,12 +1,13 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
@@ -32,6 +33,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
+import com.ola.recoverunsold.ui.components.app.AppHero
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
@@ -107,67 +109,75 @@ fun UserVerificationContent(
     isSuccessful: Boolean
 ) {
     val focusManager = LocalFocusManager.current
+    val fieldsModifier = modifier
+        .fillMaxWidth()
+        .padding(horizontal = 10.dp)
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(12.dp),
-        verticalArrangement = Arrangement.Center,
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val fieldsModifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 10.dp)
-
-        Text(
-            stringResource(R.string.user_verification_confirm_instruction),
+        AppHero(
             modifier = Modifier
-                .padding(horizontal = 25.dp, vertical = 10.dp)
-                .align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center
+                .fillMaxWidth()
+                .padding(bottom = 60.dp),
+            text = stringResource(R.string.verification_of_your_account)
         )
 
-        CustomTextInput(
-            modifier = fieldsModifier,
-            value = token,
-            leadingIcon = { Icon(Icons.Filled.Menu, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.code)) },
-            label = { Text(text = stringResource(R.string.code)) },
-            onValueChange = onTokenChange,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Number
-            ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = IsRequiredValidator(),
-            onValidationSuccess = onValidationSuccess,
-            onValidationError = onValidationError
-        )
+        Column(
+            modifier = Modifier.padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                stringResource(R.string.user_verification_confirm_instruction),
+                modifier = Modifier
+                    .padding(horizontal = 25.dp, vertical = 10.dp)
+                    .align(Alignment.CenterHorizontally),
+                textAlign = TextAlign.Center
+            )
 
-        if (loading) {
-            Button(onClick = {}, enabled = false, modifier = fieldsModifier) {
-                CircularProgressIndicator(color = MaterialTheme.colors.background)
+            CustomTextInput(
+                modifier = fieldsModifier,
+                value = token,
+                leadingIcon = { Icon(Icons.Filled.Menu, contentDescription = null) },
+                placeholder = { Text(text = stringResource(R.string.code)) },
+                label = { Text(text = stringResource(R.string.code)) },
+                onValueChange = onTokenChange,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Number
+                ),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                validator = IsRequiredValidator(),
+                onValidationSuccess = onValidationSuccess,
+                onValidationError = onValidationError
+            )
+
+            Button(onClick = onSubmit, enabled = !loading, modifier = fieldsModifier) {
+                if (loading) {
+                    CircularProgressIndicator(color = MaterialTheme.colors.background)
+                } else {
+                    Text(
+                        stringResource(R.string.verify_account_action),
+                        modifier = Modifier.padding(vertical = 5.dp)
+                    )
+                }
             }
-        } else {
-            Button(onClick = onSubmit, modifier = fieldsModifier) {
-                Text(
-                    stringResource(R.string.verify_account_action),
-                    modifier = Modifier.padding(vertical = 5.dp)
-                )
-            }
+
+            NavigationTextButton(
+                navController = navController,
+                route = Routes.Login.path,
+                text = R.string.login_action
+            )
+
+            NavigationTextButton(
+                navController = navController,
+                route = Routes.StartUserVerification.path,
+                text = R.string.code_not_sent
+            )
         }
-
-        NavigationTextButton(
-            navController = navController,
-            route = Routes.Login.path,
-            text = R.string.login_action
-        )
-
-        NavigationTextButton(
-            navController = navController,
-            route = Routes.StartUserVerification.path,
-            text = R.string.code_not_sent
-        )
 
         if (errorMessage != null) {
             LaunchedEffect(snackbarHostState) {

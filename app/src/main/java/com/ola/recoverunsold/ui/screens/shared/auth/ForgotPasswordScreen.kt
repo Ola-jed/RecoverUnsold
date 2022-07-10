@@ -1,12 +1,13 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
@@ -31,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
+import com.ola.recoverunsold.ui.components.app.AppHero
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
@@ -106,64 +108,73 @@ fun ForgotPasswordContent(
     onValidationSuccess: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
+    val fieldsModifier = modifier
+        .fillMaxWidth()
+        .padding(horizontal = 10.dp)
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(12.dp),
-        verticalArrangement = Arrangement.Center,
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val fieldsModifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 10.dp)
-
-        Text(
-            stringResource(R.string.forgot_password_indications),
+        AppHero(
             modifier = Modifier
-                .padding(horizontal = 25.dp, vertical = 10.dp)
-                .align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center
+                .fillMaxWidth()
+                .padding(bottom = 60.dp),
+            text = stringResource(R.string.reset_password)
         )
 
-        CustomTextInput(
-            modifier = fieldsModifier,
-            value = email,
-            leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
-            label = { Text(text = stringResource(R.string.email_label)) },
-            onValueChange = onEmailChange,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = EmailValidator(),
-            onValidationError = onValidationError,
-            onValidationSuccess = onValidationSuccess
-        )
+        Column(
+            modifier = Modifier.padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                stringResource(R.string.forgot_password_indications),
+                modifier = Modifier
+                    .padding(horizontal = 25.dp, vertical = 10.dp)
+                    .align(Alignment.CenterHorizontally),
+                textAlign = TextAlign.Center
+            )
 
-        if (loading) {
-            Button(onClick = {}) {
-                CircularProgressIndicator(color = MaterialTheme.colors.background)
+            CustomTextInput(
+                modifier = fieldsModifier,
+                value = email,
+                leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
+                placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
+                label = { Text(text = stringResource(R.string.email_label)) },
+                onValueChange = onEmailChange,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                validator = EmailValidator(),
+                onValidationError = onValidationError,
+                onValidationSuccess = onValidationSuccess
+            )
+
+
+            Button(onClick = onSubmit, modifier = fieldsModifier, enabled = !loading) {
+                if (loading) {
+                    CircularProgressIndicator(color = MaterialTheme.colors.background)
+                } else {
+                    Text(
+                        stringResource(R.string.send_code_action),
+                        modifier = Modifier.padding(vertical = 5.dp)
+                    )
+                }
             }
-        } else {
-            Button(onClick = onSubmit, modifier = fieldsModifier) {
-                Text(
-                    stringResource(R.string.send_code_action),
-                    modifier = Modifier.padding(vertical = 5.dp)
-                )
-            }
+
+            NavigationTextButton(
+                navController = navController,
+                route = Routes.Login.path,
+                text = R.string.login_action
+            )
+
+            NavigationTextButton(
+                navController = navController,
+                route = Routes.PasswordReset.path,
+                text = R.string.code_already_sent
+            )
         }
-
-        NavigationTextButton(
-            navController = navController,
-            route = Routes.Login.path,
-            text = R.string.login_action
-        )
-
-        NavigationTextButton(
-            navController = navController,
-            route = Routes.PasswordReset.path,
-            text = R.string.code_already_sent
-        )
 
         if (errorMessage != null) {
             LaunchedEffect(snackbarHostState) {

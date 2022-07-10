@@ -159,4 +159,6 @@
     <string name="product_updated_successfully">Product updated successfully</string>
     <string name="product_deleted_successfully">Product deleted successfully</string>
     <string name="product_deletion_failed">Product deletion failed</string>
+    <string name="verification_of_your_account">Verification of your account</string>
+    <string name="reset_password">Reset password</string>
 </resources>

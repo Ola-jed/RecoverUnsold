@@ -1,12 +1,13 @@
 package com.ola.recoverunsold.ui.screens.shared.auth
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
@@ -32,6 +33,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
+import com.ola.recoverunsold.ui.components.app.AppHero
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
@@ -54,6 +56,7 @@ fun StartUserVerificationScreen(
         scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
     ) { padding ->
         StartUserVerificationContent(
+            modifier = Modifier.padding(padding),
             email = userVerificationViewModel.email,
             onEmailChange = { userVerificationViewModel.email = it },
             onSubmit = {
@@ -73,7 +76,6 @@ fun StartUserVerificationScreen(
             navController = navController,
             snackbarHostState = snackbarHostState,
             coroutineScope = coroutineScope,
-            modifier = Modifier.padding(padding),
             isSuccessful = userVerificationViewModel.apiCallResult.status == ApiStatus.SUCCESS,
             onValidationSuccess = {
                 userVerificationViewModel.formState = userVerificationViewModel.formState.copy(
@@ -114,63 +116,72 @@ fun StartUserVerificationContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 12.dp),
-        verticalArrangement = Arrangement.Center,
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            stringResource(R.string.user_verification_instruction),
+        AppHero(
             modifier = Modifier
-                .padding(horizontal = 25.dp, vertical = 10.dp)
-                .align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center
+                .fillMaxWidth()
+                .padding(bottom = 60.dp),
+            text = stringResource(R.string.verification_of_your_account)
         )
 
-        CustomTextInput(
-            modifier = fieldsModifier,
-            value = email,
-            leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
-            placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
-            label = { Text(text = stringResource(R.string.email_label)) },
-            onValueChange = onEmailChange,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Email
-            ),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            validator = EmailValidator(),
-            onValidationSuccess = onValidationSuccess,
-            onValidationError = onValidationError
-        )
+        Column(
+            modifier = Modifier.padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                stringResource(R.string.user_verification_instruction),
+                modifier = Modifier
+                    .padding(horizontal = 25.dp, vertical = 10.dp)
+                    .align(Alignment.CenterHorizontally),
+                textAlign = TextAlign.Center
+            )
 
-        if (loading) {
-            Button(
-                onClick = {},
+            CustomTextInput(
                 modifier = fieldsModifier,
-                enabled = false
+                value = email,
+                leadingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
+                placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
+                label = { Text(text = stringResource(R.string.email_label)) },
+                onValueChange = onEmailChange,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Email
+                ),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                validator = EmailValidator(),
+                onValidationSuccess = onValidationSuccess,
+                onValidationError = onValidationError
+            )
+
+            Button(
+                onClick = onSubmit,
+                modifier = fieldsModifier,
+                enabled = !loading
             ) {
-                CircularProgressIndicator(color = MaterialTheme.colors.background)
+                if (loading) {
+                    CircularProgressIndicator(color = MaterialTheme.colors.background)
+                } else {
+                    Text(
+                        stringResource(R.string.send_code_action),
+                        modifier = Modifier.padding(vertical = 5.dp)
+                    )
+                }
             }
-        } else {
-            Button(onClick = onSubmit, modifier = fieldsModifier) {
-                Text(
-                    stringResource(R.string.send_code_action),
-                    modifier = Modifier.padding(vertical = 5.dp)
-                )
-            }
+
+            NavigationTextButton(
+                navController = navController,
+                route = Routes.Login.path,
+                text = R.string.login_action
+            )
+
+            NavigationTextButton(
+                navController = navController,
+                route = Routes.ConfirmUserVerification.path,
+                text = R.string.code_already_sent
+            )
         }
-
-        NavigationTextButton(
-            navController = navController,
-            route = Routes.Login.path,
-            text = R.string.login_action
-        )
-
-        NavigationTextButton(
-            navController = navController,
-            route = Routes.ConfirmUserVerification.path,
-            text = R.string.code_already_sent
-        )
 
         if (errorMessage != null) {
             LaunchedEffect(snackbarHostState) {

@@ -156,4 +156,6 @@
     <string name="product_updated_successfully">Le produit a été mis à jour avec succès</string>
     <string name="product_deleted_successfully">Produit supprimé avec succès</string>
     <string name="product_deletion_failed">La suppression du produit a échoué</string>
+    <string name="verification_of_your_account">Vérification de votre compte</string>
+    <string name="reset_password">Réinitialisation du mot de passe</string>
 </resources>

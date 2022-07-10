@@ -156,4 +156,6 @@
     <string name="product_updated_successfully">Producto actualizado con éxito</string>
     <string name="product_deleted_successfully">Producto retirado con éxito</string>
     <string name="product_deletion_failed">Fallo en la eliminación del producto</string>
+    <string name="verification_of_your_account">Comprobación de la cuenta</string>
+    <string name="reset_password">Restablecer contraseña</string>
 </resources>
