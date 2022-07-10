@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -59,12 +60,40 @@ fun LocationItem(
                     .padding(bottom = 10.dp)
                     .align(Alignment.CenterHorizontally)
             )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (location.image != null) {
+
+            if (location.image != null && location.indication == null) {
+                val height = (LocalConfiguration.current.screenHeightDp * 0.1).dp
+                val width = (LocalConfiguration.current.screenWidthDp * 0.70).dp
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(location.image)
+                        .crossfade(true)
+                        .build(),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(height = height, width = width)
+                        .padding(end = 5.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .align(Alignment.CenterHorizontally)
+                )
+            }
+
+            if (location.indication != null && location.image == null) {
+                val textWidth = (LocalConfiguration.current.screenWidthDp * 0.70).dp
+                Text(
+                    location.indication,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.width(width = textWidth)
+                )
+            }
+
+            if (location.image != null && location.indication != null) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     val height = (LocalConfiguration.current.screenHeightDp * 0.1).dp
                     val width = (LocalConfiguration.current.screenWidthDp * 0.40).dp
                     AsyncImage(
@@ -77,13 +106,17 @@ fun LocationItem(
                         modifier = Modifier
                             .size(height = height, width = width)
                             .padding(end = 5.dp)
-                            .clip(RoundedCornerShape(10.dp)),
+                            .clip(RoundedCornerShape(10.dp))
+                    )
+                    val textWidth = (LocalConfiguration.current.screenWidthDp * 0.40).dp
+                    Text(
+                        location.indication,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.width(width = textWidth)
                     )
                 }
-                if (location.indication != null) {
-                    Text(location.indication, textAlign = TextAlign.Center)
-                }
             }
+
             Text(
                 stringResource(R.string.published_the, location.createdAt.formatDate()),
                 modifier = Modifier.padding(top = 5.dp)

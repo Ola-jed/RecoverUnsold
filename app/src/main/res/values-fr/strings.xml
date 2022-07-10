@@ -148,4 +148,12 @@
     <string name="unspecified">Non spécifié</string>
     <string name="invalid_integer">Nombre entier invalide</string>
     <string name="invalid_decimal">Nombre décimal invalide</string>
+    <string name="description">Description</string>
+    <string name="add">Ajouter</string>
+    <string name="add_product_to_offer">Ajouter un produit à l\'offre</string>
+    <string name="update_product">Mettre à jour le produit</string>
+    <string name="product_published_successfully">Produit publié avec succès</string>
+    <string name="product_updated_successfully">Le produit a été mis à jour avec succès</string>
+    <string name="product_deleted_successfully">Produit supprimé avec succès</string>
+    <string name="product_deletion_failed">La suppression du produit a échoué</string>
 </resources>

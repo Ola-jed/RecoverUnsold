@@ -43,7 +43,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
-import com.ola.recoverunsold.api.requests.ProductCreateRequest
 import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.ui.components.app.AppBar
@@ -52,6 +51,7 @@ import com.ola.recoverunsold.ui.components.app.DateTimePicker
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorOfferFormViewModel
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorOfferFormViewModelFactory
+import com.ola.recoverunsold.utils.misc.FormType
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 import com.ola.recoverunsold.utils.misc.jsonDeserialize
@@ -65,15 +65,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date
 
-// TODO : finish with products
-
 @Composable
 fun DistributorOfferFormScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     serializedOffer: String? = null,
     distributorOfferFormViewModel: DistributorOfferFormViewModel = viewModel(
-        factory = DistributorOfferFormViewModelFactory(serializedOffer.jsonDeserialize<Offer>())
+        factory = DistributorOfferFormViewModelFactory(offer = serializedOffer.jsonDeserialize())
     )
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -100,7 +98,6 @@ fun DistributorOfferFormScreen(
             price = distributorOfferFormViewModel.price,
             locations = distributorOfferFormViewModel.locations,
             location = distributorOfferFormViewModel.location,
-            products = distributorOfferFormViewModel.products,
             onStartDateChange = { distributorOfferFormViewModel.startDate = it },
             onEndDateChange = { distributorOfferFormViewModel.endDate = it },
             onBeneficiariesChange = { distributorOfferFormViewModel.beneficiaries = it },
@@ -143,6 +140,7 @@ fun DistributorOfferFormScreen(
             isSuccessful = distributorOfferFormViewModel.offerResponse.status == ApiStatus.SUCCESS,
             onSuccess = {
                 navController.popBackStack()
+                navController.popBackStack()
                 navController.navigate(
                     Routes.OfferDetails.path.replace(
                         "{offerId}",
@@ -165,7 +163,6 @@ fun DistributorOfferFormContent(
     price: Double,
     locations: List<Location>,
     location: Location?,
-    products: List<ProductCreateRequest>? = null,
     onStartDateChange: (Date) -> Unit,
     onEndDateChange: (Date) -> Unit,
     onBeneficiariesChange: (Int) -> Unit,
@@ -214,9 +211,7 @@ fun DistributorOfferFormContent(
             enabled = false,
             onValueChange = {},
             label = { Text(text = stringResource(R.string.start_date_time_label)) },
-            trailingIcon = {
-                Icon(Icons.Default.EditCalendar, contentDescription = null)
-            }
+            trailingIcon = { Icon(Icons.Default.EditCalendar, contentDescription = null) }
         )
 
         CustomTextInput(
@@ -226,9 +221,7 @@ fun DistributorOfferFormContent(
             enabled = false,
             onValueChange = {},
             label = { Text(text = stringResource(R.string.end_date_time_label)) },
-            trailingIcon = {
-                Icon(Icons.Default.EditCalendar, contentDescription = null)
-            }
+            trailingIcon = { Icon(Icons.Default.EditCalendar, contentDescription = null) }
         )
 
         CustomTextInput(
@@ -345,5 +338,3 @@ fun DistributorOfferFormContent(
         }
     }
 }
-
-enum class FormType { Create, Update }

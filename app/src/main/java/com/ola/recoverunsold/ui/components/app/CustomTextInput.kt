@@ -47,12 +47,11 @@ fun CustomTextInput(
     onValidationSuccess: (() -> Unit)? = null,
     canBeEmpty: Boolean = false
 ) {
-    val valueIsInvalid = (!canBeEmpty && value.isNotBlank()) && validator?.isValid(value.trimEnd()) == false
+    val valueIsInvalid = (!canBeEmpty && value.isNotBlank())
+            && validator?.isValid(value.trimEnd()) == false
     Column(
         modifier = Modifier
-            .padding(
-                bottom = if (valueIsInvalid) 0.dp else 10.dp
-            )
+            .padding(bottom = if (valueIsInvalid) 0.dp else 10.dp)
     ) {
         OutlinedTextField(
             enabled = enabled,
@@ -60,7 +59,7 @@ fun CustomTextInput(
             value = value,
             onValueChange = {
                 onValueChange(it)
-                if (!valueIsInvalid && it.isNotBlank()) {
+                if (!valueIsInvalid && (it.isNotBlank() xor canBeEmpty)) {
                     onValidationSuccess?.invoke()
                 }
             },

@@ -1,6 +1,7 @@
 package com.ola.recoverunsold.ui.screens.viewmodels
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -13,7 +14,7 @@ import com.ola.recoverunsold.api.core.StatusCode
 import com.ola.recoverunsold.api.query.PaginationQuery
 import com.ola.recoverunsold.api.requests.OfferCreateRequest
 import com.ola.recoverunsold.api.requests.OfferUpdateRequest
-import com.ola.recoverunsold.api.requests.ProductCreateRequest
+import com.ola.recoverunsold.api.requests.ProductCreateData
 import com.ola.recoverunsold.api.services.wrappers.LocationServiceWrapper
 import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
 import com.ola.recoverunsold.models.Location
@@ -46,15 +47,12 @@ class DistributorOfferFormViewModel(
     private var locationPaginationQuery by mutableStateOf(PaginationQuery(perPage = 50))
     private var locationsResponse by mutableStateOf(ApiStatus.INACTIVE)
     var formState by mutableStateOf(FormState())
-    var locations: List<Location> by mutableStateOf(emptyList())
+    var locations: MutableList<Location> = mutableStateListOf()
     var offerResponse: ApiCallResult<Offer> by mutableStateOf(ApiCallResult.Inactive())
-
     var startDate by mutableStateOf(offer?.startDate)
     var endDate by mutableStateOf(
         if (offer != null) {
-            Date.from(
-                offer.startDate.toInstant().plusSeconds(offer.duration.toLong())
-            )
+            Date.from(offer.startDate.toInstant().plusSeconds(offer.duration.toLong()))
         } else {
             null
         }
@@ -62,7 +60,7 @@ class DistributorOfferFormViewModel(
     var beneficiaries by mutableStateOf(offer?.beneficiaries ?: 0)
     var price by mutableStateOf(offer?.price ?: 0.0)
     var location by mutableStateOf(offer?.location)
-    var products by mutableStateOf(emptyList<ProductCreateRequest>())
+    var products: MutableList<ProductCreateData> = mutableStateListOf()
 
     init {
         fetchPublishedLocations()
@@ -77,7 +75,7 @@ class DistributorOfferFormViewModel(
             )
             if (response.isSuccessful) {
                 val responsePage = response.body()!!
-                locations = locations.plus(responsePage.items)
+                locations.addAll(responsePage.items)
                 locationPaginationQuery = locationPaginationQuery++
                 locationsResponse = ApiStatus.SUCCESS
             } else {

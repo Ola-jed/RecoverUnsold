@@ -209,8 +209,7 @@ fun DistributorLocationFormScreenContent(
                     ),
                     singleLine = false,
                     keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                    onValidationSuccess = onValidationSuccess,
-                    onValidationError = onValidationError
+                    canBeEmpty = true
                 )
             }
 
@@ -287,12 +286,10 @@ fun DistributorLocationFormScreenContent(
             }
 
             if (currentIndex == maxIndex) {
-                if (loading) {
-                    Button(onClick = {}) {
+                Button(onClick = onSubmit, enabled = !loading) {
+                    if (loading) {
                         CircularProgressIndicator(color = MaterialTheme.colors.background)
-                    }
-                } else {
-                    Button(onClick = onSubmit) {
+                    } else {
                         Text(text = stringResource(R.string.submit))
                         Icon(Icons.Default.Send, contentDescription = null)
                     }

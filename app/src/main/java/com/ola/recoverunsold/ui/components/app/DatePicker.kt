@@ -23,7 +23,7 @@ fun DatePicker(
         { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
             internalDate = LocalDate.of(year, month + 1, dayOfMonth)
             onDateUpdated(internalDate)
-        }, internalDate.year, internalDate.monthValue, internalDate.dayOfMonth
+        }, internalDate.year, internalDate.monthValue - 1, internalDate.dayOfMonth
     )
     datePickerDialog.setCancelable(true)
     datePickerDialog.setOnCancelListener {

@@ -9,8 +9,11 @@ import androidx.lifecycle.viewModelScope
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
+import com.ola.recoverunsold.api.services.wrappers.ProductServiceWrapper
 import com.ola.recoverunsold.models.Offer
+import com.ola.recoverunsold.models.Product
 import com.ola.recoverunsold.utils.resources.Strings
+import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent
@@ -25,6 +28,9 @@ class OfferDetailsViewModelFactory(private val offerId: String) :
 
 class OfferDetailsViewModel(
     private val offerServiceWrapper: OfferServiceWrapper = KoinJavaComponent.get(OfferServiceWrapper::class.java),
+    private val productServiceWrapper: ProductServiceWrapper = KoinJavaComponent.get(
+        ProductServiceWrapper::class.java
+    ),
     private val offerId: String
 ) : ViewModel() {
     var offerApiCallResult: ApiCallResult<Offer> by mutableStateOf(ApiCallResult.Inactive())
@@ -42,6 +48,20 @@ class OfferDetailsViewModel(
                 ApiCallResult.Success(_data = response.body())
             } else {
                 ApiCallResult.Error(code = response.code())
+            }
+        }
+    }
+
+    fun deleteProduct(product: Product, onSuccess: () -> Unit, onError: () -> Unit) {
+        viewModelScope.launch {
+            val response = productServiceWrapper.deleteProduct(
+                product.id,
+                TokenStore.get()!!.bearerToken
+            )
+            if (response.isSuccessful) {
+                onSuccess()
+            } else {
+                onError()
             }
         }
     }

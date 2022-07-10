@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -14,12 +13,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -36,22 +38,25 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
+import com.ola.recoverunsold.api.responses.TokenRoles
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
 import com.ola.recoverunsold.ui.components.app.SubtitleWithIcon
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.location.LocationItem
 import com.ola.recoverunsold.ui.components.product.ProductItem
+import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.OfferDetailsViewModel
 import com.ola.recoverunsold.ui.screens.viewmodels.OfferDetailsViewModelFactory
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
+import com.ola.recoverunsold.utils.misc.jsonSerialize
+import com.ola.recoverunsold.utils.misc.remove
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
+import com.ola.recoverunsold.utils.store.TokenStore
 import kotlinx.coroutines.launch
 import java.util.Date
-
-// TODO: handle product update and delete for distributors
 
 @Composable
 fun OfferDetailsScreen(
@@ -64,6 +69,7 @@ fun OfferDetailsScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
+    val connectedAsDistributor = TokenStore.get()?.role == TokenRoles.DISTRIBUTOR
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -75,7 +81,23 @@ fun OfferDetailsScreen(
                 navController = navController
             )
         },
-        drawerContent = DrawerContent(navController, snackbarHostState)
+        drawerContent = DrawerContent(navController, snackbarHostState),
+        floatingActionButton = {
+            if (connectedAsDistributor) {
+                FloatingActionButton(onClick = {
+                    navController.navigate(
+                        Routes.OfferProduct.path
+                            .replace("{offerId}", offerId)
+                            .remove("{product}")
+                    )
+                }) {
+                    Icon(
+                        Icons.Default.PlaylistAdd,
+                        contentDescription = stringResource(id = R.string.add)
+                    )
+                }
+            }
+        }
     ) { paddingValues ->
         when (offerDetailsViewModel.offerApiCallResult.status) {
             ApiStatus.LOADING -> LoadingIndicator()
@@ -99,7 +121,6 @@ fun OfferDetailsScreen(
             }
             else -> {
                 val offer = offerDetailsViewModel.offerApiCallResult.data!!
-                val height = LocalConfiguration.current.screenHeightDp
                 val width = LocalConfiguration.current.screenWidthDp
 
                 Column(
@@ -162,7 +183,6 @@ fun OfferDetailsScreen(
                         LazyRow(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height((height * 0.3).dp)
                         ) {
                             items(items = offer.products) {
                                 ProductItem(
@@ -170,7 +190,34 @@ fun OfferDetailsScreen(
                                         .padding(horizontal = 5.dp)
                                         .width((width * 0.6).dp),
                                     product = it,
-                                    isEditable = true
+                                    isEditable = offer.distributorId == offerDetailsViewModel.currentUserId,
+                                    onEdit = {
+                                        navController.navigate(
+                                            Routes.OfferProduct.path
+                                                .replace("{offerId}", offerId)
+                                                .replace("{product}", it.jsonSerialize())
+                                        )
+                                    },
+                                    onDelete = {
+                                        offerDetailsViewModel.deleteProduct(
+                                            product = it,
+                                            onSuccess = {
+                                                coroutineScope.launch {
+                                                    snackbarHostState.show(
+                                                        message = Strings.get(R.string.product_deleted_successfully)
+                                                    )
+                                                }
+                                                offerDetailsViewModel.getOffer()
+                                            },
+                                            onError = {
+                                                coroutineScope.launch {
+                                                    snackbarHostState.show(
+                                                        message = Strings.get(R.string.product_deletion_failed)
+                                                    )
+                                                }
+                                            }
+                                        )
+                                    }
                                 )
                             }
                         }
@@ -190,7 +237,7 @@ fun OfferDetailsScreen(
                                 .fillMaxWidth()
                                 .padding(horizontal = 20.dp, vertical = 10.dp),
                             location = offer.location,
-                            isModifiable = offer.distributorId == offerDetailsViewModel.currentUserId
+                            isModifiable = false
                         )
 
                         val context = LocalContext.current

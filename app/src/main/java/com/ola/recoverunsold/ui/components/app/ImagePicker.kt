@@ -20,8 +20,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -41,42 +44,37 @@ fun ImagePicker(
     onImagePicked: (Uri) -> Unit
 ) {
     val context = LocalContext.current
-    val imageData: MutableState<Uri?> =
-        rememberSaveable { mutableStateOf(imageUri) }
+    var imageUriData by rememberSaveable { mutableStateOf(imageUri) }
+    val bitmap: MutableState<Bitmap?> = remember { mutableStateOf(null) }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
-    ) { imageData.value = it }
+    ) {
+        imageUriData = it
+        it?.let { it1 -> onImagePicked(it1) }
+    }
 
 
     Column {
         Text(
             stringResource(id = R.string.pick_an_image),
-            modifier = Modifier.padding(start = 10.dp)
+            modifier = Modifier.padding(start = 20.dp)
         )
         Surface(
             modifier = modifier
                 .clip(RoundedCornerShape(5.dp))
-                .clickable {
-                    launcher.launch(
-                        "image/*"
-                    )
-                },
+                .clickable { launcher.launch("image/*") },
             color = Color.Black.copy(alpha = 0.3F)
         ) {
-            imageData.let {
-                val bitmap: MutableState<Bitmap?> =
-                    rememberSaveable { mutableStateOf(null) }
-                val uri = it.value
+            imageUriData.let {
+                val uri = it
                 if (uri != null) {
-                    onImagePicked(uri)
                     if (Build.VERSION.SDK_INT < 28) {
                         bitmap.value = MediaStore.Images
                             .Media
                             .getBitmap(context.contentResolver, uri)
                     } else {
-                        val source = ImageDecoder
-                            .createSource(context.contentResolver, uri)
+                        val source = ImageDecoder.createSource(context.contentResolver, uri)
                         bitmap.value = ImageDecoder.decodeBitmap(source)
                     }
 

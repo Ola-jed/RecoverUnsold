@@ -17,6 +17,7 @@ sealed class Routes(val path: String) {
     object OfferDetails : Routes("offers/{offerId}")
     object DistributorOffers : Routes("distributor/offers")
     object OfferCreateOrUpdate : Routes("offers/edit?offer={offer}")
+    object OfferProduct : Routes("offers/{offerId}/products?product={product}")
     object Orders : Routes("orders")
     object DistributorOrdersReceived : Routes("orders/received")
     object DistributorAccount : Routes("account/distributor")

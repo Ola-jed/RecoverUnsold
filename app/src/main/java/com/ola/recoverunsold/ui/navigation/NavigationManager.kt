@@ -13,6 +13,7 @@ import com.ola.recoverunsold.ui.screens.distributor.account.DistributorAccountSc
 import com.ola.recoverunsold.ui.screens.distributor.account.DistributorLocationFormScreen
 import com.ola.recoverunsold.ui.screens.distributor.offers.DistributorOfferFormScreen
 import com.ola.recoverunsold.ui.screens.distributor.offers.DistributorOffersScreen
+import com.ola.recoverunsold.ui.screens.distributor.offers.DistributorProductFormScreen
 import com.ola.recoverunsold.ui.screens.distributor.orders.DistributorOrdersReceivedScreen
 import com.ola.recoverunsold.ui.screens.shared.AboutScreen
 import com.ola.recoverunsold.ui.screens.shared.DistributorsScreen
@@ -171,6 +172,25 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
                 navController = navHostController,
                 snackbarHostState = snackbarHostState,
                 serializedOffer = backStackEntry.arguments?.getString("offer")
+            )
+        }
+        composable(
+            Routes.OfferProduct.path,
+            arguments = listOf(
+                navArgument("offerId") {
+                    nullable = false
+                    type = NavType.StringType
+                }, navArgument("product") {
+                    nullable = true
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            DistributorProductFormScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState,
+                offerId = backStackEntry.arguments?.getString("offerId")!!,
+                serializedProduct = backStackEntry.arguments?.getString("product")
             )
         }
         composable(

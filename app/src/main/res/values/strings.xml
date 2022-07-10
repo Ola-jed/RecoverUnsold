@@ -138,7 +138,7 @@
     <string name="products_label">Products</string>
     <string name="offer_details">Offer details</string>
     <string name="view_location_on_maps">View location on Maps</string>
-    <string name="existing_locations_fetch_failed">An error occured while retrieving the existing locations</string>
+    <string name="existing_locations_fetch_failed">An error occurred while retrieving the existing locations</string>
     <string name="create_new_offer_label">Create a new offer</string>
     <string name="update_offer_label">Update the offer</string>
     <string name="number_of_beneficiaries">Number of beneficiaries (optional)</string>
@@ -151,4 +151,12 @@
     <string name="unspecified">Unspecified</string>
     <string name="invalid_integer">Invalid integer</string>
     <string name="invalid_decimal">Invalid decimal number</string>
+    <string name="description">Description</string>
+    <string name="add">Add</string>
+    <string name="add_product_to_offer">Add a product to the offer</string>
+    <string name="update_product">Update the product</string>
+    <string name="product_published_successfully">Product published successfully</string>
+    <string name="product_updated_successfully">Product updated successfully</string>
+    <string name="product_deleted_successfully">Product deleted successfully</string>
+    <string name="product_deletion_failed">Product deletion failed</string>
 </resources>
