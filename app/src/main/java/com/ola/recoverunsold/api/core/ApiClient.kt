@@ -2,6 +2,7 @@ package com.ola.recoverunsold.api.core
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.ola.recoverunsold.BuildConfig
 import com.ola.recoverunsold.api.services.BaseApiService
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
@@ -21,13 +22,19 @@ object ApiClient {
     }
 
     private val logger = HttpLoggingInterceptor()
-        .apply { level = HttpLoggingInterceptor.Level.BODY }
+        .apply {
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
+            }
+        }
 
     private val httpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
-            .connectTimeout(2, TimeUnit.MINUTES)
+            .connectTimeout(1, TimeUnit.MINUTES)
             .readTimeout(2, TimeUnit.MINUTES)
-            .writeTimeout(2, TimeUnit.MINUTES)
+            .writeTimeout(1, TimeUnit.MINUTES)
             .addInterceptor(logger)
             .build()
     }
