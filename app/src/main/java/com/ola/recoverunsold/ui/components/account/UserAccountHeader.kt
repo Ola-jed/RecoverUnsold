@@ -27,7 +27,9 @@ fun UserAccountHeader(
 ) {
     Box(modifier.size(size), contentAlignment = Alignment.Center) {
         val color = remember(id, name) { Color("$id / $name".toHslColor()) }
-        val initials = name.split(" ").joinToString("") { it.first().toString() }
+        val initials = name.split(" ")
+            .filter { it.isNotBlank() }
+            .joinToString("") { it.first().toString() }
         Canvas(modifier = Modifier.fillMaxSize()) {
             drawCircle(SolidColor(color))
         }
