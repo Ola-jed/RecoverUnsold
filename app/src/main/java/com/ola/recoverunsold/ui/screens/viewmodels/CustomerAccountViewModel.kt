@@ -32,7 +32,7 @@ class CustomerAccountViewModel(
     var formState by mutableStateOf(FormState())
 
     fun updateCustomer() {
-        accountApiCallResult = ApiCallResult.Loading()
+        accountApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             val response = accountService.updateCustomer(
                 token.bearerToken,
@@ -58,7 +58,7 @@ class CustomerAccountViewModel(
     }
 
     fun deleteCustomer(onDeleteSuccess: () -> Unit) {
-        accountApiCallResult = ApiCallResult.Loading()
+        accountApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             val response = accountService.deleteAccount(token.bearerToken)
             accountApiCallResult = if (response.isSuccessful) {

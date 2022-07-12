@@ -48,7 +48,7 @@ class DistributorLocationFormViewModel(
     val token = TokenStore.get()!!
 
     fun create(context: Context) {
-        apiCallResult = ApiCallResult.Loading()
+        apiCallResult = ApiCallResult.Loading
         val locationRequest = LocationCreateOrUpdateRequest(
             name = name,
             indication = indication.nullIfBlank(),
@@ -79,7 +79,7 @@ class DistributorLocationFormViewModel(
     }
 
     fun update(context: Context) {
-        apiCallResult = ApiCallResult.Loading()
+        apiCallResult = ApiCallResult.Loading
         val locationRequest = LocationCreateOrUpdateRequest(
             name = name,
             indication = indication.nullIfBlank(),

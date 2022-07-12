@@ -26,7 +26,7 @@ class LoginViewModel(
     var formState by mutableStateOf(FormState())
 
     fun login(onSuccess: () -> Unit = {}) {
-        apiCallResult = ApiCallResult.Loading()
+        apiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             val response = authService.login(LoginRequest(email = email, password = password))
             apiCallResult = if (response.isSuccessful) {

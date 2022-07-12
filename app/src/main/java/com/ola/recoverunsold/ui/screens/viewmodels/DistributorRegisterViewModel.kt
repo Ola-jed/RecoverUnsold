@@ -35,7 +35,7 @@ class DistributorRegisterViewModel(
     var formState by mutableStateOf(FormState())
 
     fun register() {
-        apiCallResult = ApiCallResult.Loading()
+        apiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             val response = authService.registerDistributor(
                 DistributorRegisterRequest(

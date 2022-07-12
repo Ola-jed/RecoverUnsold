@@ -31,7 +31,7 @@ class DistributorOffersViewModel(
     }
 
     fun getOffers() {
-        offersApiResult = ApiCallResult.Loading()
+        offersApiResult = ApiCallResult.Loading
         viewModelScope.launch {
             val response = offerServiceWrapper.getDistributorOffers(userId, offerFilterQuery)
             offersApiResult = if (response.isSuccessful) {

@@ -85,7 +85,7 @@ class DistributorOfferFormViewModel(
     }
 
     fun create() {
-        offerResponse = ApiCallResult.Loading()
+        offerResponse = ApiCallResult.Loading
         val offerCreateRequest = OfferCreateRequest(
             startDate = startDate!!,
             duration = (endDate!!.time.toULong() - startDate!!.time.toULong()) / 1000UL,
@@ -104,7 +104,7 @@ class DistributorOfferFormViewModel(
     }
 
     fun update() {
-        offerResponse = ApiCallResult.Loading()
+        offerResponse = ApiCallResult.Loading
         val offerUpdateRequest = OfferUpdateRequest(
             startDate = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(startDate!!),
             duration = (endDate!!.time.toULong() - startDate!!.time.toULong()) / 1000UL,

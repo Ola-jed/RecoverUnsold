@@ -28,7 +28,7 @@ class OffersViewModel(
     }
 
     fun getOffers() {
-        offersApiResult = ApiCallResult.Loading()
+        offersApiResult = ApiCallResult.Loading
         viewModelScope.launch {
             val response = offerServiceWrapper.getOffers(offerFilterQuery)
             offersApiResult = if (response.isSuccessful) {

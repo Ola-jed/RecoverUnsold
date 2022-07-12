@@ -32,7 +32,7 @@ class LocationsSectionViewModel(
     }
 
     fun getLocations() {
-        locationsGetResponse = ApiCallResult.Loading()
+        locationsGetResponse = ApiCallResult.Loading
         viewModelScope.launch {
             val response = locationServiceWrapper.getLocations(token.bearerToken, paginationQuery)
             locationsGetResponse = if (response.isSuccessful) {

@@ -30,7 +30,7 @@ class CustomerRegisterViewModel(
     var formState by mutableStateOf(FormState())
 
     fun register() {
-        apiCallResult = ApiCallResult.Loading()
+        apiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             val response = authService.registerCustomer(
                 CustomerRegisterRequest(

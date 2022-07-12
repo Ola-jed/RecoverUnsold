@@ -48,7 +48,7 @@ class ProductFormViewModel(
     var productApiCall: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive)
 
     fun create(context: Context) {
-        productApiCall = ApiCallResult.Loading()
+        productApiCall = ApiCallResult.Loading
         val productCreateRequest = ProductCreateRequest(
             name = name,
             description = description,
@@ -76,7 +76,7 @@ class ProductFormViewModel(
     }
 
     fun update() {
-        productApiCall = ApiCallResult.Loading()
+        productApiCall = ApiCallResult.Loading
         val productUpdateRequest = ProductUpdateRequest(
             name = name,
             description = description

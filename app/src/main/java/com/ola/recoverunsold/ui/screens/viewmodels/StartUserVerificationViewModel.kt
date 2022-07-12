@@ -25,7 +25,7 @@ class StartUserVerificationViewModel(
     var formState by mutableStateOf(FormState())
 
     fun submit() {
-        apiCallResult = ApiCallResult.Loading()
+        apiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             val response = userVerificationService.startUserVerification(
                 UserVerificationStartRequest(email)

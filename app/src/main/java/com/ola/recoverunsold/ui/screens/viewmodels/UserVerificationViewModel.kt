@@ -25,7 +25,7 @@ class UserVerificationViewModel(
     var formState by mutableStateOf(FormState())
 
     fun submit() {
-        apiCallResult = ApiCallResult.Loading()
+        apiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             val response = userVerificationService.confirmUserVerification(
                 UserVerificationConfirmRequest(token)

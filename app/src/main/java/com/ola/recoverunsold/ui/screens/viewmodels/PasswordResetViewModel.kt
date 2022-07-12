@@ -26,7 +26,7 @@ class PasswordResetViewModel(
     var formState by mutableStateOf(FormState())
 
     fun submit() {
-        apiCallResult = ApiCallResult.Loading()
+        apiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             val response = forgotPasswordService.resetPassword(
                 PasswordResetRequest(

@@ -32,7 +32,7 @@ class DistributorAccountViewModel(
     var formState by mutableStateOf(FormState())
 
     fun updateDistributor() {
-        accountApiCallResult = ApiCallResult.Loading()
+        accountApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             val response = accountService.updateDistributor(
                 token.bearerToken,
@@ -62,7 +62,7 @@ class DistributorAccountViewModel(
     }
 
     fun deleteDistributor(onDeleteSuccess: () -> Unit) {
-        accountApiCallResult = ApiCallResult.Loading()
+        accountApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             val response = accountService.deleteAccount(token.bearerToken)
             accountApiCallResult = if (response.isSuccessful) {

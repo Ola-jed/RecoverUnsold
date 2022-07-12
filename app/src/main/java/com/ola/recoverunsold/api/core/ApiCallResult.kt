@@ -15,9 +15,7 @@ sealed class ApiCallResult<out T>(
         statusCode = code
     )
 
-    data class Loading<out R>(val isLoading: Boolean = true) : ApiCallResult<R>(
-        status = ApiStatus.LOADING
-    )
+    object Loading : ApiCallResult<Nothing>(status = ApiStatus.LOADING)
 
     object Inactive : ApiCallResult<Nothing>(status = ApiStatus.INACTIVE)
 }
