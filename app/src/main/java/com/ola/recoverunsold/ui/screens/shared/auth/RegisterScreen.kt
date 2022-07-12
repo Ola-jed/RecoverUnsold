@@ -52,7 +52,8 @@ fun RegisterScreenContent(
         ) {
             Text(
                 stringResource(R.string.customer_status_declaration),
-                Modifier.padding(30.dp),
+                modifier = Modifier
+                    .padding(30.dp),
                 color = MaterialTheme.colors.onSecondary
             )
         }

@@ -20,7 +20,7 @@ class StartUserVerificationViewModel(
         UserVerificationService::class.java
     )
 ) : ViewModel() {
-    var apiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive())
+    var apiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive)
     var email by mutableStateOf("")
     var formState by mutableStateOf(FormState())
 

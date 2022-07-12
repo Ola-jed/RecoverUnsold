@@ -24,7 +24,7 @@ class LocationsSectionViewModel(
     )
 ) : ViewModel() {
     private val token = TokenStore.get()!!
-    var locationsGetResponse: ApiCallResult<Page<Location>> by mutableStateOf(ApiCallResult.Inactive())
+    var locationsGetResponse: ApiCallResult<Page<Location>> by mutableStateOf(ApiCallResult.Inactive)
     private var paginationQuery by mutableStateOf(PaginationQuery())
 
     init {

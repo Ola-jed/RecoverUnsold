@@ -1,5 +1,6 @@
 package com.ola.recoverunsold.api.services.wrappers
 
+import com.ola.recoverunsold.api.query.OfferDistanceFilterQuery
 import com.ola.recoverunsold.api.query.OfferFilterQuery
 import com.ola.recoverunsold.api.requests.OfferCreateRequest
 import com.ola.recoverunsold.api.requests.OfferUpdateRequest
@@ -23,6 +24,10 @@ class OfferServiceWrapper(private val offerService: OfferService) {
 
     suspend fun getOffers(offerFilterQuery: OfferFilterQuery): Response<Page<Offer>> {
         return offerService.getOffers(offerFilterQuery.toQueryMap())
+    }
+
+    suspend fun getCloseOffers(offerDistanceFilterQuery: OfferDistanceFilterQuery): Response<Page<Offer>> {
+        return offerService.getCloseOffers(offerDistanceFilterQuery.toQueryMap())
     }
 
     suspend fun getOffer(id: String): Response<Offer> {

@@ -28,7 +28,7 @@ class DistributorAccountViewModel(
     var taxId by mutableStateOf(distributor.taxId)
     var rccm by mutableStateOf(distributor.rccm)
     var websiteUrl by mutableStateOf(distributor.websiteUrl ?: "")
-    var accountApiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive())
+    var accountApiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive)
     var formState by mutableStateOf(FormState())
 
     fun updateDistributor() {

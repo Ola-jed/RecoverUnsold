@@ -40,7 +40,7 @@ class DistributorLocationFormViewModel(
     private val location: Location?
 ) : ViewModel() {
     var formState by mutableStateOf(FormState())
-    var apiCallResult: ApiCallResult<Location> by mutableStateOf(ApiCallResult.Inactive())
+    var apiCallResult: ApiCallResult<Location> by mutableStateOf(ApiCallResult.Inactive)
     var name by mutableStateOf(location?.name ?: "")
     var indication by mutableStateOf(location?.indication ?: "")
     var imageUri by mutableStateOf<Uri?>(null)

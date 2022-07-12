@@ -23,7 +23,7 @@ class DistributorOffersViewModel(
     private val offerServiceWrapper: OfferServiceWrapper = KoinJavaComponent.get(OfferServiceWrapper::class.java)
 ) : ViewModel() {
     var offerFilterQuery by mutableStateOf(OfferFilterQuery())
-    var offersApiResult: ApiCallResult<Page<Offer>> by mutableStateOf(ApiCallResult.Inactive())
+    var offersApiResult: ApiCallResult<Page<Offer>> by mutableStateOf(ApiCallResult.Inactive)
     private val userId = UserObserver.user.value!!.id
 
     init {

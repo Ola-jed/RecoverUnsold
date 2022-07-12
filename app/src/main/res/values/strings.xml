@@ -161,4 +161,5 @@
     <string name="product_deletion_failed">Product deletion failed</string>
     <string name="verification_of_your_account">Verification of your account</string>
     <string name="reset_password">Reset password</string>
+    <string name="view_more">View more</string>
 </resources>

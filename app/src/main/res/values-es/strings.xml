@@ -158,4 +158,5 @@
     <string name="product_deletion_failed">Fallo en la eliminación del producto</string>
     <string name="verification_of_your_account">Comprobación de la cuenta</string>
     <string name="reset_password">Restablecer contraseña</string>
+    <string name="view_more">Ver más</string>
 </resources>

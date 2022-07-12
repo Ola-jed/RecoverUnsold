@@ -48,7 +48,7 @@ class DistributorOfferFormViewModel(
     private var locationsResponse by mutableStateOf(ApiStatus.INACTIVE)
     var formState by mutableStateOf(FormState())
     var locations: MutableList<Location> = mutableStateListOf()
-    var offerResponse: ApiCallResult<Offer> by mutableStateOf(ApiCallResult.Inactive())
+    var offerResponse: ApiCallResult<Offer> by mutableStateOf(ApiCallResult.Inactive)
     var startDate by mutableStateOf(offer?.startDate)
     var endDate by mutableStateOf(
         if (offer != null) {

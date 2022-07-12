@@ -35,6 +35,11 @@ interface OfferService : BaseApiService {
         @Path("id") id: String
     ): Response<Offer>
 
+    @GET(ApiConstants.closeOffersUrl)
+    suspend fun getCloseOffers(
+        @QueryMap filters: Map<String, String>
+    ): Response<Page<Offer>>
+
     @POST(ApiConstants.offersUrl)
     @Multipart
     suspend fun createOffer(

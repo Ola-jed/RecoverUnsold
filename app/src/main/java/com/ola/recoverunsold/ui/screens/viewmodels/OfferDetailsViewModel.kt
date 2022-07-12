@@ -33,7 +33,7 @@ class OfferDetailsViewModel(
     ),
     private val offerId: String
 ) : ViewModel() {
-    var offerApiCallResult: ApiCallResult<Offer> by mutableStateOf(ApiCallResult.Inactive())
+    var offerApiCallResult: ApiCallResult<Offer> by mutableStateOf(ApiCallResult.Inactive)
     val currentUserId = UserObserver.user.value?.id ?: ""
 
     init {

@@ -19,7 +19,5 @@ sealed class ApiCallResult<out T>(
         status = ApiStatus.LOADING
     )
 
-    class Inactive : ApiCallResult<Nothing>(
-        status = ApiStatus.INACTIVE
-    )
+    object Inactive : ApiCallResult<Nothing>(status = ApiStatus.INACTIVE)
 }

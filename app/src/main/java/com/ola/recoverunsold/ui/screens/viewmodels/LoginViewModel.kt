@@ -20,7 +20,7 @@ import org.koin.java.KoinJavaComponent
 class LoginViewModel(
     private val authService: AuthService = KoinJavaComponent.get(AuthService::class.java)
 ) : ViewModel() {
-    var apiCallResult: ApiCallResult<Token> by mutableStateOf(ApiCallResult.Inactive())
+    var apiCallResult: ApiCallResult<Token> by mutableStateOf(ApiCallResult.Inactive)
     var email by mutableStateOf("")
     var password by mutableStateOf("")
     var formState by mutableStateOf(FormState())

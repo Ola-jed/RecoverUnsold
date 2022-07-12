@@ -28,7 +28,7 @@ class CustomerAccountViewModel(
     var username by mutableStateOf(customer.username)
     var firstName by mutableStateOf(customer.firstName ?: "")
     var lastName by mutableStateOf(customer.lastName ?: "")
-    var accountApiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive())
+    var accountApiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive)
     var formState by mutableStateOf(FormState())
 
     fun updateCustomer() {

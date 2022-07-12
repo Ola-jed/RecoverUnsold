@@ -21,7 +21,7 @@ class OffersViewModel(
     private val offerServiceWrapper: OfferServiceWrapper = KoinJavaComponent.get(OfferServiceWrapper::class.java)
 ) : ViewModel() {
     var offerFilterQuery by mutableStateOf(OfferFilterQuery(active = true))
-    var offersApiResult: ApiCallResult<Page<Offer>> by mutableStateOf(ApiCallResult.Inactive())
+    var offersApiResult: ApiCallResult<Page<Offer>> by mutableStateOf(ApiCallResult.Inactive)
 
     init {
         getOffers()

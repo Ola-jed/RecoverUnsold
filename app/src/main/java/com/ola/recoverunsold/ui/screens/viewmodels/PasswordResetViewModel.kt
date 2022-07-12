@@ -20,7 +20,7 @@ class PasswordResetViewModel(
         ForgotPasswordService::class.java
     )
 ) : ViewModel() {
-    var apiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive())
+    var apiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive)
     var token by mutableStateOf("")
     var password by mutableStateOf("")
     var formState by mutableStateOf(FormState())

@@ -24,9 +24,7 @@ fun FlippedCard(
     cutCornerSize: Dp = 25.dp,
     content: @Composable () -> Unit,
 ) {
-    Box(
-        modifier = modifier.padding(10.dp)
-    ) {
+    Box(modifier = modifier) {
         androidx.compose.foundation.Canvas(modifier = Modifier.matchParentSize()) {
             val path = Path().apply {
                 lineTo(size.width - cutCornerSize.toPx(), 0f)

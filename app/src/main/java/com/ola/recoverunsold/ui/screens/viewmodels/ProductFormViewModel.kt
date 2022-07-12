@@ -45,7 +45,7 @@ class ProductFormViewModel(
     var name by mutableStateOf(product?.name ?: "")
     var description by mutableStateOf(product?.description ?: "")
     var images = mutableStateListOf<Uri>()
-    var productApiCall: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive())
+    var productApiCall: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive)
 
     fun create(context: Context) {
         productApiCall = ApiCallResult.Loading()
