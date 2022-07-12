@@ -12,7 +12,6 @@ data class OfferFilterQuery(
     var maxDate: Date? = null,
     var active: Boolean? = null
 ) : PaginationQuery(page, perPage), ApiClientQueryInterface {
-
     override fun toQueryMap(): Map<String, String> {
         val resultMap = mutableMapOf("page" to page.toString(), "perPage" to perPage.toString())
         if (minPrice != null) {
@@ -33,18 +32,8 @@ data class OfferFilterQuery(
         return resultMap
     }
 
-    override fun nextPage(): OfferFilterQuery {
-        return OfferFilterQuery(
-            page + 1, perPage, minPrice, maxPrice, minDate, maxDate, active
-        )
-    }
-
-    override fun previousPage(): OfferFilterQuery {
-        return OfferFilterQuery(
-            page - 1, perPage, minPrice, maxPrice, minDate, maxDate, active
-        )
-    }
-
+    override fun nextPage(): OfferFilterQuery = copy(page = page + 1)
+    override fun previousPage(): OfferFilterQuery = copy(page = page - 1)
     override operator fun inc(): OfferFilterQuery = nextPage()
     override operator fun dec(): OfferFilterQuery = previousPage()
 }
