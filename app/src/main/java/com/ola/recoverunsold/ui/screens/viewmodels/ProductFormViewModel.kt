@@ -55,7 +55,7 @@ class ProductFormViewModel(
             images = images.map { uri ->
                 val imageFile = uri.createFile(context)
                 MultipartBody.Part.createFormData(
-                    "image",
+                    "images",
                     imageFile.name,
                     imageFile.asRequestBody("multipart/form-data".toMediaTypeOrNull())
                 )

@@ -36,7 +36,6 @@ import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
 
-// TODO : Get offers near to this user
 @Composable
 fun OffersScreen(
     navController: NavController,
@@ -83,14 +82,13 @@ fun OffersScreen(
             else -> {
                 val offers = offersViewModel.offersApiResult.data!!
                 if (offers.items.isEmpty()) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
+                    Box(modifier = Modifier.fillMaxSize()) {
                         Text(
                             stringResource(R.string.no_offers_found),
                             style = MaterialTheme.typography.h6,
-                            modifier = Modifier.padding(horizontal = 10.dp)
+                            modifier = Modifier
+                                .padding(horizontal = 10.dp)
+                                .align(Alignment.Center)
                         )
                     }
                 } else {
@@ -187,6 +185,21 @@ fun OffersScreen(
                                     Button(onClick = { offersViewModel.getNext() }) {
                                         Text(stringResource(id = R.string.next))
                                     }
+                                }
+                            }
+                        }
+
+                        item {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 10.dp),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                Button(onClick = {
+                                    navController.navigate(Routes.CloseOffers.path)
+                                }) {
+                                    Text(stringResource(id = R.string.view_current_offers_near_me))
                                 }
                             }
                         }

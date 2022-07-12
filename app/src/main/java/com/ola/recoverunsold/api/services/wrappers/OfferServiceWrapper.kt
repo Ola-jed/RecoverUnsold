@@ -7,6 +7,7 @@ import com.ola.recoverunsold.api.requests.OfferUpdateRequest
 import com.ola.recoverunsold.api.services.NoContentResponse
 import com.ola.recoverunsold.api.services.OfferService
 import com.ola.recoverunsold.models.Offer
+import com.ola.recoverunsold.models.OfferWithRelativeDistance
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.utils.misc.toMultipartRequestBody
 import retrofit2.Response
@@ -26,7 +27,9 @@ class OfferServiceWrapper(private val offerService: OfferService) {
         return offerService.getOffers(offerFilterQuery.toQueryMap())
     }
 
-    suspend fun getCloseOffers(offerDistanceFilterQuery: OfferDistanceFilterQuery): Response<Page<Offer>> {
+    suspend fun getCloseOffers(
+        offerDistanceFilterQuery: OfferDistanceFilterQuery
+    ): Response<Page<OfferWithRelativeDistance>> {
         return offerService.getCloseOffers(offerDistanceFilterQuery.toQueryMap())
     }
 

@@ -162,4 +162,7 @@
     <string name="verification_of_your_account">Verification of your account</string>
     <string name="reset_password">Reset password</string>
     <string name="view_more">View more</string>
+    <string name="view_current_offers_near_me">View current offers near me</string>
+    <string name="number_of_kilometers_for_research">Number of kilometers for research</string>
+    <string name="distance">Distance in kilometers</string>
 </resources>

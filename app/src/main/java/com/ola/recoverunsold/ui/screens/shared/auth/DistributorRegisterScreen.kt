@@ -52,6 +52,7 @@ import com.ola.recoverunsold.utils.validation.EmailValidator
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import com.ola.recoverunsold.utils.validation.PhoneValidator
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -322,11 +323,12 @@ fun DistributorRegisterContent(
 
             if (isSuccessful) {
                 LaunchedEffect(snackbarHostState) {
-                    navController.navigate(Routes.ConfirmUserVerification.path)
                     coroutineScope.launch {
                         snackbarHostState.show(
                             message = Strings.get(R.string.code_sent_successfully)
                         )
+                        delay(1000)
+                        navController.navigate(Routes.ConfirmUserVerification.path)
                     }
                 }
             }

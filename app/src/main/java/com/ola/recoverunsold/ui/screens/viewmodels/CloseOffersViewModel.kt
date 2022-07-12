@@ -8,7 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.query.OfferDistanceFilterQuery
 import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
+import com.ola.recoverunsold.models.LatLong
 import com.ola.recoverunsold.models.Offer
+import com.ola.recoverunsold.models.OfferWithRelativeDistance
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.utils.validation.FormState
 import kotlinx.coroutines.launch
@@ -21,11 +23,10 @@ class CloseOffersViewModel(
     var offerDistanceFilterQuery by mutableStateOf(
         OfferDistanceFilterQuery(
             distance = 1.0,
-            latitude = 0.0,
-            longitude = 0.0
+            latLong = LatLong.zero()
         )
     )
-    var closeOffersApiResult: ApiCallResult<Page<Offer>> by mutableStateOf(ApiCallResult.Inactive)
+    var closeOffersApiResult: ApiCallResult<Page<OfferWithRelativeDistance>> by mutableStateOf(ApiCallResult.Inactive)
 
     fun getCloseOffers() {
         closeOffersApiResult = ApiCallResult.Loading

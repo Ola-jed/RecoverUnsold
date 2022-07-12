@@ -24,6 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -98,14 +99,14 @@ fun DistributorOffersScreen(
                 val offers = distributorOffersViewModel.offersApiResult.data!!
 
                 if (offers.items.isEmpty()) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
+                    Box(modifier = Modifier.fillMaxSize()) {
                         Text(
                             stringResource(R.string.no_offer_published),
                             style = MaterialTheme.typography.h6,
-                            modifier = Modifier.padding(horizontal = 10.dp)
+                            modifier = Modifier
+                                .padding(horizontal = 10.dp)
+                                .align(Alignment.Center),
+                            textAlign = TextAlign.Center
                         )
                     }
                 } else {

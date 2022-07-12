@@ -4,6 +4,7 @@ import com.ola.recoverunsold.api.core.ApiConstants
 import com.ola.recoverunsold.api.requests.OfferUpdateRequest
 import com.ola.recoverunsold.api.requests.ProductCreateRequest
 import com.ola.recoverunsold.models.Offer
+import com.ola.recoverunsold.models.OfferWithRelativeDistance
 import com.ola.recoverunsold.models.Page
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -38,7 +39,7 @@ interface OfferService : BaseApiService {
     @GET(ApiConstants.closeOffersUrl)
     suspend fun getCloseOffers(
         @QueryMap filters: Map<String, String>
-    ): Response<Page<Offer>>
+    ): Response<Page<OfferWithRelativeDistance>>
 
     @POST(ApiConstants.offersUrl)
     @Multipart

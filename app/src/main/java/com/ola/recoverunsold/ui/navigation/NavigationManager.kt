@@ -16,6 +16,7 @@ import com.ola.recoverunsold.ui.screens.distributor.offers.DistributorOffersScre
 import com.ola.recoverunsold.ui.screens.distributor.offers.DistributorProductFormScreen
 import com.ola.recoverunsold.ui.screens.distributor.orders.DistributorOrdersReceivedScreen
 import com.ola.recoverunsold.ui.screens.shared.AboutScreen
+import com.ola.recoverunsold.ui.screens.shared.CloseOffersScreen
 import com.ola.recoverunsold.ui.screens.shared.DistributorsScreen
 import com.ola.recoverunsold.ui.screens.shared.HomeScreen
 import com.ola.recoverunsold.ui.screens.shared.OfferDetailsScreen
@@ -108,6 +109,12 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
         }
         composable(Routes.Offers.path) {
             OffersScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState
+            )
+        }
+        composable(Routes.CloseOffers.path) {
+            CloseOffersScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState
             )
