@@ -1,6 +1,8 @@
 package com.ola.recoverunsold.utils.misc
 
 import android.content.Context
+import android.content.Intent
+import android.location.Location
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
@@ -9,8 +11,11 @@ import androidx.annotation.ColorInt
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.ola.recoverunsold.R
@@ -89,6 +94,50 @@ fun Context.hasNetwork(): Boolean {
         }
     }
     return false
+}
+
+/**
+ * Use the Android context to get the device location
+ */
+fun Context.getDeviceLocation(
+    onLatLngValueUpdate: (LatLng) -> Unit,
+    onLocationFetchFailed: () -> Unit
+) {
+    val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+    val locationChangeListener = fun(location: Location?) {
+        if (location != null) {
+            onLatLngValueUpdate(
+                LatLng(
+                    location.latitude,
+                    location.longitude
+                )
+            )
+        } else {
+            onLocationFetchFailed()
+        }
+    }
+    fusedLocationProviderClient.getCurrentLocation(
+        Priority.PRIORITY_BALANCED_POWER_ACCURACY,
+        null
+    ).addOnSuccessListener(locationChangeListener)
+}
+
+/**
+ * Open a map with the given lat long
+ */
+fun Context.openMapWithCoordinates(latitude: Double, longitude: Double) {
+    val mapsIntent = Intent(Intent.ACTION_VIEW)
+    mapsIntent.data = Uri.Builder().scheme("https")
+        .authority("www.google.com")
+        .appendPath("maps")
+        .appendPath("dir")
+        .appendPath("")
+        .appendQueryParameter("api", "1")
+        .appendQueryParameter(
+            "destination",
+            "${latitude},${longitude}"
+        ).build()
+    ContextCompat.startActivity(this, mapsIntent, null)
 }
 
 /**
@@ -202,7 +251,7 @@ fun Number?.formatWithoutTrailingZeros(): String {
         return toString.split('.')[0]
     }
     // An empty decimal part
-    if(toString?.endsWith('.') == true) {
+    if (toString?.endsWith('.') == true) {
         return "$toString.0"
     }
     return toString?.replace("^(\\d+\\.\\d*?[1-9])0+\$", "$1") ?: ""

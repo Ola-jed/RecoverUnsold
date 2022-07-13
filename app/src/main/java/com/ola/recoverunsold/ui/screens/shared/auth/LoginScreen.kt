@@ -215,7 +215,6 @@ fun LoginScreenContent(
                     CircularProgressIndicator(color = MaterialTheme.colors.background)
                 } else {
                     Text(stringResource(R.string.login_action), modifier = Modifier.padding(5.dp))
-
                 }
             }
 

@@ -162,4 +162,8 @@
     <string name="view_current_offers_near_me">Voir les offres en cours à proximité de chez moi</string>
     <string name="number_of_kilometers_for_research">Nombre de kilomètres pour la recherche</string>
     <string name="distance">Distance en kilomètres</string>
+    <string name="feature_requiring_permission">Cette fonctionnalité requiert la permission d\'accéder à votre localisation.</string>
+    <string name="search">Rechercher</string>
+    <string name="enter_search_department">Entrez le rayon dans lequel effectuer la recherche</string>
+    <string name="change_search_radius">Modifier le rayon de recherche</string>
 </resources>

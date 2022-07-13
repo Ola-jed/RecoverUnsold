@@ -165,4 +165,8 @@
     <string name="view_current_offers_near_me">View current offers near me</string>
     <string name="number_of_kilometers_for_research">Number of kilometers for research</string>
     <string name="distance">Distance in kilometers</string>
+    <string name="feature_requiring_permission">This feature requires permission to access your location.</string>
+    <string name="search">Search</string>
+    <string name="enter_search_department">Enter the department in which to search</string>
+    <string name="change_search_radius">Change the search radius</string>
 </resources>

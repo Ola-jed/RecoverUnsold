@@ -1,7 +1,5 @@
 package com.ola.recoverunsold.ui.screens.shared
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,7 +31,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
@@ -51,6 +48,7 @@ import com.ola.recoverunsold.ui.screens.viewmodels.OfferDetailsViewModelFactory
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 import com.ola.recoverunsold.utils.misc.jsonSerialize
+import com.ola.recoverunsold.utils.misc.openMapWithCoordinates
 import com.ola.recoverunsold.utils.misc.remove
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
@@ -244,20 +242,14 @@ fun OfferDetailsScreen(
                         Button(
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
-                                .padding(top = 15.dp), onClick = {
-                                val mapsIntent = Intent(Intent.ACTION_VIEW)
-                                mapsIntent.data = Uri.Builder().scheme("https")
-                                    .authority("www.google.com")
-                                    .appendPath("maps")
-                                    .appendPath("dir")
-                                    .appendPath("")
-                                    .appendQueryParameter("api", "1")
-                                    .appendQueryParameter(
-                                        "destination",
-                                        "${offer.location.coordinates.latitude},${offer.location.coordinates.longitude}"
-                                    ).build()
-                                startActivity(context, mapsIntent, null)
-                            }) {
+                                .padding(top = 15.dp),
+                            onClick = {
+                                context.openMapWithCoordinates(
+                                    latitude = offer.location.coordinates.latitude,
+                                    longitude = offer.location.coordinates.longitude
+                                )
+                            }
+                        ) {
                             Text(stringResource(id = R.string.view_location_on_maps))
                         }
                     }

@@ -1,8 +1,6 @@
 package com.ola.recoverunsold.ui.components.location
 
 import android.Manifest
-import android.content.Context
-import android.location.Location
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -17,8 +15,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -27,6 +23,7 @@ import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.ola.recoverunsold.utils.misc.getDeviceLocation
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -59,10 +56,13 @@ fun LocationMap(
 
     when {
         locationPermissionState.hasPermission -> {
-            getDeviceLocation(context, {
-                latLngData = it
-                onLatLngUpdate(it)
-            }, { onLocationFetchFailed() })
+            context.getDeviceLocation(
+                onLatLngValueUpdate = {
+                    latLngData = it
+                    onLatLngUpdate(it)
+                },
+                onLocationFetchFailed = onLocationFetchFailed
+            )
         }
         else -> {}
     }
@@ -80,28 +80,4 @@ fun LocationMap(
             state = MarkerState(position = latLngData)
         )
     }
-}
-
-private fun getDeviceLocation(
-    context: Context,
-    onLatLngValueUpdate: (LatLng) -> Unit,
-    onLocationFetchFailed: () -> Unit
-) {
-    val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
-    val locationChangeListener = fun(location: Location?) {
-        if (location != null) {
-            onLatLngValueUpdate(
-                LatLng(
-                    location.latitude,
-                    location.longitude
-                )
-            )
-        } else {
-            onLocationFetchFailed()
-        }
-    }
-    fusedLocationProviderClient.getCurrentLocation(
-        Priority.PRIORITY_BALANCED_POWER_ACCURACY,
-        null
-    ).addOnSuccessListener(locationChangeListener)
 }

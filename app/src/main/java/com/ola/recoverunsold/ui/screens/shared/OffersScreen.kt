@@ -193,8 +193,8 @@ fun OffersScreen(
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(top = 10.dp),
-                                horizontalArrangement = Arrangement.SpaceEvenly
+                                    .padding(20.dp),
+                                horizontalArrangement = Arrangement.Center
                             ) {
                                 Button(onClick = {
                                     navController.navigate(Routes.CloseOffers.path)
