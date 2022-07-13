@@ -28,6 +28,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.text.DateFormat
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -237,24 +239,10 @@ fun Date.format(format: String = "yyyy-MM-dd'T'HH:mm:ss.SSS"): String {
  * Format decimal numbers without the zeros at the end
  */
 fun Number?.formatWithoutTrailingZeros(): String {
-    // Special case : 0/0.00/00.00000 ...
-    if (this?.toLong() == 0L) {
-        return "0"
-    }
-    // Integral number
-    val toString = this?.toString()
-    if (toString?.contains('.') == false) {
-        return toString
-    }
-    // No decimal part
-    if (toString?.split('.')?.get(1)?.toInt() == 0) {
-        return toString.split('.')[0]
-    }
-    // An empty decimal part
-    if (toString?.endsWith('.') == true) {
-        return "$toString.0"
-    }
-    return toString?.replace("^(\\d+\\.\\d*?[1-9])0+\$", "$1") ?: ""
+    if(this == null) return ""
+    val df = DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH))
+    df.maximumFractionDigits = 340
+    return df.format(this)
 }
 
 /**

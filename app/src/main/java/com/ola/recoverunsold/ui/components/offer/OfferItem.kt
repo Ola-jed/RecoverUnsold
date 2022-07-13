@@ -31,6 +31,7 @@ import com.ola.recoverunsold.ui.components.app.ConfirmDialog
 import com.ola.recoverunsold.ui.components.app.ImageSlider
 import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.formatDateTime
+import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 
 /**
  * A component to show information about an offer
@@ -67,7 +68,10 @@ fun OfferItem(
             }
 
             Text(
-                text = stringResource(R.string.total_amount, offer.price.toString()),
+                text = stringResource(
+                    R.string.total_amount,
+                    offer.price.formatWithoutTrailingZeros()
+                ),
                 modifier = Modifier.padding(top = 10.dp)
             )
 
