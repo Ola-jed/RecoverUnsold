@@ -8,6 +8,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
+import com.ola.recoverunsold.api.core.StatusCode
+import com.ola.recoverunsold.api.requests.OrderCreateRequest
+import com.ola.recoverunsold.api.responses.TokenRoles
+import com.ola.recoverunsold.api.services.OrderService
 import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
 import com.ola.recoverunsold.api.services.wrappers.ProductServiceWrapper
 import com.ola.recoverunsold.models.Offer
@@ -17,6 +21,7 @@ import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent
+import java.util.Date
 
 class OfferDetailsViewModelFactory(private val offerId: String) :
     ViewModelProvider.NewInstanceFactory() {
@@ -31,10 +36,15 @@ class OfferDetailsViewModel(
     private val productServiceWrapper: ProductServiceWrapper = KoinJavaComponent.get(
         ProductServiceWrapper::class.java
     ),
+    private val orderService: OrderService = KoinJavaComponent.get(OrderService::class.java),
     private val offerId: String
 ) : ViewModel() {
     var offerApiCallResult: ApiCallResult<Offer> by mutableStateOf(ApiCallResult.Inactive)
+    var orderApiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive)
+    var withdrawalDate by mutableStateOf(Date())
     val currentUserId = UserObserver.user.value?.id ?: ""
+    val token = TokenStore.get()!!.bearerToken
+    val isCustomer = TokenStore.get()!!.role == TokenRoles.CUSTOMER
 
     init {
         getOffer()
@@ -54,10 +64,7 @@ class OfferDetailsViewModel(
 
     fun deleteProduct(product: Product, onSuccess: () -> Unit, onError: () -> Unit) {
         viewModelScope.launch {
-            val response = productServiceWrapper.deleteProduct(
-                product.id,
-                TokenStore.get()!!.bearerToken
-            )
+            val response = productServiceWrapper.deleteProduct(product.id, token)
             if (response.isSuccessful) {
                 onSuccess()
             } else {
@@ -66,8 +73,32 @@ class OfferDetailsViewModel(
         }
     }
 
+    fun orderProduct() {
+        orderApiCallResult = ApiCallResult.Loading
+        viewModelScope.launch {
+            val response = orderService.createOrder(
+                token,
+                offerId,
+                OrderCreateRequest(withdrawalDate = withdrawalDate)
+            )
+            orderApiCallResult = if (response.isSuccessful) {
+                ApiCallResult.Success(_data = Unit)
+            } else {
+                ApiCallResult.Error(code = response.code())
+            }
+        }
+    }
+
     fun errorMessage(): String? = when (offerApiCallResult.statusCode) {
-        404 -> Strings.get(R.string.offer_not_found)
+        StatusCode.NotFound.code -> Strings.get(R.string.offer_not_found)
+        in 400..600 -> Strings.get(R.string.unknown_error_occured)
+        else -> null
+    }
+
+    fun orderErrorMessage(): String? = when (orderApiCallResult.statusCode) {
+        StatusCode.NotFound.code -> Strings.get(R.string.offer_not_found)
+        StatusCode.Forbidden.code -> Strings.get(R.string.beneficiaries_number_already_reached)
+        StatusCode.BadRequest.code -> Strings.get(R.string.invalid_date)
         in 400..600 -> Strings.get(R.string.unknown_error_occured)
         else -> null
     }

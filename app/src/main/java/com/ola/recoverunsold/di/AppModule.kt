@@ -6,6 +6,7 @@ import com.ola.recoverunsold.api.services.AuthService
 import com.ola.recoverunsold.api.services.ForgotPasswordService
 import com.ola.recoverunsold.api.services.LocationService
 import com.ola.recoverunsold.api.services.OfferService
+import com.ola.recoverunsold.api.services.OrderService
 import com.ola.recoverunsold.api.services.UserVerificationService
 import com.ola.recoverunsold.api.services.wrappers.LocationServiceWrapper
 import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
@@ -19,6 +20,7 @@ val appModule = module {
     factory<AccountService> { ApiClient.buildService() }
     factory<LocationService> { ApiClient.buildService() }
     factory<OfferService> { ApiClient.buildService() }
+    factory<OrderService> { ApiClient.buildService() }
     factory { LocationServiceWrapper(ApiClient.buildService()) }
     factory { OfferServiceWrapper(ApiClient.buildService()) }
     factory { ProductServiceWrapper(ApiClient.buildService()) }

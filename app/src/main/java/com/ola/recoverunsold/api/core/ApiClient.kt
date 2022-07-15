@@ -62,7 +62,7 @@ object ApiClient {
 
     val retrofit: Retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl(ApiConstants.apiBaseUrl)
+            .baseUrl(ApiUrls.apiBaseUrl)
             .client(httpClient)
             .addConverterFactory(nullOnEmptyConverterFactory)
             .addConverterFactory(GsonConverterFactory.create(gson))

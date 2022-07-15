@@ -1,6 +1,6 @@
 package com.ola.recoverunsold.api.services
 
-import com.ola.recoverunsold.api.core.ApiConstants
+import com.ola.recoverunsold.api.core.ApiUrls
 import com.ola.recoverunsold.api.requests.ProductUpdateRequest
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.models.Product
@@ -19,24 +19,24 @@ import retrofit2.http.Path
 import retrofit2.http.QueryMap
 
 interface ProductService : BaseApiService {
-    @GET(ApiConstants.productsUrl + "/{id}")
+    @GET(ApiUrls.productsUrl + "/{id}")
     suspend fun getProduct(
         @Path("id") id: String
     ): Response<Product>
 
-    @GET(ApiConstants.distributorProductsUrl + "/{id}")
+    @GET(ApiUrls.distributorProductsUrl + "/{id}")
     suspend fun getDistributorProducts(
         @Path("id") id: String,
         @QueryMap pagination: Map<String, String>
     ): Response<Page<Product>>
 
-    @GET(ApiConstants.offersUrl + "/{id}/Products")
+    @GET(ApiUrls.offersUrl + "/{id}/Products")
     suspend fun getOfferProducts(
         @Path("id") id: String,
         @QueryMap pagination: Map<String, String>
     ): Response<Page<Product>>
 
-    @POST(ApiConstants.offersUrl + "/{id}/Products")
+    @POST(ApiUrls.offersUrl + "/{id}/Products")
     @Multipart
     suspend fun createProduct(
         @Path("id") id: String,
@@ -46,14 +46,14 @@ interface ProductService : BaseApiService {
         @Part images: List<MultipartBody.Part>? = null
     ): Response<Product>
 
-    @PUT(ApiConstants.productsUrl + "/{id}")
+    @PUT(ApiUrls.productsUrl + "/{id}")
     suspend fun updateProduct(
         @Path("id") id: String,
         @Header("Authorization") authorization: String,
         @Body productUpdateRequest: ProductUpdateRequest
     ): NoContentResponse
 
-    @DELETE(ApiConstants.productsUrl + "/{id}")
+    @DELETE(ApiUrls.productsUrl + "/{id}")
     suspend fun deleteProduct(
         @Path("id") id: String,
         @Header("Authorization") authorization: String

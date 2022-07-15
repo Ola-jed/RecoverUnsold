@@ -242,6 +242,7 @@ fun OfferDetailsScreen(
                         Button(
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
+                                .fillMaxWidth(0.85F)
                                 .padding(top = 15.dp),
                             onClick = {
                                 context.openMapWithCoordinates(
@@ -251,6 +252,15 @@ fun OfferDetailsScreen(
                             }
                         ) {
                             Text(stringResource(id = R.string.view_location_on_maps))
+                        }
+
+                        if (offerDetailsViewModel.isCustomer) {
+                            Button(modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .fillMaxWidth(0.85F),
+                                onClick = { /*TODO*/ }) {
+                                Text(stringResource(id = R.string.order))
+                            }
                         }
                     }
                 }

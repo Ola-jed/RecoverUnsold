@@ -166,4 +166,7 @@
     <string name="search">Busque en</string>
     <string name="enter_search_department">Introduzca el departamento en el que desea buscar</string>
     <string name="change_search_radius">Cambiar el radio de búsqueda</string>
+    <string name="invalid_date">Fecha inválida</string>
+    <string name="beneficiaries_number_already_reached">Numero de beneficiarios a los que ya se ha llegado</string>
+    <string name="order">Pedir</string>
 </resources>

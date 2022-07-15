@@ -1,6 +1,6 @@
 package com.ola.recoverunsold.api.services
 
-import com.ola.recoverunsold.api.core.ApiConstants
+import com.ola.recoverunsold.api.core.ApiUrls
 import com.ola.recoverunsold.api.requests.OfferUpdateRequest
 import com.ola.recoverunsold.api.requests.ProductCreateRequest
 import com.ola.recoverunsold.models.Offer
@@ -20,28 +20,28 @@ import retrofit2.http.Path
 import retrofit2.http.QueryMap
 
 interface OfferService : BaseApiService {
-    @GET(ApiConstants.offersUrl)
+    @GET(ApiUrls.offersUrl)
     suspend fun getOffers(
         @QueryMap filters: Map<String, String>
     ): Response<Page<Offer>>
 
-    @GET(ApiConstants.distributorOffersUrl + "/{distributorId}")
+    @GET(ApiUrls.distributorOffersUrl + "/{distributorId}")
     suspend fun getDistributorOffers(
         @Path("distributorId") distributorId: String,
         @QueryMap filters: Map<String, String>
     ): Response<Page<Offer>>
 
-    @GET(ApiConstants.offersUrl + "/{id}")
+    @GET(ApiUrls.offersUrl + "/{id}")
     suspend fun getOffer(
         @Path("id") id: String
     ): Response<Offer>
 
-    @GET(ApiConstants.closeOffersUrl)
+    @GET(ApiUrls.closeOffersUrl)
     suspend fun getCloseOffers(
         @QueryMap filters: Map<String, String>
     ): Response<Page<OfferWithRelativeDistance>>
 
-    @POST(ApiConstants.offersUrl)
+    @POST(ApiUrls.offersUrl)
     @Multipart
     suspend fun createOffer(
         @Header("Authorization") authorization: String,
@@ -53,14 +53,14 @@ interface OfferService : BaseApiService {
         @Part("products") products: List<ProductCreateRequest>? = null
     ): Response<Offer>
 
-    @PUT(ApiConstants.offersUrl + "/{id}")
+    @PUT(ApiUrls.offersUrl + "/{id}")
     suspend fun updateOffer(
         @Header("Authorization") authorization: String,
         @Path("id") id: String,
         @Body offerUpdateRequest: OfferUpdateRequest
     ): NoContentResponse
 
-    @DELETE(ApiConstants.offersUrl + "/{id}")
+    @DELETE(ApiUrls.offersUrl + "/{id}")
     suspend fun deleteOffer(
         @Header("Authorization") authorization: String,
         @Path("id") id: String

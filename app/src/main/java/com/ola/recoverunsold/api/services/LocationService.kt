@@ -1,6 +1,6 @@
 package com.ola.recoverunsold.api.services
 
-import com.ola.recoverunsold.api.core.ApiConstants
+import com.ola.recoverunsold.api.core.ApiUrls
 import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.models.Page
 import okhttp3.MultipartBody
@@ -17,28 +17,28 @@ import retrofit2.http.Path
 import retrofit2.http.QueryMap
 
 interface LocationService : BaseApiService {
-    @GET(ApiConstants.distributorsLocationsUrl + "/{distributorId}")
+    @GET(ApiUrls.distributorsLocationsUrl + "/{distributorId}")
     suspend fun getDistributorLocations(
         @Path("distributorId") distributorId: String,
         @QueryMap pagination: Map<String, String>
     ): Response<Page<Location>>
 
-    @GET(ApiConstants.locationsSearchUrl + "/{query}")
+    @GET(ApiUrls.locationsSearchUrl + "/{query}")
     suspend fun searchLocations(
         @Path("query") query: String,
         @QueryMap pagination: Map<String, String>
     ): Response<Page<Location>>
 
-    @GET(ApiConstants.locationsUrl + "/{id}")
+    @GET(ApiUrls.locationsUrl + "/{id}")
     suspend fun getLocation(@Path("id") id: String): Response<Location>
 
-    @GET(ApiConstants.locationsUrl)
+    @GET(ApiUrls.locationsUrl)
     suspend fun getLocations(
         @Header("Authorization") authorization: String,
         @QueryMap pagination: Map<String, String>
     ): Response<Page<Location>>
 
-    @POST(ApiConstants.locationsUrl)
+    @POST(ApiUrls.locationsUrl)
     @Multipart
     suspend fun createLocation(
         @Header("Authorization") authorization: String,
@@ -49,7 +49,7 @@ interface LocationService : BaseApiService {
         @Part("longitude") longitude: RequestBody
     ): Response<Location>
 
-    @PUT(ApiConstants.locationsUrl + "/{id}")
+    @PUT(ApiUrls.locationsUrl + "/{id}")
     @Multipart
     suspend fun updateLocation(
         @Header("Authorization") authorization: String,
@@ -61,7 +61,7 @@ interface LocationService : BaseApiService {
         @Part("longitude") longitude: RequestBody
     ): NoContentResponse
 
-    @DELETE(ApiConstants.locationsUrl + "/{id}")
+    @DELETE(ApiUrls.locationsUrl + "/{id}")
     suspend fun deleteLocation(
         @Header("Authorization") authorization: String,
         @Path("id") id: String

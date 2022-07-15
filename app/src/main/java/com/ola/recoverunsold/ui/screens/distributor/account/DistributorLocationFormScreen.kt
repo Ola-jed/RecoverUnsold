@@ -215,7 +215,7 @@ fun DistributorLocationFormScreenContent(
 
             1 -> ImagePicker(
                 modifier = fieldsModifier
-                    .height((LocalConfiguration.current.screenHeightDp * 0.25).dp),
+                    .height((LocalConfiguration.current.screenHeightDp * 0.75).dp),
                 imageUri = imageUri,
                 onImagePicked = onImagePicked
             )

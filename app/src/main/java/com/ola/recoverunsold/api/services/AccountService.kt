@@ -1,6 +1,6 @@
 package com.ola.recoverunsold.api.services
 
-import com.ola.recoverunsold.api.core.ApiConstants
+import com.ola.recoverunsold.api.core.ApiUrls
 import com.ola.recoverunsold.api.requests.CustomerUpdateRequest
 import com.ola.recoverunsold.api.requests.DistributorUpdateRequest
 import com.ola.recoverunsold.api.requests.PasswordUpdateRequest
@@ -14,35 +14,35 @@ import retrofit2.http.Header
 import retrofit2.http.PUT
 
 interface AccountService : BaseApiService {
-    @GET(ApiConstants.accountUrl)
+    @GET(ApiUrls.accountUrl)
     suspend fun getCustomer(
         @Header("Authorization") authorization: String
     ): Response<Customer>
 
-    @GET(ApiConstants.accountUrl)
+    @GET(ApiUrls.accountUrl)
     suspend fun getDistributor(
         @Header("Authorization") authorization: String
     ): Response<Distributor>
 
-    @PUT(ApiConstants.customerAccountUrl)
+    @PUT(ApiUrls.customerAccountUrl)
     suspend fun updateCustomer(
         @Header("Authorization") authorization: String,
         @Body customerUpdateRequest: CustomerUpdateRequest
     ): NoContentResponse
 
-    @PUT(ApiConstants.distributorAccountUrl)
+    @PUT(ApiUrls.distributorAccountUrl)
     suspend fun updateDistributor(
         @Header("Authorization") authorization: String,
         @Body distributorUpdateRequest: DistributorUpdateRequest
     ): NoContentResponse
 
-    @PUT(ApiConstants.accountPasswordUrl)
+    @PUT(ApiUrls.accountPasswordUrl)
     suspend fun updatePassword(
         @Header("Authorization") authorization: String,
         @Body passwordUpdateRequest: PasswordUpdateRequest
     ): NoContentResponse
 
-    @DELETE(ApiConstants.accountUrl)
+    @DELETE(ApiUrls.accountUrl)
     suspend fun deleteAccount(
         @Header("Authorization") authorization: String
     ): NoContentResponse
