@@ -172,4 +172,7 @@
     <string name="invalid_date">Invalid date</string>
     <string name="beneficiaries_number_already_reached">Beneficiaries number already reached</string>
     <string name="order">Order</string>
+    <string name="withdrawal_date">Withdrawal date</string>
+    <string name="confirm_order">Confirm my order</string>
+    <string name="order_successfully_placed">Order successfully placed</string>
 </resources>

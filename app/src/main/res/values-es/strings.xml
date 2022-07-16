@@ -169,4 +169,7 @@
     <string name="invalid_date">Fecha inválida</string>
     <string name="beneficiaries_number_already_reached">Numero de beneficiarios a los que ya se ha llegado</string>
     <string name="order">Pedir</string>
+    <string name="withdrawal_date">Fecha de retirada</string>
+    <string name="confirm_order">Confirmar mi pedido</string>
+    <string name="order_successfully_placed">Pedido exitoso</string>
 </resources>

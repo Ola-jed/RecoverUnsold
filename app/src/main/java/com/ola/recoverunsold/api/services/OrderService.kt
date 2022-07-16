@@ -5,12 +5,12 @@ import com.ola.recoverunsold.api.requests.OrderCreateRequest
 import com.ola.recoverunsold.models.Order
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface OrderService : BaseApiService {
-    @GET(ApiUrls.offersUrl + "/{id}" + "/Orders")
+    @POST(ApiUrls.offersUrl + "/{id}" + "/Orders")
     suspend fun createOrder(
         @Header("Authorization") authorization: String,
         @Path("id") offerId: String,

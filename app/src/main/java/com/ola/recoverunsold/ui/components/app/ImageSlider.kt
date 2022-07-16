@@ -28,13 +28,23 @@ import com.ola.recoverunsold.R
 @Composable
 fun ImageSlider(
     modifier: Modifier = Modifier,
-    imageUris: List<String>
+    imageUris: List<String>,
+    rounded: Boolean = true
 ) {
     var currentIndex by rememberSaveable { mutableStateOf(0) }
 
     Box(
         modifier = modifier
     ) {
+        val imageModifier = if(rounded) {
+            Modifier.fillMaxSize()
+                .align(Alignment.Center)
+                .clip(RoundedCornerShape(10.dp))
+        } else {
+            Modifier.fillMaxSize()
+                .align(Alignment.Center)
+        }
+
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(imageUris[currentIndex])
@@ -43,16 +53,13 @@ fun ImageSlider(
                 .build(),
             contentScale = ContentScale.Crop,
             contentDescription = null,
-            modifier = Modifier
-                .fillMaxSize()
-                .align(Alignment.Center)
-                .clip(RoundedCornerShape(10.dp)),
+            modifier = imageModifier
         )
 
         if (currentIndex > 0) {
             FloatingActionButton(
                 modifier = Modifier.align(Alignment.CenterStart),
-                backgroundColor = Color.White.copy(alpha = 0.5F),
+                backgroundColor = Color.White.copy(alpha = 0.65F),
                 elevation = FloatingActionButtonDefaults.elevation(0.dp),
                 onClick = { currentIndex-- }) {
                 Icon(Icons.Filled.ArrowBackIos, contentDescription = null)
@@ -62,7 +69,7 @@ fun ImageSlider(
         if (currentIndex < imageUris.size - 1) {
             FloatingActionButton(
                 modifier = Modifier.align(Alignment.CenterEnd),
-                backgroundColor = Color.White.copy(alpha = 0.5F),
+                backgroundColor = Color.White.copy(alpha = 0.65F),
                 elevation = FloatingActionButtonDefaults.elevation(0.dp),
                 onClick = { currentIndex++ }) {
                 Icon(Icons.Filled.ArrowForwardIos, contentDescription = null)

@@ -54,8 +54,7 @@ fun DateTimePicker(
 
 private fun buildDate(localDate: LocalDate, localTime: LocalTime): Date {
     return Date.from(
-        LocalDateTime
-            .of(localDate, localTime)
+        LocalDateTime.of(localDate, localTime)
             .atZone(ZoneId.systemDefault())
             .toInstant()
     )

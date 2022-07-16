@@ -55,64 +55,67 @@ fun OfferItem(
         elevation = 10.dp,
         shape = RoundedCornerShape(10.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(10.dp)
-        ) {
+        Column(modifier = Modifier.fillMaxSize()) {
             if (!productsImagesUris.isNullOrEmpty()) {
                 ImageSlider(
                     modifier = Modifier.fillMaxWidth(),
-                    imageUris = productsImagesUris
+                    imageUris = productsImagesUris,
+                    rounded = false
                 )
             }
 
-            Text(
-                text = stringResource(
-                    R.string.total_amount,
-                    offer.price.formatWithoutTrailingZeros()
-                ),
-                modifier = Modifier.padding(top = 10.dp)
-            )
-
-            if (offer.beneficiaries != null) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(10.dp)
+            ) {
                 Text(
                     text = stringResource(
-                        R.string.offer_beneficiaries_data,
-                        offer.beneficiaries
+                        R.string.total_amount,
+                        offer.price.formatWithoutTrailingZeros()
+                    ),
+                    modifier = Modifier.padding(top = 10.dp)
+                )
+
+                if (offer.beneficiaries != null) {
+                    Text(
+                        text = stringResource(
+                            R.string.offer_beneficiaries_data,
+                            offer.beneficiaries
+                        )
+                    )
+                }
+
+                Text(
+                    text = stringResource(
+                        R.string.start_date_time,
+                        startDate.formatDateTime()
                     )
                 )
-            }
 
-            Text(
-                text = stringResource(
-                    R.string.start_date_time,
-                    startDate.formatDateTime()
+                Text(
+                    text = stringResource(
+                        R.string.published_the,
+                        offer.createdAt.formatDate()
+                    ),
+                    modifier = Modifier.padding(top = 5.dp)
                 )
-            )
 
-            Text(
-                text = stringResource(
-                    R.string.published_the,
-                    offer.createdAt.formatDate()
-                ),
-                modifier = Modifier.padding(top = 5.dp)
-            )
-
-            if (isEditable) {
-                Row(
-                    modifier = Modifier.align(Alignment.End),
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
-                    IconButton(onClick = onEdit) {
-                        Icon(Icons.Default.Edit, contentDescription = null)
-                    }
-                    IconButton(onClick = { showDeleteConfirmationDialog = true }) {
-                        Icon(
-                            Icons.Default.Delete,
-                            tint = MaterialTheme.colors.error,
-                            contentDescription = null
-                        )
+                if (isEditable) {
+                    Row(
+                        modifier = Modifier.align(Alignment.End),
+                        horizontalArrangement = Arrangement.SpaceAround
+                    ) {
+                        IconButton(onClick = onEdit) {
+                            Icon(Icons.Default.Edit, contentDescription = null)
+                        }
+                        IconButton(onClick = { showDeleteConfirmationDialog = true }) {
+                            Icon(
+                                Icons.Default.Delete,
+                                tint = MaterialTheme.colors.error,
+                                contentDescription = null
+                            )
+                        }
                     }
                 }
             }
