@@ -172,4 +172,12 @@
     <string name="withdrawal_date">Fecha de retirada</string>
     <string name="confirm_order">Confirmar mi pedido</string>
     <string name="order_successfully_placed">Pedido exitoso</string>
+    <string name="order_status_pending">Pendiente</string>
+    <string name="order_status_approved">Aprobada</string>
+    <string name="order_status_rejected">Rechazada</string>
+    <string name="order_status_completed">Completada</string>
+    <string name="status">Estatus</string>
+    <string name="order_code">Código de pedido : %1$s</string>
+    <string name="ordered_on">Ordenada el %1$s</string>
+    <string name="see_offer_details">Ver detalles de la oferta</string>
 </resources>

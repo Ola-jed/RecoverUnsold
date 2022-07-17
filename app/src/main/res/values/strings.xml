@@ -175,4 +175,12 @@
     <string name="withdrawal_date">Withdrawal date</string>
     <string name="confirm_order">Confirm my order</string>
     <string name="order_successfully_placed">Order successfully placed</string>
+    <string name="order_status_pending">Pending</string>
+    <string name="order_status_approved">Approved</string>
+    <string name="order_status_rejected">Rejected</string>
+    <string name="order_status_completed">Completed</string>
+    <string name="status">Status</string>
+    <string name="order_code">Order code : %1$s</string>
+    <string name="ordered_on">Ordered on %1$s</string>
+    <string name="see_offer_details">See offer details</string>
 </resources>

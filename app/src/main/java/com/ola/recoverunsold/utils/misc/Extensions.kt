@@ -11,6 +11,12 @@ import androidx.annotation.ColorInt
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Block
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.DoneAll
+import androidx.compose.material.icons.filled.HourglassTop
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
@@ -20,6 +26,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.LatLong
+import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.utils.resources.Strings
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
@@ -276,5 +283,29 @@ fun String?.toSecureInt(): Int {
         }
 
         0
+    }
+}
+
+/**
+ * Convert the status of the order to an internationalized string
+ */
+fun OrderStatus.internationalizedValue(): String {
+    return when (this) {
+        OrderStatus.Pending -> Strings.get(R.string.order_status_pending)
+        OrderStatus.Approved -> Strings.get(R.string.order_status_approved)
+        OrderStatus.Rejected -> Strings.get(R.string.order_status_rejected)
+        OrderStatus.Completed -> Strings.get(R.string.order_status_completed)
+    }
+}
+
+/**
+ * Get the icon related to a Status
+ */
+fun OrderStatus.toIcon(): ImageVector {
+    return when (this) {
+        OrderStatus.Pending -> Icons.Default.HourglassTop
+        OrderStatus.Approved -> Icons.Default.Check
+        OrderStatus.Rejected -> Icons.Default.Block
+        OrderStatus.Completed -> Icons.Default.DoneAll
     }
 }

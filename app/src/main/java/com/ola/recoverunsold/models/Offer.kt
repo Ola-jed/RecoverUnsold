@@ -6,10 +6,10 @@ data class Offer(
     val id: String,
     val startDate: Date,
     val duration: ULong,
-    val beneficiaries: Int?,
+    val beneficiaries: Int? = null,
     val price: Double,
     val createdAt: Date,
     val distributorId: String,
-    val location: Location?,
-    val products: List<Product>?
+    val location: Location? = null,
+    val products: List<Product>? = null
 )
