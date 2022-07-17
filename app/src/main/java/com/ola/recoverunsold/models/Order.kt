@@ -9,4 +9,3 @@ data class Order(
     val offer: Offer?
 )
 
-enum class OrderStatus { Pending, Approved, Rejected, Completed }
