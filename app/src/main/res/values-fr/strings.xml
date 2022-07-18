@@ -173,9 +173,9 @@
     <string name="confirm_order">Valider ma commande</string>
     <string name="order_successfully_placed">Commande passée avec succès</string>
     <string name="order_status_pending">En attente</string>
-    <string name="order_status_approved">Approuvée</string>
-    <string name="order_status_rejected">Rejetée</string>
-    <string name="order_status_completed">Terminée</string>
+    <string name="order_status_approved">Approuvées</string>
+    <string name="order_status_rejected">Rejetées</string>
+    <string name="order_status_completed">Terminées</string>
     <string name="status">Statut</string>
     <string name="order_code">Code commande : %1$s</string>
     <string name="ordered_on">Commande passée le %1$s</string>

@@ -2,6 +2,7 @@ package com.ola.recoverunsold.ui.components.order
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -73,7 +74,7 @@ fun OrderItem(
                 text = "${stringResource(id = R.string.withdrawal_date)} : ${order.withdrawalDate.formatDateTime()}"
             )
 
-            Button(onClick = onMoreInformationRequest) {
+            Button(onClick = onMoreInformationRequest, modifier = Modifier.fillMaxWidth()) {
                 Text(text = stringResource(id = R.string.view_more_about_offer))
             }
         }
