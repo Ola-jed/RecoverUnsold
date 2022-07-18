@@ -67,6 +67,7 @@ fun LocationItem(
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(location.image)
+                        .placeholder(R.mipmap.placeholder)
                         .crossfade(true)
                         .build(),
                     contentScale = ContentScale.Crop,

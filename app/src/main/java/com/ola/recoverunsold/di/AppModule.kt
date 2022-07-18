@@ -10,6 +10,7 @@ import com.ola.recoverunsold.api.services.OrderService
 import com.ola.recoverunsold.api.services.UserVerificationService
 import com.ola.recoverunsold.api.services.wrappers.LocationServiceWrapper
 import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
+import com.ola.recoverunsold.api.services.wrappers.OrderServiceWrapper
 import com.ola.recoverunsold.api.services.wrappers.ProductServiceWrapper
 import org.koin.dsl.module
 
@@ -23,5 +24,6 @@ val appModule = module {
     factory<OrderService> { ApiClient.buildService() }
     factory { LocationServiceWrapper(ApiClient.buildService()) }
     factory { OfferServiceWrapper(ApiClient.buildService()) }
+    factory { OrderServiceWrapper(ApiClient.buildService()) }
     factory { ProductServiceWrapper(ApiClient.buildService()) }
 }

@@ -19,6 +19,9 @@ object ApiUrls {
     const val offersUrl = "Offers"
     const val distributorOffersUrl = "Offers/Distributors"
     const val closeOffersUrl = "Offers/CloseToLocation"
+    const val ordersUrl = "Orders"
+    const val customerOrdersUrl = "Orders/Customer"
+    const val distributorOrdersUrl = "Orders/Distributor"
     const val productsUrl = "Products"
     const val distributorProductsUrl = "Products/Distributors"
 }

@@ -180,4 +180,7 @@
     <string name="order_code">Código de pedido : %1$s</string>
     <string name="ordered_on">Ordenada el %1$s</string>
     <string name="see_offer_details">Ver detalles de la oferta</string>
+    <string name="no_order_found">No se ha encontrado ningún pedido</string>
+    <string name="all">Todo</string>
+    <string name="view_more_about_offer">Ver más sobre la oferta</string>
 </resources>

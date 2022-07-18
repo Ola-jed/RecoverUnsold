@@ -183,4 +183,7 @@
     <string name="order_code">Order code : %1$s</string>
     <string name="ordered_on">Ordered on %1$s</string>
     <string name="see_offer_details">See offer details</string>
+    <string name="no_order_found">No order found</string>
+    <string name="all">All</string>
+    <string name="view_more_about_offer">View more about the offer</string>
 </resources>

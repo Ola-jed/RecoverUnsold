@@ -180,4 +180,7 @@
     <string name="order_code">Code commande : %1$s</string>
     <string name="ordered_on">Commande passée le %1$s</string>
     <string name="see_offer_details">Voir les détails de l\'offre</string>
+    <string name="no_order_found">Aucune commande trouvée</string>
+    <string name="all">Tous</string>
+    <string name="view_more_about_offer">En savoir plus sur l\'offre</string>
 </resources>

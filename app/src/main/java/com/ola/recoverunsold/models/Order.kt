@@ -9,5 +9,6 @@ data class Order(
     val customer: Customer? = null,
     val offerId: String,
     val offer: Offer?,
+    val withdrawalDate: Date,
     val createdAt: Date
 )

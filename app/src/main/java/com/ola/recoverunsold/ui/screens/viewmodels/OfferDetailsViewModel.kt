@@ -11,8 +11,8 @@ import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.core.StatusCode
 import com.ola.recoverunsold.api.requests.OrderCreateRequest
 import com.ola.recoverunsold.api.responses.TokenRoles
-import com.ola.recoverunsold.api.services.OrderService
 import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
+import com.ola.recoverunsold.api.services.wrappers.OrderServiceWrapper
 import com.ola.recoverunsold.api.services.wrappers.ProductServiceWrapper
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.Product
@@ -36,7 +36,7 @@ class OfferDetailsViewModel(
     private val productServiceWrapper: ProductServiceWrapper = KoinJavaComponent.get(
         ProductServiceWrapper::class.java
     ),
-    private val orderService: OrderService = KoinJavaComponent.get(OrderService::class.java),
+    private val orderService: OrderServiceWrapper = KoinJavaComponent.get(OrderServiceWrapper::class.java),
     private val offerId: String
 ) : ViewModel() {
     var offerApiCallResult: ApiCallResult<Offer> by mutableStateOf(ApiCallResult.Inactive)

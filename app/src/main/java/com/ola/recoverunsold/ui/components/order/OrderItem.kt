@@ -12,15 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
-import com.ola.recoverunsold.models.Location
-import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.Order
-import com.ola.recoverunsold.models.OrderStatus
-import com.ola.recoverunsold.models.Product
-import com.ola.recoverunsold.models.ProductImage
 import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
@@ -70,49 +64,18 @@ fun OrderItem(
                 )
             )
 
-            Button(onClick = onMoreInformationRequest) {
-                Text(text = stringResource(id = R.string.view_more))
-            }
-
             Text(
                 text = stringResource(R.string.ordered_on, order.createdAt.formatDate()),
                 modifier = Modifier.padding(top = 10.dp)
             )
+
+            Text(
+                text = "${stringResource(id = R.string.withdrawal_date)} : ${order.withdrawalDate.formatDateTime()}"
+            )
+
+            Button(onClick = onMoreInformationRequest) {
+                Text(text = stringResource(id = R.string.view_more_about_offer))
+            }
         }
     }
-}
-
-@Preview
-@Composable
-fun preview() {
-    OrderItem(
-        order = Order(
-            id = "1234",
-            status = OrderStatus.Rejected,
-            customerId = "123",
-            offerId = "1234",
-            offer = Offer(
-                id = "1234",
-                startDate = Date(),
-                duration = 1455UL,
-                beneficiaries = 4,
-                price = 4500.0,
-                createdAt = Date(),
-                distributorId = "123",
-                location = Location.Dummy,
-                products = listOf(
-                    Product(
-                        id = "123",
-                        name = "Produit 1",
-                        description = "Description du produit 1",
-                        offerId = "123",
-                        createdAt = Date(),
-                        images = listOf(ProductImage(""))
-                    )
-                )
-            ),
-            createdAt = Date(),
-        ),
-        onMoreInformationRequest = {}
-    )
 }
