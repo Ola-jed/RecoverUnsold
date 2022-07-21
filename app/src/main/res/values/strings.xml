@@ -186,4 +186,8 @@
     <string name="no_order_found">No order found</string>
     <string name="all">All</string>
     <string name="view_more_about_offer">View more about the offer</string>
+    <string name="close_offers">Close offers</string>
+    <string name="account">Account</string>
+    <string name="create_a_location">Create a location</string>
+    <string name="new_product">New product</string>
 </resources>

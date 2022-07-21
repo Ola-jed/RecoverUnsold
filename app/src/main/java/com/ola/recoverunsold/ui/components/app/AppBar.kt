@@ -21,31 +21,26 @@ fun AppBar(
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState,
     canGoBack: Boolean = false,
-    navController: NavController? = null
+    navController: NavController? = null,
+    title: String? = null
 ) {
     if (canGoBack) {
         require(navController != null) { "You are able to go back, so the navController should be passed" }
     }
 
     TopAppBar(
-        title = { Text(stringResource(id = R.string.app_name)) },
+        title = { Text(title ?: stringResource(id = R.string.app_name)) },
         backgroundColor = MaterialTheme.colors.primary,
         navigationIcon = {
             if (!canGoBack) {
                 IconButton(onClick = {
                     coroutineScope.launch { scaffoldState.drawerState.open() }
                 }) {
-                    Icon(
-                        Icons.Default.Menu,
-                        contentDescription = null
-                    )
+                    Icon(Icons.Default.Menu, contentDescription = null)
                 }
             } else {
                 IconButton(onClick = { navController?.navigateUp() }) {
-                    Icon(
-                        Icons.Default.ArrowBack,
-                        contentDescription = null,
-                    )
+                    Icon(Icons.Default.ArrowBack, contentDescription = null)
                 }
             }
         }

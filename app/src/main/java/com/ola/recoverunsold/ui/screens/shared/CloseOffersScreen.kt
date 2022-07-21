@@ -73,7 +73,8 @@ fun CloseOffersScreen(
         topBar = {
             AppBar(
                 coroutineScope = coroutineScope,
-                scaffoldState = scaffoldState
+                scaffoldState = scaffoldState,
+                title = stringResource(id = R.string.close_offers)
             )
         },
         drawerContent = DrawerContent(navController, snackbarHostState)
@@ -96,12 +97,7 @@ fun CloseOffersScreen(
                             onLatLngValueUpdate = {
                                 closeOffersViewModel.offerDistanceFilterQuery = closeOffersViewModel
                                     .offerDistanceFilterQuery
-                                    .copy(
-                                        latLong = LatLong(
-                                            latitude = it.latitude,
-                                            longitude = it.longitude
-                                        )
-                                    )
+                                    .copy(latLong = LatLong(it.latitude, it.longitude))
                             },
                             onLocationFetchFailed = {
                                 coroutineScope.launch {

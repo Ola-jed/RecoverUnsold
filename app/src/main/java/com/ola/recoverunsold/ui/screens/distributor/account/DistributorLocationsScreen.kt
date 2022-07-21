@@ -51,9 +51,8 @@ fun DistributorLocationsScreen(
         when (locationsSectionViewModel.locationsGetResponse.status) {
             ApiStatus.LOADING -> {
                 CircularProgressIndicator(
-                    color = MaterialTheme.colors.primary, modifier = Modifier.align(
-                        Alignment.Center
-                    )
+                    color = MaterialTheme.colors.primary,
+                    modifier = Modifier.align(Alignment.Center)
                 )
             }
             ApiStatus.ERROR -> {

@@ -85,14 +85,14 @@ fun DistributorLocationFormScreen(
                 coroutineScope = coroutineScope,
                 scaffoldState = scaffoldState,
                 canGoBack = true,
-                navController = navController
+                navController = navController,
+                title = stringResource(id = R.string.create_a_location)
             )
         },
         drawerGesturesEnabled = false
     ) { paddingValues ->
         DistributorLocationFormScreenContent(
-            modifier = Modifier
-                .padding(paddingValues),
+            modifier = Modifier.padding(paddingValues),
             name = distributorLocationFormViewModel.name,
             indication = distributorLocationFormViewModel.indication,
             location = location,

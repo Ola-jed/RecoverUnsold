@@ -78,7 +78,14 @@ fun DistributorProductFormScreen(
                 coroutineScope = coroutineScope,
                 scaffoldState = scaffoldState,
                 canGoBack = true,
-                navController = navController
+                navController = navController,
+                title = stringResource(
+                    id = if (serializedProduct == null) {
+                        R.string.new_product
+                    } else {
+                        R.string.update_product
+                    }
+                )
             )
         },
         drawerContent = DrawerContent(navController, snackbarHostState),

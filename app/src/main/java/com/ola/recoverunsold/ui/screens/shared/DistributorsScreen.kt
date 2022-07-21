@@ -8,7 +8,9 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.ola.recoverunsold.R
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 
@@ -25,7 +27,8 @@ fun DistributorsScreen(
         topBar = {
             AppBar(
                 coroutineScope = coroutineScope,
-                scaffoldState = scaffoldState
+                scaffoldState = scaffoldState,
+                title = stringResource(id = R.string.distributors)
             )
         },
         drawerContent = DrawerContent(navController, snackbarHostState)

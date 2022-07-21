@@ -94,7 +94,8 @@ fun OfferDetailsScreen(
                 coroutineScope = coroutineScope,
                 scaffoldState = scaffoldState,
                 canGoBack = true,
-                navController = navController
+                navController = navController,
+                title = stringResource(id = R.string.offer_details)
             )
         },
         drawerContent = DrawerContent(navController, snackbarHostState),

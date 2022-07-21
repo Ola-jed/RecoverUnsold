@@ -68,7 +68,8 @@ fun DistributorAccountScreen(
         topBar = {
             AppBar(
                 coroutineScope = coroutineScope,
-                scaffoldState = scaffoldState
+                scaffoldState = scaffoldState,
+                title = stringResource(id = R.string.account)
             )
         },
         drawerContent = DrawerContent(navController, snackbarHostState)
@@ -77,13 +78,7 @@ fun DistributorAccountScreen(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .run {
-                    if (tabIndex == profileIndex) {
-                        verticalScroll(scrollState)
-                    } else {
-                        this
-                    }
-                },
+                .run { if (tabIndex == profileIndex) verticalScroll(scrollState) else this },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             TabRow(selectedTabIndex = tabIndex,

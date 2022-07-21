@@ -85,7 +85,14 @@ fun DistributorOfferFormScreen(
                 coroutineScope = coroutineScope,
                 scaffoldState = scaffoldState,
                 canGoBack = true,
-                navController = navController
+                navController = navController,
+                title = stringResource(
+                    id = if (serializedOffer == null) {
+                        R.string.create_new_offer
+                    } else {
+                        R.string.update_offer_label
+                    }
+                )
             )
         }
     ) { paddingValues ->

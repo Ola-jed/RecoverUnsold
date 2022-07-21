@@ -57,15 +57,14 @@ fun DistributorOffersScreen(
         topBar = {
             AppBar(
                 coroutineScope = coroutineScope,
-                scaffoldState = scaffoldState
+                scaffoldState = scaffoldState,
+                title = stringResource(id = R.string.offers)
             )
         },
         drawerContent = DrawerContent(navController, snackbarHostState),
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                navController.navigate(
-                    Routes.OfferCreateOrUpdate.path.remove("{offer}")
-                )
+                navController.navigate(Routes.OfferCreateOrUpdate.path.remove("{offer}"))
             }) {
                 Icon(Icons.Default.Add, contentDescription = null)
             }

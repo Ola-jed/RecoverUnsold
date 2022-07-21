@@ -183,4 +183,8 @@
     <string name="no_order_found">Aucune commande trouvée</string>
     <string name="all">Tous</string>
     <string name="view_more_about_offer">En savoir plus sur l\'offre</string>
+    <string name="close_offers">Offres à proximité</string>
+    <string name="account">Compte</string>
+    <string name="create_a_location">Créer un site</string>
+    <string name="new_product">Nouveau produit</string>
 </resources>

@@ -50,7 +50,8 @@ fun OffersScreen(
         topBar = {
             AppBar(
                 coroutineScope = coroutineScope,
-                scaffoldState = scaffoldState
+                scaffoldState = scaffoldState,
+                title = stringResource(id = R.string.offers)
             )
         },
         drawerContent = DrawerContent(navController, snackbarHostState)
