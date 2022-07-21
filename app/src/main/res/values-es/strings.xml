@@ -187,4 +187,5 @@
     <string name="account">Cuenta</string>
     <string name="create_a_location">Crear una ubicación</string>
     <string name="new_product">Nuevo producto</string>
+    <string name="orders_placed">Pedidos anteriores</string>
 </resources>

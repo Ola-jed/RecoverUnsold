@@ -53,7 +53,7 @@ fun OrdersScreen(
             AppBar(
                 coroutineScope = coroutineScope,
                 scaffoldState = scaffoldState,
-                title = stringResource(id = R.string.orders)
+                title = stringResource(id = R.string.orders_placed)
             )
         },
         drawerContent = DrawerContent(navController, snackbarHostState)

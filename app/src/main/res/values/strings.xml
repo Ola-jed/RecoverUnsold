@@ -190,4 +190,5 @@
     <string name="account">Account</string>
     <string name="create_a_location">Create a location</string>
     <string name="new_product">New product</string>
+    <string name="orders_placed">Orders placed</string>
 </resources>
