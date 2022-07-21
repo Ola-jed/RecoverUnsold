@@ -20,21 +20,36 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
 
     /**
      * We send the token only if we have an api token to make an authenticated request
+     * If a token is generated and the user is not logged yet, we send it later
      * And if the device have google play services enabled because otherwise, they won't work
      */
     override fun onNewToken(token: String) {
         Log.d("AppFirebaseMessagingService", "New token generated : $token")
         super.onNewToken(token)
-        val apiToken = TokenStore.get() ?: return
-        val isGooglePlayAvailable =
-            GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
-        if (isGooglePlayAvailable != ConnectionResult.SUCCESS) return
+        val apiToken = TokenStore.get()
+        val isGooglePlayAvailable = GoogleApiAvailability
+            .getInstance()
+            .isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
+
+        if (apiToken == null && isGooglePlayAvailable) {
+            BackgroundFcmTokenSender.fcmTokenToSend = token
+            return
+        } else if (!isGooglePlayAvailable) {
+            return
+        }
+
         val fcmTokenService = KoinJavaComponent.get<FcmTokenService>(FcmTokenService::class.java)
         scope.launch {
-            fcmTokenService.createFcmToken(
-                apiToken.bearerToken,
-                FcmTokenCreateRequest(token)
-            )
+            try {
+                val response = fcmTokenService.createFcmToken(
+                    apiToken!!.bearerToken,
+                    FcmTokenCreateRequest(token)
+                )
+                if (!response.isSuccessful) BackgroundFcmTokenSender.fcmTokenToSend = token
+            } catch (e: Exception) {
+                Log.d("AppFirebaseMessagingService", "Token sending failed : ${e.message}")
+                BackgroundFcmTokenSender.fcmTokenToSend = token
+            }
         }
     }
 
