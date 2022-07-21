@@ -331,7 +331,7 @@ fun DistributorOfferFormContent(
                             FormType.Update -> Strings.get(R.string.offer_updated_successfully)
                         }
                     )
-                    delay(1000)
+                    delay(900)
                     onSuccess()
                 }
             }

@@ -355,7 +355,7 @@ fun DistributorRegisterContent(
                         snackbarHostState.show(
                             message = Strings.get(R.string.code_sent_successfully)
                         )
-                        delay(1000)
+                        delay(900)
                         navController.navigate(Routes.ConfirmUserVerification.path)
                     }
                 }

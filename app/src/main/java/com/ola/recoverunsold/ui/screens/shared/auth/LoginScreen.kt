@@ -41,11 +41,14 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.firebase.messaging.FirebaseMessaging
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.core.ApiStatus
+import com.ola.recoverunsold.api.requests.FcmTokenCreateRequest
 import com.ola.recoverunsold.api.responses.TokenRoles
 import com.ola.recoverunsold.api.services.AccountService
+import com.ola.recoverunsold.api.services.FcmTokenService
 import com.ola.recoverunsold.ui.components.app.AppHero
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.NavigationTextButton
@@ -97,6 +100,17 @@ fun LoginScreen(
                                 tokenStore.storeToken(token)
                                 TokenStore.init { token }
                                 val accountService: AccountService = get(AccountService::class.java)
+                                val fcmService: FcmTokenService = get(FcmTokenService::class.java)
+                                FirebaseMessaging.getInstance()
+                                    .token
+                                    .addOnSuccessListener {
+                                        coroutineScope.launch {
+                                            fcmService.createFcmToken(
+                                                token.bearerToken,
+                                                FcmTokenCreateRequest(it)
+                                            )
+                                        }
+                                    }
                                 val response = if (token.role == TokenRoles.CUSTOMER) {
                                     accountService.getCustomer(token.bearerToken)
                                 } else {

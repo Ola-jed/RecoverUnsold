@@ -13,7 +13,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent
 
-
 class AppFirebaseMessagingService : FirebaseMessagingService() {
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
@@ -25,30 +24,18 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
      */
     override fun onNewToken(token: String) {
         Log.d("AppFirebaseMessagingService", "New token generated : $token")
-        super.onNewToken(token)
         val apiToken = TokenStore.get()
         val isGooglePlayAvailable = GoogleApiAvailability
             .getInstance()
             .isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
-
-        if (apiToken == null && isGooglePlayAvailable) {
-            BackgroundFcmTokenSender.fcmTokenToSend = token
-            return
-        } else if (!isGooglePlayAvailable) {
-            return
-        }
-
+        if (apiToken == null || !isGooglePlayAvailable) return
         val fcmTokenService = KoinJavaComponent.get<FcmTokenService>(FcmTokenService::class.java)
         scope.launch {
             try {
-                val response = fcmTokenService.createFcmToken(
-                    apiToken!!.bearerToken,
-                    FcmTokenCreateRequest(token)
-                )
-                if (!response.isSuccessful) BackgroundFcmTokenSender.fcmTokenToSend = token
+                fcmTokenService.createFcmToken(apiToken.bearerToken, FcmTokenCreateRequest(token))
+                super.onNewToken(token)
             } catch (e: Exception) {
                 Log.d("AppFirebaseMessagingService", "Token sending failed : ${e.message}")
-                BackgroundFcmTokenSender.fcmTokenToSend = token
             }
         }
     }
