@@ -121,7 +121,7 @@ fun OrdersScreen(
                                 OrderItem(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = 15.dp),
+                                        .padding(horizontal = 15.dp, vertical = 10.dp),
                                     order = it,
                                     onMoreInformationRequest = {
                                         navController.navigate(

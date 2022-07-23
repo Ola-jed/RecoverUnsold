@@ -74,7 +74,9 @@ fun CloseOffersScreen(
             AppBar(
                 coroutineScope = coroutineScope,
                 scaffoldState = scaffoldState,
-                title = stringResource(id = R.string.close_offers)
+                title = stringResource(id = R.string.close_offers),
+                canGoBack = true,
+                navController = navController
             )
         },
         drawerContent = DrawerContent(navController, snackbarHostState)

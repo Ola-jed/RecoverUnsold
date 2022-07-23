@@ -43,4 +43,16 @@ interface OrderService : BaseApiService {
         @Path("id") offerId: String,
         @Body orderCreateRequest: OrderCreateRequest
     ): Response<Order>
+
+    @POST(ApiUrls.ordersUrl + "/{id}/Accept")
+    suspend fun acceptOrder(
+        @Header("Authorization") authorization: String,
+        @Path("id") id: String
+    ): NoContentResponse
+
+    @POST(ApiUrls.ordersUrl + "/{id}/Reject")
+    suspend fun rejectOrder(
+        @Header("Authorization") authorization: String,
+        @Path("id") id: String
+    ): NoContentResponse
 }

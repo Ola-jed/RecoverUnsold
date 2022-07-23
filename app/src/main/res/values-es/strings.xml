@@ -188,4 +188,12 @@
     <string name="create_a_location">Crear una ubicación</string>
     <string name="new_product">Nuevo producto</string>
     <string name="orders_placed">Pedidos anteriores</string>
+    <string name="accept">Aceptar</string>
+    <string name="reject">Residuos</string>
+    <string name="customer">Cliente</string>
+    <string name="accept_order_question">¿ Aceptar esta oferta ?</string>
+    <string name="accept_order_label">Aceptar esta oferta</string>
+    <string name="reject_order_question">¿ Rechazar esta oferta ?</string>
+    <string name="reject_order_label">Rechazar esta oferta</string>
+    <string name="update_location">Actualizar ubicación</string>
 </resources>

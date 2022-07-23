@@ -86,7 +86,13 @@ fun DistributorLocationFormScreen(
                 scaffoldState = scaffoldState,
                 canGoBack = true,
                 navController = navController,
-                title = stringResource(id = R.string.create_a_location)
+                title = stringResource(
+                    id = if (serializedLocation == null) {
+                        R.string.create_a_location
+                    } else {
+                        R.string.update_location
+                    }
+                )
             )
         },
         drawerGesturesEnabled = false

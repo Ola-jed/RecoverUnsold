@@ -6,15 +6,18 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
+import com.ola.recoverunsold.ui.screens.viewmodels.OrdersReceivedViewModel
 
 @Composable
 fun DistributorOrdersReceivedScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
+    ordersReceivedViewModel: OrdersReceivedViewModel = viewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
@@ -29,7 +32,9 @@ fun DistributorOrdersReceivedScreen(
             )
         },
         drawerContent = DrawerContent(navController, snackbarHostState)
-    ) {
-        // TODO
+    ) { paddingValues ->
+        when (ordersReceivedViewModel.ordersGetResponse.status) {
+
+        }
     }
 }

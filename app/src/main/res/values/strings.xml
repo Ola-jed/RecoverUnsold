@@ -191,4 +191,12 @@
     <string name="create_a_location">Create a location</string>
     <string name="new_product">New product</string>
     <string name="orders_placed">Orders placed</string>
+    <string name="accept">Accept</string>
+    <string name="reject">Reject</string>
+    <string name="customer">Customer</string>
+    <string name="accept_order_question">Accept this order ?</string>
+    <string name="accept_order_label">Accept order</string>
+    <string name="reject_order_question">Reject this order ?</string>
+    <string name="reject_order_label">Reject order</string>
+    <string name="update_location">Update the location</string>
 </resources>

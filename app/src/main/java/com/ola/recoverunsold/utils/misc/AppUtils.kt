@@ -9,8 +9,13 @@ import org.koin.java.KoinJavaComponent
 suspend fun Context.logout() {
     val token = TokenStore.get()
     if (token != null) {
-        val fcmTokenService = KoinJavaComponent.get<FcmTokenService>(FcmTokenService::class.java)
-        fcmTokenService.deleteAllFcmTokens(token.bearerToken)
+        try {
+            val fcmTokenService = KoinJavaComponent
+                .get<FcmTokenService>(FcmTokenService::class.java)
+            fcmTokenService.deleteAllFcmTokens(token.bearerToken)
+        } catch (e: Exception) {
+            // Nothing because we should not hinder the user experience
+        }
         TokenStore(this).removeToken()
     }
     UserObserver.remove()

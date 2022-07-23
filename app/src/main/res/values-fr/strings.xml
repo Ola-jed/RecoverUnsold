@@ -188,4 +188,12 @@
     <string name="create_a_location">Créer un site</string>
     <string name="new_product">Nouveau produit</string>
     <string name="orders_placed">Commandes passées</string>
+    <string name="accept">Accepter</string>
+    <string name="reject">Rejeter</string>
+    <string name="customer">Client</string>
+    <string name="accept_order_question">"Accepter cette commande ? "</string>
+    <string name="accept_order_label">Accepter la commande</string>
+    <string name="reject_order_question">Rejeter cette commande ?</string>
+    <string name="reject_order_label">Rejeter la commande</string>
+    <string name="update_location">Mettre à jour le site</string>
 </resources>

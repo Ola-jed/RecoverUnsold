@@ -2,6 +2,7 @@ package com.ola.recoverunsold.api.services.wrappers
 
 import com.ola.recoverunsold.api.query.OrderFilterQuery
 import com.ola.recoverunsold.api.requests.OrderCreateRequest
+import com.ola.recoverunsold.api.services.NoContentResponse
 import com.ola.recoverunsold.api.services.OrderService
 import com.ola.recoverunsold.models.Order
 import com.ola.recoverunsold.models.Page
@@ -40,5 +41,19 @@ class OrderServiceWrapper(private val orderService: OrderService) {
         orderCreateRequest: OrderCreateRequest
     ): Response<Order> {
         return orderService.createOrder(authorization, offerId, orderCreateRequest)
+    }
+
+    suspend fun acceptOrder(
+        authorization: String,
+        offerId: String
+    ): NoContentResponse {
+        return orderService.acceptOrder(authorization, offerId)
+    }
+
+    suspend fun rejectOrder(
+        authorization: String,
+        offerId: String
+    ): NoContentResponse {
+        return orderService.rejectOrder(authorization, offerId)
     }
 }

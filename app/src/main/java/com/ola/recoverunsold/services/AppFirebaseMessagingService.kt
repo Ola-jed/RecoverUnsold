@@ -28,7 +28,15 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
         val isGooglePlayAvailable = GoogleApiAvailability
             .getInstance()
             .isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
-        if (apiToken == null || !isGooglePlayAvailable) return
+
+        if (apiToken == null || !isGooglePlayAvailable) {
+            Log.i(
+                "AppFirebaseMessagingService",
+                "Token is null or no google play services available"
+            )
+            return
+        }
+
         val fcmTokenService = KoinJavaComponent.get<FcmTokenService>(FcmTokenService::class.java)
         scope.launch {
             try {
