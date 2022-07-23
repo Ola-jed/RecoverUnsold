@@ -82,77 +82,80 @@ fun OffersScreen(
             }
             else -> {
                 val offers = offersViewModel.offersApiResult.data!!
-                if (offers.items.isEmpty()) {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        Text(
-                            stringResource(R.string.no_offers_found),
-                            style = MaterialTheme.typography.h6,
-                            modifier = Modifier
-                                .padding(horizontal = 10.dp)
-                                .align(Alignment.Center)
-                        )
+
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .fillMaxSize()
+                ) {
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+                            OfferFilterComponent(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(20.dp),
+                                minPrice = offersViewModel.offerFilterQuery.minPrice,
+                                maxPrice = offersViewModel.offerFilterQuery.maxPrice,
+                                minDate = offersViewModel.offerFilterQuery.minDate,
+                                maxDate = offersViewModel.offerFilterQuery.maxDate,
+                                active = offersViewModel.offerFilterQuery.active,
+                                onMinPriceChange = {
+                                    offersViewModel.offerFilterQuery =
+                                        offersViewModel.offerFilterQuery.copy(
+                                            minPrice = it
+                                        )
+                                },
+                                onMaxPriceChange = {
+                                    offersViewModel.offerFilterQuery =
+                                        offersViewModel.offerFilterQuery.copy(
+                                            maxPrice = it
+                                        )
+                                },
+                                onMinDateChange = {
+                                    offersViewModel.offerFilterQuery =
+                                        offersViewModel.offerFilterQuery.copy(
+                                            minDate = it
+                                        )
+                                },
+                                onMaxDateChange = {
+                                    offersViewModel.offerFilterQuery =
+                                        offersViewModel.offerFilterQuery.copy(
+                                            maxDate = it
+                                        )
+                                },
+                                onActiveChange = {
+                                    offersViewModel.offerFilterQuery =
+                                        offersViewModel.offerFilterQuery.copy(
+                                            active = it
+                                        )
+                                },
+                                onApply = {
+                                    offersViewModel.getOffers()
+                                },
+                                onReset = {
+                                    offersViewModel.resetFilter()
+                                    offersViewModel.getOffers()
+                                }
+                            )
+                        }
                     }
-                } else {
-                    LazyColumn(
-                        modifier = Modifier
-                            .padding(paddingValues)
-                            .fillMaxSize()
-                    ) {
+
+                    if (offers.items.isEmpty()) {
                         item {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Start
-                            ) {
-                                OfferFilterComponent(
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                Text(
+                                    stringResource(R.string.no_offers_found),
+                                    style = MaterialTheme.typography.h6,
                                     modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(20.dp),
-                                    minPrice = offersViewModel.offerFilterQuery.minPrice,
-                                    maxPrice = offersViewModel.offerFilterQuery.maxPrice,
-                                    minDate = offersViewModel.offerFilterQuery.minDate,
-                                    maxDate = offersViewModel.offerFilterQuery.maxDate,
-                                    active = offersViewModel.offerFilterQuery.active,
-                                    onMinPriceChange = {
-                                        offersViewModel.offerFilterQuery =
-                                            offersViewModel.offerFilterQuery.copy(
-                                                minPrice = it
-                                            )
-                                    },
-                                    onMaxPriceChange = {
-                                        offersViewModel.offerFilterQuery =
-                                            offersViewModel.offerFilterQuery.copy(
-                                                maxPrice = it
-                                            )
-                                    },
-                                    onMinDateChange = {
-                                        offersViewModel.offerFilterQuery =
-                                            offersViewModel.offerFilterQuery.copy(
-                                                minDate = it
-                                            )
-                                    },
-                                    onMaxDateChange = {
-                                        offersViewModel.offerFilterQuery =
-                                            offersViewModel.offerFilterQuery.copy(
-                                                maxDate = it
-                                            )
-                                    },
-                                    onActiveChange = {
-                                        offersViewModel.offerFilterQuery =
-                                            offersViewModel.offerFilterQuery.copy(
-                                                active = it
-                                            )
-                                    },
-                                    onApply = {
-                                        offersViewModel.getOffers()
-                                    },
-                                    onReset = {
-                                        offersViewModel.resetFilter()
-                                        offersViewModel.getOffers()
-                                    }
+                                        .padding(horizontal = 10.dp)
+                                        .align(Alignment.Center)
                                 )
                             }
                         }
-
+                    } else {
                         items(items = offers.items) { item ->
                             OfferItem(
                                 modifier = Modifier

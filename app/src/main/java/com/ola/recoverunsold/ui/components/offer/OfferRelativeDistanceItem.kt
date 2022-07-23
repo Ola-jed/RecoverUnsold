@@ -20,6 +20,7 @@ import com.ola.recoverunsold.models.OfferWithRelativeDistance
 import com.ola.recoverunsold.ui.components.app.ImageSlider
 import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.formatDateTime
+import androidx.compose.ui.platform.LocalConfiguration as LocalConfiguration1
 
 @Composable
 fun OfferRelativeDistanceItem(
@@ -31,6 +32,7 @@ fun OfferRelativeDistanceItem(
     val offer = offerWithRelativeDistance.offer
     val startDate = offer.startDate
     val productsImagesUris = offer.products?.flatMap { it.images }?.map { it.url }
+    val height = (LocalConfiguration1.current.screenHeightDp * 0.2).dp
 
     Surface(
         modifier = modifier.clickable { onMoreInformationRequest() },
@@ -45,6 +47,7 @@ fun OfferRelativeDistanceItem(
             if (!productsImagesUris.isNullOrEmpty()) {
                 ImageSlider(
                     modifier = Modifier.fillMaxWidth(),
+                    imageHeight = height,
                     imageUris = productsImagesUris
                 )
             }

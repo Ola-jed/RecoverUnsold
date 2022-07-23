@@ -97,78 +97,80 @@ fun DistributorOffersScreen(
             else -> {
                 val offers = distributorOffersViewModel.offersApiResult.data!!
 
-                if (offers.items.isEmpty()) {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        Text(
-                            stringResource(R.string.no_offer_published),
-                            style = MaterialTheme.typography.h6,
-                            modifier = Modifier
-                                .padding(horizontal = 10.dp)
-                                .align(Alignment.Center),
-                            textAlign = TextAlign.Center
-                        )
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .fillMaxSize()
+                ) {
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+                            OfferFilterComponent(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(20.dp),
+                                minPrice = distributorOffersViewModel.offerFilterQuery.minPrice,
+                                maxPrice = distributorOffersViewModel.offerFilterQuery.maxPrice,
+                                minDate = distributorOffersViewModel.offerFilterQuery.minDate,
+                                maxDate = distributorOffersViewModel.offerFilterQuery.maxDate,
+                                active = distributorOffersViewModel.offerFilterQuery.active,
+                                onMinPriceChange = {
+                                    distributorOffersViewModel.offerFilterQuery =
+                                        distributorOffersViewModel.offerFilterQuery.copy(
+                                            minPrice = it
+                                        )
+                                },
+                                onMaxPriceChange = {
+                                    distributorOffersViewModel.offerFilterQuery =
+                                        distributorOffersViewModel.offerFilterQuery.copy(
+                                            maxPrice = it
+                                        )
+                                },
+                                onMinDateChange = {
+                                    distributorOffersViewModel.offerFilterQuery =
+                                        distributorOffersViewModel.offerFilterQuery.copy(
+                                            minDate = it
+                                        )
+                                },
+                                onMaxDateChange = {
+                                    distributorOffersViewModel.offerFilterQuery =
+                                        distributorOffersViewModel.offerFilterQuery.copy(
+                                            maxDate = it
+                                        )
+                                },
+                                onActiveChange = {
+                                    distributorOffersViewModel.offerFilterQuery =
+                                        distributorOffersViewModel.offerFilterQuery.copy(
+                                            active = it
+                                        )
+                                },
+                                onApply = {
+                                    distributorOffersViewModel.getOffers()
+                                },
+                                onReset = {
+                                    distributorOffersViewModel.resetFilter()
+                                    distributorOffersViewModel.getOffers()
+                                }
+                            )
+                        }
                     }
-                } else {
-                    LazyColumn(
-                        modifier = Modifier
-                            .padding(paddingValues)
-                            .fillMaxSize()
-                    ) {
+
+                    if (offers.items.isEmpty()) {
                         item {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Start
-                            ) {
-                                OfferFilterComponent(
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                Text(
+                                    stringResource(R.string.no_offers_found),
+                                    style = MaterialTheme.typography.h6,
                                     modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(20.dp),
-                                    minPrice = distributorOffersViewModel.offerFilterQuery.minPrice,
-                                    maxPrice = distributorOffersViewModel.offerFilterQuery.maxPrice,
-                                    minDate = distributorOffersViewModel.offerFilterQuery.minDate,
-                                    maxDate = distributorOffersViewModel.offerFilterQuery.maxDate,
-                                    active = distributorOffersViewModel.offerFilterQuery.active,
-                                    onMinPriceChange = {
-                                        distributorOffersViewModel.offerFilterQuery =
-                                            distributorOffersViewModel.offerFilterQuery.copy(
-                                                minPrice = it
-                                            )
-                                    },
-                                    onMaxPriceChange = {
-                                        distributorOffersViewModel.offerFilterQuery =
-                                            distributorOffersViewModel.offerFilterQuery.copy(
-                                                maxPrice = it
-                                            )
-                                    },
-                                    onMinDateChange = {
-                                        distributorOffersViewModel.offerFilterQuery =
-                                            distributorOffersViewModel.offerFilterQuery.copy(
-                                                minDate = it
-                                            )
-                                    },
-                                    onMaxDateChange = {
-                                        distributorOffersViewModel.offerFilterQuery =
-                                            distributorOffersViewModel.offerFilterQuery.copy(
-                                                maxDate = it
-                                            )
-                                    },
-                                    onActiveChange = {
-                                        distributorOffersViewModel.offerFilterQuery =
-                                            distributorOffersViewModel.offerFilterQuery.copy(
-                                                active = it
-                                            )
-                                    },
-                                    onApply = {
-                                        distributorOffersViewModel.getOffers()
-                                    },
-                                    onReset = {
-                                        distributorOffersViewModel.resetFilter()
-                                        distributorOffersViewModel.getOffers()
-                                    }
+                                        .padding(horizontal = 10.dp)
+                                        .align(Alignment.Center),
+                                    textAlign = TextAlign.Center
                                 )
                             }
                         }
-
+                    } else {
                         items(items = offers.items) { item ->
                             OfferItem(
                                 modifier = Modifier

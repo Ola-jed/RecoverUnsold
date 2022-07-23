@@ -60,6 +60,7 @@ import com.ola.recoverunsold.ui.components.product.ProductItem
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.OfferDetailsViewModel
 import com.ola.recoverunsold.ui.screens.viewmodels.OfferDetailsViewModelFactory
+import com.ola.recoverunsold.utils.misc.addSeconds
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 import com.ola.recoverunsold.utils.misc.jsonSerialize
@@ -220,9 +221,7 @@ fun OfferDetailsScreen(
                     Text(
                         text = stringResource(
                             R.string.end_date_time,
-                            Date.from(
-                                offer.startDate.toInstant().plusSeconds(offer.duration.toLong())
-                            ).formatDateTime()
+                            offer.startDate.addSeconds(offer.duration).formatDateTime()
                         ),
                         modifier = Modifier.padding(vertical = 5.dp)
                     )

@@ -23,6 +23,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
@@ -49,6 +50,7 @@ fun OfferItem(
     var showDeleteConfirmationDialog by rememberSaveable { mutableStateOf(false) }
     val startDate = offer.startDate
     val productsImagesUris = offer.products?.flatMap { it.images }?.map { it.url }
+    val height = (LocalConfiguration.current.screenHeightDp * 0.2).dp
 
     Surface(
         modifier = modifier.clickable { onTap() },
@@ -58,8 +60,10 @@ fun OfferItem(
         Column(modifier = Modifier.fillMaxSize()) {
             if (!productsImagesUris.isNullOrEmpty()) {
                 ImageSlider(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth(),
                     imageUris = productsImagesUris,
+                    imageHeight = height,
                     rounded = false
                 )
             }

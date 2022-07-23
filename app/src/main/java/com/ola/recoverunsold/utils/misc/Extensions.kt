@@ -219,6 +219,26 @@ fun copyStreamToFile(inputStream: InputStream, outputFile: File) {
 }
 
 /**
+ * Add a big amount of time to a Date
+ */
+fun Date.addSeconds(seconds: ULong): Date {
+    var returnDate = this
+    var value = seconds
+    val longMaxValueAsULong = Long.MAX_VALUE.toULong()
+    if (seconds > longMaxValueAsULong) {
+        while (value > longMaxValueAsULong) {
+            var returnInstant = returnDate.toInstant()
+            returnInstant = returnInstant.plusSeconds(Long.MAX_VALUE)
+            value -= longMaxValueAsULong
+            returnDate = Date.from(returnInstant)
+        }
+    } else {
+        return Date.from(returnDate.toInstant().plusSeconds(seconds.toLong()))
+    }
+    return returnDate
+}
+
+/**
  * Format a date using the locale default format
  */
 fun Date.formatDate(): String {
@@ -246,7 +266,7 @@ fun Date.format(format: String = "yyyy-MM-dd'T'HH:mm:ss.SSS"): String {
  * Format decimal numbers without the zeros at the end
  */
 fun Number?.formatWithoutTrailingZeros(): String {
-    if(this == null) return ""
+    if (this == null) return ""
     val df = DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH))
     df.maximumFractionDigits = 340
     return df.format(this)

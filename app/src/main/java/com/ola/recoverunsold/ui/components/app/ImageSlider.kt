@@ -2,6 +2,7 @@ package com.ola.recoverunsold.ui.components.app
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.FloatingActionButtonDefaults
@@ -20,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -29,6 +31,7 @@ import com.ola.recoverunsold.R
 fun ImageSlider(
     modifier: Modifier = Modifier,
     imageUris: List<String>,
+    imageHeight: Dp? = null,
     rounded: Boolean = true
 ) {
     var currentIndex by rememberSaveable { mutableStateOf(0) }
@@ -36,13 +39,19 @@ fun ImageSlider(
     Box(
         modifier = modifier
     ) {
-        val imageModifier = if(rounded) {
-            Modifier.fillMaxSize()
+        var imageModifier = if (rounded) {
+            Modifier
+                .fillMaxSize()
                 .align(Alignment.Center)
                 .clip(RoundedCornerShape(10.dp))
         } else {
-            Modifier.fillMaxSize()
+            Modifier
+                .fillMaxSize()
                 .align(Alignment.Center)
+        }
+
+        if (imageHeight != null) {
+            imageModifier = imageModifier.height(imageHeight)
         }
 
         AsyncImage(
