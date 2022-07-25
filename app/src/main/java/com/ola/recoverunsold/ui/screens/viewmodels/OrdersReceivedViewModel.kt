@@ -22,14 +22,14 @@ class OrdersReceivedViewModel(
         OrderServiceWrapper::class.java
     )
 ) : ViewModel() {
-    private val token = TokenStore.get()!!
+    private val token = TokenStore.get()!!.bearerToken
     var ordersGetResponse: ApiCallResult<Page<Order>> by mutableStateOf(ApiCallResult.Inactive)
     var orderQuery by mutableStateOf(OrderFilterQuery())
 
     fun getOrders() {
         ordersGetResponse = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = orderServiceWrapper.getCustomerOrders(token.bearerToken, orderQuery)
+            val response = orderServiceWrapper.getCustomerOrders(token, orderQuery)
             ordersGetResponse = if (response.isSuccessful) {
                 ApiCallResult.Success(_data = response.body())
             } else {
@@ -54,7 +54,23 @@ class OrdersReceivedViewModel(
 
     fun acceptOrder(order: Order, onSuccess: () -> Unit, onFailure: () -> Unit) {
         viewModelScope.launch {
-            //TODO
+            val response = orderServiceWrapper.acceptOrder(token, order.id)
+            if(response.isSuccessful) {
+                onSuccess()
+            } else {
+                onFailure()
+            }
+        }
+    }
+
+    fun rejectOrder(order: Order, onSuccess: () -> Unit, onFailure: () -> Unit) {
+        viewModelScope.launch {
+            val response = orderServiceWrapper.rejectOrder(token, order.id)
+            if(response.isSuccessful) {
+                onSuccess()
+            } else {
+                onFailure()
+            }
         }
     }
 

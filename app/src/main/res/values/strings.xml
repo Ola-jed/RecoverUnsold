@@ -199,4 +199,6 @@
     <string name="reject_order_question">Reject this order ?</string>
     <string name="reject_order_label">Reject order</string>
     <string name="update_location">Update the location</string>
+    <string name="order_successfully_accepted">Order successfully accepted</string>
+    <string name="order_successfully_rejected">Order successfully rejected</string>
 </resources>

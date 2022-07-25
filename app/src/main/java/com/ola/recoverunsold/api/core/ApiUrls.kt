@@ -13,6 +13,7 @@ object ApiUrls {
     const val customerAccountUrl = "Account/Customer"
     const val distributorAccountUrl = "Account/Distributor"
     const val accountPasswordUrl = "Account/Password"
+    const val distributorsUrl = "Distributors"
     const val locationsUrl = "Locations"
     const val distributorsLocationsUrl = "Locations/Distributors"
     const val locationsSearchUrl = "Locations/Search"

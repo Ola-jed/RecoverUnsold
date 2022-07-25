@@ -196,4 +196,6 @@
     <string name="reject_order_question">¿ Rechazar esta oferta ?</string>
     <string name="reject_order_label">Rechazar esta oferta</string>
     <string name="update_location">Actualizar ubicación</string>
+    <string name="order_successfully_accepted">Pedidos aceptada con éxito</string>
+    <string name="order_successfully_rejected">"Pedidos rechazada con éxito "</string>
 </resources>

@@ -37,23 +37,23 @@ class OrderServiceWrapper(private val orderService: OrderService) {
 
     suspend fun createOrder(
         authorization: String,
-        offerId: String,
+        orderId: String,
         orderCreateRequest: OrderCreateRequest
     ): Response<Order> {
-        return orderService.createOrder(authorization, offerId, orderCreateRequest)
+        return orderService.createOrder(authorization, orderId, orderCreateRequest)
     }
 
     suspend fun acceptOrder(
         authorization: String,
-        offerId: String
+        orderId: String
     ): NoContentResponse {
-        return orderService.acceptOrder(authorization, offerId)
+        return orderService.acceptOrder(authorization, orderId)
     }
 
     suspend fun rejectOrder(
         authorization: String,
-        offerId: String
+        orderId: String
     ): NoContentResponse {
-        return orderService.rejectOrder(authorization, offerId)
+        return orderService.rejectOrder(authorization, orderId)
     }
 }
