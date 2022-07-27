@@ -24,10 +24,12 @@ import com.ola.recoverunsold.utils.misc.formatDate
 fun DistributorInformationComponent(
     modifier: Modifier = Modifier,
     distributorInformation: DistributorInformation,
-    onTap: () -> Unit
+    onTap: (() -> Unit)? = null
 ) {
+    val surfaceModifier = if (onTap == null) modifier else modifier.clickable { onTap() }
+
     Surface(
-        modifier = modifier.clickable { onTap() },
+        modifier = surfaceModifier,
         elevation = 10.dp,
         shape = RoundedCornerShape(20.dp)
     ) {
@@ -48,7 +50,7 @@ fun DistributorInformationComponent(
                 leadingIcon = {
                     Icon(
                         Icons.Filled.Email,
-                        contentDescription = null,
+                        contentDescription = null
                     )
                 },
                 data = distributorInformation.email

@@ -22,11 +22,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -38,10 +34,10 @@ import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
-import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
 import com.ola.recoverunsold.ui.components.distributor.DistributorInformationComponent
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
+import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorsViewModel
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
@@ -139,7 +135,13 @@ fun DistributorsScreen(
                                     .fillParentMaxWidth()
                                     .padding(horizontal = 20.dp, vertical = 10.dp),
                                 distributorInformation = item,
-                                onTap = {}
+                                onTap = {
+                                    navController.navigate(
+                                        Routes.DistributorDetails
+                                            .path
+                                            .replace("{distributorId}", item.id)
+                                    )
+                                }
                             )
                         }
 

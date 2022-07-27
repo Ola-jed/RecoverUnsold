@@ -13,6 +13,7 @@ sealed class Routes(val path: String) {
     object PasswordResetSuccess : Routes("password-reset/success")
     object Home : Routes("home")
     object Distributors : Routes("distributors")
+    object DistributorDetails : Routes("distributors/{distributorId}")
     object Offers : Routes("offers")
     object CloseOffers : Routes("close-offers")
     object OfferDetails : Routes("offers/{offerId}")

@@ -17,6 +17,7 @@ import com.ola.recoverunsold.ui.screens.distributor.offers.DistributorProductFor
 import com.ola.recoverunsold.ui.screens.distributor.orders.DistributorOrdersReceivedScreen
 import com.ola.recoverunsold.ui.screens.shared.AboutScreen
 import com.ola.recoverunsold.ui.screens.shared.CloseOffersScreen
+import com.ola.recoverunsold.ui.screens.shared.DistributorDetailsScreen
 import com.ola.recoverunsold.ui.screens.shared.DistributorsScreen
 import com.ola.recoverunsold.ui.screens.shared.HomeScreen
 import com.ola.recoverunsold.ui.screens.shared.OfferDetailsScreen
@@ -105,6 +106,21 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
             DistributorsScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState
+            )
+        }
+        composable(
+            Routes.DistributorDetails.path,
+            arguments = listOf(
+                navArgument("distributorId") {
+                    nullable = false
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            DistributorDetailsScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState,
+                distributorId = backStackEntry.arguments?.getString("distributorId")!!
             )
         }
         composable(Routes.Offers.path) {

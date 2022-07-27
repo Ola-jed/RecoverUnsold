@@ -202,4 +202,6 @@
     <string name="order_successfully_accepted">Order successfully accepted</string>
     <string name="order_successfully_rejected">Order successfully rejected</string>
     <string name="no_distributor_found">No distributor found</string>
+    <string name="distributor_information">Distributor information</string>
+    <string name="error_occured_while_fetching_offers">An error occurred while fetching offers</string>
 </resources>
