@@ -1,6 +1,9 @@
 package com.ola.recoverunsold.ui.components.distributor
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
@@ -12,51 +15,56 @@ import androidx.compose.material.icons.filled.Web
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.DistributorInformation
 import com.ola.recoverunsold.utils.misc.formatDate
-import java.util.Date
 
 @Composable
 fun DistributorInformationComponent(
     modifier: Modifier = Modifier,
-    distributorInformation: DistributorInformation
+    distributorInformation: DistributorInformation,
+    onTap: () -> Unit
 ) {
-    Surface(modifier = modifier) {
-        Column {
+    Surface(
+        modifier = modifier.clickable { onTap() },
+        elevation = 10.dp,
+        shape = RoundedCornerShape(20.dp)
+    ) {
+        Column(modifier = Modifier.padding(10.dp)) {
             DistributorInformationLine(
+                modifier = Modifier.padding(vertical = 5.dp),
                 leadingIcon = {
                     Icon(
                         Icons.Filled.AccountBox,
                         contentDescription = null,
                     )
                 },
-                label = stringResource(id = R.string.username_label),
                 data = distributorInformation.username
             )
 
             DistributorInformationLine(
+                modifier = Modifier.padding(vertical = 5.dp),
                 leadingIcon = {
                     Icon(
                         Icons.Filled.Email,
                         contentDescription = null,
                     )
                 },
-                label = stringResource(id = R.string.email_label),
                 data = distributorInformation.email
             )
 
             DistributorInformationLine(
+                modifier = Modifier.padding(vertical = 5.dp),
                 leadingIcon = {
                     Icon(Icons.Filled.Phone, contentDescription = null)
                 },
-                label = stringResource(id = R.string.phone_label),
                 data = distributorInformation.phone
             )
 
             if (distributorInformation.websiteUrl != null) {
                 DistributorInformationLine(
+                    modifier = Modifier.padding(vertical = 5.dp),
                     leadingIcon = {
                         Icon(Icons.Filled.Web, contentDescription = null)
                     },
@@ -66,6 +74,7 @@ fun DistributorInformationComponent(
             }
 
             DistributorInformationLine(
+                modifier = Modifier.padding(vertical = 5.dp),
                 leadingIcon = {
                     Icon(Icons.Filled.CalendarToday, contentDescription = null)
                 },
@@ -74,19 +83,4 @@ fun DistributorInformationComponent(
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun Preview() {
-    DistributorInformationComponent(
-        distributorInformation = DistributorInformation(
-            id = "XXX",
-            username = "Best Distribution",
-            email = "best_distribution@mail.com",
-            phone = "+229657678998",
-            websiteUrl = "ola.com",
-            createdAt = Date()
-        )
-    )
 }

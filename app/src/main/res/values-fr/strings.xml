@@ -198,4 +198,5 @@
     <string name="update_location">Mettre à jour le site</string>
     <string name="order_successfully_accepted">Commande acceptée avec succès</string>
     <string name="order_successfully_rejected">Commande rejetée avec succès</string>
+    <string name="no_distributor_found">Aucun distributeur trouvé</string>
 </resources>

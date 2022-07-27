@@ -201,4 +201,5 @@
     <string name="update_location">Update the location</string>
     <string name="order_successfully_accepted">Order successfully accepted</string>
     <string name="order_successfully_rejected">Order successfully rejected</string>
+    <string name="no_distributor_found">No distributor found</string>
 </resources>

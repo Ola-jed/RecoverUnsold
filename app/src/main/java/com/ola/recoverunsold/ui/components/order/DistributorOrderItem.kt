@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Order
+import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.ui.components.app.ConfirmDialog
 import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.formatDateTime
@@ -122,19 +123,26 @@ fun DistributorOrderItem(
                 Text(text = "${stringResource(id = R.string.member_since_label)} ${customer.createdAt.formatDate()}")
             }
 
-            Button(onClick = { showAcceptOrderDialog = true }, modifier = Modifier.fillMaxWidth()) {
-                Text(text = stringResource(id = R.string.accept_order_label))
+            if (order.status == OrderStatus.Pending || order.status == OrderStatus.Rejected) {
+                Button(
+                    onClick = { showAcceptOrderDialog = true },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = stringResource(id = R.string.accept_order_label))
+                }
             }
 
-            Button(
-                onClick = { showRejectOrderDialog = true },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.reject_order_label),
-                    color = MaterialTheme.colors.onError
-                )
+            if (order.status == OrderStatus.Pending || order.status == OrderStatus.Approved) {
+                Button(
+                    onClick = { showRejectOrderDialog = true },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.reject_order_label),
+                        color = MaterialTheme.colors.onError
+                    )
+                }
             }
         }
     }

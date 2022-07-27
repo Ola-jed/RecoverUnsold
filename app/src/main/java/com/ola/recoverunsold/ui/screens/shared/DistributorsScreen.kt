@@ -1,23 +1,57 @@
 package com.ola.recoverunsold.ui.screens.shared
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
+import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
+import com.ola.recoverunsold.ui.components.app.CustomTextInput
+import com.ola.recoverunsold.ui.components.app.LoadingIndicator
+import com.ola.recoverunsold.ui.components.distributor.DistributorInformationComponent
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
+import com.ola.recoverunsold.ui.screens.viewmodels.DistributorsViewModel
+import com.ola.recoverunsold.utils.misc.show
+import com.ola.recoverunsold.utils.resources.Strings
+import kotlinx.coroutines.launch
 
 @Composable
 fun DistributorsScreen(
     navController: NavController,
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    distributorsViewModel: DistributorsViewModel = viewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
@@ -32,7 +66,105 @@ fun DistributorsScreen(
             )
         },
         drawerContent = DrawerContent(navController, snackbarHostState)
-    ) {
-        Text("Distributors", modifier = Modifier.padding(it))
+    ) { paddingValues ->
+        when (distributorsViewModel.distributorsApiResult.status) {
+            ApiStatus.LOADING -> LoadingIndicator()
+            ApiStatus.ERROR -> {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Button(
+                        onClick = {
+                            distributorsViewModel.resetFilter()
+                            distributorsViewModel.getDistributors()
+                        },
+                        modifier = Modifier.align(Alignment.Center)
+                    ) {
+                        Text(stringResource(id = R.string.retry))
+                    }
+                }
+
+                LaunchedEffect(snackbarHostState) {
+                    coroutineScope.launch {
+                        snackbarHostState.show(
+                            message = distributorsViewModel.errorMessage()
+                                ?: Strings.get(R.string.unknown_error_occured)
+                        )
+                    }
+                }
+            }
+            else -> {
+                val distributors = distributorsViewModel.distributorsApiResult.data!!
+
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .fillMaxSize()
+                ) {
+                    item {
+                        TextField(
+                            modifier = Modifier
+                                .fillParentMaxWidth(),
+                            value = distributorsViewModel.distributorFilterQuery.name ?: "",
+                            leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
+                            onValueChange = {
+                                distributorsViewModel.distributorFilterQuery = distributorsViewModel
+                                    .distributorFilterQuery
+                                    .copy(name = it)
+                            },
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Done,
+                                keyboardType = KeyboardType.Text
+                            ),
+                            keyboardActions = KeyboardActions(onDone = {
+                                distributorsViewModel.getDistributors()
+                            })
+                        )
+                    }
+
+                    if (distributors.items.isEmpty()) {
+                        item {
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                Text(
+                                    stringResource(R.string.no_distributor_found),
+                                    style = MaterialTheme.typography.h6,
+                                    modifier = Modifier
+                                        .padding(horizontal = 10.dp)
+                                        .align(Alignment.Center)
+                                )
+                            }
+                        }
+                    } else {
+                        items(items = distributors.items) { item ->
+                            DistributorInformationComponent(
+                                modifier = Modifier
+                                    .fillParentMaxWidth()
+                                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                                distributorInformation = item,
+                                onTap = {}
+                            )
+                        }
+
+                        item {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 20.dp, end = 20.dp, top = 10.dp),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                if (distributors.pageNumber > 1) {
+                                    Button(onClick = { distributorsViewModel.getPrevious() }) {
+                                        Text(stringResource(id = R.string.previous))
+                                    }
+                                }
+                                if (distributors.hasNext) {
+                                    Button(onClick = { distributorsViewModel.getNext() }) {
+                                        Text(stringResource(id = R.string.next))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

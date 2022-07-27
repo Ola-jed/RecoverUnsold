@@ -26,10 +26,14 @@ class OrdersReceivedViewModel(
     var ordersGetResponse: ApiCallResult<Page<Order>> by mutableStateOf(ApiCallResult.Inactive)
     var orderQuery by mutableStateOf(OrderFilterQuery())
 
+    init {
+        getOrders()
+    }
+
     fun getOrders() {
         ordersGetResponse = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = orderServiceWrapper.getCustomerOrders(token, orderQuery)
+            val response = orderServiceWrapper.getDistributorOrders(token, orderQuery)
             ordersGetResponse = if (response.isSuccessful) {
                 ApiCallResult.Success(_data = response.body())
             } else {

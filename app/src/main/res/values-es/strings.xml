@@ -198,4 +198,5 @@
     <string name="update_location">Actualizar ubicación</string>
     <string name="order_successfully_accepted">Pedidos aceptada con éxito</string>
     <string name="order_successfully_rejected">"Pedidos rechazada con éxito "</string>
+    <string name="no_distributor_found">No se ha encontrado ningùn distribuidor</string>
 </resources>
