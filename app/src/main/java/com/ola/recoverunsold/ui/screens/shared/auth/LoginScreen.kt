@@ -221,7 +221,8 @@ fun LoginScreenContent(
                                 Icons.Default.VisibilityOff
                             } else {
                                 Icons.Default.Visibility
-                            }, contentDescription = null
+                            },
+                            contentDescription = null
                         )
                     }
                 },

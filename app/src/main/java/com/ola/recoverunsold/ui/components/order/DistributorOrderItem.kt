@@ -36,7 +36,6 @@ import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 import com.ola.recoverunsold.utils.misc.internationalizedValue
 import com.ola.recoverunsold.utils.misc.toIcon
-import java.util.Date
 
 @Composable
 fun DistributorOrderItem(
@@ -70,31 +69,19 @@ fun DistributorOrderItem(
                     R.string.total_amount,
                     offer.price.formatWithoutTrailingZeros()
                 ),
+                modifier = Modifier.padding(top = 10.dp),
+                fontWeight = FontWeight.Bold,
+                fontSize =  17.sp
+            )
+
+            Text(
+                text = stringResource(R.string.ordered_on, order.createdAt.formatDateTime()),
                 modifier = Modifier.padding(top = 10.dp)
             )
 
             Text(
-                text = "${offer.startDate.formatDateTime()} - ${
-                    Date.from(
-                        offer.startDate.toInstant().plusSeconds(offer.duration.toLong())
-                    ).formatDateTime()
-                }"
-            )
-
-            Text(
-                text = stringResource(
-                    R.string.published_the,
-                    offer.createdAt.formatDate()
-                )
-            )
-
-            Text(
-                text = stringResource(R.string.ordered_on, order.createdAt.formatDate()),
+                text = "${stringResource(id = R.string.to_be_picked_up_on)} : ${order.withdrawalDate.formatDateTime()}",
                 modifier = Modifier.padding(top = 10.dp)
-            )
-
-            Text(
-                text = "${stringResource(id = R.string.withdrawal_date)} : ${order.withdrawalDate.formatDateTime()}"
             )
 
             IconButton(

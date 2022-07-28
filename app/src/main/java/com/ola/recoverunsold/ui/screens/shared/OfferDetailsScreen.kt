@@ -87,6 +87,7 @@ fun OfferDetailsScreen(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed),
         snackbarHostState = snackbarHostState
     )
+    var showWithdrawalDatePicker by remember { mutableStateOf(false) }
 
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
@@ -127,17 +128,16 @@ fun OfferDetailsScreen(
                     .padding(30.dp),
                 withdrawalDate = offerDetailsViewModel.withdrawalDate,
                 onWithdrawalDateChange = { offerDetailsViewModel.withdrawalDate = it },
-                onSubmit = {
-                    offerDetailsViewModel.orderProduct()
-                },
-                loading = offerDetailsViewModel.orderApiCallResult.status == ApiStatus.LOADING
+                onSubmit = { offerDetailsViewModel.orderProduct() },
+                loading = offerDetailsViewModel.orderApiCallResult.status == ApiStatus.LOADING,
+                showDatePicker = showWithdrawalDatePicker,
+                onDatePickerHide = { showWithdrawalDatePicker = false },
+                onDatePickerShow = { showWithdrawalDatePicker = true }
             )
 
             if (offerDetailsViewModel.orderApiCallResult.status == ApiStatus.SUCCESS) {
                 coroutineScope.launch {
-                    snackbarHostState.show(
-                        Strings.get(R.string.order_successfully_placed)
-                    )
+                    snackbarHostState.show(Strings.get(R.string.order_successfully_placed))
                     bottomSheetScaffoldState.bottomSheetState.collapse()
                     navController.navigate(Routes.Orders.path)
                 }
@@ -145,9 +145,7 @@ fun OfferDetailsScreen(
 
             if (offerDetailsViewModel.orderErrorMessage() != null) {
                 coroutineScope.launch {
-                    snackbarHostState.show(
-                        offerDetailsViewModel.orderErrorMessage()!!
-                    )
+                    snackbarHostState.show(offerDetailsViewModel.orderErrorMessage()!!)
                     bottomSheetScaffoldState.bottomSheetState.collapse()
                 }
             }
@@ -338,15 +336,16 @@ fun OrderForm(
     withdrawalDate: Date,
     onWithdrawalDateChange: (Date) -> Unit,
     onSubmit: () -> Unit,
-    loading: Boolean
+    loading: Boolean,
+    showDatePicker: Boolean,
+    onDatePickerShow: () -> Unit,
+    onDatePickerHide: () -> Unit
 ) {
-    var showDatePicker by remember { mutableStateOf(false) }
-
     Column(modifier = modifier) {
         CustomTextInput(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { showDatePicker = true },
+                .clickable { onDatePickerShow() },
             value = withdrawalDate.formatDateTime(),
             readOnly = true,
             enabled = false,
@@ -368,7 +367,7 @@ fun OrderForm(
         DateTimePicker(
             onDateUpdate = {
                 onWithdrawalDateChange(it)
-                showDatePicker = false
+                onDatePickerHide()
             },
             date = withdrawalDate
         )

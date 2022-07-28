@@ -140,7 +140,7 @@ fun DistributorOrdersReceivedScreen(
                                                     snackbarHostState.show(
                                                         message = Strings.get(R.string.order_successfully_accepted)
                                                     )
-                                                    delay(8000)
+                                                    delay(7000)
                                                 }
                                             },
                                             onFailure = {
@@ -148,7 +148,7 @@ fun DistributorOrdersReceivedScreen(
                                                     snackbarHostState.show(
                                                         message = Strings.get(R.string.unknown_error_occured)
                                                     )
-                                                    delay(8000)
+                                                    delay(7000)
                                                 }
                                             }
                                         )
@@ -162,7 +162,7 @@ fun DistributorOrdersReceivedScreen(
                                                     snackbarHostState.show(
                                                         message = Strings.get(R.string.order_successfully_rejected)
                                                     )
-                                                    delay(8000)
+                                                    delay(7000)
                                                 }
                                             },
                                             onFailure = {
@@ -170,7 +170,7 @@ fun DistributorOrdersReceivedScreen(
                                                     snackbarHostState.show(
                                                         message = Strings.get(R.string.unknown_error_occured)
                                                     )
-                                                    delay(8000)
+                                                    delay(7000)
                                                 }
                                             }
                                         )

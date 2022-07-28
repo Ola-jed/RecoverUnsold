@@ -13,7 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Order
 import com.ola.recoverunsold.utils.misc.formatDate
@@ -47,7 +49,9 @@ fun OrderItem(
                     R.string.total_amount,
                     offer.price.formatWithoutTrailingZeros()
                 ),
-                modifier = Modifier.padding(top = 10.dp)
+                modifier = Modifier.padding(top = 10.dp),
+                fontWeight = FontWeight.Bold,
+                fontSize =  17.sp
             )
 
             Text(
@@ -71,7 +75,7 @@ fun OrderItem(
             )
 
             Text(
-                text = "${stringResource(id = R.string.withdrawal_date)} : ${order.withdrawalDate.formatDateTime()}"
+                text = "${stringResource(id = R.string.to_be_picked_up_on)} : ${order.withdrawalDate.formatDateTime()}"
             )
 
             Button(onClick = onMoreInformationRequest, modifier = Modifier.fillMaxWidth()) {

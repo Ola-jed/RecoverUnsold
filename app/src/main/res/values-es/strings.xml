@@ -203,4 +203,6 @@
     <string name="error_occured_while_fetching_offers">Se ha producido un error al recuperar las ofertas</string>
     <string name="call">Hacer una llamada</string>
     <string name="send_email">Enviar un correo electrónico</string>
+    <string name="to_be_picked_up_on">Para ser retirado en</string>
+    <string name="welcome">Bienvenido</string>
 </resources>
