@@ -179,7 +179,7 @@ fun DistributorDetailsScreen(
             }
 
             when (distributorDetailsViewModel.offersApiCallResult.status) {
-                ApiStatus.LOADING -> {}
+                ApiStatus.LOADING, ApiStatus.INACTIVE -> {}
                 ApiStatus.ERROR -> {
                     LaunchedEffect(snackbarHostState) {
                         coroutineScope.launch {

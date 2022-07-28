@@ -139,6 +139,7 @@ fun OfferDetailsScreen(
                         Strings.get(R.string.order_successfully_placed)
                     )
                     bottomSheetScaffoldState.bottomSheetState.collapse()
+                    navController.navigate(Routes.Orders.path)
                 }
             }
 
