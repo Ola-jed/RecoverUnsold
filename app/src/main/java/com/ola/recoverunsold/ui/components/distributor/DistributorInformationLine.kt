@@ -16,22 +16,15 @@ fun DistributorInformationLine(
     label: String? = null,
     data: String
 ) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
+    Row(modifier = modifier, horizontalArrangement = Arrangement.SpaceEvenly) {
         Row(horizontalArrangement = Arrangement.Start) {
             if (leadingIcon != null) {
                 leadingIcon()
             }
 
             if (label != null) {
-                Text(
-                    modifier = Modifier.padding(start = 10.dp),
-                    text = "$label : "
-                )
-            }
-            else {
+                Text(modifier = Modifier.padding(start = 10.dp), text = "$label : ")
+            } else {
                 Spacer(modifier = Modifier.padding(start = 10.dp))
             }
         }

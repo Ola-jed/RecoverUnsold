@@ -201,4 +201,6 @@
     <string name="no_distributor_found">Aucun distributeur trouvé</string>
     <string name="distributor_information">Informations du distributeur</string>
     <string name="error_occured_while_fetching_offers">Une erreur s\'est produite lors de la récupération des offres</string>
+    <string name="call">Passer un appel</string>
+    <string name="send_email">Envoyer un courriel</string>
 </resources>

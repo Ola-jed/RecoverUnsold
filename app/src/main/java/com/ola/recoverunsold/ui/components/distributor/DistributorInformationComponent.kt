@@ -39,7 +39,7 @@ fun DistributorInformationComponent(
                 leadingIcon = {
                     Icon(
                         Icons.Filled.AccountBox,
-                        contentDescription = null,
+                        contentDescription = null
                     )
                 },
                 data = distributorInformation.username
