@@ -153,16 +153,19 @@ fun DistributorDetailsScreen(
                         )
 
                         TextButton(onClick = {
-                            val phoneIntent = Intent(Intent.ACTION_DIAL)
-                            phoneIntent.data = Uri.parse("tel:${distributorInformation.phone}")
+                            val phoneIntent = Intent(Intent.ACTION_DIAL).apply {
+                                data = Uri.parse("tel:${distributorInformation.phone}")
+                            }
                             startActivity(context, phoneIntent, null)
                         }, modifier = Modifier.fillMaxWidth()) {
                             Text(stringResource(id = R.string.call))
                         }
 
                         TextButton(onClick = {
-                            val emailIntent = Intent(Intent.ACTION_SEND)
-                            emailIntent.putExtra(Intent.EXTRA_EMAIL, distributorInformation.email)
+                            val emailIntent = Intent(Intent.ACTION_SEND).apply {
+                                type = "*/*"
+                                putExtra(Intent.EXTRA_EMAIL, arrayOf(distributorInformation.email))
+                            }
                             startActivity(
                                 context,
                                 Intent.createChooser(emailIntent, Strings.get(R.string.send_email)),
