@@ -62,6 +62,7 @@ import com.ola.recoverunsold.utils.validation.EmailValidator
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.koin.java.KoinJavaComponent.get
 
 @Composable
@@ -104,7 +105,7 @@ fun LoginScreen(
                                 FirebaseMessaging.getInstance()
                                     .token
                                     .addOnSuccessListener {
-                                        coroutineScope.launch {
+                                        runBlocking {
                                             fcmService.createFcmToken(
                                                 token.bearerToken,
                                                 FcmTokenCreateRequest(it)
