@@ -40,6 +40,7 @@ import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.screens.viewmodels.AboutViewModel
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
+import com.ola.recoverunsold.utils.store.UserObserver
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -144,16 +145,22 @@ fun AboutScreen(
                 fontSize = 15.sp
             )
 
-            Button(
-                onClick = {
-                    coroutineScope.launch { bottomSheetScaffoldState.bottomSheetState.expand() }
-                }, modifier = Modifier
-                    .padding(top = 25.dp)
-                    .align(Alignment.CenterHorizontally)
-            ) {
-                Text(text = stringResource(id = R.string.send_us_a_message))
+            if (UserObserver.user.value != null) {
+                Button(
+                    onClick = {
+                        coroutineScope.launch { bottomSheetScaffoldState.bottomSheetState.expand() }
+                    }, modifier = Modifier
+                        .padding(top = 25.dp)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Text(text = stringResource(id = R.string.send_us_a_message))
 
-                Icon(imageVector = Icons.Default.Send, contentDescription = null)
+                    Icon(
+                        imageVector = Icons.Default.Send,
+                        contentDescription = null,
+                        modifier = Modifier.padding(start = 5.dp)
+                    )
+                }
             }
         }
     }
