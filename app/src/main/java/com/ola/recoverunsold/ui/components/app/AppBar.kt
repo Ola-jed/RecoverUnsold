@@ -1,5 +1,7 @@
 package com.ola.recoverunsold.ui.components.app
 
+import androidx.compose.material.BottomSheetScaffoldState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -20,6 +22,38 @@ import kotlinx.coroutines.launch
 fun AppBar(
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState,
+    canGoBack: Boolean = false,
+    navController: NavController? = null,
+    title: String? = null
+) {
+    if (canGoBack) {
+        require(navController != null) { "You are able to go back, so the navController should be passed" }
+    }
+
+    TopAppBar(
+        title = { Text(title ?: stringResource(id = R.string.app_name)) },
+        backgroundColor = MaterialTheme.colors.primary,
+        navigationIcon = {
+            if (!canGoBack) {
+                IconButton(onClick = {
+                    coroutineScope.launch { scaffoldState.drawerState.open() }
+                }) {
+                    Icon(Icons.Default.Menu, contentDescription = null)
+                }
+            } else {
+                IconButton(onClick = { navController?.navigateUp() }) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = null)
+                }
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun AppBar(
+    coroutineScope: CoroutineScope,
+    scaffoldState: BottomSheetScaffoldState,
     canGoBack: Boolean = false,
     navController: NavController? = null,
     title: String? = null

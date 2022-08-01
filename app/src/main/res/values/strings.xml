@@ -208,4 +208,12 @@
     <string name="send_email">Send an email</string>
     <string name="to_be_picked_up_on">To be picked up on</string>
     <string name="welcome">Welcome</string>
+    <string name="about_us">About us</string>
+    <string name="about_us_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Aliquam nulla facilisi cras fermentum odio eu feugiat. Congue quisque egestas diam in arcu cursus euismod quis. Diam ut venenatis tellus in metus vulputate eu scelerisque felis.</string>
+    <string name="send_us_a_message">Send us a message</string>
+    <string name="your_message">Your message</string>
+    <string name="message_sent_successfully">Message sent successfully</string>
+    <string name="failed_to_send_message">Failed to send the message</string>
+    <string name="send_message">Send message</string>
+    <string name="the_message_cannot_be_empty">The message cannot be empty</string>
 </resources>

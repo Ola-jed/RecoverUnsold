@@ -205,4 +205,12 @@
     <string name="send_email">Envoyer un courriel</string>
     <string name="to_be_picked_up_on">A retirer le</string>
     <string name="welcome">Bienvenue</string>
+    <string name="about_us">À propos de nous</string>
+    <string name="about_us_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Aliquam nulla facilisi cras fermentum odio eu feugiat. Congue quisque egestas diam in arcu cursus euismod quis. Diam ut venenatis tellus in metus vulputate eu scelerisque felis.</string>
+    <string name="send_us_a_message">Envoyez-nous un message</string>
+    <string name="your_message">Votre message</string>
+    <string name="message_sent_successfully">Message envoyé avec succès</string>
+    <string name="failed_to_send_message">Échec de l\'envoi du message</string>
+    <string name="send_message">Envoyer le message</string>
+    <string name="the_message_cannot_be_empty">Le message ne peut pas être vide</string>
 </resources>
