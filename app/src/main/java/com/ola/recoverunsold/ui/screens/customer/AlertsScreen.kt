@@ -78,7 +78,7 @@ fun AlertsScreen(
             AlertForm(
                 modifier = Modifier
                     .fillMaxWidth(0.8F)
-                    .padding(bottom = 25.dp)
+                    .padding(vertical = 25.dp)
                     .align(Alignment.CenterHorizontally),
                 alertType = alertsViewModel.alertType,
                 onAlertTypeChange = { alertsViewModel.alertType = it },
