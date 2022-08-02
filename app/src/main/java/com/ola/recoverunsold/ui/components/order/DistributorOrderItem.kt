@@ -43,6 +43,7 @@ fun DistributorOrderItem(
     order: Order,
     onOrderAccept: () -> Unit,
     onOrderReject: () -> Unit,
+    onOrderComplete: () -> Unit,
     onMoreInformationRequest: () -> Unit
 ) {
     val offer = order.offer!!
@@ -50,6 +51,7 @@ fun DistributorOrderItem(
     var isExpanded by remember { mutableStateOf(false) }
     var showAcceptOrderDialog by remember { mutableStateOf(false) }
     var showRejectOrderDialog by remember { mutableStateOf(false) }
+    var showCompleteOrderDialog by remember { mutableStateOf(false) }
 
     Surface(
         modifier = modifier
@@ -81,7 +83,8 @@ fun DistributorOrderItem(
 
             Text(
                 text = "${stringResource(id = R.string.to_be_picked_up_on)} : ${order.withdrawalDate.formatDateTime()}",
-                modifier = Modifier.padding(top = 10.dp)
+                modifier = Modifier.padding(top = 10.dp),
+                fontWeight = FontWeight.SemiBold
             )
 
             IconButton(
@@ -131,6 +134,15 @@ fun DistributorOrderItem(
                     )
                 }
             }
+
+            if (order.status == OrderStatus.Approved) {
+                Button(
+                    onClick = { showCompleteOrderDialog = true },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = stringResource(id = R.string.finalize_order_label))
+                }
+            }
         }
     }
 
@@ -156,6 +168,18 @@ fun DistributorOrderItem(
                 onOrderReject()
             },
             isDanger = true
+        )
+    }
+
+    if (showCompleteOrderDialog) {
+        ConfirmDialog(
+            title = stringResource(R.string.finalize_order_label),
+            content = stringResource(R.string.finalize_order_question),
+            onDismiss = { showCompleteOrderDialog = false },
+            onConfirm = {
+                showCompleteOrderDialog = false
+                onOrderComplete()
+            }
         )
     }
 }

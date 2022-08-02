@@ -70,7 +70,18 @@ class OrdersReceivedViewModel(
     fun rejectOrder(order: Order, onSuccess: () -> Unit, onFailure: () -> Unit) {
         viewModelScope.launch {
             val response = orderServiceWrapper.rejectOrder(token, order.id)
-            if(response.isSuccessful) {
+            if (response.isSuccessful) {
+                onSuccess()
+            } else {
+                onFailure()
+            }
+        }
+    }
+
+    fun completeOrder(order: Order, onSuccess: () -> Unit, onFailure: () -> Unit) {
+        viewModelScope.launch {
+            val response = orderServiceWrapper.completeOrder(token, order.id)
+            if (response.isSuccessful) {
                 onSuccess()
             } else {
                 onFailure()

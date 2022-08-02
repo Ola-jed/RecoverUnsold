@@ -229,4 +229,7 @@
     <string name="alert_created_successfully">Alert created successfully</string>
     <string name="alert_creation_failed">Failed to create the alert</string>
     <string name="distributor">Distributor</string>
+    <string name="finalize_order_label">Finalize the order</string>
+    <string name="finalize_order_question">Do you want to finalize this order ?</string>
+    <string name="order_completed_successfully">Order successfully completed</string>
 </resources>

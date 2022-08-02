@@ -226,4 +226,7 @@
     <string name="alert_created_successfully">Alerte créée avec succès</string>
     <string name="alert_creation_failed">Echec de la création de l\'alerte</string>
     <string name="distributor">Distributeur</string>
+    <string name="finalize_order_label">Finaliser la commande</string>
+    <string name="finalize_order_question">Voulez-vous finaliser cette commande ?</string>
+    <string name="order_completed_successfully">Commande finalisée avec succès</string>
 </resources>

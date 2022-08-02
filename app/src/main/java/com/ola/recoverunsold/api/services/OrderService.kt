@@ -37,7 +37,7 @@ interface OrderService : BaseApiService {
         @QueryMap filters: Map<String, String>
     ): Response<Page<Order>>
 
-    @POST(ApiUrls.offersUrl + "/{id}" + "/Orders")
+    @POST(ApiUrls.offersUrl + "/{id}/Orders")
     suspend fun createOrder(
         @Header("Authorization") authorization: String,
         @Path("id") offerId: String,
@@ -52,6 +52,12 @@ interface OrderService : BaseApiService {
 
     @POST(ApiUrls.ordersUrl + "/{id}/Reject")
     suspend fun rejectOrder(
+        @Header("Authorization") authorization: String,
+        @Path("id") id: String
+    ): NoContentResponse
+
+    @POST(ApiUrls.ordersUrl + "/{id}/Complete")
+    suspend fun completeOrder(
         @Header("Authorization") authorization: String,
         @Path("id") id: String
     ): NoContentResponse

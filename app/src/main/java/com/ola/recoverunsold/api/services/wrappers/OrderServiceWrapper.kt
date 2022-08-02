@@ -56,4 +56,11 @@ class OrderServiceWrapper(private val orderService: OrderService) {
     ): NoContentResponse {
         return orderService.rejectOrder(authorization, orderId)
     }
+
+    suspend fun completeOrder(
+        authorization: String,
+        orderId: String
+    ): NoContentResponse {
+        return orderService.completeOrder(authorization, orderId)
+    }
 }

@@ -175,6 +175,28 @@ fun DistributorOrdersReceivedScreen(
                                             }
                                         )
                                         ordersReceivedViewModel.getOrders()
+                                    },
+                                    onOrderComplete = {
+                                        ordersReceivedViewModel.completeOrder(
+                                            order = it,
+                                            onSuccess = {
+                                                coroutineScope.launch {
+                                                    snackbarHostState.show(
+                                                        message = Strings.get(R.string.order_completed_successfully)
+                                                    )
+                                                    delay(7000)
+                                                }
+                                            },
+                                            onFailure = {
+                                                coroutineScope.launch {
+                                                    snackbarHostState.show(
+                                                        message = Strings.get(R.string.unknown_error_occured)
+                                                    )
+                                                    delay(7000)
+                                                }
+                                            }
+                                        )
+                                        ordersReceivedViewModel.getOrders()
                                     }
                                 )
                             }
