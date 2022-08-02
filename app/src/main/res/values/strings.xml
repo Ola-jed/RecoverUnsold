@@ -232,4 +232,7 @@
     <string name="finalize_order_label">Finalize the order</string>
     <string name="finalize_order_question">Do you want to finalize this order ?</string>
     <string name="order_completed_successfully">Order successfully completed</string>
+    <string name="order_status_approved_singular">Approved</string>
+    <string name="order_status_rejected_singular">Rejected</string>
+    <string name="order_status_completed_singular">Completed</string>
 </resources>

@@ -175,7 +175,7 @@
     <string name="order_status_pending">En attente</string>
     <string name="order_status_approved">Approuvées</string>
     <string name="order_status_rejected">Rejetées</string>
-    <string name="order_status_completed">Terminées</string>
+    <string name="order_status_completed">Finalisées</string>
     <string name="status">Statut</string>
     <string name="order_code">Code commande : %1$s</string>
     <string name="ordered_on">Commande passée le %1$s</string>
@@ -229,4 +229,7 @@
     <string name="finalize_order_label">Finaliser la commande</string>
     <string name="finalize_order_question">Voulez-vous finaliser cette commande ?</string>
     <string name="order_completed_successfully">Commande finalisée avec succès</string>
+    <string name="order_status_approved_singular">Approuvée</string>
+    <string name="order_status_rejected_singular">Rejetée</string>
+    <string name="order_status_completed_singular">Finalisée</string>
 </resources>

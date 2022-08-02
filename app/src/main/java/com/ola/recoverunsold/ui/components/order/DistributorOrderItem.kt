@@ -34,7 +34,7 @@ import com.ola.recoverunsold.ui.components.app.ConfirmDialog
 import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
-import com.ola.recoverunsold.utils.misc.internationalizedValue
+import com.ola.recoverunsold.utils.misc.internationalizedValueSingular
 import com.ola.recoverunsold.utils.misc.toIcon
 
 @Composable
@@ -63,7 +63,7 @@ fun DistributorOrderItem(
         Column(modifier = Modifier.padding(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(imageVector = order.status.toIcon(), contentDescription = null)
-                Text(text = order.status.internationalizedValue())
+                Text(text = order.status.internationalizedValueSingular())
             }
 
             Text(
@@ -73,7 +73,7 @@ fun DistributorOrderItem(
                 ),
                 modifier = Modifier.padding(top = 10.dp),
                 fontWeight = FontWeight.Bold,
-                fontSize =  17.sp
+                fontSize = 17.sp
             )
 
             Text(

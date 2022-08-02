@@ -229,4 +229,7 @@
     <string name="finalize_order_label">Finalizar el pedido</string>
     <string name="finalize_order_question">¿ Desea finalizar este pedido ?</string>
     <string name="order_completed_successfully">Pedido completado con éxito</string>
+    <string name="order_status_approved_singular">Aprobado</string>
+    <string name="order_status_completed_singular">Completado</string>
+    <string name="order_status_rejected_singular">Rechazado</string>
 </resources>

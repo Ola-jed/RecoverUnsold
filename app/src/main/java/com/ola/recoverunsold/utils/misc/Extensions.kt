@@ -86,27 +86,6 @@ fun String.nullIfBlank(): String? {
 }
 
 /**
- * Returns if the current Context has network access
- */
-fun Context.hasNetwork(): Boolean {
-    val connectivityManager = this.getSystemService<ConnectivityManager>()
-    if (connectivityManager != null) {
-        val capabilities = connectivityManager
-            .getNetworkCapabilities(connectivityManager.activeNetwork)
-        if (capabilities != null) {
-            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                return true
-            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                return true
-            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                return true
-            }
-        }
-    }
-    return false
-}
-
-/**
  * Use the Android context to get the device location
  */
 fun Context.getDeviceLocation(
@@ -116,12 +95,7 @@ fun Context.getDeviceLocation(
     val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
     val locationChangeListener = fun(location: Location?) {
         if (location != null) {
-            onLatLngValueUpdate(
-                LatLng(
-                    location.latitude,
-                    location.longitude
-                )
-            )
+            onLatLngValueUpdate(LatLng(location.latitude, location.longitude))
         } else {
             onLocationFetchFailed()
         }
@@ -304,6 +278,18 @@ fun String?.toSecureInt(): Int {
         }
 
         0
+    }
+}
+
+/**
+ * Convert the status of the order to an internationalized string at singular
+ */
+fun OrderStatus.internationalizedValueSingular(): String {
+    return when (this) {
+        OrderStatus.Pending -> Strings.get(R.string.order_status_pending)
+        OrderStatus.Approved -> Strings.get(R.string.order_status_approved_singular)
+        OrderStatus.Rejected -> Strings.get(R.string.order_status_rejected_singular)
+        OrderStatus.Completed -> Strings.get(R.string.order_status_completed_singular)
     }
 }
 
