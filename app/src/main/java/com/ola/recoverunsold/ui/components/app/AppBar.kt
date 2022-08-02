@@ -1,5 +1,6 @@
 package com.ola.recoverunsold.ui.components.app
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
@@ -24,7 +25,8 @@ fun AppBar(
     scaffoldState: ScaffoldState,
     canGoBack: Boolean = false,
     navController: NavController? = null,
-    title: String? = null
+    title: String? = null,
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
     if (canGoBack) {
         require(navController != null) { "You are able to go back, so the navController should be passed" }
@@ -45,7 +47,8 @@ fun AppBar(
                     Icon(Icons.Default.ArrowBack, contentDescription = null)
                 }
             }
-        }
+        },
+        actions = actions
     )
 }
 

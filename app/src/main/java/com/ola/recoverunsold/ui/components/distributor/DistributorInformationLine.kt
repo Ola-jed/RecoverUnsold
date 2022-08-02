@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -14,7 +16,8 @@ fun DistributorInformationLine(
     modifier: Modifier = Modifier,
     leadingIcon: @Composable (() -> Unit)? = null,
     label: String? = null,
-    data: String
+    data: String,
+    textStyle: TextStyle? = null
 ) {
     Row(modifier = modifier, horizontalArrangement = Arrangement.SpaceEvenly) {
         Row(horizontalArrangement = Arrangement.Start) {
@@ -29,6 +32,10 @@ fun DistributorInformationLine(
             }
         }
 
-        Text(data)
+        if (textStyle == null) {
+            Text(data)
+        } else {
+            Text(data, style = textStyle)
+        }
     }
 }

@@ -120,7 +120,7 @@ fun AboutScreen(
         sheetPeekHeight = 0.dp,
         sheetElevation = 25.dp,
         sheetGesturesEnabled = true,
-        sheetShape = RoundedCornerShape(topStart = 35.dp, topEnd = 35.dp)
+        sheetShape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp)
     ) { paddingValues ->
         Column(
             modifier = Modifier

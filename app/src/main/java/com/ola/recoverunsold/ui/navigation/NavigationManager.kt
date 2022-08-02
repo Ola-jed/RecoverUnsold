@@ -7,6 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.ola.recoverunsold.ui.screens.customer.AlertsScreen
 import com.ola.recoverunsold.ui.screens.customer.CustomerAccountScreen
 import com.ola.recoverunsold.ui.screens.customer.OrdersScreen
 import com.ola.recoverunsold.ui.screens.distributor.account.DistributorAccountScreen
@@ -167,6 +168,12 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
         }
         composable(Routes.About.path) {
             AboutScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState
+            )
+        }
+        composable(Routes.Alerts.path) {
+            AlertsScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState
             )

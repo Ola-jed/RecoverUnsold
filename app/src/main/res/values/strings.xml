@@ -216,4 +216,17 @@
     <string name="failed_to_send_message">Failed to send the message</string>
     <string name="send_message">Send message</string>
     <string name="the_message_cannot_be_empty">The message cannot be empty</string>
+    <string name="trigger">Trigger</string>
+    <string name="all_new_publications">All new publications</string>
+    <string name="publications_of_given_distributor">The publications of a given distributor</string>
+    <string name="delete_alert_label">Delete alert</string>
+    <string name="delete_alert_question">Do you want to delete this alert ?</string>
+    <string name="my_alerts">Alerts settings</string>
+    <string name="no_alerts_defined">No alerts defined</string>
+    <string name="create_new_alert">Create a new alert</string>
+    <string name="alert_successfully_deleted">Alert successfully deleted</string>
+    <string name="alert_deletion_failed">Failed to delete the alert</string>
+    <string name="alert_created_successfully">Alert created successfully</string>
+    <string name="alert_creation_failed">Failed to create the alert</string>
+    <string name="distributor">Distributor</string>
 </resources>

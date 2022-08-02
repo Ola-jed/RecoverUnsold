@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.ola.recoverunsold.BuildConfig
 import com.ola.recoverunsold.api.services.BaseApiService
+import com.ola.recoverunsold.models.AlertType
 import com.ola.recoverunsold.models.OrderStatus
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
@@ -20,6 +21,7 @@ object ApiClient {
             .setLenient()
             .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
             .registerTypeAdapter(OrderStatus::class.java, OrderStatus.Serializer())
+            .registerTypeAdapter(AlertType::class.java, AlertType.Serializer())
             .create()
     }
 

@@ -213,4 +213,17 @@
     <string name="failed_to_send_message">Échec de l\'envoi du message</string>
     <string name="send_message">Envoyer le message</string>
     <string name="the_message_cannot_be_empty">Le message ne peut pas être vide</string>
+    <string name="trigger">Déclencheur</string>
+    <string name="all_new_publications">Toutes les nouvelles publications</string>
+    <string name="publications_of_given_distributor">Les publications d\'un distributeur donné</string>
+    <string name="delete_alert_label">Supprimer l\'alerte</string>
+    <string name="delete_alert_question">Voulez-vous supprimer cette alerte ?</string>
+    <string name="my_alerts">Paramètres des alertes</string>
+    <string name="no_alerts_defined">Aucune alerte définie</string>
+    <string name="create_new_alert">Créer une nouvelle alerte</string>
+    <string name="alert_successfully_deleted">Alerte supprimée avec succès</string>
+    <string name="alert_deletion_failed">Echec de la suppression de l\'alerte</string>
+    <string name="alert_created_successfully">Alerte créée avec succès</string>
+    <string name="alert_creation_failed">Echec de la création de l\'alerte</string>
+    <string name="distributor">Distributeur</string>
 </resources>

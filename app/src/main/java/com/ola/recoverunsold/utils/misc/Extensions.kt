@@ -25,6 +25,7 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.ola.recoverunsold.R
+import com.ola.recoverunsold.models.AlertType
 import com.ola.recoverunsold.models.LatLong
 import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.utils.resources.Strings
@@ -327,5 +328,15 @@ fun OrderStatus.toIcon(): ImageVector {
         OrderStatus.Approved -> Icons.Default.Check
         OrderStatus.Rejected -> Icons.Default.Block
         OrderStatus.Completed -> Icons.Default.DoneAll
+    }
+}
+
+/**
+ * Convert the alert type into a meaningful label
+ */
+fun AlertType.label(): String {
+    return when (this) {
+        AlertType.AnyOfferPublished -> Strings.get(R.string.all_new_publications)
+        AlertType.DistributorOfferPublished -> Strings.get(R.string.publications_of_given_distributor)
     }
 }

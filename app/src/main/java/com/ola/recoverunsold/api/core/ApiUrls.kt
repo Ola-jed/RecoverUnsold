@@ -14,6 +14,7 @@ object ApiUrls {
     const val distributorAccountUrl = "Account/Distributor"
     const val accountPasswordUrl = "Account/Password"
     const val distributorsUrl = "Distributors"
+    const val distributorLabelsUrl = "Distributors/Labels"
     const val locationsUrl = "Locations"
     const val distributorsLocationsUrl = "Locations/Distributors"
     const val locationsSearchUrl = "Locations/Search"
@@ -27,4 +28,5 @@ object ApiUrls {
     const val distributorProductsUrl = "Products/Distributors"
     const val fcmTokenUrl = "FcmTokens"
     const val reviewsUrl = "Reviews"
+    const val alertsUrl = "Alerts"
 }

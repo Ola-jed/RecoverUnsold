@@ -2,6 +2,7 @@ package com.ola.recoverunsold.di
 
 import com.ola.recoverunsold.api.core.ApiClient
 import com.ola.recoverunsold.api.services.AccountService
+import com.ola.recoverunsold.api.services.AlertsService
 import com.ola.recoverunsold.api.services.AuthService
 import com.ola.recoverunsold.api.services.DistributorService
 import com.ola.recoverunsold.api.services.FcmTokenService
@@ -29,6 +30,7 @@ val appModule = module {
     factory<OrderService> { ApiClient.buildService() }
     factory<FcmTokenService> { ApiClient.buildService() }
     factory<ReviewsService> { ApiClient.buildService() }
+    factory<AlertsService> { ApiClient.buildService() }
     factory { LocationServiceWrapper(ApiClient.buildService()) }
     factory { OfferServiceWrapper(ApiClient.buildService()) }
     factory { OrderServiceWrapper(ApiClient.buildService()) }

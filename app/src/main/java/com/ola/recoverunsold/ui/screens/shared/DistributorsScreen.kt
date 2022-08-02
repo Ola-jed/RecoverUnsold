@@ -107,12 +107,13 @@ fun DistributorsScreen(
                                     .copy(name = it)
                             },
                             keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Done,
+                                imeAction = ImeAction.Search,
                                 keyboardType = KeyboardType.Text
                             ),
-                            keyboardActions = KeyboardActions(onDone = {
+                            keyboardActions = KeyboardActions(onSearch = {
                                 distributorsViewModel.getDistributors()
-                            })
+                            }),
+                            singleLine = true
                         )
                     }
 

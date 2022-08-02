@@ -1,7 +1,19 @@
 package com.ola.recoverunsold.ui.screens.customer
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -10,8 +22,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
@@ -46,64 +61,74 @@ fun CustomerAccountScreen(
             AppBar(
                 coroutineScope = coroutineScope,
                 scaffoldState = scaffoldState,
-                title = stringResource(id = R.string.account)
+                title = stringResource(id = R.string.account),
+                actions = {
+                    IconButton(onClick = { navController.navigate(Routes.Alerts.path) }) {
+                        Icon(
+                            modifier = Modifier.padding(start = 5.dp),
+                            imageVector = Icons.Default.NotificationsActive,
+                            contentDescription = null
+                        )
+                    }
+                }
             )
         },
         drawerContent = DrawerContent(navController, snackbarHostState)
     ) {
-        CustomerProfileInformationSection(
-            customer = user!! as Customer,
-            username = customerAccountServiceViewModel.username,
-            firstName = customerAccountServiceViewModel.firstName,
-            lastName = customerAccountServiceViewModel.lastName,
-            isEditing = isEditing,
-            onEditingStart = { isEditing = true },
-            onEditingEnd = {
-                if (!customerAccountServiceViewModel.formState.isValid) {
-                    coroutineScope.launch {
-                        snackbarHostState.show(
-                            message = customerAccountServiceViewModel.formState.errorMessage
-                                ?: Strings.get(R.string.invalid_data)
-                        )
-                    }
-                } else {
-                    customerAccountServiceViewModel.updateCustomer()
-                    isEditing = false
-                }
-            },
-            onEditingCancel = { isEditing = false },
-            loading = customerAccountServiceViewModel.accountApiCallResult.status == ApiStatus.LOADING,
-            onUsernameChange = { customerAccountServiceViewModel.username = it },
-            onFirstNameChange = { customerAccountServiceViewModel.firstName = it },
-            onLastNameChange = { customerAccountServiceViewModel.lastName = it },
-            onDelete = {
-                customerAccountServiceViewModel.deleteCustomer {
-                    coroutineScope.launch {
-                        context.logout()
-                        navController.navigate(Routes.Home.path) {
-                            popUpTo(Routes.Home.path) { inclusive = true }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            CustomerProfileInformationSection(
+                customer = user!! as Customer,
+                username = customerAccountServiceViewModel.username,
+                firstName = customerAccountServiceViewModel.firstName,
+                lastName = customerAccountServiceViewModel.lastName,
+                isEditing = isEditing,
+                onEditingStart = { isEditing = true },
+                onEditingEnd = {
+                    if (!customerAccountServiceViewModel.formState.isValid) {
+                        coroutineScope.launch {
+                            snackbarHostState.show(
+                                message = customerAccountServiceViewModel.formState.errorMessage
+                                    ?: Strings.get(R.string.invalid_data)
+                            )
                         }
-                        snackbarHostState.show(
-                            message = Strings.get(R.string.account_deleted_successfully)
-                        )
+                    } else {
+                        customerAccountServiceViewModel.updateCustomer()
+                        isEditing = false
                     }
+                },
+                onEditingCancel = { isEditing = false },
+                loading = customerAccountServiceViewModel.accountApiCallResult.status == ApiStatus.LOADING,
+                onUsernameChange = { customerAccountServiceViewModel.username = it },
+                onFirstNameChange = { customerAccountServiceViewModel.firstName = it },
+                onLastNameChange = { customerAccountServiceViewModel.lastName = it },
+                onDelete = {
+                    customerAccountServiceViewModel.deleteCustomer {
+                        coroutineScope.launch {
+                            context.logout()
+                            navController.navigate(Routes.Home.path) {
+                                popUpTo(Routes.Home.path) { inclusive = true }
+                            }
+                            snackbarHostState.show(
+                                message = Strings.get(R.string.account_deleted_successfully)
+                            )
+                        }
+                    }
+                },
+                onValidationSuccess = {
+                    customerAccountServiceViewModel.formState = customerAccountServiceViewModel
+                        .formState
+                        .copy(isValid = true, errorMessage = null)
+                },
+                onValidationError = {
+                    customerAccountServiceViewModel.formState = customerAccountServiceViewModel
+                        .formState
+                        .copy(isValid = false, errorMessage = it)
                 }
-            },
-            onValidationSuccess = {
-                customerAccountServiceViewModel.formState =
-                    customerAccountServiceViewModel.formState
-                        .copy(
-                            isValid = true,
-                            errorMessage = null
-                        )
-            },
-            onValidationError = {
-                customerAccountServiceViewModel.formState =
-                    customerAccountServiceViewModel.formState.copy(
-                        isValid = false,
-                        errorMessage = it
-                    )
-            }
-        )
+            )
+        }
     }
 }
