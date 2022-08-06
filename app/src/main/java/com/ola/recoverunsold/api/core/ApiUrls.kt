@@ -29,4 +29,5 @@ object ApiUrls {
     const val fcmTokenUrl = "FcmTokens"
     const val reviewsUrl = "Reviews"
     const val alertsUrl = "Alerts"
+    const val opinionsUrl = "Opinions"
 }

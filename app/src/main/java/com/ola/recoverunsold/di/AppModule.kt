@@ -9,6 +9,7 @@ import com.ola.recoverunsold.api.services.FcmTokenService
 import com.ola.recoverunsold.api.services.ForgotPasswordService
 import com.ola.recoverunsold.api.services.LocationService
 import com.ola.recoverunsold.api.services.OfferService
+import com.ola.recoverunsold.api.services.OpinionsService
 import com.ola.recoverunsold.api.services.OrderService
 import com.ola.recoverunsold.api.services.ReviewsService
 import com.ola.recoverunsold.api.services.UserVerificationService
@@ -28,6 +29,7 @@ val appModule = module {
     factory<LocationService> { ApiClient.buildService() }
     factory<OfferService> { ApiClient.buildService() }
     factory<OrderService> { ApiClient.buildService() }
+    factory<OpinionsService> { ApiClient.buildService() }
     factory<FcmTokenService> { ApiClient.buildService() }
     factory<ReviewsService> { ApiClient.buildService() }
     factory<AlertsService> { ApiClient.buildService() }

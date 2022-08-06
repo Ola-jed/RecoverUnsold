@@ -10,5 +10,6 @@ data class Order(
     val offerId: String,
     val offer: Offer?,
     val withdrawalDate: Date,
-    val createdAt: Date
+    val createdAt: Date,
+    val opinions: List<Opinion>
 )
