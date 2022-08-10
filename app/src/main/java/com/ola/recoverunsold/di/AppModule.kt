@@ -7,6 +7,7 @@ import com.ola.recoverunsold.api.services.AuthService
 import com.ola.recoverunsold.api.services.DistributorService
 import com.ola.recoverunsold.api.services.FcmTokenService
 import com.ola.recoverunsold.api.services.ForgotPasswordService
+import com.ola.recoverunsold.api.services.HomeService
 import com.ola.recoverunsold.api.services.LocationService
 import com.ola.recoverunsold.api.services.OfferService
 import com.ola.recoverunsold.api.services.OpinionsService
@@ -21,6 +22,7 @@ import com.ola.recoverunsold.api.services.wrappers.ProductServiceWrapper
 import org.koin.dsl.module
 
 val appModule = module {
+    factory<HomeService> { ApiClient.buildService() }
     factory<AuthService> { ApiClient.buildService() }
     factory<ForgotPasswordService> { ApiClient.buildService() }
     factory<UserVerificationService> { ApiClient.buildService() }

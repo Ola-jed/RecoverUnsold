@@ -30,4 +30,6 @@ object ApiUrls {
     const val reviewsUrl = "Reviews"
     const val alertsUrl = "Alerts"
     const val opinionsUrl = "Opinions"
+    const val homeUrl = "Home"
+    const val distributorsHomeUrl = "Home/Distributors"
 }
