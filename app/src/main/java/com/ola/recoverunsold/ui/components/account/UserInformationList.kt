@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Numbers
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Web
@@ -110,7 +111,7 @@ fun UserInformationList(user: User, modifier: Modifier = Modifier) {
 
             AccountInformationTile(
                 leadingIcon = {
-                    Icon(Icons.Filled.Web, contentDescription = null)
+                    Icon(Icons.Filled.Language, contentDescription = null)
                 },
                 label = stringResource(id = R.string.website_url_label),
                 data = user.websiteUrl ?: stringResource(R.string.n_a)
