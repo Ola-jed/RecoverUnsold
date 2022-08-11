@@ -3,10 +3,9 @@ package com.ola.recoverunsold.utils.misc
 import android.content.Context
 import android.content.Intent
 import android.location.Location
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.net.Uri
 import android.provider.OpenableColumns
+import android.util.Log
 import androidx.annotation.ColorInt
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
@@ -16,9 +15,9 @@ import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.material.icons.filled.HourglassTop
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.core.content.ContextCompat
-import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -26,9 +25,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.AlertType
+import com.ola.recoverunsold.models.DistributorHomeData
 import com.ola.recoverunsold.models.LatLong
 import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.utils.resources.Strings
+import me.bytebeats.views.charts.bar.BarChartData
+import me.bytebeats.views.charts.line.LineChartData
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -42,6 +44,19 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.math.absoluteValue
+
+private val colorsDeciles = arrayOf(
+    Color(red = 255, green = 0, blue = 0),
+    Color(red = 229, green = 25, blue = 0),
+    Color(red = 204, green = 51, blue = 0),
+    Color(red = 178, green = 76, blue = 0),
+    Color(red = 153, green = 102, blue = 0),
+    Color(red = 127, green = 127, blue = 0),
+    Color(red = 102, green = 153, blue = 0),
+    Color(red = 76, green = 178, blue = 0),
+    Color(red = 51, green = 204, blue = 0),
+    Color(red = 25, green = 229, blue = 0)
+)
 
 private val dateTimeFormatter = DateFormat
     .getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault())
@@ -214,6 +229,26 @@ fun Date.addSeconds(seconds: ULong): Date {
 }
 
 /**
+ * Retrieve a big amount of time to a Date
+ */
+fun Date.minusSeconds(seconds: ULong): Date {
+    var returnDate = this
+    var value = seconds
+    val longMaxValueAsULong = Long.MAX_VALUE.toULong()
+    if (seconds > longMaxValueAsULong) {
+        while (value > longMaxValueAsULong) {
+            var returnInstant = returnDate.toInstant()
+            returnInstant = returnInstant.minusSeconds(Long.MAX_VALUE)
+            value -= longMaxValueAsULong
+            returnDate = Date.from(returnInstant)
+        }
+    } else {
+        return Date.from(returnDate.toInstant().minusSeconds(seconds.toLong()))
+    }
+    return returnDate
+}
+
+/**
  * Format a date using the locale default format
  */
 fun Date.formatDate(): String {
@@ -326,3 +361,31 @@ fun AlertType.label(): String {
         AlertType.DistributorOfferPublished -> Strings.get(R.string.publications_of_given_distributor)
     }
 }
+
+/**
+ * Convert the data of orders for a distributor to bars for the chart
+ */
+fun DistributorHomeData.toBars(): List<BarChartData.Bar> {
+    if (ordersPerDay.isEmpty()) {
+        return emptyList()
+    }
+
+    val maxOrdersPerDayDivided = (this.ordersPerDay.values.maxOf { it }) / 10F
+    val ordersPerDayDeciles = (1..10).map { maxOrdersPerDayDivided * it }
+
+    return this.ordersPerDay.map {
+        BarChartData.Bar(
+            value = it.value.toFloat(),
+            label = it.key.formatDate(),
+            color = colorsDeciles[ordersPerDayDeciles.indexOf(ordersPerDayDeciles.filter { value -> value >= it.value }[0])]
+        )
+    }.filter { it.value != 0F }
+}
+
+/**
+ * Convert the data of orders for a distributor to bars for the chart
+ */
+fun DistributorHomeData.toPoints(): List<LineChartData.Point> = this
+    .ordersPerDay
+    .map { LineChartData.Point(value = it.value.toFloat(), label = it.key.formatDate()) }
+    .filter { it.value != 0F }

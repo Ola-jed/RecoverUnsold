@@ -71,11 +71,14 @@ fun OrderItem(
 
             Text(
                 text = stringResource(R.string.ordered_on, order.createdAt.formatDate()),
-                modifier = Modifier.padding(top = 10.dp)
+                modifier = Modifier.padding(top = 10.dp),
+                fontWeight = FontWeight.Bold,
+                fontSize = 17.sp
             )
 
             Text(
-                text = "${stringResource(id = R.string.to_be_picked_up_on)} : ${order.withdrawalDate.formatDateTime()}"
+                text = "${stringResource(id = R.string.to_be_picked_up_on)} : ${order.withdrawalDate.formatDateTime()}",
+                fontWeight = FontWeight.Bold
             )
 
             Button(onClick = onMoreInformationRequest, modifier = Modifier.fillMaxWidth()) {
