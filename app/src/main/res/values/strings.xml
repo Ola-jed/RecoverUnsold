@@ -235,4 +235,6 @@
     <string name="order_status_approved_singular">Approved</string>
     <string name="order_status_rejected_singular">Rejected</string>
     <string name="order_status_completed_singular">Completed</string>
+    <string name="featured_offers">Featured Offers</string>
+    <string name="some_of_our_distributors">Some of our Distributors</string>
 </resources>

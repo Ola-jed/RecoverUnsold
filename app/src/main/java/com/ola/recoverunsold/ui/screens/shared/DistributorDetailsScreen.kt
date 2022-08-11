@@ -2,6 +2,7 @@ package com.ola.recoverunsold.ui.screens.shared
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,20 +12,31 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -110,8 +122,8 @@ fun DistributorDetailsScreen(
                     ) {
                         DistributorInformationLine(
                             modifier = Modifier
-                                .padding(vertical = 5.dp)
-                                .align(Alignment.CenterHorizontally),
+                                .align(Alignment.CenterHorizontally)
+                                .padding(vertical = 5.dp),
                             data = distributorInformation.username,
                             textStyle = MaterialTheme.typography.h6
                         )
@@ -134,11 +146,44 @@ fun DistributorDetailsScreen(
                                 data = distributorInformation.phone
                             )
 
-                            if (distributorInformation.websiteUrl != null) {
+                            var distributorWebsite = distributorInformation.websiteUrl
+                            if (distributorWebsite != null) {
+                                if (!distributorWebsite.startsWith("http://")
+                                    && !distributorWebsite.startsWith("https://")
+                                ) {
+                                    distributorWebsite = "http://$distributorWebsite"
+                                }
+
+                                val websiteLinkString = buildAnnotatedString {
+                                    append(distributorWebsite)
+
+                                    addStyle(
+                                        style = SpanStyle(
+                                            color = Color.Blue,
+                                            textDecoration = TextDecoration.Underline
+                                        ),
+                                        start = 0,
+                                        end = distributorWebsite.length
+                                    )
+
+                                    addStringAnnotation(
+                                        tag = "URL",
+                                        annotation = distributorWebsite,
+                                        start = 0,
+                                        end = distributorWebsite.length
+                                    )
+                                }
+
+                                val uriHandler = LocalUriHandler.current
+
                                 DistributorInformationLine(
                                     modifier = Modifier.padding(vertical = 5.dp),
-                                    label = stringResource(id = R.string.website_url_label),
-                                    data = distributorInformation.websiteUrl
+                                    text = {
+                                        ClickableText(
+                                            text = websiteLinkString,
+                                            onClick = { uriHandler.openUri(distributorWebsite) }
+                                        )
+                                    }
                                 )
                             }
 

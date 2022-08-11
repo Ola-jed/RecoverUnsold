@@ -8,7 +8,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -16,9 +15,12 @@ fun DistributorInformationLine(
     modifier: Modifier = Modifier,
     leadingIcon: @Composable (() -> Unit)? = null,
     label: String? = null,
-    data: String,
+    text: @Composable (() -> Unit)? = null,
+    data: String? = null,
     textStyle: TextStyle? = null
 ) {
+    require((data == null) xor (text == null)) { "Exactly one element between Data and Text must be passed" }
+
     Row(modifier = modifier, horizontalArrangement = Arrangement.SpaceEvenly) {
         Row(horizontalArrangement = Arrangement.Start) {
             if (leadingIcon != null) {
@@ -32,10 +34,16 @@ fun DistributorInformationLine(
             }
         }
 
-        if (textStyle == null) {
-            Text(data)
-        } else {
-            Text(data, style = textStyle)
+        if (data != null) {
+            if (textStyle == null) {
+                Text(data)
+            } else {
+                Text(data, style = textStyle)
+            }
+        }
+
+        if (text != null) {
+            text()
         }
     }
 }

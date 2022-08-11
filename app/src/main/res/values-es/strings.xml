@@ -232,4 +232,6 @@
     <string name="order_status_approved_singular">Aprobado</string>
     <string name="order_status_completed_singular">Completado</string>
     <string name="order_status_rejected_singular">Rechazado</string>
+    <string name="featured_offers">Ofertas destacadas</string>
+    <string name="some_of_our_distributors">Algunos distribuidores</string>
 </resources>
