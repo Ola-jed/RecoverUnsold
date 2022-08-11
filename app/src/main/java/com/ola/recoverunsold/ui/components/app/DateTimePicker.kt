@@ -17,6 +17,8 @@ import java.util.Date
 @Composable
 fun DateTimePicker(
     date: Date? = null,
+    minDate: Date? = null,
+    maxDate: Date? = null,
     onDateUpdate: (Date) -> Unit
 ) {
     val dateTime = LocalDateTime.ofInstant((date ?: Date()).toInstant(), ZoneId.systemDefault())
@@ -28,6 +30,8 @@ fun DateTimePicker(
     if (showDatePicker) {
         DatePicker(
             date = localDate,
+            minDate = minDate,
+            maxDate = maxDate,
             onDateUpdated = {
                 localDate = it
                 showDatePicker = false

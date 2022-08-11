@@ -122,11 +122,14 @@ fun OfferDetailsScreen(
             }
         },
         sheetContent = {
+            val offer = offerDetailsViewModel.offerApiCallResult.data
+
             OrderForm(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(30.dp),
                 withdrawalDate = offerDetailsViewModel.withdrawalDate,
+                maxWithdrawalDate = offer?.startDate?.addSeconds(offer.duration),
                 onWithdrawalDateChange = { offerDetailsViewModel.withdrawalDate = it },
                 onSubmit = { offerDetailsViewModel.orderProduct() },
                 loading = offerDetailsViewModel.orderApiCallResult.status == ApiStatus.LOADING,
@@ -334,6 +337,7 @@ fun OfferDetailsScreen(
 fun OrderForm(
     modifier: Modifier = Modifier,
     withdrawalDate: Date,
+    maxWithdrawalDate: Date?,
     onWithdrawalDateChange: (Date) -> Unit,
     onSubmit: () -> Unit,
     loading: Boolean,
@@ -369,7 +373,9 @@ fun OrderForm(
                 onWithdrawalDateChange(it)
                 onDatePickerHide()
             },
-            date = withdrawalDate
+            date = withdrawalDate,
+            minDate = Date(),
+            maxDate = maxWithdrawalDate
         )
     }
 }

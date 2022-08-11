@@ -9,10 +9,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import java.time.LocalDate
+import java.util.Date
 
 @Composable
 fun DatePicker(
     date: LocalDate? = null,
+    minDate: Date? = null,
+    maxDate: Date? = null,
     onDateUpdated: (LocalDate) -> Unit,
     show: Boolean,
     onCancel: () -> Unit
@@ -28,6 +31,14 @@ fun DatePicker(
     datePickerDialog.setCancelable(true)
     datePickerDialog.setOnCancelListener {
         onCancel()
+    }
+
+    if (minDate != null) {
+        datePickerDialog.datePicker.minDate = minDate.time
+    }
+
+    if (maxDate != null) {
+        datePickerDialog.datePicker.maxDate = maxDate.time
     }
 
     if (show) {

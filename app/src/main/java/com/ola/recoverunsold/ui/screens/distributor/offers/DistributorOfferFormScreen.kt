@@ -307,7 +307,9 @@ fun DistributorOfferFormContent(
                     onStartDateChange(it)
                     showStartDatePicker = false
                 },
-                date = startDate
+                date = startDate,
+                minDate = Date(),
+                maxDate = endDate
             )
         }
 
@@ -317,7 +319,8 @@ fun DistributorOfferFormContent(
                     onEndDateChange(it)
                     showEndDatePicker = false
                 },
-                date = endDate
+                date = endDate,
+                minDate = startDate
             )
         }
 

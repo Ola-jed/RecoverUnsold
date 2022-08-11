@@ -185,11 +185,19 @@ fun OfferFilterComponent(
                 }
 
                 if (showMinDatePicker) {
-                    DateTimePicker(date = minDate, onDateUpdate = onMinDateChange)
+                    DateTimePicker(
+                        date = minDate,
+                        onDateUpdate = onMinDateChange,
+                        maxDate = maxDate
+                    )
                 }
 
                 if (showMaxDatePicker) {
-                    DateTimePicker(date = maxDate, onDateUpdate = onMaxDateChange)
+                    DateTimePicker(
+                        date = maxDate,
+                        onDateUpdate = onMaxDateChange,
+                        minDate = minDate
+                    )
                 }
 
                 Button(
