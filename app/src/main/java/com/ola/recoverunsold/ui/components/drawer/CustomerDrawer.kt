@@ -136,15 +136,11 @@ fun CustomerDrawer(
                 .clip(RoundedCornerShape(10.dp))
                 .clickable {
                     coroutineScope.launch {
-                        context.logout()
                         navController.navigate(Routes.Home.path) {
-                            popUpTo(Routes.Home.path) {
-                                inclusive = true
-                            }
+                            popUpTo(Routes.Home.path) { inclusive = true }
                         }
-                        snackbarHostState.show(
-                            message = Strings.get(R.string.logout_successfull)
-                        )
+                        context.logout()
+                        snackbarHostState.show(message = Strings.get(R.string.logout_successfull))
                     }
                 }
                 .fillMaxWidth()

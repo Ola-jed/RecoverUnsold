@@ -128,13 +128,11 @@ fun DistributorDrawer(
                 .clip(RoundedCornerShape(10.dp))
                 .clickable {
                     coroutineScope.launch {
-                        context.logout()
                         navController.navigate(Routes.Login.path) {
                             popUpTo(Routes.Login.path) { inclusive = true }
                         }
-                        snackbarHostState.show(
-                            message = Strings.get(R.string.logout_successfull)
-                        )
+                        context.logout()
+                        snackbarHostState.show(message = Strings.get(R.string.logout_successfull))
                     }
                 }
                 .fillMaxWidth()
