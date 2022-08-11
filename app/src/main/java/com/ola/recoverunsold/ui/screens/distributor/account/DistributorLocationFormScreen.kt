@@ -87,7 +87,7 @@ fun DistributorLocationFormScreen(
                 canGoBack = true,
                 navController = navController,
                 title = stringResource(
-                    id = if (serializedLocation == null) {
+                    id = if (serializedLocation.isNullOrBlank()) {
                         R.string.create_a_location
                     } else {
                         R.string.update_location
