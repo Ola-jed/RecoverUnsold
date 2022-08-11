@@ -204,7 +204,10 @@ fun DistributorHomeScreen(
                             animation = simpleChartAnimation(),
                             barDrawer = SimpleBarDrawer(),
                             xAxisDrawer = SimpleXAxisDrawer(axisLineColor = onBgColor),
-                            yAxisDrawer = SimpleYAxisDrawer(axisLineColor = onBgColor),
+                            yAxisDrawer = SimpleYAxisDrawer(
+                                axisLineColor = onBgColor,
+                                labelTextColor = onBgColor
+                            ),
                             labelDrawer = SimpleLabelDrawer(
                                 labelTextSize = 13.sp,
                                 labelTextColor = onBgColor
@@ -212,7 +215,9 @@ fun DistributorHomeScreen(
                         )
 
                         Text(
-                            modifier = Modifier.padding(top = 25.dp, bottom = 15.dp, start = 15.dp),
+                            modifier = Modifier
+                                .padding(top = 25.dp, bottom = 15.dp, start = 15.dp)
+                                .align(Alignment.Start),
                             text = stringResource(id = R.string.latest_orders),
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.body1
