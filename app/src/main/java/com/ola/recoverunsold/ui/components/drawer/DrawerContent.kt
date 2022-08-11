@@ -6,6 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
+import com.ola.recoverunsold.models.Customer
+import com.ola.recoverunsold.models.Distributor
 import com.ola.recoverunsold.utils.store.UserObserver
 
 @Composable
@@ -14,14 +16,10 @@ fun DrawerContent(
     snackbarHostState: SnackbarHostState
 ): @Composable ColumnScope.() -> Unit {
     val user by UserObserver.user.collectAsState()
+
     return when (user) {
         null -> VisitorDrawer(navController = navController)
-        else -> {
-            AuthDrawer(
-                user = user!!,
-                navController = navController,
-                snackbarHostState = snackbarHostState
-            )
-        }
+        is Customer -> CustomerDrawer(user as Customer, navController, snackbarHostState)
+        is Distributor -> DistributorDrawer(user as Distributor, navController, snackbarHostState)
     }
 }
