@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SnackbarHostState
@@ -87,63 +89,65 @@ fun DistributorDrawer(
                 )
             }
         }
-        DrawerNavRow(
-            navController = navController,
-            route = Routes.Home.path,
-            text = R.string.home,
-            leadingIcon = Icons.Outlined.Home,
-            modifier = Modifier.padding(bottom = 5.dp, top = 10.dp)
-        )
-        DrawerNavRow(
-            navController = navController,
-            route = Routes.DistributorOffers.path,
-            text = R.string.offers_published,
-            leadingIcon = Icons.Outlined.ShoppingBag,
-            modifier = Modifier.padding(vertical = 5.dp)
-        )
-        DrawerNavRow(
-            navController = navController,
-            route = Routes.DistributorOrdersReceived.path,
-            text = R.string.orders_received,
-            leadingIcon = Icons.Outlined.History,
-            modifier = Modifier.padding(vertical = 5.dp)
-        )
-        DrawerNavRow(
-            navController = navController,
-            route = Routes.DistributorAccount.path,
-            text = R.string.settings,
-            leadingIcon = Icons.Outlined.Settings,
-            modifier = Modifier.padding(vertical = 5.dp)
-        )
-        DrawerNavRow(
-            navController = navController,
-            route = Routes.About.path,
-            text = R.string.about,
-            leadingIcon = Icons.Outlined.Info,
-            modifier = Modifier.padding(vertical = 5.dp)
-        )
-        Spacer(Modifier.weight(4f))
-        Row(
-            modifier = Modifier
-                .clip(RoundedCornerShape(10.dp))
-                .clickable {
-                    coroutineScope.launch {
-                        navController.navigate(Routes.Login.path) {
-                            popUpTo(Routes.Login.path) { inclusive = true }
-                        }
-                        context.logout()
-                        snackbarHostState.show(message = Strings.get(R.string.logout_successfull))
-                    }
-                }
-                .fillMaxWidth()
-                .padding(top = 15.dp, bottom = 15.dp, start = 24.dp)
-        ) {
-            Icon(
-                Icons.Filled.Logout,
-                contentDescription = null,
-                modifier = Modifier.padding(end = 15.dp)
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            DrawerNavRow(
+                navController = navController,
+                route = Routes.Home.path,
+                text = R.string.home,
+                leadingIcon = Icons.Outlined.Home,
+                modifier = Modifier.padding(bottom = 5.dp, top = 10.dp)
             )
-            Text(stringResource(R.string.logout_label))
+            DrawerNavRow(
+                navController = navController,
+                route = Routes.DistributorOffers.path,
+                text = R.string.offers_published,
+                leadingIcon = Icons.Outlined.ShoppingBag,
+                modifier = Modifier.padding(vertical = 5.dp)
+            )
+            DrawerNavRow(
+                navController = navController,
+                route = Routes.DistributorOrdersReceived.path,
+                text = R.string.orders_received,
+                leadingIcon = Icons.Outlined.History,
+                modifier = Modifier.padding(vertical = 5.dp)
+            )
+            DrawerNavRow(
+                navController = navController,
+                route = Routes.DistributorAccount.path,
+                text = R.string.settings,
+                leadingIcon = Icons.Outlined.Settings,
+                modifier = Modifier.padding(vertical = 5.dp)
+            )
+            DrawerNavRow(
+                navController = navController,
+                route = Routes.About.path,
+                text = R.string.about,
+                leadingIcon = Icons.Outlined.Info,
+                modifier = Modifier.padding(vertical = 5.dp)
+            )
+            Spacer(Modifier.weight(4f))
+            Row(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
+                    .clickable {
+                        coroutineScope.launch {
+                            navController.navigate(Routes.Login.path) {
+                                popUpTo(Routes.Login.path) { inclusive = true }
+                            }
+                            context.logout()
+                            snackbarHostState.show(message = Strings.get(R.string.logout_successfull))
+                        }
+                    }
+                    .fillMaxWidth()
+                    .padding(top = 15.dp, bottom = 15.dp, start = 24.dp)
+            ) {
+                Icon(
+                    Icons.Filled.Logout,
+                    contentDescription = null,
+                    modifier = Modifier.padding(end = 15.dp)
+                )
+                Text(stringResource(R.string.logout_label))
+            }
         }
     }
 }
