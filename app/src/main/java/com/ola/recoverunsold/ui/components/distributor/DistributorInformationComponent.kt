@@ -7,8 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Email
@@ -30,19 +31,20 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.DistributorInformation
 import com.ola.recoverunsold.utils.misc.formatDate
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DistributorInformationComponent(
     modifier: Modifier = Modifier,
     distributorInformation: DistributorInformation,
     onTap: (() -> Unit)? = null
 ) {
-    val surfaceModifier = if (onTap == null) modifier else modifier.clickable { onTap() }
     val context = LocalContext.current
 
-    Surface(
-        modifier = surfaceModifier,
+    Card(
+        modifier = modifier,
         elevation = 10.dp,
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(20.dp),
+        onClick = { onTap?.invoke() }
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
             DistributorInformationLine(
