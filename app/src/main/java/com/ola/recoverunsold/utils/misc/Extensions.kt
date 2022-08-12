@@ -5,7 +5,6 @@ import android.content.Intent
 import android.location.Location
 import android.net.Uri
 import android.provider.OpenableColumns
-import android.util.Log
 import androidx.annotation.ColorInt
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
@@ -377,7 +376,7 @@ fun DistributorHomeData.toBars(): List<BarChartData.Bar> {
         BarChartData.Bar(
             value = it.value.toFloat(),
             label = it.key.formatDate(),
-            color = colorsDeciles[ordersPerDayDeciles.indexOf(ordersPerDayDeciles.filter { value -> value >= it.value }[0])]
+            color = colorsDeciles[ordersPerDayDeciles.indexOf(ordersPerDayDeciles.first { value -> value >= it.value })]
         )
     }.filter { it.value != 0F }
 }

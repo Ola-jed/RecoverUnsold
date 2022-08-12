@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -155,6 +156,7 @@ fun DistributorHomeScreen(
 
                             IconButton(onClick = { isDateRegionExpanded = !isDateRegionExpanded }) {
                                 Icon(
+                                    modifier = Modifier.then(Modifier.size(48.dp)),
                                     imageVector = if (isDateRegionExpanded) {
                                         Icons.Default.ExpandLess
                                     } else {
@@ -203,10 +205,16 @@ fun DistributorHomeScreen(
                                 .padding(vertical = 10.dp),
                             animation = simpleChartAnimation(),
                             barDrawer = SimpleBarDrawer(),
-                            xAxisDrawer = SimpleXAxisDrawer(axisLineColor = onBgColor),
+                            xAxisDrawer = SimpleXAxisDrawer(
+                                axisLineColor = onBgColor,
+                                axisLineThickness = 2.dp
+                            ),
                             yAxisDrawer = SimpleYAxisDrawer(
                                 axisLineColor = onBgColor,
-                                labelTextColor = onBgColor
+                                labelTextColor = onBgColor,
+                                labelValueFormatter = { it.toInt().toString() },
+                                drawLabelEvery = 7,
+                                axisLineThickness = 2.dp
                             ),
                             labelDrawer = SimpleLabelDrawer(
                                 labelTextSize = 13.sp,
