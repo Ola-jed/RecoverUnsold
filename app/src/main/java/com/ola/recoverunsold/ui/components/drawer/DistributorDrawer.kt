@@ -25,6 +25,7 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -127,26 +128,31 @@ fun DistributorDrawer(
             )
             Spacer(Modifier.weight(4f))
             Row(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(10.dp))
-                    .clickable {
-                        coroutineScope.launch {
-                            navController.navigate(Routes.Login.path) {
-                                popUpTo(Routes.Login.path) { inclusive = true }
-                            }
-                            context.logout()
-                            snackbarHostState.show(message = Strings.get(R.string.logout_successfull))
-                        }
-                    }
-                    .fillMaxWidth()
-                    .padding(top = 15.dp, bottom = 15.dp, start = 24.dp)
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(horizontal = 7.dp, vertical = 5.dp)
             ) {
-                Icon(
-                    Icons.Filled.Logout,
-                    contentDescription = null,
-                    modifier = Modifier.padding(end = 15.dp)
-                )
-                Text(stringResource(R.string.logout_label))
+                Row(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .clickable {
+                            coroutineScope.launch {
+                                navController.navigate(Routes.Login.path) {
+                                    popUpTo(Routes.Login.path) { inclusive = true }
+                                }
+                                context.logout()
+                                snackbarHostState.show(message = Strings.get(R.string.logout_successfull))
+                            }
+                        }
+                        .fillMaxWidth()
+                        .padding(top = 15.dp, bottom = 15.dp, start = 15.dp)
+                ) {
+                    Icon(
+                        Icons.Filled.Logout,
+                        contentDescription = null,
+                        modifier = Modifier.padding(end = 15.dp)
+                    )
+                    Text(stringResource(R.string.logout_label))
+                }
             }
         }
     }
