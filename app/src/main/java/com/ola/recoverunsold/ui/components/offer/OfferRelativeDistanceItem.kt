@@ -1,15 +1,13 @@
 package com.ola.recoverunsold.ui.components.offer
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.Surface
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,6 +20,7 @@ import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import androidx.compose.ui.platform.LocalConfiguration as LocalConfiguration1
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun OfferRelativeDistanceItem(
     modifier: Modifier = Modifier,
@@ -34,10 +33,11 @@ fun OfferRelativeDistanceItem(
     val productsImagesUris = offer.products?.flatMap { it.images }?.map { it.url }
     val height = (LocalConfiguration1.current.screenHeightDp * 0.2).dp
 
-    Surface(
-        modifier = modifier.clickable { onMoreInformationRequest() },
+    Card(
+        modifier = modifier,
         elevation = 10.dp,
-        shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(10.dp),
+        onClick = onMoreInformationRequest
     ) {
         Column(
             modifier = Modifier
@@ -62,11 +62,13 @@ fun OfferRelativeDistanceItem(
                     text = stringResource(
                         R.string.offer_beneficiaries_data,
                         offer.beneficiaries
-                    )
+                    ),
+                    modifier = Modifier.padding(top = 5.dp)
                 )
             }
 
             Text(
+                modifier = Modifier.padding(top = 5.dp),
                 text = stringResource(
                     R.string.start_date_time,
                     startDate.formatDateTime()
@@ -74,25 +76,20 @@ fun OfferRelativeDistanceItem(
             )
 
             Text(
+                modifier = Modifier.padding(top = 5.dp),
                 text = stringResource(
                     R.string.published_the,
                     offer.createdAt.formatDate()
-                ),
-                modifier = Modifier.padding(top = 5.dp)
+                )
             )
 
-
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.SpaceBetween
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 5.dp),
+                onClick = onMapShowRequest
             ) {
-                Button(onClick = onMoreInformationRequest) {
-                    Text(text = stringResource(id = R.string.view_more))
-                }
-
-                Button(onClick = onMapShowRequest) {
-                    Text(text = stringResource(id = R.string.view_location_on_maps))
-                }
+                Text(text = stringResource(id = R.string.view_location_on_maps))
             }
         }
     }

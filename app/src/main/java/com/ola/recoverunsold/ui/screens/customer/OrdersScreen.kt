@@ -89,7 +89,7 @@ fun OrdersScreen(
                     OrderFilterComponent(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(20.dp),
+                            .padding(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 5.dp),
                         orderStatus = customerOrderViewModel.orderQuery.status?.let {
                             OrderStatus.valueOf(it)
                         },
@@ -125,10 +125,8 @@ fun OrdersScreen(
                                     order = it,
                                     onMoreInformationRequest = {
                                         navController.navigate(
-                                            Routes.OfferDetails.path.replace(
-                                                "{offerId}",
-                                                it.offerId
-                                            )
+                                            Routes.OfferDetails.path
+                                                .replace("{offerId}", it.offerId)
                                         )
                                     }
                                 )

@@ -55,6 +55,7 @@ fun OrderItem(
             )
 
             Text(
+                modifier = Modifier.padding(vertical = 5.dp),
                 text = "${offer.startDate.formatDateTime()} - ${
                     Date.from(
                         offer.startDate.toInstant().plusSeconds(offer.duration.toLong())
@@ -77,6 +78,7 @@ fun OrderItem(
             )
 
             Text(
+                modifier = Modifier.padding(vertical = 5.dp),
                 text = "${stringResource(id = R.string.to_be_picked_up_on)} : ${order.withdrawalDate.formatDateTime()}",
                 fontWeight = FontWeight.Bold
             )

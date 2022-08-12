@@ -2,6 +2,7 @@ package com.ola.recoverunsold.ui.components.order
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Chip
 import androidx.compose.material.ChipDefaults
@@ -10,10 +11,11 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ClearAll
+import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.utils.misc.internationalizedValue
@@ -26,8 +28,11 @@ fun OrderFilterComponent(
     orderStatus: OrderStatus?,
     onOrderStatusChange: (OrderStatus?) -> Unit
 ) {
+    val onBgModified = MaterialTheme.colors.onBackground.copy(alpha = 0.3F)
+
     Row(modifier = modifier.horizontalScroll(rememberScrollState())) {
         Chip(
+            modifier = Modifier.padding(end = 5.dp),
             onClick = { onOrderStatusChange(null) },
             colors = ChipDefaults.chipColors(
                 backgroundColor = if (orderStatus == null) {
@@ -38,7 +43,7 @@ fun OrderFilterComponent(
             ),
             leadingIcon = {
                 Icon(
-                    imageVector = Icons.Default.ClearAll,
+                    imageVector = Icons.Default.List,
                     contentDescription = stringResource(id = R.string.all),
                     tint = if (orderStatus == null) {
                         MaterialTheme.colors.onPrimary
@@ -50,11 +55,7 @@ fun OrderFilterComponent(
         ) {
             Text(
                 text = stringResource(id = R.string.all),
-                color = if (orderStatus == null) {
-                    MaterialTheme.colors.onPrimary
-                } else {
-                    MaterialTheme.colors.onBackground
-                }
+                color = if (orderStatus == null) MaterialTheme.colors.onPrimary else onBgModified
             )
         }
 
@@ -66,12 +67,13 @@ fun OrderFilterComponent(
             }
 
             Chip(
+                modifier = Modifier.padding(end = 5.dp),
                 onClick = { onOrderStatusChange(it) },
                 colors = ChipDefaults.chipColors(
                     backgroundColor = if (it == orderStatus) {
-                        MaterialTheme.colors.primary
+                        MaterialTheme.colors.onPrimary
                     } else {
-                        MaterialTheme.colors.background
+                        onBgModified
                     }
                 ),
                 leadingIcon = {

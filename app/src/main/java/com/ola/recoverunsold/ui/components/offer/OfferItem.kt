@@ -76,15 +76,16 @@ fun OfferItem(
                     .padding(10.dp)
             ) {
                 Text(
+                    modifier = Modifier.padding(top = 10.dp),
                     text = stringResource(
                         R.string.total_amount,
                         offer.price.formatWithoutTrailingZeros()
-                    ),
-                    modifier = Modifier.padding(top = 10.dp)
+                    )
                 )
 
                 if (offer.beneficiaries != null) {
                     Text(
+                        modifier = Modifier.padding(top = 5.dp),
                         text = stringResource(
                             R.string.offer_beneficiaries_data,
                             offer.beneficiaries
@@ -93,6 +94,7 @@ fun OfferItem(
                 }
 
                 Text(
+                    modifier = Modifier.padding(top = 5.dp),
                     text = stringResource(
                         R.string.start_date_time,
                         startDate.formatDateTime()
