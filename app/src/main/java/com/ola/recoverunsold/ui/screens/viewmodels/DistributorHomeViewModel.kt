@@ -9,9 +9,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.query.PeriodQuery
 import com.ola.recoverunsold.api.services.HomeService
-import com.ola.recoverunsold.models.CustomerHomeData
 import com.ola.recoverunsold.models.DistributorHomeData
-import com.ola.recoverunsold.utils.misc.addSeconds
 import com.ola.recoverunsold.utils.misc.minusSeconds
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
@@ -62,17 +60,14 @@ class DistributorHomeViewModel(
     }
 
     fun refresh() {
-        homeDataApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             _isRefreshing.emit(true)
             val response = homeService.getDistributorHomeData(
                 token = token,
                 period = periodQuery.toQueryMap()
             )
-            homeDataApiCallResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
+            if (response.isSuccessful) {
+                homeDataApiCallResult = ApiCallResult.Success(_data = response.body())
             }
             _isRefreshing.emit(false)
         }

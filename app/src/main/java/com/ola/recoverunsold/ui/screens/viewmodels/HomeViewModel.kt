@@ -42,14 +42,11 @@ class HomeViewModel(
     }
 
     fun refresh() {
-        homeDataApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             _isRefreshing.emit(true)
             val response = homeService.getCustomerHomeData()
-            homeDataApiCallResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
+            if (response.isSuccessful) {
+                homeDataApiCallResult = ApiCallResult.Success(_data = response.body())
             }
             _isRefreshing.emit(false)
         }
