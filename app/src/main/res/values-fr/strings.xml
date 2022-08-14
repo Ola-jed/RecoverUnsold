@@ -242,4 +242,10 @@
     <string name="comment_deletion_question">Voulez-vous supprimer ce commentaire ?</string>
     <string name="no_comments_yet">Aucun commentaire</string>
     <string name="comment_deleted_successfully">Commentaire supprimé avec succès</string>
+    <string name="order_details">Détails de la commande</string>
+    <string name="comment">Commentaire</string>
+    <string name="comments">Commentaires</string>
+    <string name="comment_deletion_failed">Echec de la suppression du commentaire</string>
+    <string name="comment_publish_failed">Échec de la publication du commentaire</string>
+    <string name="comment_published_successfully">Commentaire publié avec succès</string>
 </resources>

@@ -34,11 +34,11 @@ import com.ola.recoverunsold.ui.components.order.OrderFilterComponent
 import com.ola.recoverunsold.ui.components.order.OrderItem
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.CustomerOrderViewModel
+import com.ola.recoverunsold.utils.misc.jsonSerialize
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
 
-// TODO : Bottom sheet with create
 @Composable
 fun OrdersScreen(
     navController: NavController,
@@ -57,7 +57,7 @@ fun OrdersScreen(
                 title = stringResource(id = R.string.orders_placed)
             )
         },
-        drawerContent = DrawerContent(navController, snackbarHostState)
+        drawerContent = DrawerContent(navController)
     ) { paddingValues ->
         when (customerOrderViewModel.ordersGetResponse.status) {
             ApiStatus.LOADING, ApiStatus.INACTIVE -> LoadingIndicator()
@@ -124,27 +124,11 @@ fun OrdersScreen(
                                         .fillMaxWidth()
                                         .padding(horizontal = 15.dp, vertical = 20.dp),
                                     order = it,
-                                    onMoreInformationRequest = {
+                                    onTap = {
                                         navController.navigate(
-                                            Routes.OfferDetails.path
-                                                .replace("{offerId}", it.offerId)
-                                        )
-                                    },
-                                    canPublish = true,
-                                    onOpinionDelete = { opinion ->
-                                        customerOrderViewModel.deleteOpinion(
-                                            opinion = opinion,
-                                            onSuccess = {
-                                                coroutineScope.launch {
-                                                    snackbarHostState.show(Strings.get(R.string.comment_deleted_successfully))
-                                                    customerOrderViewModel.getOrders()
-                                                }
-                                            },
-                                            onFailure = {
-                                                coroutineScope.launch {
-                                                    snackbarHostState.show(Strings.get(R.string.unknown_error_occured))
-                                                }
-                                            }
+                                            Routes.OrderDetails
+                                                .path
+                                                .replace("{orderId}", it.id)
                                         )
                                     }
                                 )

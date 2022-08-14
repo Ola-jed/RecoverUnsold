@@ -73,7 +73,7 @@ fun CustomerAccountScreen(
                 }
             )
         },
-        drawerContent = DrawerContent(navController, snackbarHostState)
+        drawerContent = DrawerContent(navController)
     ) {
         Column(
             modifier = Modifier

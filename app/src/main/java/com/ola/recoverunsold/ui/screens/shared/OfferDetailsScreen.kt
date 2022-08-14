@@ -100,7 +100,7 @@ fun OfferDetailsScreen(
                 title = stringResource(id = R.string.offer_details)
             )
         },
-        drawerContent = DrawerContent(navController, snackbarHostState),
+        drawerContent = DrawerContent(navController),
         floatingActionButton = {
             if (offerDetailsViewModel.isDistributor) {
                 FloatingActionButton(onClick = {

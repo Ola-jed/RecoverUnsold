@@ -57,7 +57,7 @@ fun DistributorOrdersReceivedScreen(
                 title = stringResource(id = R.string.orders_received)
             )
         },
-        drawerContent = DrawerContent(navController, snackbarHostState)
+        drawerContent = DrawerContent(navController)
     ) { paddingValues ->
         when (ordersReceivedViewModel.ordersGetResponse.status) {
             ApiStatus.LOADING, ApiStatus.INACTIVE -> LoadingIndicator()
@@ -126,10 +126,9 @@ fun DistributorOrdersReceivedScreen(
                                     order = it,
                                     onMoreInformationRequest = {
                                         navController.navigate(
-                                            Routes.OfferDetails.path.replace(
-                                                "{offerId}",
-                                                it.offerId
-                                            )
+                                            Routes.OrderDetails
+                                                .path
+                                                .replace("{orderId}", it.id)
                                         )
                                     },
                                     onOrderAccept = {

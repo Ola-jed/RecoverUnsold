@@ -72,7 +72,7 @@ fun DistributorAccountScreen(
                 title = stringResource(id = R.string.account)
             )
         },
-        drawerContent = DrawerContent(navController, snackbarHostState)
+        drawerContent = DrawerContent(navController)
     ) { padding ->
         Column(
             modifier = Modifier

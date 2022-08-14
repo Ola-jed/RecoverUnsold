@@ -79,7 +79,7 @@ fun CloseOffersScreen(
                 navController = navController
             )
         },
-        drawerContent = DrawerContent(navController, snackbarHostState)
+        drawerContent = DrawerContent(navController)
     ) { paddingValues ->
         when (closeOffersViewModel.closeOffersApiResult.status) {
             ApiStatus.INACTIVE -> {

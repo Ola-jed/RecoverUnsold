@@ -15,6 +15,7 @@ import retrofit2.http.QueryMap
 interface OrderService : BaseApiService {
     @GET(ApiUrls.ordersUrl + "/{id}")
     suspend fun getOrder(
+        @Header("Authorization") authorization: String,
         @Path("id") id: String
     ): Response<Order>
 

@@ -97,7 +97,7 @@ fun DistributorHomeScreen(
                 title = stringResource(id = R.string.home)
             )
         },
-        drawerContent = DrawerContent(navController, snackbarHostState)
+        drawerContent = DrawerContent(navController)
     ) { paddingValues ->
         SwipeRefresh(
             modifier = Modifier
@@ -251,11 +251,11 @@ fun DistributorHomeScreen(
                                             .fillParentMaxWidth(0.90F)
                                             .padding(horizontal = 20.dp, vertical = 10.dp),
                                         order = item,
-                                        onMoreInformationRequest = {
+                                        onTap = {
                                             navController.navigate(
-                                                Routes.OfferDetails
+                                                Routes.OrderDetails
                                                     .path
-                                                    .replace("{offerId}", item.offerId)
+                                                    .replace("{orderId}", item.id)
                                             )
                                         }
                                     )

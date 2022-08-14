@@ -65,7 +65,7 @@ fun CustomerHomeScreen(
                 title = stringResource(id = R.string.home)
             )
         },
-        drawerContent = DrawerContent(navController, snackbarHostState)
+        drawerContent = DrawerContent(navController)
     ) { paddingValues ->
         SwipeRefresh(
             modifier = Modifier

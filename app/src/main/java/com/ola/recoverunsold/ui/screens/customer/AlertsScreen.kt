@@ -66,7 +66,7 @@ fun AlertsScreen(
                 navController = navController
             )
         },
-        drawerContent = DrawerContent(navController, snackbarHostState),
+        drawerContent = DrawerContent(navController),
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 coroutineScope.launch { bottomSheetScaffoldState.bottomSheetState.expand() }

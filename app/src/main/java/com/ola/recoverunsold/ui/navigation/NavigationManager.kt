@@ -23,6 +23,7 @@ import com.ola.recoverunsold.ui.screens.shared.DistributorsScreen
 import com.ola.recoverunsold.ui.screens.shared.HomeScreen
 import com.ola.recoverunsold.ui.screens.shared.OfferDetailsScreen
 import com.ola.recoverunsold.ui.screens.shared.OffersScreen
+import com.ola.recoverunsold.ui.screens.shared.OrderDetailsScreen
 import com.ola.recoverunsold.ui.screens.shared.auth.CustomerRegisterScreen
 import com.ola.recoverunsold.ui.screens.shared.auth.DistributorRegisterScreen
 import com.ola.recoverunsold.ui.screens.shared.auth.ForgotPasswordScreen
@@ -146,6 +147,21 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
             OrdersScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState
+            )
+        }
+        composable(
+            Routes.OrderDetails.path,
+            arguments = listOf(
+                navArgument("orderId") {
+                    nullable = false
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            OrderDetailsScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState,
+                orderId = backStackEntry.arguments?.getString("orderId")!!
             )
         }
         composable(Routes.DistributorAccount.path) {

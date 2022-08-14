@@ -61,7 +61,7 @@ fun DistributorOffersScreen(
                 title = stringResource(id = R.string.offers)
             )
         },
-        drawerContent = DrawerContent(navController, snackbarHostState),
+        drawerContent = DrawerContent(navController),
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 navController.navigate(Routes.OfferCreateOrUpdate.path.remove("{offer}"))

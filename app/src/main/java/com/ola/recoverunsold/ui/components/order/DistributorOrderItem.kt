@@ -1,6 +1,5 @@
 package com.ola.recoverunsold.ui.components.order
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,14 +7,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,12 +28,12 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Order
 import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.ui.components.app.ConfirmDialog
-import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 import com.ola.recoverunsold.utils.misc.internationalizedValueSingular
 import com.ola.recoverunsold.utils.misc.toIcon
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DistributorOrderItem(
     modifier: Modifier = Modifier,
@@ -47,23 +44,38 @@ fun DistributorOrderItem(
     onMoreInformationRequest: () -> Unit
 ) {
     val offer = order.offer!!
-    val customer = order.customer!!
-    var isExpanded by remember { mutableStateOf(false) }
     var showAcceptOrderDialog by remember { mutableStateOf(false) }
     var showRejectOrderDialog by remember { mutableStateOf(false) }
     var showCompleteOrderDialog by remember { mutableStateOf(false) }
 
-    Surface(
-        modifier = modifier
-            .padding(horizontal = 10.dp)
-            .clickable { onMoreInformationRequest() },
+    Card(
+        modifier = modifier.padding(horizontal = 10.dp),
         elevation = 10.dp,
-        shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(10.dp),
+        onClick = onMoreInformationRequest
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(imageVector = order.status.toIcon(), contentDescription = null)
-                Text(text = order.status.internationalizedValueSingular())
+            Surface(
+                elevation = 15.dp,
+                color = MaterialTheme.colors.secondary,
+                shape = RoundedCornerShape(30.dp)
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 7.5.dp, vertical = 5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = order.status.toIcon(),
+                        contentDescription = null,
+                        tint = MaterialTheme.colors.onSecondary
+                    )
+
+                    Text(
+                        modifier = Modifier.padding(start = 3.dp),
+                        text = order.status.internationalizedValueSingular(),
+                        color = MaterialTheme.colors.onSecondary
+                    )
+                }
             }
 
             Text(
@@ -83,40 +95,14 @@ fun DistributorOrderItem(
 
             Text(
                 text = "${stringResource(id = R.string.to_be_picked_up_on)} : ${order.withdrawalDate.formatDateTime()}",
-                modifier = Modifier.padding(top = 10.dp),
+                modifier = Modifier.padding(vertical = 10.dp),
                 fontWeight = FontWeight.SemiBold
             )
 
-            IconButton(
-                modifier = Modifier.align(Alignment.End),
-                onClick = { isExpanded = !isExpanded }
-            ) {
-                Icon(
-                    imageVector = if (isExpanded) {
-                        Icons.Default.ExpandLess
-                    } else {
-                        Icons.Default.ExpandMore
-                    },
-                    contentDescription = null
-                )
-            }
-
-            if (isExpanded) {
-                Text(
-                    text = stringResource(id = R.string.customer),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
-                )
-
-                Text(text = customer.username)
-                Text(text = customer.email)
-                Text(text = "${stringResource(id = R.string.member_since_label)} ${customer.createdAt.formatDate()}")
-            }
-
             if (order.status == OrderStatus.Pending || order.status == OrderStatus.Rejected) {
                 Button(
-                    onClick = { showAcceptOrderDialog = true },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { showAcceptOrderDialog = true }
                 ) {
                     Text(text = stringResource(id = R.string.accept_order_label))
                 }
@@ -137,8 +123,8 @@ fun DistributorOrderItem(
 
             if (order.status == OrderStatus.Approved) {
                 Button(
-                    onClick = { showCompleteOrderDialog = true },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { showCompleteOrderDialog = true }
                 ) {
                     Text(text = stringResource(id = R.string.finalize_order_label))
                 }

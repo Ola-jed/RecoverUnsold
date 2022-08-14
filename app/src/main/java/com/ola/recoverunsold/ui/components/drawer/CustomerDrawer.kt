@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Logout
@@ -42,15 +41,12 @@ import com.ola.recoverunsold.models.Customer
 import com.ola.recoverunsold.ui.components.account.UserAccountHeader
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.utils.misc.logout
-import com.ola.recoverunsold.utils.misc.show
-import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
 
 @Composable
 fun CustomerDrawer(
     user: Customer,
-    navController: NavController,
-    snackbarHostState: SnackbarHostState
+    navController: NavController
 ): @Composable ColumnScope.() -> Unit {
     val configuration = LocalConfiguration.current
     val context = LocalContext.current
@@ -145,11 +141,10 @@ fun CustomerDrawer(
                         .clip(RoundedCornerShape(10.dp))
                         .clickable {
                             coroutineScope.launch {
+                                context.logout()
                                 navController.navigate(Routes.Home.path) {
                                     popUpTo(Routes.Home.path) { inclusive = true }
                                 }
-                                context.logout()
-                                snackbarHostState.show(message = Strings.get(R.string.logout_successfull))
                             }
                         }
                         .fillMaxWidth()

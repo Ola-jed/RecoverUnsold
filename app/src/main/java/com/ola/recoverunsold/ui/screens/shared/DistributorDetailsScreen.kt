@@ -82,7 +82,7 @@ fun DistributorDetailsScreen(
                 navController = navController
             )
         },
-        drawerContent = DrawerContent(navController, snackbarHostState)
+        drawerContent = DrawerContent(navController)
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
             when (distributorDetailsViewModel.distributorApiCallResult.status) {

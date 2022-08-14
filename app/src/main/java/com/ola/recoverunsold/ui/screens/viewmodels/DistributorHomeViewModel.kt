@@ -35,7 +35,6 @@ class DistributorHomeViewModel(
     )
 
     private val _isRefreshing = MutableStateFlow(false)
-
     val isRefreshing: StateFlow<Boolean>
         get() = _isRefreshing.asStateFlow()
 

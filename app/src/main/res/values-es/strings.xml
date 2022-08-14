@@ -242,4 +242,10 @@
     <string name="comment_deletion_question">¿ Quieres borrar este comentario ?</string>
     <string name="no_comments_yet">No se ha comentado nada</string>
     <string name="comment_deleted_successfully">Comentario eliminado con éxito</string>
+    <string name="order_details">Detalles del pedido</string>
+    <string name="comment">Comentario</string>
+    <string name="comments">Comentarios</string>
+    <string name="comment_deletion_failed">No se ha podido eliminar el comentario</string>
+    <string name="comment_publish_failed">No se publica el comentario</string>
+    <string name="comment_published_successfully">Comentario publicado con éxito</string>
 </resources>

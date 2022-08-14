@@ -54,7 +54,7 @@ fun OffersScreen(
                 title = stringResource(id = R.string.offers)
             )
         },
-        drawerContent = DrawerContent(navController, snackbarHostState)
+        drawerContent = DrawerContent(navController)
     ) { paddingValues ->
         when (offersViewModel.offersApiResult.status) {
             ApiStatus.LOADING -> LoadingIndicator()

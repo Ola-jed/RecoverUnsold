@@ -9,8 +9,8 @@ import com.ola.recoverunsold.models.Page
 import retrofit2.Response
 
 class OrderServiceWrapper(private val orderService: OrderService) {
-    suspend fun getOrder(id: String): Response<Order> {
-        return orderService.getOrder(id)
+    suspend fun getOrder(authorization: String, id: String): Response<Order> {
+        return orderService.getOrder(authorization, id)
     }
 
     suspend fun getCustomerOrders(

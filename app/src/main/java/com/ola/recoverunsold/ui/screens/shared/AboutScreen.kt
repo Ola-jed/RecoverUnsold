@@ -65,7 +65,7 @@ fun AboutScreen(
                 title = stringResource(id = R.string.about)
             )
         },
-        drawerContent = DrawerContent(navController, snackbarHostState),
+        drawerContent = DrawerContent(navController),
         sheetContent = {
             val focusManager = LocalFocusManager.current
 

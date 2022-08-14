@@ -61,7 +61,7 @@ fun DistributorsScreen(
                 title = stringResource(id = R.string.distributors)
             )
         },
-        drawerContent = DrawerContent(navController, snackbarHostState)
+        drawerContent = DrawerContent(navController)
     ) { paddingValues ->
         when (distributorsViewModel.distributorsApiResult.status) {
             ApiStatus.LOADING -> LoadingIndicator()

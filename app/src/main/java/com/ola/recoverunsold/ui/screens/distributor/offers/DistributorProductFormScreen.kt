@@ -88,7 +88,7 @@ fun DistributorProductFormScreen(
                 )
             )
         },
-        drawerContent = DrawerContent(navController, snackbarHostState),
+        drawerContent = DrawerContent(navController),
     ) { paddingValues ->
         DistributorProductFormScreenContent(
             modifier = Modifier.padding(paddingValues),
