@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
@@ -28,7 +29,7 @@ fun OrderFilterComponent(
     orderStatus: OrderStatus?,
     onOrderStatusChange: (OrderStatus?) -> Unit
 ) {
-    val onBgModified = MaterialTheme.colors.onBackground.copy(alpha = 0.3F)
+    val onBgModified = Color.Black.copy(alpha = 0.1F)
 
     Row(modifier = modifier.horizontalScroll(rememberScrollState())) {
         Chip(
@@ -38,7 +39,7 @@ fun OrderFilterComponent(
                 backgroundColor = if (orderStatus == null) {
                     MaterialTheme.colors.primary
                 } else {
-                    MaterialTheme.colors.background
+                    onBgModified
                 }
             ),
             leadingIcon = {
@@ -55,12 +56,22 @@ fun OrderFilterComponent(
         ) {
             Text(
                 text = stringResource(id = R.string.all),
-                color = if (orderStatus == null) MaterialTheme.colors.onPrimary else onBgModified
+                color = if (orderStatus == null) {
+                    MaterialTheme.colors.onPrimary
+                } else {
+                    MaterialTheme.colors.onBackground
+                }
             )
         }
 
         OrderStatus.values().forEach {
             val bgColor = if (it == orderStatus) {
+                MaterialTheme.colors.primary
+            } else {
+                onBgModified
+            }
+
+            val fgColor = if (it == orderStatus) {
                 MaterialTheme.colors.onPrimary
             } else {
                 MaterialTheme.colors.onBackground
@@ -69,22 +80,16 @@ fun OrderFilterComponent(
             Chip(
                 modifier = Modifier.padding(end = 5.dp),
                 onClick = { onOrderStatusChange(it) },
-                colors = ChipDefaults.chipColors(
-                    backgroundColor = if (it == orderStatus) {
-                        MaterialTheme.colors.onPrimary
-                    } else {
-                        onBgModified
-                    }
-                ),
+                colors = ChipDefaults.chipColors(backgroundColor = bgColor),
                 leadingIcon = {
                     Icon(
                         imageVector = it.toIcon(),
                         contentDescription = it.name,
-                        tint = bgColor
+                        tint = fgColor
                     )
                 }
             ) {
-                Text(text = it.internationalizedValue(), color = bgColor)
+                Text(text = it.internationalizedValue(), color = fgColor)
             }
         }
     }

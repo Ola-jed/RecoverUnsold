@@ -97,7 +97,7 @@ fun DistributorOrdersReceivedScreen(
                         onOrderStatusChange = {
                             ordersReceivedViewModel.orderQuery = ordersReceivedViewModel
                                 .orderQuery
-                                .copy(status = it?.name)
+                                .copy(status = it?.name, page = 1)
                             ordersReceivedViewModel.getOrders()
                         }
                     )
@@ -122,7 +122,7 @@ fun DistributorOrdersReceivedScreen(
                                 DistributorOrderItem(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = 15.dp, vertical = 10.dp),
+                                        .padding(horizontal = 15.dp, vertical = 20.dp),
                                     order = it,
                                     onMoreInformationRequest = {
                                         navController.navigate(

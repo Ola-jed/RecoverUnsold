@@ -9,7 +9,9 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.core.StatusCode
 import com.ola.recoverunsold.api.query.OrderFilterQuery
+import com.ola.recoverunsold.api.services.OpinionsService
 import com.ola.recoverunsold.api.services.wrappers.OrderServiceWrapper
+import com.ola.recoverunsold.models.Opinion
 import com.ola.recoverunsold.models.Order
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.utils.resources.Strings
@@ -20,11 +22,13 @@ import org.koin.java.KoinJavaComponent
 class CustomerOrderViewModel(
     private val orderServiceWrapper: OrderServiceWrapper = KoinJavaComponent.get(
         OrderServiceWrapper::class.java
-    )
+    ),
+    private val opinionsService: OpinionsService = KoinJavaComponent.get(OpinionsService::class.java)
 ) : ViewModel() {
-    private val token = TokenStore.get()!!
+    private val token = TokenStore.get()!!.bearerToken
     var ordersGetResponse: ApiCallResult<Page<Order>> by mutableStateOf(ApiCallResult.Inactive)
     var orderQuery by mutableStateOf(OrderFilterQuery())
+    var comment by mutableStateOf("")
 
     init {
         getOrders()
@@ -34,13 +38,30 @@ class CustomerOrderViewModel(
         ordersGetResponse = ApiCallResult.Loading
         viewModelScope.launch {
             val response = orderServiceWrapper.getCustomerOrders(
-                token.bearerToken,
+                token,
                 orderQuery
             )
             ordersGetResponse = if (response.isSuccessful) {
                 ApiCallResult.Success(_data = response.body())
             } else {
                 ApiCallResult.Error(code = response.code())
+            }
+        }
+    }
+
+    fun publishOpinion(onSuccess: () -> Unit, onFailure: () -> Unit) {
+        viewModelScope.launch {
+            // TODO
+        }
+    }
+
+    fun deleteOpinion(opinion: Opinion, onSuccess: () -> Unit, onFailure: () -> Unit) {
+        viewModelScope.launch {
+            val response = opinionsService.deleteOpinion(opinion.id, token)
+            if (response.isSuccessful) {
+                onSuccess()
+            } else {
+                onFailure()
             }
         }
     }

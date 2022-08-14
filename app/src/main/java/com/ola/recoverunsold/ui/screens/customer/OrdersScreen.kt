@@ -38,6 +38,7 @@ import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
 
+// TODO : Bottom sheet with create
 @Composable
 fun OrdersScreen(
     navController: NavController,
@@ -89,14 +90,14 @@ fun OrdersScreen(
                     OrderFilterComponent(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 5.dp),
+                            .padding(top = 25.dp, start = 20.dp, end = 20.dp, bottom = 10.dp),
                         orderStatus = customerOrderViewModel.orderQuery.status?.let {
                             OrderStatus.valueOf(it)
                         },
                         onOrderStatusChange = {
                             customerOrderViewModel.orderQuery = customerOrderViewModel
                                 .orderQuery
-                                .copy(status = it?.name)
+                                .copy(status = it?.name, page = 1)
                             customerOrderViewModel.getOrders()
                         }
                     )
@@ -121,12 +122,29 @@ fun OrdersScreen(
                                 OrderItem(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = 15.dp, vertical = 10.dp),
+                                        .padding(horizontal = 15.dp, vertical = 20.dp),
                                     order = it,
                                     onMoreInformationRequest = {
                                         navController.navigate(
                                             Routes.OfferDetails.path
                                                 .replace("{offerId}", it.offerId)
+                                        )
+                                    },
+                                    canPublish = true,
+                                    onOpinionDelete = { opinion ->
+                                        customerOrderViewModel.deleteOpinion(
+                                            opinion = opinion,
+                                            onSuccess = {
+                                                coroutineScope.launch {
+                                                    snackbarHostState.show(Strings.get(R.string.comment_deleted_successfully))
+                                                    customerOrderViewModel.getOrders()
+                                                }
+                                            },
+                                            onFailure = {
+                                                coroutineScope.launch {
+                                                    snackbarHostState.show(Strings.get(R.string.unknown_error_occured))
+                                                }
+                                            }
                                         )
                                     }
                                 )

@@ -238,4 +238,8 @@
     <string name="latest_orders">Últimos pedidos</string>
     <string name="start_date">Fecha de inicio</string>
     <string name="end_date">Fecha de finalización</string>
+    <string name="comment_deletion">Borrado del comentario</string>
+    <string name="comment_deletion_question">¿ Quieres borrar este comentario ?</string>
+    <string name="no_comments_yet">No se ha comentado nada</string>
+    <string name="comment_deleted_successfully">Comentario eliminado con éxito</string>
 </resources>

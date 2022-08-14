@@ -241,4 +241,8 @@
     <string name="latest_orders">Latest orders</string>
     <string name="start_date">Start date</string>
     <string name="end_date">End date</string>
+    <string name="comment_deletion">Comment deletion</string>
+    <string name="comment_deletion_question">Do you want to delete this comment ?</string>
+    <string name="no_comments_yet">No comments yet</string>
+    <string name="comment_deleted_successfully">Comment successfully deleted</string>
 </resources>
