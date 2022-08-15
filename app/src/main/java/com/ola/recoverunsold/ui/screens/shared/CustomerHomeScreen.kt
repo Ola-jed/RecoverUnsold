@@ -120,7 +120,7 @@ fun CustomerHomeScreen(
                                             stringResource(R.string.no_offers_found),
                                             style = MaterialTheme.typography.h6,
                                             modifier = Modifier
-                                                .padding(horizontal = 10.dp)
+                                                .padding(start = 40.dp)
                                                 .align(Alignment.Center)
                                         )
                                     }

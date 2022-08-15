@@ -125,16 +125,7 @@ fun Context.getDeviceLocation(
  */
 fun Context.openMapWithCoordinates(latitude: Double, longitude: Double) {
     val mapsIntent = Intent(Intent.ACTION_VIEW)
-    mapsIntent.data = Uri.Builder().scheme("https")
-        .authority("www.google.com")
-        .appendPath("maps")
-        .appendPath("dir")
-        .appendPath("")
-        .appendQueryParameter("api", "1")
-        .appendQueryParameter(
-            "destination",
-            "${latitude},${longitude}"
-        ).build()
+    mapsIntent.data = Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude")
     ContextCompat.startActivity(this, mapsIntent, null)
 }
 
@@ -142,13 +133,11 @@ fun Context.openMapWithCoordinates(latitude: Double, longitude: Double) {
  * Shortcut for snackbar showing
  * Because the duration is always long and the dismiss message "OK"
  */
-suspend fun SnackbarHostState.show(message: String): SnackbarResult {
-    return showSnackbar(
-        message = message,
-        actionLabel = Strings.get(R.string.ok),
-        duration = SnackbarDuration.Long
-    )
-}
+suspend fun SnackbarHostState.show(message: String): SnackbarResult = showSnackbar(
+    message = message,
+    actionLabel = Strings.get(R.string.ok),
+    duration = SnackbarDuration.Long
+)
 
 /**
  * Convert a data type to Multipart/Form-data request body element
@@ -180,7 +169,7 @@ fun Uri.createFile(context: Context): File {
         fileName = cursor.getString(nameIndex)
     }
 
-    val fileType: String? = this.let { returnUri ->
+    this.let { returnUri ->
         contentResolver.getType(returnUri)
     }
 
