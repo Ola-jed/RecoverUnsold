@@ -3,6 +3,8 @@ package com.ola.recoverunsold.utils.misc
 import android.content.Context
 import android.content.Intent
 import android.location.Location
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.annotation.ColorInt
@@ -17,6 +19,7 @@ import androidx.compose.material.icons.filled.HourglassTop
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -30,6 +33,7 @@ import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.utils.resources.Strings
 import me.bytebeats.views.charts.bar.BarChartData
 import me.bytebeats.views.charts.line.LineChartData
+import okhttp3.Cache
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -59,6 +63,8 @@ private val colorsDeciles = arrayOf(
 
 private val dateTimeFormatter = DateFormat
     .getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault())
+
+private val cacheSize = 5242880L
 
 /**
  * Convert a color string to Hsl
@@ -128,6 +134,28 @@ fun Context.openMapWithCoordinates(latitude: Double, longitude: Double) {
     mapsIntent.data = Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude")
     ContextCompat.startActivity(this, mapsIntent, null)
 }
+
+/**
+ * Returns if the current Context has network access
+ */
+fun Context.hasNetwork(): Boolean {
+    val connectivityManager = this.getSystemService<ConnectivityManager>()
+    val capabilities = connectivityManager
+        ?.getNetworkCapabilities(connectivityManager.activeNetwork)
+    if (capabilities != null) {
+        when {
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> return true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> return true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> return true
+        }
+    }
+    return false
+}
+
+/**
+ * Create an http cache for okhttp from the context
+ */
+fun Context.httpCache(): Cache = Cache(this.cacheDir, cacheSize)
 
 /**
  * Shortcut for snackbar showing
