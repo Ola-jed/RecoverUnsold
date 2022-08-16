@@ -248,4 +248,5 @@
     <string name="comment_deletion_failed">No se ha podido eliminar el comentario</string>
     <string name="comment_publish_failed">No se publica el comentario</string>
     <string name="comment_published_successfully">Comentario publicado con éxito</string>
+    <string name="view_all">Ver todo</string>
 </resources>

@@ -269,7 +269,7 @@ fun DistributorHomeScreen(
                                 .padding(end = 10.dp, bottom = 15.dp),
                             onClick = { navController.navigate(Routes.DistributorOrdersReceived.path) }
                         ) {
-                            Text(stringResource(id = R.string.view_more))
+                            Text(stringResource(id = R.string.view_all))
 
                             Icon(
                                 modifier = Modifier.padding(start = 5.dp),

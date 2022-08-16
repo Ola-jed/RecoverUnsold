@@ -248,4 +248,5 @@
     <string name="comment_deletion_failed">Echec de la suppression du commentaire</string>
     <string name="comment_publish_failed">Échec de la publication du commentaire</string>
     <string name="comment_published_successfully">Commentaire publié avec succès</string>
+    <string name="view_all">Tout voir</string>
 </resources>

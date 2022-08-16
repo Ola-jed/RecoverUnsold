@@ -150,7 +150,7 @@ fun CustomerHomeScreen(
                                 .padding(end = 10.dp),
                             onClick = { navController.navigate(Routes.Offers.path) }
                         ) {
-                            Text(stringResource(id = R.string.view_more))
+                            Text(stringResource(id = R.string.view_all))
 
                             Icon(
                                 modifier = Modifier.padding(start = 5.dp),
@@ -204,7 +204,7 @@ fun CustomerHomeScreen(
                                 .padding(end = 10.dp),
                             onClick = { navController.navigate(Routes.Distributors.path) }
                         ) {
-                            Text(stringResource(id = R.string.view_more))
+                            Text(stringResource(id = R.string.view_all))
 
                             Icon(
                                 modifier = Modifier.padding(start = 5.dp),
