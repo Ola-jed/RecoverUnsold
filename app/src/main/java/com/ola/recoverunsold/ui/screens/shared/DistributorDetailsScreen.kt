@@ -2,7 +2,6 @@ package com.ola.recoverunsold.ui.screens.shared
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,17 +11,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -210,21 +204,12 @@ fun DistributorDetailsScreen(
 
                         Button(
                             onClick = {
-                                val emailIntent = Intent(Intent.ACTION_SEND).apply {
-                                    type = "*/*"
-                                    putExtra(
-                                        Intent.EXTRA_EMAIL,
-                                        arrayOf(distributorInformation.email)
-                                    )
-                                }
-                                startActivity(
-                                    context,
-                                    Intent.createChooser(
-                                        emailIntent,
-                                        Strings.get(R.string.send_email)
-                                    ),
-                                    null
+                                val emailIntent = Intent(
+                                    Intent.ACTION_SENDTO,
+                                    Uri.parse("mailto:${distributorInformation.email}")
                                 )
+                                emailIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                startActivity(context, emailIntent, null)
                             },
                             modifier = Modifier
                                 .fillMaxWidth(0.75F)
