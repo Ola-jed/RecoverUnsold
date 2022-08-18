@@ -65,6 +65,8 @@ fun DistributorDetailsScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -79,10 +81,14 @@ fun DistributorDetailsScreen(
         },
         drawerContent = DrawerContent(navController)
     ) { paddingValues ->
-        Column(modifier = Modifier.padding(paddingValues)) {
+        LazyColumn(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+        ) {
             when (distributorDetailsViewModel.distributorApiCallResult.status) {
-                ApiStatus.LOADING -> LoadingIndicator()
-                ApiStatus.ERROR -> {
+                ApiStatus.LOADING -> item { LoadingIndicator() }
+                ApiStatus.ERROR -> item {
                     Box(modifier = Modifier.fillMaxSize()) {
                         Button(
                             onClick = {
@@ -108,115 +114,136 @@ fun DistributorDetailsScreen(
                     val distributorInformation = distributorDetailsViewModel
                         .distributorApiCallResult
                         .data!!
-                    val context = LocalContext.current
 
-                    Column(
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .fillMaxWidth()
-                    ) {
-                        DistributorInformationLine(
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .padding(vertical = 5.dp),
-                            data = distributorInformation.username,
-                            textStyle = MaterialTheme.typography.h6
-                        )
-
-                        UserAccountHeader(
-                            modifier = Modifier.align(Alignment.CenterHorizontally),
-                            id = distributorInformation.id,
-                            name = distributorInformation.username,
-                            size = (LocalConfiguration.current.screenWidthDp * 0.25).dp
-                        )
-
-                        Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
                             DistributorInformationLine(
                                 modifier = Modifier.padding(vertical = 5.dp),
-                                data = distributorInformation.email
+                                data = distributorInformation.username,
+                                textStyle = MaterialTheme.typography.h6
                             )
+                        }
+                    }
 
-                            DistributorInformationLine(
-                                modifier = Modifier.padding(vertical = 5.dp),
-                                data = distributorInformation.phone
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            UserAccountHeader(
+                                id = distributorInformation.id,
+                                name = distributorInformation.username,
+                                size = (configuration.screenWidthDp * 0.25).dp
                             )
+                        }
+                    }
 
-                            var distributorWebsite = distributorInformation.websiteUrl
-                            if (distributorWebsite != null) {
-                                if (!distributorWebsite.startsWith("http://")
-                                    && !distributorWebsite.startsWith("https://")
-                                ) {
-                                    distributorWebsite = "http://$distributorWebsite"
-                                }
-
-                                val websiteLinkString = buildAnnotatedString {
-                                    append(distributorWebsite)
-
-                                    addStyle(
-                                        style = SpanStyle(
-                                            color = Color.Blue,
-                                            textDecoration = TextDecoration.Underline
-                                        ),
-                                        start = 0,
-                                        end = distributorWebsite.length
-                                    )
-
-                                    addStringAnnotation(
-                                        tag = "URL",
-                                        annotation = distributorWebsite,
-                                        start = 0,
-                                        end = distributorWebsite.length
-                                    )
-                                }
-
-                                val uriHandler = LocalUriHandler.current
+                    item {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Column {
+                                DistributorInformationLine(
+                                    modifier = Modifier.padding(vertical = 5.dp),
+                                    data = distributorInformation.email
+                                )
 
                                 DistributorInformationLine(
                                     modifier = Modifier.padding(vertical = 5.dp),
-                                    text = {
-                                        ClickableText(
-                                            text = websiteLinkString,
-                                            onClick = { uriHandler.openUri(distributorWebsite) }
+                                    data = distributorInformation.phone
+                                )
+
+                                var distributorWebsite = distributorInformation.websiteUrl
+                                if (distributorWebsite != null) {
+                                    if (!distributorWebsite.startsWith("http://")
+                                        && !distributorWebsite.startsWith("https://")
+                                    ) {
+                                        distributorWebsite = "http://$distributorWebsite"
+                                    }
+
+                                    val websiteLinkString = buildAnnotatedString {
+                                        append(distributorWebsite)
+
+                                        addStyle(
+                                            style = SpanStyle(
+                                                color = Color.Blue,
+                                                textDecoration = TextDecoration.Underline
+                                            ),
+                                            start = 0,
+                                            end = distributorWebsite.length
+                                        )
+
+                                        addStringAnnotation(
+                                            tag = "URL",
+                                            annotation = distributorWebsite,
+                                            start = 0,
+                                            end = distributorWebsite.length
                                         )
                                     }
+
+                                    val uriHandler = LocalUriHandler.current
+
+                                    DistributorInformationLine(
+                                        modifier = Modifier.padding(vertical = 5.dp),
+                                        text = {
+                                            ClickableText(
+                                                text = websiteLinkString,
+                                                onClick = { uriHandler.openUri(distributorWebsite) }
+                                            )
+                                        }
+                                    )
+                                }
+
+                                DistributorInformationLine(
+                                    modifier = Modifier.padding(vertical = 5.dp),
+                                    label = stringResource(id = R.string.member_since_label),
+                                    data = distributorInformation.createdAt.formatDate()
                                 )
                             }
-
-                            DistributorInformationLine(
-                                modifier = Modifier.padding(vertical = 5.dp),
-                                label = stringResource(id = R.string.member_since_label),
-                                data = distributorInformation.createdAt.formatDate()
-                            )
                         }
+                    }
 
-                        Button(
-                            onClick = {
-                                val phoneIntent = Intent(Intent.ACTION_DIAL).apply {
-                                    data = Uri.parse("tel:${distributorInformation.phone}")
-                                }
-                                startActivity(context, phoneIntent, null)
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth(0.75F)
-                                .align(Alignment.CenterHorizontally)
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
                         ) {
-                            Text(stringResource(id = R.string.call))
+                            Button(
+                                onClick = {
+                                    val phoneIntent = Intent(Intent.ACTION_DIAL).apply {
+                                        data = Uri.parse("tel:${distributorInformation.phone}")
+                                    }
+                                    startActivity(context, phoneIntent, null)
+                                },
+                                modifier = Modifier.fillMaxWidth(0.75F)
+                            ) {
+                                Text(stringResource(id = R.string.call))
+                            }
                         }
+                    }
 
-                        Button(
-                            onClick = {
-                                val emailIntent = Intent(
-                                    Intent.ACTION_SENDTO,
-                                    Uri.parse("mailto:${distributorInformation.email}")
-                                )
-                                emailIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                                startActivity(context, emailIntent, null)
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth(0.75F)
-                                .align(Alignment.CenterHorizontally)
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
                         ) {
-                            Text(stringResource(id = R.string.send_email))
+                            Button(
+                                onClick = {
+                                    val emailIntent = Intent(
+                                        Intent.ACTION_SENDTO,
+                                        Uri.parse("mailto:${distributorInformation.email}")
+                                    )
+                                    emailIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                    startActivity(context, emailIntent, null)
+                                },
+                                modifier = Modifier.fillMaxWidth(0.75F)
+                            ) {
+                                Text(stringResource(id = R.string.send_email))
+                            }
                         }
                     }
                 }
@@ -225,111 +252,105 @@ fun DistributorDetailsScreen(
             when (distributorDetailsViewModel.offersApiCallResult.status) {
                 ApiStatus.LOADING, ApiStatus.INACTIVE -> {}
                 ApiStatus.ERROR -> {
-                    LaunchedEffect(snackbarHostState) {
-                        coroutineScope.launch {
-                            snackbarHostState.show(
-                                message = Strings.get(R.string.error_occured_while_fetching_offers)
-                            )
-                        }
+                    coroutineScope.launch {
+                        snackbarHostState.show(Strings.get(R.string.error_occured_while_fetching_offers))
                     }
                 }
                 else -> {
                     val offers = distributorDetailsViewModel.offersApiCallResult.data!!
 
-                    LazyColumn {
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+                            OfferFilterComponent(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(20.dp),
+                                minPrice = distributorDetailsViewModel.offerFilterQuery.minPrice,
+                                maxPrice = distributorDetailsViewModel.offerFilterQuery.maxPrice,
+                                minDate = distributorDetailsViewModel.offerFilterQuery.minDate,
+                                maxDate = distributorDetailsViewModel.offerFilterQuery.maxDate,
+                                active = distributorDetailsViewModel.offerFilterQuery.active,
+                                onMinPriceChange = {
+                                    distributorDetailsViewModel.offerFilterQuery =
+                                        distributorDetailsViewModel.offerFilterQuery.copy(
+                                            minPrice = it
+                                        )
+                                },
+                                onMaxPriceChange = {
+                                    distributorDetailsViewModel.offerFilterQuery =
+                                        distributorDetailsViewModel.offerFilterQuery.copy(
+                                            maxPrice = it
+                                        )
+                                },
+                                onMinDateChange = {
+                                    distributorDetailsViewModel.offerFilterQuery =
+                                        distributorDetailsViewModel.offerFilterQuery.copy(
+                                            minDate = it
+                                        )
+                                },
+                                onMaxDateChange = {
+                                    distributorDetailsViewModel.offerFilterQuery =
+                                        distributorDetailsViewModel.offerFilterQuery.copy(
+                                            maxDate = it
+                                        )
+                                },
+                                onActiveChange = {
+                                    distributorDetailsViewModel.offerFilterQuery =
+                                        distributorDetailsViewModel.offerFilterQuery.copy(
+                                            active = it
+                                        )
+                                },
+                                onApply = {
+                                    distributorDetailsViewModel.getOffers()
+                                },
+                                onReset = {
+                                    distributorDetailsViewModel.offerFilterQuery =
+                                        OfferFilterQuery()
+                                    distributorDetailsViewModel.getOffers()
+                                }
+                            )
+                        }
+                    }
+
+                    if (offers.items.isEmpty()) {
                         item {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Start
-                            ) {
-                                OfferFilterComponent(
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                Text(
+                                    stringResource(R.string.no_offers_found),
+                                    style = MaterialTheme.typography.h6,
                                     modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(20.dp),
-                                    minPrice = distributorDetailsViewModel.offerFilterQuery.minPrice,
-                                    maxPrice = distributorDetailsViewModel.offerFilterQuery.maxPrice,
-                                    minDate = distributorDetailsViewModel.offerFilterQuery.minDate,
-                                    maxDate = distributorDetailsViewModel.offerFilterQuery.maxDate,
-                                    active = distributorDetailsViewModel.offerFilterQuery.active,
-                                    onMinPriceChange = {
-                                        distributorDetailsViewModel.offerFilterQuery =
-                                            distributorDetailsViewModel.offerFilterQuery.copy(
-                                                minPrice = it
-                                            )
-                                    },
-                                    onMaxPriceChange = {
-                                        distributorDetailsViewModel.offerFilterQuery =
-                                            distributorDetailsViewModel.offerFilterQuery.copy(
-                                                maxPrice = it
-                                            )
-                                    },
-                                    onMinDateChange = {
-                                        distributorDetailsViewModel.offerFilterQuery =
-                                            distributorDetailsViewModel.offerFilterQuery.copy(
-                                                minDate = it
-                                            )
-                                    },
-                                    onMaxDateChange = {
-                                        distributorDetailsViewModel.offerFilterQuery =
-                                            distributorDetailsViewModel.offerFilterQuery.copy(
-                                                maxDate = it
-                                            )
-                                    },
-                                    onActiveChange = {
-                                        distributorDetailsViewModel.offerFilterQuery =
-                                            distributorDetailsViewModel.offerFilterQuery.copy(
-                                                active = it
-                                            )
-                                    },
-                                    onApply = {
-                                        distributorDetailsViewModel.getOffers()
-                                    },
-                                    onReset = {
-                                        distributorDetailsViewModel.offerFilterQuery =
-                                            OfferFilterQuery()
-                                        distributorDetailsViewModel.getOffers()
-                                    }
+                                        .padding(horizontal = 10.dp)
+                                        .align(Alignment.Center)
                                 )
                             }
                         }
-
-                        if (offers.items.isEmpty()) {
-                            item {
-                                Box(modifier = Modifier.fillMaxSize()) {
-                                    Text(
-                                        stringResource(R.string.no_offers_found),
-                                        style = MaterialTheme.typography.h6,
-                                        modifier = Modifier
-                                            .padding(horizontal = 10.dp)
-                                            .align(Alignment.Center)
+                    } else {
+                        items(items = offers.items) { item ->
+                            OfferItem(
+                                modifier = Modifier
+                                    .fillParentMaxWidth()
+                                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                                offer = item,
+                                onTap = {
+                                    navController.navigate(
+                                        Routes.OfferDetails
+                                            .path
+                                            .replace("{offerId}", item.id)
                                     )
                                 }
-                            }
-                        } else {
-                            items(items = offers.items) { item ->
-                                OfferItem(
-                                    modifier = Modifier
-                                        .fillParentMaxWidth()
-                                        .padding(horizontal = 20.dp, vertical = 10.dp),
-                                    offer = item,
-                                    onTap = {
-                                        navController.navigate(
-                                            Routes.OfferDetails
-                                                .path
-                                                .replace("{offerId}", item.id)
-                                        )
-                                    }
-                                )
-                            }
+                            )
+                        }
 
-                            item {
-                                PaginationComponent(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    page = offers,
-                                    onPrevious = { distributorDetailsViewModel.getPrevious() },
-                                    onNext = { distributorDetailsViewModel.getNext() }
-                                )
-                            }
+                        item {
+                            PaginationComponent(
+                                modifier = Modifier.fillMaxWidth(),
+                                page = offers,
+                                onPrevious = { distributorDetailsViewModel.getPrevious() },
+                                onNext = { distributorDetailsViewModel.getNext() }
+                            )
                         }
                     }
                 }
