@@ -1,9 +1,7 @@
 package com.ola.recoverunsold.ui.screens.customer
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,12 +27,12 @@ import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
+import com.ola.recoverunsold.ui.components.app.PaginationComponent
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.order.OrderFilterComponent
 import com.ola.recoverunsold.ui.components.order.OrderItem
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.CustomerOrderViewModel
-import com.ola.recoverunsold.utils.misc.jsonSerialize
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
@@ -135,23 +133,12 @@ fun OrdersScreen(
                             }
 
                             item {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(start = 20.dp, end = 20.dp, top = 10.dp),
-                                    horizontalArrangement = Arrangement.SpaceEvenly
-                                ) {
-                                    if (orders.pageNumber > 1) {
-                                        Button(onClick = { customerOrderViewModel.getPrevious() }) {
-                                            Text(stringResource(id = R.string.previous))
-                                        }
-                                    }
-                                    if (orders.hasNext) {
-                                        Button(onClick = { customerOrderViewModel.getNext() }) {
-                                            Text(stringResource(id = R.string.next))
-                                        }
-                                    }
-                                }
+                                PaginationComponent(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    page = orders,
+                                    onPrevious = { customerOrderViewModel.getPrevious() },
+                                    onNext = { customerOrderViewModel.getNext() }
+                                )
                             }
                         }
                     }

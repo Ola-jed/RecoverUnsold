@@ -4,7 +4,6 @@ import android.Manifest
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -42,6 +41,7 @@ import com.ola.recoverunsold.models.LatLong
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
+import com.ola.recoverunsold.ui.components.app.PaginationComponent
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.offer.OfferRelativeDistanceItem
 import com.ola.recoverunsold.ui.navigation.Routes
@@ -234,23 +234,12 @@ fun CloseOffersScreen(
                         }
 
                         item {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 20.dp, end = 20.dp, top = 10.dp),
-                                horizontalArrangement = Arrangement.SpaceEvenly
-                            ) {
-                                if (offers.pageNumber > 1) {
-                                    Button(onClick = { closeOffersViewModel.getPrevious() }) {
-                                        Text(stringResource(id = R.string.previous))
-                                    }
-                                }
-                                if (offers.hasNext) {
-                                    Button(onClick = { closeOffersViewModel.getNext() }) {
-                                        Text(stringResource(id = R.string.next))
-                                    }
-                                }
-                            }
+                            PaginationComponent(
+                                modifier = Modifier.fillMaxWidth(),
+                                page = offers,
+                                onPrevious = { closeOffersViewModel.getPrevious() },
+                                onNext = { closeOffersViewModel.getNext() }
+                            )
                         }
                     }
                 }

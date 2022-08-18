@@ -1,9 +1,7 @@
 package com.ola.recoverunsold.ui.screens.distributor.orders
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,6 +27,7 @@ import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
+import com.ola.recoverunsold.ui.components.app.PaginationComponent
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.order.DistributorOrderItem
 import com.ola.recoverunsold.ui.components.order.OrderFilterComponent
@@ -201,23 +200,12 @@ fun DistributorOrdersReceivedScreen(
                             }
 
                             item {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(start = 20.dp, end = 20.dp, top = 10.dp),
-                                    horizontalArrangement = Arrangement.SpaceEvenly
-                                ) {
-                                    if (orders.pageNumber > 1) {
-                                        Button(onClick = { ordersReceivedViewModel.getPrevious() }) {
-                                            Text(stringResource(id = R.string.previous))
-                                        }
-                                    }
-                                    if (orders.hasNext) {
-                                        Button(onClick = { ordersReceivedViewModel.getNext() }) {
-                                            Text(stringResource(id = R.string.next))
-                                        }
-                                    }
-                                }
+                                PaginationComponent(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    page = orders,
+                                    onPrevious = { ordersReceivedViewModel.getPrevious() },
+                                    onNext = { ordersReceivedViewModel.getNext() }
+                                )
                             }
                         }
                     }

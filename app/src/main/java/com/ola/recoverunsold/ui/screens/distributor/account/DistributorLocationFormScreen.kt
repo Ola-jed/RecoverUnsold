@@ -278,9 +278,7 @@ fun DistributorLocationFormScreenContent(
                 Button(onClick = {
                     if (name.isBlank()) {
                         coroutineScope.launch {
-                            snackbarHostState.show(
-                                message = Strings.get(R.string.name_field_required_message)
-                            )
+                            snackbarHostState.show(Strings.get(R.string.name_field_required_message))
                         }
                     } else {
                         currentIndex++
@@ -305,11 +303,7 @@ fun DistributorLocationFormScreenContent(
 
         if (errorMessage != null) {
             LaunchedEffect(snackbarHostState) {
-                coroutineScope.launch {
-                    snackbarHostState.show(
-                        message = errorMessage
-                    )
-                }
+                coroutineScope.launch { snackbarHostState.show(message = errorMessage) }
             }
         }
 
@@ -317,9 +311,7 @@ fun DistributorLocationFormScreenContent(
             LaunchedEffect(snackbarHostState) {
                 navController.navigate(Routes.DistributorAccount.path)
                 coroutineScope.launch {
-                    snackbarHostState.show(
-                        message = Strings.get(R.string.location_published_successfully)
-                    )
+                    snackbarHostState.show(message = Strings.get(R.string.location_published_successfully))
                 }
             }
         }

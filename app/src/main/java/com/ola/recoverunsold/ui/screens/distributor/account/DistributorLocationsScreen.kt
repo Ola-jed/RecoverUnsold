@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -29,6 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
+import com.ola.recoverunsold.ui.components.app.PaginationComponent
 import com.ola.recoverunsold.ui.components.location.LocationItem
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.LocationsSectionViewModel
@@ -128,27 +128,12 @@ fun DistributorLocationsScreen(
                                 )
                             }
                             item {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(start = 20.dp, end = 20.dp, top = 10.dp),
-                                    horizontalArrangement = Arrangement.SpaceEvenly
-                                ) {
-                                    if (locations.pageNumber > 1) {
-                                        Button(onClick = {
-                                            locationsSectionViewModel.getPrevious()
-                                        }) {
-                                            Text(stringResource(id = R.string.previous))
-                                        }
-                                    }
-                                    if (locations.hasNext) {
-                                        Button(onClick = {
-                                            locationsSectionViewModel.getNext()
-                                        }) {
-                                            Text(stringResource(id = R.string.next))
-                                        }
-                                    }
-                                }
+                                PaginationComponent(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    page = locations,
+                                    onPrevious = { locationsSectionViewModel.getPrevious() },
+                                    onNext = { locationsSectionViewModel.getNext() }
+                                )
                             }
                         }
                     }

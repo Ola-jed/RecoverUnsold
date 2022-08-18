@@ -41,6 +41,7 @@ import com.ola.recoverunsold.api.query.OfferFilterQuery
 import com.ola.recoverunsold.ui.components.account.UserAccountHeader
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
+import com.ola.recoverunsold.ui.components.app.PaginationComponent
 import com.ola.recoverunsold.ui.components.distributor.DistributorInformationLine
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.offer.OfferFilterComponent
@@ -322,23 +323,12 @@ fun DistributorDetailsScreen(
                             }
 
                             item {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(start = 20.dp, end = 20.dp, top = 10.dp),
-                                    horizontalArrangement = Arrangement.SpaceEvenly
-                                ) {
-                                    if (offers.pageNumber > 1) {
-                                        Button(onClick = { distributorDetailsViewModel.getPrevious() }) {
-                                            Text(stringResource(id = R.string.previous))
-                                        }
-                                    }
-                                    if (offers.hasNext) {
-                                        Button(onClick = { distributorDetailsViewModel.getNext() }) {
-                                            Text(stringResource(id = R.string.next))
-                                        }
-                                    }
-                                }
+                                PaginationComponent(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    page = offers,
+                                    onPrevious = { distributorDetailsViewModel.getPrevious() },
+                                    onNext = { distributorDetailsViewModel.getNext() }
+                                )
                             }
                         }
                     }

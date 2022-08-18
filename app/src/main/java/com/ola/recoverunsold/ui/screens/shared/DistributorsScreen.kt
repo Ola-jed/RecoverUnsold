@@ -1,8 +1,6 @@
 package com.ola.recoverunsold.ui.screens.shared
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -35,6 +33,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
+import com.ola.recoverunsold.ui.components.app.PaginationComponent
 import com.ola.recoverunsold.ui.components.distributor.DistributorInformationComponent
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.navigation.Routes
@@ -147,23 +146,12 @@ fun DistributorsScreen(
                         }
 
                         item {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 20.dp, end = 20.dp, top = 10.dp),
-                                horizontalArrangement = Arrangement.SpaceEvenly
-                            ) {
-                                if (distributors.pageNumber > 1) {
-                                    Button(onClick = { distributorsViewModel.getPrevious() }) {
-                                        Text(stringResource(id = R.string.previous))
-                                    }
-                                }
-                                if (distributors.hasNext) {
-                                    Button(onClick = { distributorsViewModel.getNext() }) {
-                                        Text(stringResource(id = R.string.next))
-                                    }
-                                }
-                            }
+                            PaginationComponent(
+                                modifier = Modifier.fillMaxWidth(),
+                                page = distributors,
+                                onPrevious = { distributorsViewModel.getPrevious() },
+                                onNext = { distributorsViewModel.getNext() }
+                            )
                         }
                     }
                 }
