@@ -59,6 +59,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
+import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
@@ -161,7 +162,11 @@ fun OrderDetailsScreen(
         sheetGesturesEnabled = true,
         sheetShape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp),
         floatingActionButton = {
-            if (orderDetailsViewModel.isCustomer) {
+            val canShowFab = orderDetailsViewModel.isCustomer
+                    && orderDetailsViewModel.orderApiCallResult.data != null
+                    && (orderDetailsViewModel.orderApiCallResult.data?.status == OrderStatus.Completed
+                    || orderDetailsViewModel.orderApiCallResult.data?.status == OrderStatus.Approved)
+            if (canShowFab) {
                 FloatingActionButton(onClick = {
                     coroutineScope.launch { bottomSheetScaffoldState.bottomSheetState.expand() }
                 }) {
