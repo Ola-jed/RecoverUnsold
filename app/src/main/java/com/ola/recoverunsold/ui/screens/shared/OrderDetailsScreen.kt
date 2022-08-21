@@ -135,7 +135,7 @@ fun OrderDetailsScreen(
                         imeAction = ImeAction.Done,
                         keyboardType = KeyboardType.Text
                     ),
-                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
                 )
 
                 Button(

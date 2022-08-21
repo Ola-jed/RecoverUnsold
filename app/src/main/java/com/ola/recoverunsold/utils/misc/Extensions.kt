@@ -382,8 +382,9 @@ fun AlertType.label(): String {
  * Convert the data of orders for a distributor to bars for the chart
  */
 fun DistributorHomeData.toBars(): List<BarChartData.Bar> {
+    val emptyDataList = listOf(BarChartData.Bar(value = 0F, label = "", color = colorsDeciles[0]))
     if (ordersPerDay.isEmpty()) {
-        return emptyList()
+        return emptyDataList
     }
 
     val maxOrdersPerDayDivided = (this.ordersPerDay.values.maxOf { it }) / 10F
@@ -395,7 +396,7 @@ fun DistributorHomeData.toBars(): List<BarChartData.Bar> {
             label = it.key.formatDate(),
             color = colorsDeciles[ordersPerDayDeciles.indexOf(ordersPerDayDeciles.first { value -> value >= it.value })]
         )
-    }.filter { it.value != 0F }
+    }.filter { it.value != 0F }.ifEmpty { emptyDataList }
 }
 
 /**

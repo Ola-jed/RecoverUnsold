@@ -197,8 +197,13 @@ fun DistributorHomeScreen(
                             )
                         }
 
+                        val bars = homeData.toBars()
+
                         BarChart(
-                            barChartData = BarChartData(bars = homeData.toBars()),
+                            barChartData = BarChartData(
+                                bars = bars,
+                                maxBarValue = if (bars.isEmpty()) 5F else bars.maxOf { it.value }
+                            ),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height((screenHeight * 0.4).dp)
@@ -213,7 +218,7 @@ fun DistributorHomeScreen(
                                 axisLineColor = onBgColor,
                                 labelTextColor = onBgColor,
                                 labelValueFormatter = { it.toInt().toString() },
-                                drawLabelEvery = 7,
+                                drawLabelEvery = 6,
                                 axisLineThickness = 2.dp
                             ),
                             labelDrawer = SimpleLabelDrawer(
