@@ -96,14 +96,14 @@ class ProductFormViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface ProductFormViewModelFactory {
+    interface Factory {
         fun create(offerId: String, product: Product?): ProductFormViewModel
     }
 
     @Suppress("UNCHECKED_CAST")
     companion object {
         fun provideFactory(
-            productFormViewModelFactory: ProductFormViewModelFactory,
+            productFormViewModelFactory: Factory,
             offerId: String,
             product: Product?
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {

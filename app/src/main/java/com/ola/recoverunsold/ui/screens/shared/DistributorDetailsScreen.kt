@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.ola.recoverunsold.MainActivity
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.api.query.OfferFilterQuery
@@ -363,8 +364,7 @@ fun DistributorDetailsScreen(
 @Composable
 fun distributorDetailsViewModel(distributorId: String): DistributorDetailsViewModel {
     val factory = EntryPointAccessors
-        .fromActivity<DistributorDetailsViewModel.DistributorDetailsViewModelFactory>(
-            LocalContext.current as Activity
-        )
+        .fromActivity<MainActivity.ViewModelFactoryProvider>(LocalContext.current as Activity)
+        .distributorDetailsViewModelFactory()
     return viewModel(factory = DistributorDetailsViewModel.provideFactory(factory, distributorId))
 }

@@ -13,13 +13,33 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.ola.recoverunsold.ui.navigation.NavigationManager
+import com.ola.recoverunsold.ui.screens.viewmodels.DistributorDetailsViewModel
+import com.ola.recoverunsold.ui.screens.viewmodels.DistributorLocationFormViewModel
+import com.ola.recoverunsold.ui.screens.viewmodels.DistributorOfferFormViewModel
 import com.ola.recoverunsold.ui.screens.viewmodels.MainViewModel
+import com.ola.recoverunsold.ui.screens.viewmodels.OfferDetailsViewModel
+import com.ola.recoverunsold.ui.screens.viewmodels.OrderDetailsViewModel
+import com.ola.recoverunsold.ui.screens.viewmodels.ProductFormViewModel
 import com.ola.recoverunsold.ui.theme.RecoverUnsoldTheme
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.components.ActivityComponent
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
+
+    @EntryPoint
+    @InstallIn(ActivityComponent::class)
+    interface ViewModelFactoryProvider {
+        fun productFormViewModelFactory(): ProductFormViewModel.Factory
+        fun orderDetailsViewModelFactory(): OrderDetailsViewModel.Factory
+        fun distributorOfferFormViewModelFactory(): DistributorOfferFormViewModel.Factory
+        fun distributorLocationFormViewModelFactory(): DistributorLocationFormViewModel.Factory
+        fun distributorDetailsViewModelFactory(): DistributorDetailsViewModel.Factory
+        fun offerDetailsViewModelFactory(): OfferDetailsViewModel.Factory
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

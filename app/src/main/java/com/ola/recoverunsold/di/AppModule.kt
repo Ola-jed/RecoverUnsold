@@ -10,6 +10,7 @@ import com.ola.recoverunsold.api.services.ForgotPasswordService
 import com.ola.recoverunsold.api.services.HomeService
 import com.ola.recoverunsold.api.services.LocationService
 import com.ola.recoverunsold.api.services.OfferService
+import com.ola.recoverunsold.api.services.OpinionsService
 import com.ola.recoverunsold.api.services.OrderService
 import com.ola.recoverunsold.api.services.ReviewsService
 import com.ola.recoverunsold.api.services.UserVerificationService
@@ -58,6 +59,10 @@ object AppModule {
     @Provides
     @Singleton
     fun providesOrderService() = ApiClient.buildService<OrderService>()
+
+    @Provides
+    @Singleton
+    fun providesOpinionsService() = ApiClient.buildService<OpinionsService>()
 
     @Provides
     @Singleton

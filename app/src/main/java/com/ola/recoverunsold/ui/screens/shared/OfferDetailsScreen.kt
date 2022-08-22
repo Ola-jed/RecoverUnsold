@@ -48,6 +48,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.ola.recoverunsold.MainActivity
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
@@ -382,8 +383,7 @@ fun OrderForm(
 @Composable
 fun offerDetailsViewModel(offerId: String): OfferDetailsViewModel {
     val factory = EntryPointAccessors
-        .fromActivity<OfferDetailsViewModel.OfferDetailsViewModelFactory>(
-            LocalContext.current as Activity
-        )
+        .fromActivity<MainActivity.ViewModelFactoryProvider>(LocalContext.current as Activity)
+        .offerDetailsViewModelFactory()
     return viewModel(factory = OfferDetailsViewModel.provideFactory(factory, offerId))
 }

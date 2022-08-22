@@ -43,6 +43,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.ola.recoverunsold.MainActivity
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.models.Location
@@ -354,8 +355,7 @@ fun DistributorOfferFormContent(
 @Composable
 fun distributorOfferFormViewModel(offer: Offer?): DistributorOfferFormViewModel {
     val factory = EntryPointAccessors
-        .fromActivity<DistributorOfferFormViewModel.DistributorOfferFormViewModelFactory>(
-            LocalContext.current as Activity
-        )
+        .fromActivity<MainActivity.ViewModelFactoryProvider>(LocalContext.current as Activity)
+        .distributorOfferFormViewModelFactory()
     return viewModel(factory = DistributorOfferFormViewModel.provideFactory(factory, offer))
 }

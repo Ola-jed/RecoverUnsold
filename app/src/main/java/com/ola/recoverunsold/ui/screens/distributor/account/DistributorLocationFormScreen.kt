@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.android.gms.maps.model.LatLng
+import com.ola.recoverunsold.MainActivity
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.models.Location
@@ -322,8 +323,7 @@ fun DistributorLocationFormScreenContent(
 @Composable
 fun distributorLocationFormViewModel(location: Location?): DistributorLocationFormViewModel {
     val factory = EntryPointAccessors
-        .fromActivity<DistributorLocationFormViewModel.DistributorLocationFormViewModelFactory>(
-            LocalContext.current as Activity
-        )
+        .fromActivity<MainActivity.ViewModelFactoryProvider>(LocalContext.current as Activity)
+        .distributorLocationFormViewModelFactory()
     return viewModel(factory = DistributorLocationFormViewModel.provideFactory(factory, location))
 }

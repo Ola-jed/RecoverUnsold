@@ -82,14 +82,14 @@ class DistributorDetailsViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface DistributorDetailsViewModelFactory {
+    interface Factory {
         fun create(distributorId: String): DistributorDetailsViewModel
     }
 
     @Suppress("UNCHECKED_CAST")
     companion object {
         fun provideFactory(
-            distributorDetailsViewModelFactory: DistributorDetailsViewModelFactory,
+            distributorDetailsViewModelFactory: Factory,
             distributorId: String
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {

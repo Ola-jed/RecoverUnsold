@@ -58,6 +58,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.ola.recoverunsold.MainActivity
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.models.OrderStatus
@@ -467,8 +468,7 @@ fun OrderDetailsScreen(
 @Composable
 fun orderDetailsViewModel(orderId: String): OrderDetailsViewModel {
     val factory = EntryPointAccessors
-        .fromActivity<OrderDetailsViewModel.OrderDetailsViewModelFactory>(
-            LocalContext.current as Activity
-        )
+        .fromActivity<MainActivity.ViewModelFactoryProvider>(LocalContext.current as Activity)
+        .orderDetailsViewModelFactory()
     return viewModel(factory = OrderDetailsViewModel.provideFactory(factory, orderId))
 }

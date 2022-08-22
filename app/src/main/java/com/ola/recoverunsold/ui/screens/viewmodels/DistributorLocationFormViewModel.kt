@@ -108,14 +108,14 @@ class DistributorLocationFormViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface DistributorLocationFormViewModelFactory {
+    interface Factory {
         fun create(location: Location?): DistributorLocationFormViewModel
     }
 
     @Suppress("UNCHECKED_CAST")
     companion object {
         fun provideFactory(
-            distributorLocationFormViewModelFactory: DistributorLocationFormViewModelFactory,
+            distributorLocationFormViewModelFactory: Factory,
             location: Location?
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
