@@ -10,14 +10,16 @@ import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.services.HomeService
 import com.ola.recoverunsold.models.CustomerHomeData
 import com.ola.recoverunsold.utils.resources.Strings
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
+import javax.inject.Inject
 
-class HomeViewModel(
-    private val homeService: HomeService = KoinJavaComponent.get(HomeService::class.java)
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val homeService: HomeService
 ) : ViewModel() {
     var homeDataApiCallResult: ApiCallResult<CustomerHomeData> by mutableStateOf(ApiCallResult.Inactive)
     private val _isRefreshing = MutableStateFlow(false)

@@ -13,13 +13,13 @@ import com.ola.recoverunsold.api.services.wrappers.DistributorServiceWrapper
 import com.ola.recoverunsold.models.DistributorInformation
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.utils.resources.Strings
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
+import javax.inject.Inject
 
-class DistributorsViewModel(
-    private val distributorServiceWrapper: DistributorServiceWrapper = KoinJavaComponent.get(
-        DistributorServiceWrapper::class.java
-    )
+@HiltViewModel
+class DistributorsViewModel @Inject constructor(
+    private val distributorServiceWrapper: DistributorServiceWrapper
 ) : ViewModel() {
     var distributorFilterQuery by mutableStateOf(DistributorFilterQuery())
     var distributorsApiResult: ApiCallResult<Page<DistributorInformation>> by mutableStateOf(

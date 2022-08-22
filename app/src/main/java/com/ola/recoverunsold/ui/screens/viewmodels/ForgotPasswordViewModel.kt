@@ -12,13 +12,13 @@ import com.ola.recoverunsold.api.requests.ForgotPasswordStartRequest
 import com.ola.recoverunsold.api.services.ForgotPasswordService
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.FormState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
+import javax.inject.Inject
 
-class ForgotPasswordViewModel(
-    private val forgotPasswordService: ForgotPasswordService = KoinJavaComponent.get(
-        ForgotPasswordService::class.java
-    )
+@HiltViewModel
+class ForgotPasswordViewModel @Inject constructor(
+    private val forgotPasswordService: ForgotPasswordService
 ) : ViewModel() {
     var apiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive)
     var email by mutableStateOf("")

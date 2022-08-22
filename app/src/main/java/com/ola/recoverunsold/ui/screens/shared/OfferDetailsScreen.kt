@@ -1,5 +1,6 @@
 package com.ola.recoverunsold.ui.screens.shared
 
+import android.app.Activity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -59,7 +60,6 @@ import com.ola.recoverunsold.ui.components.location.LocationItem
 import com.ola.recoverunsold.ui.components.product.ProductItem
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.OfferDetailsViewModel
-import com.ola.recoverunsold.ui.screens.viewmodels.OfferDetailsViewModelFactory
 import com.ola.recoverunsold.utils.misc.addSeconds
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
@@ -68,6 +68,7 @@ import com.ola.recoverunsold.utils.misc.openMapWithCoordinates
 import com.ola.recoverunsold.utils.misc.remove
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -77,9 +78,7 @@ fun OfferDetailsScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     offerId: String,
-    offerDetailsViewModel: OfferDetailsViewModel = viewModel(
-        factory = OfferDetailsViewModelFactory(offerId)
-    )
+    offerDetailsViewModel: OfferDetailsViewModel = offerDetailsViewModel(offerId)
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
@@ -378,4 +377,13 @@ fun OrderForm(
             maxDate = maxWithdrawalDate
         )
     }
+}
+
+@Composable
+fun offerDetailsViewModel(offerId: String): OfferDetailsViewModel {
+    val factory = EntryPointAccessors
+        .fromActivity<OfferDetailsViewModel.OfferDetailsViewModelFactory>(
+            LocalContext.current as Activity
+        )
+    return viewModel(factory = OfferDetailsViewModel.provideFactory(factory, offerId))
 }

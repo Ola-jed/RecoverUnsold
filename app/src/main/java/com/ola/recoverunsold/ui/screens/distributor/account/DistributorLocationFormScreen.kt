@@ -1,5 +1,6 @@
 package com.ola.recoverunsold.ui.screens.distributor.account
 
+import android.app.Activity
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -55,12 +56,12 @@ import com.ola.recoverunsold.ui.components.app.ImagePicker
 import com.ola.recoverunsold.ui.components.location.LocationMap
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorLocationFormViewModel
-import com.ola.recoverunsold.ui.screens.viewmodels.DistributorLocationFormViewModelFactory
 import com.ola.recoverunsold.utils.misc.jsonDeserialize
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.misc.toCoordinates
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -69,8 +70,8 @@ fun DistributorLocationFormScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     serializedLocation: String? = null,
-    distributorLocationFormViewModel: DistributorLocationFormViewModel = viewModel(
-        factory = DistributorLocationFormViewModelFactory(serializedLocation.jsonDeserialize<Location>())
+    distributorLocationFormViewModel: DistributorLocationFormViewModel = distributorLocationFormViewModel(
+        serializedLocation.jsonDeserialize<Location>()
     )
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -316,4 +317,13 @@ fun DistributorLocationFormScreenContent(
             }
         }
     }
+}
+
+@Composable
+fun distributorLocationFormViewModel(location: Location?): DistributorLocationFormViewModel {
+    val factory = EntryPointAccessors
+        .fromActivity<DistributorLocationFormViewModel.DistributorLocationFormViewModelFactory>(
+            LocalContext.current as Activity
+        )
+    return viewModel(factory = DistributorLocationFormViewModel.provideFactory(factory, location))
 }

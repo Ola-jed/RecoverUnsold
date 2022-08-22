@@ -8,16 +8,16 @@ import com.ola.recoverunsold.api.services.AccountService
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
 import com.ola.recoverunsold.utils.store.toApiToken
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
 import java.util.Date
+import javax.inject.Inject
 
-class MainViewModel(
-    private val accountService: AccountService = KoinJavaComponent.get(AccountService::class.java)
-) : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(private val accountService: AccountService) : ViewModel() {
     private val _hasFetchedData = MutableStateFlow(false)
     val hasFinishedLoading = _hasFetchedData.asStateFlow()
 

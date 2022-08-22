@@ -15,7 +15,9 @@ import androidx.navigation.compose.rememberNavController
 import com.ola.recoverunsold.ui.navigation.NavigationManager
 import com.ola.recoverunsold.ui.screens.viewmodels.MainViewModel
 import com.ola.recoverunsold.ui.theme.RecoverUnsoldTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
 

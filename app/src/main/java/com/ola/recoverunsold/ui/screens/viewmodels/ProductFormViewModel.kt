@@ -19,26 +19,18 @@ import com.ola.recoverunsold.utils.misc.createFile
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.validation.FormState
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import org.koin.java.KoinJavaComponent
 
-class ProductFormViewModelFactory(private val offerId: String, private val product: Product?) :
-    ViewModelProvider.NewInstanceFactory() {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ProductFormViewModel(offerId = offerId, product = product) as T
-    }
-}
-
-class ProductFormViewModel(
-    private val productServiceWrapper: ProductServiceWrapper = KoinJavaComponent.get(
-        ProductServiceWrapper::class.java
-    ),
-    private val offerId: String,
-    private val product: Product?
+class ProductFormViewModel @AssistedInject constructor(
+    private val productServiceWrapper: ProductServiceWrapper,
+    @Assisted private val offerId: String,
+    @Assisted private val product: Product? = null
 ) : ViewModel() {
     private val bearerToken = TokenStore.get()!!.bearerToken
     var formState by mutableStateOf(FormState())
@@ -100,6 +92,24 @@ class ProductFormViewModel(
             400 -> Strings.get(R.string.invalid_data)
             in 400..600 -> Strings.get(R.string.unknown_error_occured)
             else -> null
+        }
+    }
+
+    @AssistedFactory
+    interface ProductFormViewModelFactory {
+        fun create(offerId: String, product: Product?): ProductFormViewModel
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    companion object {
+        fun provideFactory(
+            productFormViewModelFactory: ProductFormViewModelFactory,
+            offerId: String,
+            product: Product?
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return productFormViewModelFactory.create(offerId, product) as T
+            }
         }
     }
 }

@@ -16,25 +16,15 @@ import com.ola.recoverunsold.models.DistributorInformation
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.utils.resources.Strings
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
 
-class DistributorDetailsViewModelFactory(private val distributorId: String) :
-    ViewModelProvider.NewInstanceFactory() {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DistributorDetailsViewModel(distributorId = distributorId) as T
-    }
-}
-
-class DistributorDetailsViewModel(
-    private val distributorId: String,
-    private val distributorService: DistributorService = KoinJavaComponent.get(
-        DistributorService::class.java
-    ),
-    private val offerServiceWrapper: OfferServiceWrapper = KoinJavaComponent.get(
-        OfferServiceWrapper::class.java
-    )
+class DistributorDetailsViewModel @AssistedInject constructor(
+    private val distributorService: DistributorService,
+    private val offerServiceWrapper: OfferServiceWrapper,
+    @Assisted private val distributorId: String
 ) : ViewModel() {
     var offerFilterQuery by mutableStateOf(OfferFilterQuery())
     var distributorApiCallResult: ApiCallResult<DistributorInformation> by mutableStateOf(
@@ -51,7 +41,7 @@ class DistributorDetailsViewModel(
         distributorApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             val response = distributorService.getDistributor(distributorId)
-            distributorApiCallResult = if(response.isSuccessful) {
+            distributorApiCallResult = if (response.isSuccessful) {
                 ApiCallResult.Success(_data = response.body())
             } else {
                 ApiCallResult.Error(code = response.code())
@@ -88,6 +78,23 @@ class DistributorDetailsViewModel(
             Strings.get(R.string.unknown_error_occured)
         } else {
             null
+        }
+    }
+
+    @AssistedFactory
+    interface DistributorDetailsViewModelFactory {
+        fun create(distributorId: String): DistributorDetailsViewModel
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    companion object {
+        fun provideFactory(
+            distributorDetailsViewModelFactory: DistributorDetailsViewModelFactory,
+            distributorId: String
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return distributorDetailsViewModelFactory.create(distributorId) as T
+            }
         }
     }
 }

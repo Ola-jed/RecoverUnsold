@@ -15,11 +15,13 @@ import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
 import com.ola.recoverunsold.utils.validation.FormState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
+import javax.inject.Inject
 
-class DistributorAccountViewModel(
-    private val accountService: AccountService = KoinJavaComponent.get(AccountService::class.java)
+@HiltViewModel
+class DistributorAccountViewModel @Inject constructor(
+    private val accountService: AccountService
 ) : ViewModel() {
     private val distributor = (UserObserver.user.value!! as Distributor)
     private val token = TokenStore.get()!!

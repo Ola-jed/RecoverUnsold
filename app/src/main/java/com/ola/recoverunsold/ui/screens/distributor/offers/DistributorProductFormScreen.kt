@@ -1,5 +1,6 @@
 package com.ola.recoverunsold.ui.screens.distributor.offers
 
+import android.app.Activity
 import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
+import com.ola.recoverunsold.models.Product
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.ImagePicker
@@ -44,12 +46,12 @@ import com.ola.recoverunsold.ui.components.app.LocalImagesList
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.ProductFormViewModel
-import com.ola.recoverunsold.ui.screens.viewmodels.ProductFormViewModelFactory
 import com.ola.recoverunsold.utils.misc.FormType
 import com.ola.recoverunsold.utils.misc.jsonDeserialize
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -60,11 +62,9 @@ fun DistributorProductFormScreen(
     snackbarHostState: SnackbarHostState,
     offerId: String,
     serializedProduct: String? = null,
-    productFormViewModel: ProductFormViewModel = viewModel(
-        factory = ProductFormViewModelFactory(
-            offerId = offerId,
-            product = serializedProduct.jsonDeserialize()
-        )
+    productFormViewModel: ProductFormViewModel = productFormViewModel(
+        offerId = offerId,
+        product = serializedProduct.jsonDeserialize()
     )
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -276,4 +276,13 @@ fun DistributorProductFormScreenContent(
             }
         }
     }
+}
+
+@Composable
+fun productFormViewModel(offerId: String, product: Product?): ProductFormViewModel {
+    val factory = EntryPointAccessors
+        .fromActivity<ProductFormViewModel.ProductFormViewModelFactory>(
+            LocalContext.current as Activity
+        )
+    return viewModel(factory = ProductFormViewModel.provideFactory(factory, offerId, product))
 }

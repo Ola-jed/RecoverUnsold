@@ -13,17 +13,19 @@ import com.ola.recoverunsold.models.DistributorHomeData
 import com.ola.recoverunsold.utils.misc.minusSeconds
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
 import java.util.Date
+import javax.inject.Inject
 
 private const val secondsPerWeek: ULong = 604800UL
 
-class DistributorHomeViewModel(
-    private val homeService: HomeService = KoinJavaComponent.get(HomeService::class.java)
+@HiltViewModel
+class DistributorHomeViewModel @Inject constructor(
+    private val homeService: HomeService
 ) : ViewModel() {
     private val token = TokenStore.get()!!.bearerToken
     var homeDataApiCallResult: ApiCallResult<DistributorHomeData> by mutableStateOf(ApiCallResult.Inactive)

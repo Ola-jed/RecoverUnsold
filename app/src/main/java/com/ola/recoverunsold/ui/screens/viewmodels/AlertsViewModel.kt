@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
-import com.ola.recoverunsold.api.core.StatusCode
 import com.ola.recoverunsold.api.requests.AlertCreateRequest
 import com.ola.recoverunsold.api.services.AlertsService
 import com.ola.recoverunsold.api.services.DistributorService
@@ -16,16 +15,17 @@ import com.ola.recoverunsold.models.AlertType
 import com.ola.recoverunsold.models.DistributorLabel
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
+import javax.inject.Inject
 
-class AlertsViewModel(
-    private val alertsService: AlertsService = KoinJavaComponent.get(AlertsService::class.java),
-    private val distributorsService: DistributorService = KoinJavaComponent.get(DistributorService::class.java)
+@HiltViewModel
+class AlertsViewModel @Inject constructor(
+    private val alertsService: AlertsService,
+    private val distributorsService: DistributorService
 ) : ViewModel() {
     private val token = TokenStore.get()!!.bearerToken
     var alertsApiCallResult: ApiCallResult<List<Alert>> by mutableStateOf(ApiCallResult.Inactive)
-    var alertCreateApiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive)
     var distributorsLabels: List<DistributorLabel> = emptyList()
     var alertType by mutableStateOf(AlertType.AnyOfferPublished)
     var distributorLabel: DistributorLabel? by mutableStateOf(null)

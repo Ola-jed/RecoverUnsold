@@ -1,5 +1,6 @@
 package com.ola.recoverunsold.ui.screens.shared
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
@@ -48,10 +49,10 @@ import com.ola.recoverunsold.ui.components.offer.OfferFilterComponent
 import com.ola.recoverunsold.ui.components.offer.OfferItem
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorDetailsViewModel
-import com.ola.recoverunsold.ui.screens.viewmodels.DistributorDetailsViewModelFactory
 import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.launch
 
 @Composable
@@ -59,8 +60,8 @@ fun DistributorDetailsScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     distributorId: String,
-    distributorDetailsViewModel: DistributorDetailsViewModel = viewModel(
-        factory = DistributorDetailsViewModelFactory(distributorId)
+    distributorDetailsViewModel: DistributorDetailsViewModel = distributorDetailsViewModel(
+        distributorId
     )
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -357,4 +358,13 @@ fun DistributorDetailsScreen(
             }
         }
     }
+}
+
+@Composable
+fun distributorDetailsViewModel(distributorId: String): DistributorDetailsViewModel {
+    val factory = EntryPointAccessors
+        .fromActivity<DistributorDetailsViewModel.DistributorDetailsViewModelFactory>(
+            LocalContext.current as Activity
+        )
+    return viewModel(factory = DistributorDetailsViewModel.provideFactory(factory, distributorId))
 }

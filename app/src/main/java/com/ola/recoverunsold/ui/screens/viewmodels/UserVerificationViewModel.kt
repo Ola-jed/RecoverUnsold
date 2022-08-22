@@ -12,13 +12,13 @@ import com.ola.recoverunsold.api.requests.UserVerificationConfirmRequest
 import com.ola.recoverunsold.api.services.UserVerificationService
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.FormState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
+import javax.inject.Inject
 
-class UserVerificationViewModel(
-    private val userVerificationService: UserVerificationService = KoinJavaComponent.get(
-        UserVerificationService::class.java
-    )
+@HiltViewModel
+class UserVerificationViewModel @Inject constructor(
+    private val userVerificationService: UserVerificationService
 ) : ViewModel() {
     var apiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive)
     var token by mutableStateOf("")

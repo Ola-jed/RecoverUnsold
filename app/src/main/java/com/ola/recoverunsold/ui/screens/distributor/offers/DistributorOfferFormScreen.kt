@@ -1,5 +1,6 @@
 package com.ola.recoverunsold.ui.screens.distributor.offers
 
+import android.app.Activity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,6 +34,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,7 +52,6 @@ import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.DateTimePicker
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorOfferFormViewModel
-import com.ola.recoverunsold.ui.screens.viewmodels.DistributorOfferFormViewModelFactory
 import com.ola.recoverunsold.utils.misc.FormType
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
@@ -60,6 +61,7 @@ import com.ola.recoverunsold.utils.misc.toSecureDouble
 import com.ola.recoverunsold.utils.misc.toSecureInt
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.IntegerValidator
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -70,8 +72,8 @@ fun DistributorOfferFormScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     serializedOffer: String? = null,
-    distributorOfferFormViewModel: DistributorOfferFormViewModel = viewModel(
-        factory = DistributorOfferFormViewModelFactory(offer = serializedOffer.jsonDeserialize())
+    distributorOfferFormViewModel: DistributorOfferFormViewModel = distributorOfferFormViewModel(
+        offer = serializedOffer.jsonDeserialize()
     )
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -347,4 +349,13 @@ fun DistributorOfferFormContent(
             }
         }
     }
+}
+
+@Composable
+fun distributorOfferFormViewModel(offer: Offer?): DistributorOfferFormViewModel {
+    val factory = EntryPointAccessors
+        .fromActivity<DistributorOfferFormViewModel.DistributorOfferFormViewModelFactory>(
+            LocalContext.current as Activity
+        )
+    return viewModel(factory = DistributorOfferFormViewModel.provideFactory(factory, offer))
 }

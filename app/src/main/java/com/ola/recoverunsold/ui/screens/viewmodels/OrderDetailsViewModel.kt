@@ -17,28 +17,18 @@ import com.ola.recoverunsold.models.Order
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
 
-class OrderDetailsViewModelFactory(private val orderId: String) :
-    ViewModelProvider.NewInstanceFactory() {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return OrderDetailsViewModel(orderId = orderId) as T
-    }
-}
-
-class OrderDetailsViewModel(
-    val orderId: String,
-    private val ordersServiceWrapper: OrderServiceWrapper = KoinJavaComponent.get(
-        OrderServiceWrapper::class.java
-    ),
-    private val opinionsService: OpinionsService = KoinJavaComponent.get(
-        OpinionsService::class.java
-    )
+class OrderDetailsViewModel @AssistedInject constructor(
+    private val ordersServiceWrapper: OrderServiceWrapper,
+    private val opinionsService: OpinionsService,
+    @Assisted val orderId: String
 ) : ViewModel() {
     private val token = TokenStore.get()!!.bearerToken
     var orderApiCallResult: ApiCallResult<Order> by mutableStateOf(ApiCallResult.Inactive)
@@ -107,5 +97,22 @@ class OrderDetailsViewModel(
     fun errorMessage(): String? = when (orderApiCallResult.statusCode) {
         in 400..600 -> Strings.get(R.string.unknown_error_occured)
         else -> null
+    }
+
+    @AssistedFactory
+    interface OrderDetailsViewModelFactory {
+        fun create(orderId: String): OrderDetailsViewModel
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    companion object {
+        fun provideFactory(
+            orderDetailsViewModelFactory: OrderDetailsViewModelFactory,
+            orderId: String
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return orderDetailsViewModelFactory.create(orderId) as T
+            }
+        }
     }
 }

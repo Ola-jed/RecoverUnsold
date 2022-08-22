@@ -15,13 +15,13 @@ import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
+import javax.inject.Inject
 
-class LocationsSectionViewModel(
-    private val locationServiceWrapper: LocationServiceWrapper = KoinJavaComponent.get(
-        LocationServiceWrapper::class.java
-    )
+@HiltViewModel
+class LocationsSectionViewModel @Inject constructor(
+    private val locationServiceWrapper: LocationServiceWrapper
 ) : ViewModel() {
     private val token = TokenStore.get()!!
     var locationsGetResponse: ApiCallResult<Page<Location>> by mutableStateOf(ApiCallResult.Inactive)

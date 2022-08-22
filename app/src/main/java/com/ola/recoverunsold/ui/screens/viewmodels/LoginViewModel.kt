@@ -14,12 +14,12 @@ import com.ola.recoverunsold.api.responses.Token
 import com.ola.recoverunsold.api.services.AuthService
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.FormState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
+import javax.inject.Inject
 
-class LoginViewModel(
-    private val authService: AuthService = KoinJavaComponent.get(AuthService::class.java)
-) : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(private val authService: AuthService) : ViewModel() {
     var apiCallResult: ApiCallResult<Token> by mutableStateOf(ApiCallResult.Inactive)
     var email by mutableStateOf("")
     var password by mutableStateOf("")

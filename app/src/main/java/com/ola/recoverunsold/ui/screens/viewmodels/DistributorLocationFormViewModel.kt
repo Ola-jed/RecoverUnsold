@@ -19,25 +19,17 @@ import com.ola.recoverunsold.utils.misc.nullIfBlank
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.validation.FormState
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import org.koin.java.KoinJavaComponent
 
-class DistributorLocationFormViewModelFactory(private val location: Location?) :
-    ViewModelProvider.NewInstanceFactory() {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DistributorLocationFormViewModel(location = location) as T
-    }
-}
-
-class DistributorLocationFormViewModel(
-    private val locationServiceWrapper: LocationServiceWrapper = KoinJavaComponent.get(
-        LocationServiceWrapper::class.java
-    ),
-    private val location: Location?
+class DistributorLocationFormViewModel @AssistedInject constructor(
+    private val locationServiceWrapper: LocationServiceWrapper,
+    @Assisted private val location: Location?
 ) : ViewModel() {
     var formState by mutableStateOf(FormState())
     var apiCallResult: ApiCallResult<Location> by mutableStateOf(ApiCallResult.Inactive)
@@ -113,5 +105,22 @@ class DistributorLocationFormViewModel(
     fun errorMessage(): String? = when (apiCallResult.statusCode) {
         in 400..600 -> Strings.get(R.string.unknown_error_occured)
         else -> null
+    }
+
+    @AssistedFactory
+    interface DistributorLocationFormViewModelFactory {
+        fun create(location: Location?): DistributorLocationFormViewModel
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    companion object {
+        fun provideFactory(
+            distributorLocationFormViewModelFactory: DistributorLocationFormViewModelFactory,
+            location: Location?
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return distributorLocationFormViewModelFactory.create(location) as T
+            }
+        }
     }
 }

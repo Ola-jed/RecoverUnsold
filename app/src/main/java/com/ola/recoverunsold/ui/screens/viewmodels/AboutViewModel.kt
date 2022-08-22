@@ -11,12 +11,12 @@ import com.ola.recoverunsold.api.requests.ReviewMessageRequest
 import com.ola.recoverunsold.api.services.ReviewsService
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
+import javax.inject.Inject
 
-class AboutViewModel(
-    private val reviewsService: ReviewsService = KoinJavaComponent.get(ReviewsService::class.java)
-) : ViewModel() {
+@HiltViewModel
+class AboutViewModel @Inject constructor(private val reviewsService: ReviewsService) : ViewModel() {
     private val token: String = TokenStore.get()!!.bearerToken
     var apiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive)
     var message by mutableStateOf("")
@@ -24,10 +24,7 @@ class AboutViewModel(
     fun publishMessage() {
         apiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = reviewsService.publishReview(
-                token,
-                ReviewMessageRequest(message)
-            )
+            val response = reviewsService.publishReview(token, ReviewMessageRequest(message))
             apiCallResult = if (response.isSuccessful) {
                 ApiCallResult.Success(_data = Unit)
             } else {

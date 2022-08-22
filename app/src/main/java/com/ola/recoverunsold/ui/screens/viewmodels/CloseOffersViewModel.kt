@@ -15,11 +15,13 @@ import com.ola.recoverunsold.models.OfferWithRelativeDistance
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.FormState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
+import javax.inject.Inject
 
-class CloseOffersViewModel(
-    private val offerServiceWrapper: OfferServiceWrapper = KoinJavaComponent.get(OfferServiceWrapper::class.java)
+@HiltViewModel
+class CloseOffersViewModel @Inject constructor(
+    private val offerServiceWrapper: OfferServiceWrapper
 ) : ViewModel() {
     var formState by mutableStateOf(FormState(isValid = true))
     var offerDistanceFilterQuery by mutableStateOf(

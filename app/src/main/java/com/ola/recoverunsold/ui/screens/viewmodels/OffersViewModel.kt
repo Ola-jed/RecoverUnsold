@@ -14,11 +14,13 @@ import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.utils.resources.Strings
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
+import javax.inject.Inject
 
-class OffersViewModel(
-    private val offerServiceWrapper: OfferServiceWrapper = KoinJavaComponent.get(OfferServiceWrapper::class.java)
+@HiltViewModel
+class OffersViewModel @Inject constructor(
+    private val offerServiceWrapper: OfferServiceWrapper
 ) : ViewModel() {
     var offerFilterQuery by mutableStateOf(OfferFilterQuery(active = true))
     var offersApiResult: ApiCallResult<Page<Offer>> by mutableStateOf(ApiCallResult.Inactive)

@@ -15,14 +15,14 @@ import com.ola.recoverunsold.api.services.UserVerificationService
 import com.ola.recoverunsold.utils.misc.nullIfBlank
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.FormState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
+import javax.inject.Inject
 
-class DistributorRegisterViewModel(
-    private val authService: AuthService = KoinJavaComponent.get(AuthService::class.java),
-    private val userVerificationService: UserVerificationService = KoinJavaComponent.get(
-        UserVerificationService::class.java
-    )
+@HiltViewModel
+class DistributorRegisterViewModel @Inject constructor(
+    private val authService: AuthService,
+    private val userVerificationService: UserVerificationService
 ) : ViewModel() {
     var apiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive)
     var email by mutableStateOf("")

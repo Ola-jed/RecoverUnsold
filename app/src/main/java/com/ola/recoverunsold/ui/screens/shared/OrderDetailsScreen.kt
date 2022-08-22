@@ -1,5 +1,6 @@
 package com.ola.recoverunsold.ui.screens.shared
 
+import android.app.Activity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -69,7 +70,6 @@ import com.ola.recoverunsold.ui.components.location.LocationItem
 import com.ola.recoverunsold.ui.components.opinion.OpinionItem
 import com.ola.recoverunsold.ui.components.product.ProductItem
 import com.ola.recoverunsold.ui.screens.viewmodels.OrderDetailsViewModel
-import com.ola.recoverunsold.ui.screens.viewmodels.OrderDetailsViewModelFactory
 import com.ola.recoverunsold.utils.misc.addSeconds
 import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.formatDateTime
@@ -79,6 +79,7 @@ import com.ola.recoverunsold.utils.misc.openMapWithCoordinates
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.misc.toIcon
 import com.ola.recoverunsold.utils.resources.Strings
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -88,9 +89,7 @@ fun OrderDetailsScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     orderId: String,
-    orderDetailsViewModel: OrderDetailsViewModel = viewModel(
-        factory = OrderDetailsViewModelFactory(orderId)
-    )
+    orderDetailsViewModel: OrderDetailsViewModel = orderDetailsViewModel(orderId = orderId)
 ) {
     val coroutineScope = rememberCoroutineScope()
     val isRefreshing by orderDetailsViewModel.isRefreshing.collectAsState()
@@ -463,4 +462,13 @@ fun OrderDetailsScreen(
             }
         }
     }
+}
+
+@Composable
+fun orderDetailsViewModel(orderId: String): OrderDetailsViewModel {
+    val factory = EntryPointAccessors
+        .fromActivity<OrderDetailsViewModel.OrderDetailsViewModelFactory>(
+            LocalContext.current as Activity
+        )
+    return viewModel(factory = OrderDetailsViewModel.provideFactory(factory, orderId))
 }

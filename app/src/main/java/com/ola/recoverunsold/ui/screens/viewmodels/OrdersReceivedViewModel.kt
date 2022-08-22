@@ -14,13 +14,13 @@ import com.ola.recoverunsold.models.Order
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
+import javax.inject.Inject
 
-class OrdersReceivedViewModel(
-    private val orderServiceWrapper: OrderServiceWrapper = KoinJavaComponent.get(
-        OrderServiceWrapper::class.java
-    )
+@HiltViewModel
+class OrdersReceivedViewModel @Inject constructor(
+    private val orderServiceWrapper: OrderServiceWrapper
 ) : ViewModel() {
     private val token = TokenStore.get()!!.bearerToken
     var ordersGetResponse: ApiCallResult<Page<Order>> by mutableStateOf(ApiCallResult.Inactive)

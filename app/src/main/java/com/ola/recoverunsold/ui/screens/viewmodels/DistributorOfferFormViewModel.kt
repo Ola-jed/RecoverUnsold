@@ -22,26 +22,17 @@ import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.validation.FormState
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class DistributorOfferFormViewModelFactory(private val offer: Offer?) :
-    ViewModelProvider.NewInstanceFactory() {
-
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DistributorOfferFormViewModel(offer = offer) as T
-    }
-}
-
-class DistributorOfferFormViewModel(
-    private val offerServiceWrapper: OfferServiceWrapper = KoinJavaComponent.get(OfferServiceWrapper::class.java),
-    private val locationServiceWrapper: LocationServiceWrapper = KoinJavaComponent.get(
-        LocationServiceWrapper::class.java
-    ),
-    private val offer: Offer?
+class DistributorOfferFormViewModel @AssistedInject constructor(
+    private val offerServiceWrapper: OfferServiceWrapper,
+    private val locationServiceWrapper: LocationServiceWrapper,
+    @Assisted private val offer: Offer?
 ) : ViewModel() {
     private val bearerToken = TokenStore.get()!!.bearerToken
     private var locationPaginationQuery by mutableStateOf(PaginationQuery(perPage = 50))
@@ -139,6 +130,23 @@ class DistributorOfferFormViewModel(
                 }
             }
             else -> null
+        }
+    }
+
+    @AssistedFactory
+    interface DistributorOfferFormViewModelFactory {
+        fun create(offer: Offer?): DistributorOfferFormViewModel
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    companion object {
+        fun provideFactory(
+            distributorOfferFormViewModelFactory: DistributorOfferFormViewModelFactory,
+            offer: Offer?
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return distributorOfferFormViewModelFactory.create(offer) as T
+            }
         }
     }
 }

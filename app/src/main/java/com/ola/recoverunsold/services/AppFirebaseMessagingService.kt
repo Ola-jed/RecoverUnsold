@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.messaging.FirebaseMessagingService
+import com.ola.recoverunsold.api.core.ApiClient
 import com.ola.recoverunsold.api.requests.FcmTokenCreateRequest
 import com.ola.recoverunsold.api.services.FcmTokenService
 import com.ola.recoverunsold.utils.store.TokenStore
@@ -11,7 +12,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
 
 class AppFirebaseMessagingService : FirebaseMessagingService() {
     private val job = SupervisorJob()
@@ -37,7 +37,7 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
             return
         }
 
-        val fcmTokenService = KoinJavaComponent.get<FcmTokenService>(FcmTokenService::class.java)
+        val fcmTokenService = ApiClient.buildService<FcmTokenService>()
         scope.launch {
             try {
                 fcmTokenService.createFcmToken(apiToken.bearerToken, FcmTokenCreateRequest(token))

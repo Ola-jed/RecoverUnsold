@@ -44,6 +44,7 @@ import androidx.navigation.NavController
 import com.google.firebase.messaging.FirebaseMessaging
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
+import com.ola.recoverunsold.api.core.ApiClient
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.api.requests.FcmTokenCreateRequest
 import com.ola.recoverunsold.api.responses.TokenRoles
@@ -63,7 +64,6 @@ import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.koin.java.KoinJavaComponent.get
 
 @Composable
 fun LoginScreen(
@@ -100,8 +100,9 @@ fun LoginScreen(
                                 tokenStore.removeToken()
                                 tokenStore.storeToken(token)
                                 TokenStore.init { token }
-                                val accountService: AccountService = get(AccountService::class.java)
-                                val fcmService: FcmTokenService = get(FcmTokenService::class.java)
+                                // TODO: find a better solution
+                                val accountService: AccountService = ApiClient.buildService()
+                                val fcmService: FcmTokenService = ApiClient.buildService()
                                 FirebaseMessaging.getInstance()
                                     .token
                                     .addOnSuccessListener {

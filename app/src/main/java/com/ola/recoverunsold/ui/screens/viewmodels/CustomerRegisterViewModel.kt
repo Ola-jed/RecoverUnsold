@@ -14,14 +14,14 @@ import com.ola.recoverunsold.api.services.AuthService
 import com.ola.recoverunsold.api.services.UserVerificationService
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.FormState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
+import javax.inject.Inject
 
-class CustomerRegisterViewModel(
-    private val authService: AuthService = KoinJavaComponent.get(AuthService::class.java),
-    private val userVerificationService: UserVerificationService = KoinJavaComponent.get(
-        UserVerificationService::class.java
-    )
+@HiltViewModel
+class CustomerRegisterViewModel @Inject constructor(
+    private val authService: AuthService,
+    private val userVerificationService: UserVerificationService
 ) : ViewModel() {
     var apiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive)
     var email by mutableStateOf("")
@@ -33,11 +33,7 @@ class CustomerRegisterViewModel(
         apiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             val response = authService.registerCustomer(
-                CustomerRegisterRequest(
-                    username,
-                    email,
-                    password
-                )
+                CustomerRegisterRequest(username, email, password)
             )
             apiCallResult = if (response.isSuccessful) {
                 val userVerificationResponse = userVerificationService.startUserVerification(
