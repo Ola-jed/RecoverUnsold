@@ -54,6 +54,7 @@ import com.ola.recoverunsold.ui.components.app.DateTimePicker
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorOfferFormViewModel
 import com.ola.recoverunsold.utils.misc.FormType
+import com.ola.recoverunsold.utils.misc.addSeconds
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 import com.ola.recoverunsold.utils.misc.jsonDeserialize
@@ -323,7 +324,8 @@ fun DistributorOfferFormContent(
                     showEndDatePicker = false
                 },
                 date = endDate,
-                minDate = startDate
+                minDate = startDate,
+                maxDate = startDate?.addSeconds(432000UL)
             )
         }
 
