@@ -34,7 +34,6 @@ class DistributorDetailsViewModel @AssistedInject constructor(
 
     init {
         getDistributorInformation()
-        getOffers()
     }
 
     fun getDistributorInformation() {
@@ -46,17 +45,24 @@ class DistributorDetailsViewModel @AssistedInject constructor(
             } else {
                 ApiCallResult.Error(code = response.code())
             }
+            getOffers()
         }
     }
 
     fun getOffers() {
         offersApiCallResult = ApiCallResult.Loading
-        viewModelScope.launch {
-            val response = offerServiceWrapper.getOffers(offerFilterQuery)
-            offersApiCallResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
+
+        if (distributorApiCallResult.data != null) {
+            viewModelScope.launch {
+                val response = offerServiceWrapper.getDistributorOffers(
+                    distributorApiCallResult.data!!.id,
+                    offerFilterQuery
+                )
+                offersApiCallResult = if (response.isSuccessful) {
+                    ApiCallResult.Success(_data = response.body())
+                } else {
+                    ApiCallResult.Error(code = response.code())
+                }
             }
         }
     }
