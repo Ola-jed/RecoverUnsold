@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 fun DistributorOffersScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
-    distributorOffersViewModel: DistributorOffersViewModel = viewModel()
+    distributorOffersViewModel: DistributorOffersViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)

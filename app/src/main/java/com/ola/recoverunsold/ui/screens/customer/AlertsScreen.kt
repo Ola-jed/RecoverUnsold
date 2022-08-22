@@ -27,7 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
@@ -47,7 +47,7 @@ import kotlinx.coroutines.launch
 fun AlertsScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
-    alertsViewModel: AlertsViewModel = viewModel()
+    alertsViewModel: AlertsViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(

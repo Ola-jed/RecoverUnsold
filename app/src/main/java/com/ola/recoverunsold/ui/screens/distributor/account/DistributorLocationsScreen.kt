@@ -24,7 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
@@ -43,7 +43,7 @@ fun DistributorLocationsScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
     snackbarHostState: SnackbarHostState,
-    locationsSectionViewModel: LocationsSectionViewModel = viewModel()
+    locationsSectionViewModel: LocationsSectionViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
 

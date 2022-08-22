@@ -39,7 +39,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
@@ -60,7 +60,7 @@ import kotlinx.coroutines.launch
 fun CustomerRegisterScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
-    customerRegisterViewModel: CustomerRegisterViewModel = viewModel()
+    customerRegisterViewModel: CustomerRegisterViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
     var passwordVisible by remember { mutableStateOf(false) }

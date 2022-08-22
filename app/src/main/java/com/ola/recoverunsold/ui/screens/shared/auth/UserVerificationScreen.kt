@@ -29,7 +29,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 fun UserVerificationScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
-    userVerificationViewModel: UserVerificationViewModel = viewModel()
+    userVerificationViewModel: UserVerificationViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
 

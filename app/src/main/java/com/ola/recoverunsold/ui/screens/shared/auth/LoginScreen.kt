@@ -39,7 +39,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.firebase.messaging.FirebaseMessaging
 import com.ola.recoverunsold.R
@@ -69,7 +69,7 @@ import kotlinx.coroutines.runBlocking
 fun LoginScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
-    loginViewModel: LoginViewModel = viewModel(),
+    loginViewModel: LoginViewModel = hiltViewModel(),
     tokenStore: TokenStore = TokenStore(LocalContext.current)
 ) {
     val coroutineScope = rememberCoroutineScope()

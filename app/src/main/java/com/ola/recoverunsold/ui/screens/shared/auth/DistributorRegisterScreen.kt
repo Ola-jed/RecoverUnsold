@@ -45,7 +45,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
@@ -67,7 +67,7 @@ import kotlinx.coroutines.launch
 fun DistributorRegisterScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
-    distributorRegisterViewModel: DistributorRegisterViewModel = viewModel()
+    distributorRegisterViewModel: DistributorRegisterViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
     var passwordVisible by remember { mutableStateOf(false) }

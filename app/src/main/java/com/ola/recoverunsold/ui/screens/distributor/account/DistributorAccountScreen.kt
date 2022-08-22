@@ -29,7 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
@@ -49,7 +49,7 @@ import kotlinx.coroutines.launch
 fun DistributorAccountScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
-    distributorAccountViewModel: DistributorAccountViewModel = viewModel(),
+    distributorAccountViewModel: DistributorAccountViewModel = hiltViewModel()
 ) {
     val profileIndex = 0
     val locationsIndex = 1

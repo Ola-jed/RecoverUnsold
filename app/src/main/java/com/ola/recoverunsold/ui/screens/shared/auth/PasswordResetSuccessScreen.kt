@@ -63,9 +63,7 @@ fun PasswordResetSuccessScreen(
                         painter = painter,
                         contentDescription = null
                     )
-                    Button(onClick = {
-                        navController.navigate(Routes.Login.path)
-                    }) {
+                    Button(onClick = { navController.navigate(Routes.Login.path) }) {
                         Text(
                             stringResource(R.string.navigate_to_login),
                             style = MaterialTheme.typography.h6
