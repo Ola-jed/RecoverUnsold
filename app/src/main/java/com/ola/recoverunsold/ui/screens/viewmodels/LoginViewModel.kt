@@ -11,7 +11,9 @@ import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.api.core.StatusCode
 import com.ola.recoverunsold.api.requests.LoginRequest
 import com.ola.recoverunsold.api.responses.Token
+import com.ola.recoverunsold.api.services.AccountService
 import com.ola.recoverunsold.api.services.AuthService
+import com.ola.recoverunsold.api.services.FcmTokenService
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.FormState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +21,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val authService: AuthService) : ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val authService: AuthService,
+    private val accountService: AccountService,
+    private val fcmTokenService: FcmTokenService
+) : ViewModel() {
     var apiCallResult: ApiCallResult<Token> by mutableStateOf(ApiCallResult.Inactive)
     var email by mutableStateOf("")
     var password by mutableStateOf("")
@@ -48,4 +54,7 @@ class LoginViewModel @Inject constructor(private val authService: AuthService) :
         in 400..600 -> Strings.get(R.string.unknown_error_occured)
         else -> null
     }
+
+    fun accountService(): AccountService = accountService
+    fun fcmTokenService(): FcmTokenService = fcmTokenService
 }

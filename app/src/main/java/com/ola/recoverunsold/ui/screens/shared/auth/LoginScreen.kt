@@ -44,12 +44,9 @@ import androidx.navigation.NavController
 import com.google.firebase.messaging.FirebaseMessaging
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
-import com.ola.recoverunsold.api.core.ApiClient
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.api.requests.FcmTokenCreateRequest
 import com.ola.recoverunsold.api.responses.TokenRoles
-import com.ola.recoverunsold.api.services.AccountService
-import com.ola.recoverunsold.api.services.FcmTokenService
 import com.ola.recoverunsold.ui.components.app.AppHero
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.NavigationTextButton
@@ -100,9 +97,8 @@ fun LoginScreen(
                                 tokenStore.removeToken()
                                 tokenStore.storeToken(token)
                                 TokenStore.init { token }
-                                // TODO: find a better solution
-                                val accountService: AccountService = ApiClient.buildService()
-                                val fcmService: FcmTokenService = ApiClient.buildService()
+                                val accountService = loginViewModel.accountService()
+                                val fcmService = loginViewModel.fcmTokenService()
                                 FirebaseMessaging.getInstance()
                                     .token
                                     .addOnSuccessListener {
@@ -122,6 +118,11 @@ fun LoginScreen(
                                     val user = response.body()
                                     if (user != null) {
                                         UserObserver.update(user)
+                                    }
+                                }
+                                navController.navigate(Routes.Home.path) {
+                                    popUpTo(Routes.Home.path) {
+                                        inclusive = true
                                     }
                                 }
                             }
