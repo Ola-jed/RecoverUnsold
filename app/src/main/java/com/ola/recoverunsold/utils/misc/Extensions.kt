@@ -32,7 +32,6 @@ import com.ola.recoverunsold.models.LatLong
 import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.utils.resources.Strings
 import me.bytebeats.views.charts.bar.BarChartData
-import me.bytebeats.views.charts.line.LineChartData
 import okhttp3.Cache
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
@@ -60,11 +59,10 @@ private val colorsDeciles = arrayOf(
     Color(red = 51, green = 204, blue = 0),
     Color(red = 25, green = 229, blue = 0)
 )
-
 private val dateTimeFormatter = DateFormat
     .getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault())
-
-private val cacheSize = 5242880L
+private const val cacheSize = 5242880L
+val gson = Gson()
 
 /**
  * Convert a color string to Hsl
@@ -87,7 +85,7 @@ inline fun <reified T> String?.jsonDeserialize(): T? {
     return if (this == null) {
         null
     } else {
-        Gson().fromJson(this, T::class.java)
+        gson.fromJson(this, T::class.java)
     }
 }
 
@@ -95,7 +93,7 @@ inline fun <reified T> String?.jsonDeserialize(): T? {
  * Serialize any object to a json String
  */
 fun <T> T.jsonSerialize(): String {
-    return Gson().toJson(this)
+    return gson.toJson(this)
 }
 
 /**
@@ -382,9 +380,8 @@ fun AlertType.label(): String {
  * Convert the data of orders for a distributor to bars for the chart
  */
 fun DistributorHomeData.toBars(): List<BarChartData.Bar> {
-    val emptyDataList = listOf(BarChartData.Bar(value = 0F, label = "", color = colorsDeciles[0]))
     if (ordersPerDay.isEmpty()) {
-        return emptyDataList
+        return emptyList()
     }
 
     val maxOrdersPerDayDivided = (this.ordersPerDay.values.maxOf { it }) / 10F
@@ -396,13 +393,5 @@ fun DistributorHomeData.toBars(): List<BarChartData.Bar> {
             label = it.key.formatDate(),
             color = colorsDeciles[ordersPerDayDeciles.indexOf(ordersPerDayDeciles.first { value -> value >= it.value })]
         )
-    }.filter { it.value != 0F }.ifEmpty { emptyDataList }
+    }.filter { it.value != 0F }
 }
-
-/**
- * Convert the data of orders for a distributor to bars for the chart
- */
-fun DistributorHomeData.toPoints(): List<LineChartData.Point> = this
-    .ordersPerDay
-    .map { LineChartData.Point(value = it.value.toFloat(), label = it.key.formatDate()) }
-    .filter { it.value != 0F }

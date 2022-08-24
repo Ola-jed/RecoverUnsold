@@ -198,34 +198,43 @@ fun DistributorHomeScreen(
                         }
 
                         val bars = homeData.toBars()
-
-                        BarChart(
-                            barChartData = BarChartData(
-                                bars = bars,
-                                maxBarValue = if (bars.isEmpty()) 5F else bars.maxOf { it.value }
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height((screenHeight * 0.4).dp)
-                                .padding(vertical = 10.dp),
-                            animation = simpleChartAnimation(),
-                            barDrawer = SimpleBarDrawer(),
-                            xAxisDrawer = SimpleXAxisDrawer(
-                                axisLineColor = onBgColor,
-                                axisLineThickness = 2.dp
-                            ),
-                            yAxisDrawer = SimpleYAxisDrawer(
-                                axisLineColor = onBgColor,
-                                labelTextColor = onBgColor,
-                                labelValueFormatter = { it.toInt().toString() },
-                                drawLabelEvery = 6,
-                                axisLineThickness = 2.dp
-                            ),
-                            labelDrawer = SimpleLabelDrawer(
-                                labelTextSize = 13.sp,
-                                labelTextColor = onBgColor
+                        if (bars.isEmpty()) {
+                            Text(
+                                modifier = Modifier
+                                    .align(Alignment.CenterHorizontally)
+                                    .padding(vertical = 15.dp),
+                                text = stringResource(R.string.no_order_found),
+                                style = MaterialTheme.typography.body1
                             )
-                        )
+                        } else {
+                            BarChart(
+                                barChartData = BarChartData(
+                                    bars = bars,
+                                    maxBarValue = if (bars.isEmpty()) 5F else bars.maxOf { it.value }
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height((screenHeight * 0.4).dp)
+                                    .padding(vertical = 10.dp),
+                                animation = simpleChartAnimation(),
+                                barDrawer = SimpleBarDrawer(),
+                                xAxisDrawer = SimpleXAxisDrawer(
+                                    axisLineColor = onBgColor,
+                                    axisLineThickness = 2.dp
+                                ),
+                                yAxisDrawer = SimpleYAxisDrawer(
+                                    axisLineColor = onBgColor,
+                                    labelTextColor = onBgColor,
+                                    labelValueFormatter = { it.toInt().toString() },
+                                    drawLabelEvery = 6,
+                                    axisLineThickness = 2.dp
+                                ),
+                                labelDrawer = SimpleLabelDrawer(
+                                    labelTextSize = 13.sp,
+                                    labelTextColor = onBgColor
+                                )
+                            )
+                        }
 
                         Text(
                             modifier = Modifier
