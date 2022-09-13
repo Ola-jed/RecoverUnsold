@@ -5,6 +5,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val LightColors = lightColors(
     primary = themeLightPrimary,
@@ -43,6 +44,14 @@ fun RecoverUnsoldTheme(
         DarkColors
     } else {
         LightColors
+    }
+
+    val systemUiController = rememberSystemUiController()
+
+    if (darkTheme) {
+        systemUiController.setSystemBarsColor(color = DarkColors.background)
+    } else {
+        systemUiController.setSystemBarsColor(color = LightColors.background)
     }
 
     MaterialTheme(
