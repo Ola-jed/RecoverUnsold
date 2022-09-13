@@ -1,7 +1,9 @@
 *.iml
 .gradle
+/release/*
 /local.properties
 /.idea/*
+recover-unsold-key.keystore
 .DS_Store
 /build
 /captures

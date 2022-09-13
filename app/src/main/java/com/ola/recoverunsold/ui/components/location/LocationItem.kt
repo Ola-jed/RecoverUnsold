@@ -3,10 +3,8 @@ package com.ola.recoverunsold.ui.components.location
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -35,7 +33,6 @@ import coil.request.ImageRequest
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.ui.components.app.ConfirmDialog
-import com.ola.recoverunsold.utils.misc.formatDate
 
 /**
  * The component to show information about a distributor's location
@@ -52,18 +49,9 @@ fun LocationItem(
     var showDeleteConfirmationDialog by rememberSaveable { mutableStateOf(false) }
 
     Card(modifier = modifier, elevation = 15.dp, shape = RoundedCornerShape(20.dp)) {
-        Column(modifier = Modifier.padding(5.dp)) {
-            Text(
-                location.name,
-                style = MaterialTheme.typography.h6,
-                modifier = Modifier
-                    .padding(bottom = 10.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
-
-            if (location.image != null && location.indication == null) {
+        Column {
+            if (location.image != null) {
                 val height = (LocalConfiguration.current.screenHeightDp * 0.1).dp
-                val width = (LocalConfiguration.current.screenWidthDp * 0.70).dp
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(location.image)
@@ -73,55 +61,30 @@ fun LocationItem(
                     contentScale = ContentScale.Crop,
                     contentDescription = null,
                     modifier = Modifier
-                        .size(height = height, width = width)
-                        .padding(end = 5.dp)
-                        .clip(RoundedCornerShape(10.dp))
+                        .height(height)
+                        .clip(RoundedCornerShape(20.dp, 20.dp, 0.dp, 0.dp))
                         .align(Alignment.CenterHorizontally)
                 )
             }
 
-            if (location.indication != null && location.image == null) {
-                val textWidth = (LocalConfiguration.current.screenWidthDp * 0.70).dp
+            Text(
+                location.name,
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 10.dp)
+            )
+
+            if (location.indication != null) {
                 Text(
                     location.indication,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.width(width = textWidth)
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                        .align(Alignment.CenterHorizontally)
                 )
             }
 
-            if (location.image != null && location.indication != null) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    val height = (LocalConfiguration.current.screenHeightDp * 0.1).dp
-                    val width = (LocalConfiguration.current.screenWidthDp * 0.40).dp
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(location.image)
-                            .crossfade(true)
-                            .build(),
-                        contentScale = ContentScale.Crop,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(height = height, width = width)
-                            .padding(end = 5.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                    )
-                    val textWidth = (LocalConfiguration.current.screenWidthDp * 0.40).dp
-                    Text(
-                        location.indication,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.width(width = textWidth)
-                    )
-                }
-            }
-
-            Text(
-                stringResource(R.string.published_the, location.createdAt.formatDate()),
-                modifier = Modifier.padding(top = 5.dp)
-            )
             if (isModifiable) {
                 Row(
                     modifier = Modifier.align(Alignment.End),

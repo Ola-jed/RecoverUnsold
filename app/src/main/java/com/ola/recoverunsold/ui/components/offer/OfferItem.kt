@@ -76,7 +76,7 @@ fun OfferItem(
                     .padding(10.dp)
             ) {
                 Text(
-                    modifier = Modifier.padding(top = 10.dp),
+                    modifier = Modifier.padding(top = 7.dp),
                     text = stringResource(
                         R.string.total_amount,
                         offer.price.formatWithoutTrailingZeros()
