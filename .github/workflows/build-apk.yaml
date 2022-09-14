@@ -14,6 +14,10 @@ jobs:
         env:
           DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: echo $DATA > /home/runner/work/RecoverUnsold/RecoverUnsold/app/google-services.json
+      - name: Debug
+        env:
+          DATA: ${{ secrets.LOCAL_PROPERTIES }}
+        run: echo $DATA
       - name: Create the local properties file
         env:
           DATA: ${{ secrets.LOCAL_PROPERTIES }}
