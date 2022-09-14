@@ -56,9 +56,7 @@ fun AlertForm(
 
             ExposedDropdownMenu(
                 expanded = showAlertTypeDropdown,
-                onDismissRequest = {
-                    showAlertTypeDropdown = false
-                }
+                onDismissRequest = { showAlertTypeDropdown = false }
             ) {
                 AlertType.values().forEach {
                     DropdownMenuItem(onClick = {
