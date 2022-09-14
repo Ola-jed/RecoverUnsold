@@ -238,9 +238,7 @@ fun OrderDetailsScreen(
                         }
 
                         SubtitleWithIcon(
-                            modifier = Modifier
-                                .padding(top = 15.dp)
-                                .align(Alignment.CenterHorizontally),
+                            modifier = Modifier.padding(top = 15.dp),
                             text = stringResource(R.string.order_details),
                             imageVector = Icons.Default.Sell
                         )
@@ -261,9 +259,7 @@ fun OrderDetailsScreen(
                         )
 
                         SubtitleWithIcon(
-                            modifier = Modifier
-                                .padding(top = 15.dp)
-                                .align(Alignment.CenterHorizontally),
+                            modifier = Modifier.padding(top = 15.dp),
                             text = stringResource(R.string.offer_details),
                             imageVector = Icons.Default.Info
                         )
@@ -312,9 +308,7 @@ fun OrderDetailsScreen(
 
                         if (!offer.products.isNullOrEmpty()) {
                             SubtitleWithIcon(
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(top = 20.dp, bottom = 10.dp),
+                                modifier = Modifier.padding(top = 20.dp, bottom = 10.dp),
                                 text = stringResource(id = R.string.products_label),
                                 imageVector = Icons.Default.ShoppingBag
                             )
@@ -336,9 +330,7 @@ fun OrderDetailsScreen(
 
                         if (offer.location != null) {
                             SubtitleWithIcon(
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(top = 20.dp, bottom = 10.dp),
+                                modifier = Modifier.padding(top = 20.dp, bottom = 10.dp),
                                 text = stringResource(id = R.string.pick_up_point),
                                 imageVector = Icons.Default.Place
                             )
@@ -372,9 +364,7 @@ fun OrderDetailsScreen(
 
                             if (customer != null) {
                                 SubtitleWithIcon(
-                                    modifier = Modifier
-                                        .padding(top = 15.dp)
-                                        .align(Alignment.CenterHorizontally),
+                                    modifier = Modifier.padding(top = 15.dp),
                                     text = stringResource(R.string.customer),
                                     imageVector = Icons.Default.Person
                                 )
@@ -400,9 +390,7 @@ fun OrderDetailsScreen(
                         }
 
                         SubtitleWithIcon(
-                            modifier = Modifier
-                                .padding(top = 15.dp)
-                                .align(Alignment.CenterHorizontally),
+                            modifier = Modifier.padding(top = 15.dp),
                             text = stringResource(id = R.string.comments),
                             imageVector = Icons.Default.Comment
                         )
