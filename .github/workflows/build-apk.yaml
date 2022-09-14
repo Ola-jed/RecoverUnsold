@@ -11,8 +11,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Put the firebase data in the google-services file
-        env:
-          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: echo ${{ secrets.GOOGLE_SERVICES_JSON }} > /home/runner/work/RecoverUnsold/RecoverUnsold/app/google-services.json
       - name: Insert the google maps api key into the local.properties file
         run: echo ${{ secrets.MAPS_API_KEY }} >> /home/runner/work/RecoverUnsold/RecoverUnsold/local.properties
