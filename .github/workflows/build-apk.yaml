@@ -10,6 +10,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Put the firebase data in the google-services file
+        env:
+          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo $DATA > /home/runner/work/RecoverUnsold/RecoverUnsold/app/google-services.json
+      - name: Create the local properties file
+        env:
+          DATA: ${{ secrets.LOCAL_PROPERTIES }}
+        run: echo $DATA > /home/runner/work/RecoverUnsold/RecoverUnsold/local.properties
       - name: Generate Release APK
         run: ./gradlew assembleRelease
       - name: Sign APK
