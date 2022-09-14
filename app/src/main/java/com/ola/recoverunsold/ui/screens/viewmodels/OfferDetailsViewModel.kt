@@ -35,8 +35,8 @@ class OfferDetailsViewModel @AssistedInject constructor(
     var orderApiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive)
     var withdrawalDate by mutableStateOf(Date())
     val currentUserId = UserObserver.user.value?.id ?: ""
-    val token = TokenStore.get()!!.bearerToken
-    val isCustomer = TokenStore.get()!!.role == TokenRoles.CUSTOMER
+    val token = TokenStore.get()?.bearerToken ?: ""
+    val isCustomer = TokenStore.get()?.role == TokenRoles.CUSTOMER
     val isDistributor = TokenStore.get()?.role == TokenRoles.DISTRIBUTOR
 
     init {

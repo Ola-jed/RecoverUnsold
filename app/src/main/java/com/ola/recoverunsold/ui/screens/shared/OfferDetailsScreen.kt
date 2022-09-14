@@ -189,7 +189,6 @@ fun OfferDetailsScreen(
                         .verticalScroll(rememberScrollState())
                 ) {
                     SubtitleWithIcon(
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
                         text = stringResource(id = R.string.offer_details),
                         imageVector = Icons.Default.Info
                     )
@@ -230,9 +229,7 @@ fun OfferDetailsScreen(
 
                     if (!offer.products.isNullOrEmpty()) {
                         SubtitleWithIcon(
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .padding(top = 20.dp, bottom = 10.dp),
+                            modifier = Modifier.padding(top = 20.dp, bottom = 10.dp),
                             text = stringResource(id = R.string.products_label),
                             imageVector = Icons.Default.ShoppingBag
                         )
@@ -282,9 +279,7 @@ fun OfferDetailsScreen(
 
                     if (offer.location != null) {
                         SubtitleWithIcon(
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .padding(top = 20.dp, bottom = 10.dp),
+                            modifier = Modifier.padding(top = 20.dp, bottom = 10.dp),
                             text = stringResource(id = R.string.pick_up_point),
                             imageVector = Icons.Default.Place
                         )
