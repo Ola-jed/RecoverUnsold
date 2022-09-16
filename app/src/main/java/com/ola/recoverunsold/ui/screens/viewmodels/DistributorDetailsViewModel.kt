@@ -15,6 +15,7 @@ import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
 import com.ola.recoverunsold.models.DistributorInformation
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.Page
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -39,30 +40,20 @@ class DistributorDetailsViewModel @AssistedInject constructor(
     fun getDistributorInformation() {
         distributorApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = distributorService.getDistributor(distributorId)
-            distributorApiCallResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            distributorApiCallResult = distributorService
+                .getDistributor(distributorId)
+                .toApiCallResult()
             getOffers()
         }
     }
 
     fun getOffers() {
         offersApiCallResult = ApiCallResult.Loading
-
         if (distributorApiCallResult.data != null) {
             viewModelScope.launch {
-                val response = offerServiceWrapper.getDistributorOffers(
-                    distributorApiCallResult.data!!.id,
-                    offerFilterQuery
-                )
-                offersApiCallResult = if (response.isSuccessful) {
-                    ApiCallResult.Success(_data = response.body())
-                } else {
-                    ApiCallResult.Error(code = response.code())
-                }
+                offersApiCallResult = offerServiceWrapper
+                    .getDistributorOffers(distributorApiCallResult.data!!.id, offerFilterQuery)
+                    .toApiCallResult()
             }
         }
     }

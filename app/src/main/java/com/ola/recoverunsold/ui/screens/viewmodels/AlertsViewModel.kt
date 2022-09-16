@@ -13,6 +13,7 @@ import com.ola.recoverunsold.api.services.DistributorService
 import com.ola.recoverunsold.models.Alert
 import com.ola.recoverunsold.models.AlertType
 import com.ola.recoverunsold.models.DistributorLabel
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,12 +39,9 @@ class AlertsViewModel @Inject constructor(
     fun getAlerts() {
         alertsApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = alertsService.getAlerts(token)
-            alertsApiCallResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            alertsApiCallResult = alertsService
+                .getAlerts(token)
+                .toApiCallResult()
         }
     }
 

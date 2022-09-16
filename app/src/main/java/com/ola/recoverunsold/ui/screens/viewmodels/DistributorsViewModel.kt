@@ -12,6 +12,7 @@ import com.ola.recoverunsold.api.query.DistributorFilterQuery
 import com.ola.recoverunsold.api.services.wrappers.DistributorServiceWrapper
 import com.ola.recoverunsold.models.DistributorInformation
 import com.ola.recoverunsold.models.Page
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -33,12 +34,9 @@ class DistributorsViewModel @Inject constructor(
     fun getDistributors() {
         distributorsApiResult = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = distributorServiceWrapper.getDistributors(distributorFilterQuery)
-            distributorsApiResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            distributorsApiResult = distributorServiceWrapper
+                .getDistributors(distributorFilterQuery)
+                .toApiCallResult()
         }
     }
 

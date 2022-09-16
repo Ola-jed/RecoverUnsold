@@ -26,6 +26,7 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.ola.recoverunsold.R
+import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.models.AlertType
 import com.ola.recoverunsold.models.DistributorHomeData
 import com.ola.recoverunsold.models.LatLong
@@ -36,6 +37,7 @@ import okhttp3.Cache
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -386,7 +388,6 @@ fun DistributorHomeData.toBars(): List<BarChartData.Bar> {
 
     val maxOrdersPerDayDivided = (this.ordersPerDay.values.maxOf { it }) / 10F
     val ordersPerDayDeciles = (1..10).map { maxOrdersPerDayDivided * it }
-
     return this.ordersPerDay.map {
         BarChartData.Bar(
             value = it.value.toFloat(),
@@ -394,4 +395,27 @@ fun DistributorHomeData.toBars(): List<BarChartData.Bar> {
             color = colorsDeciles[ordersPerDayDeciles.indexOf(ordersPerDayDeciles.first { value -> value >= it.value })]
         )
     }.filter { it.value != 0F }
+}
+
+fun <T> Response<T>.toApiCallResult(onSuccess: (() -> Unit)? = null): ApiCallResult<T> {
+    return if (this.isSuccessful) {
+        if (onSuccess != null) {
+            onSuccess()
+        }
+        ApiCallResult.Success(_data = this.body())
+    } else {
+        ApiCallResult.Error(code = this.code())
+    }
+}
+
+@JvmName("toApiCallResultVoid")
+fun Response<Void>.toApiCallResult(onSuccess: (() -> Unit)? = null): ApiCallResult<Unit> {
+    return if (this.isSuccessful) {
+        if (onSuccess != null) {
+            onSuccess()
+        }
+        ApiCallResult.Success(_data = Unit)
+    } else {
+        ApiCallResult.Error(code = this.code())
+    }
 }

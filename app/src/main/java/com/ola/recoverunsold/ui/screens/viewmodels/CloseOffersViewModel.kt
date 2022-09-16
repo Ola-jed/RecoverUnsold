@@ -13,6 +13,7 @@ import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
 import com.ola.recoverunsold.models.LatLong
 import com.ola.recoverunsold.models.OfferWithRelativeDistance
 import com.ola.recoverunsold.models.Page
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.FormState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,12 +38,9 @@ class CloseOffersViewModel @Inject constructor(
     fun getCloseOffers() {
         closeOffersApiResult = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = offerServiceWrapper.getCloseOffers(offerDistanceFilterQuery)
-            closeOffersApiResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            closeOffersApiResult = offerServiceWrapper
+                .getCloseOffers(offerDistanceFilterQuery)
+                .toApiCallResult()
         }
     }
 

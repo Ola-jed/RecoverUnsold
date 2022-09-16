@@ -16,6 +16,7 @@ import com.ola.recoverunsold.models.LatLong
 import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.utils.misc.createFile
 import com.ola.recoverunsold.utils.misc.nullIfBlank
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.validation.FormState
@@ -37,7 +38,7 @@ class DistributorLocationFormViewModel @AssistedInject constructor(
     var indication by mutableStateOf(location?.indication ?: "")
     var imageUri by mutableStateOf<Uri?>(null)
     var latLong by mutableStateOf(location?.coordinates ?: LatLong.zero())
-    val token = TokenStore.get()!!
+    val token = TokenStore.get()!!.bearerToken
 
     fun create(context: Context) {
         apiCallResult = ApiCallResult.Loading
@@ -58,15 +59,9 @@ class DistributorLocationFormViewModel @AssistedInject constructor(
             }
         )
         viewModelScope.launch {
-            val response = locationServiceWrapper.createLocation(
-                token.bearerToken,
-                locationRequest
-            )
-            apiCallResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            apiCallResult = locationServiceWrapper
+                .createLocation(token, locationRequest)
+                .toApiCallResult()
         }
     }
 
@@ -90,7 +85,7 @@ class DistributorLocationFormViewModel @AssistedInject constructor(
         )
         viewModelScope.launch {
             val response = locationServiceWrapper.updateLocation(
-                token.bearerToken,
+                token,
                 location?.id!!,
                 locationRequest
             )

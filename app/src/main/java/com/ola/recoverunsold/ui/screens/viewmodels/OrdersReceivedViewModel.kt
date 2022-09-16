@@ -12,6 +12,7 @@ import com.ola.recoverunsold.api.query.OrderFilterQuery
 import com.ola.recoverunsold.api.services.wrappers.OrderServiceWrapper
 import com.ola.recoverunsold.models.Order
 import com.ola.recoverunsold.models.Page
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,12 +34,9 @@ class OrdersReceivedViewModel @Inject constructor(
     fun getOrders() {
         ordersGetResponse = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = orderServiceWrapper.getDistributorOrders(token, orderQuery)
-            ordersGetResponse = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            ordersGetResponse = orderServiceWrapper
+                .getDistributorOrders(token, orderQuery)
+                .toApiCallResult()
         }
     }
 
@@ -59,7 +57,7 @@ class OrdersReceivedViewModel @Inject constructor(
     fun acceptOrder(order: Order, onSuccess: () -> Unit, onFailure: () -> Unit) {
         viewModelScope.launch {
             val response = orderServiceWrapper.acceptOrder(token, order.id)
-            if(response.isSuccessful) {
+            if (response.isSuccessful) {
                 onSuccess()
             } else {
                 onFailure()

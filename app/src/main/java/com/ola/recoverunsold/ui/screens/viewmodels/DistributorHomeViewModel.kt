@@ -11,6 +11,7 @@ import com.ola.recoverunsold.api.query.PeriodQuery
 import com.ola.recoverunsold.api.services.HomeService
 import com.ola.recoverunsold.models.DistributorHomeData
 import com.ola.recoverunsold.utils.misc.minusSeconds
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -47,29 +48,18 @@ class DistributorHomeViewModel @Inject constructor(
     fun getHomeData() {
         homeDataApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = homeService.getDistributorHomeData(
-                token = token,
-                period = periodQuery.toQueryMap()
-            )
-
-            homeDataApiCallResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            homeDataApiCallResult = homeService
+                .getDistributorHomeData(token = token, period = periodQuery.toQueryMap())
+                .toApiCallResult()
         }
     }
 
     fun refresh() {
         viewModelScope.launch {
             _isRefreshing.emit(true)
-            val response = homeService.getDistributorHomeData(
-                token = token,
-                period = periodQuery.toQueryMap()
-            )
-            if (response.isSuccessful) {
-                homeDataApiCallResult = ApiCallResult.Success(_data = response.body())
-            }
+            homeDataApiCallResult = homeService
+                .getDistributorHomeData(token = token, period = periodQuery.toQueryMap())
+                .toApiCallResult()
             _isRefreshing.emit(false)
         }
     }

@@ -74,12 +74,12 @@ fun PasswordResetScreen(
                     passwordResetViewModel.submit()
                 }
             },
-            loading = passwordResetViewModel.apiCallResult.status == ApiStatus.LOADING,
+            loading = passwordResetViewModel.passwordResetApiCallResult.status == ApiStatus.LOADING,
             errorMessage = passwordResetViewModel.errorMessage(),
             navController = navController,
             snackbarHostState = snackbarHostState,
             coroutineScope = coroutineScope,
-            isSuccessful = passwordResetViewModel.apiCallResult.status == ApiStatus.SUCCESS,
+            isSuccessful = passwordResetViewModel.passwordResetApiCallResult.status == ApiStatus.SUCCESS,
             onValidationSuccess = {
                 passwordResetViewModel.formState = passwordResetViewModel.formState.copy(
                     isValid = true,

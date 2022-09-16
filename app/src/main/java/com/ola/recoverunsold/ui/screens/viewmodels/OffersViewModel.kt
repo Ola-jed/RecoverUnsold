@@ -13,6 +13,7 @@ import com.ola.recoverunsold.api.query.OfferFilterQuery
 import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.Page
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -32,12 +33,9 @@ class OffersViewModel @Inject constructor(
     fun getOffers() {
         offersApiResult = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = offerServiceWrapper.getOffers(offerFilterQuery)
-            offersApiResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            offersApiResult = offerServiceWrapper
+                .getOffers(offerFilterQuery)
+                .toApiCallResult()
         }
     }
 

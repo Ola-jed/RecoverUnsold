@@ -14,6 +14,7 @@ import com.ola.recoverunsold.api.responses.Token
 import com.ola.recoverunsold.api.services.AccountService
 import com.ola.recoverunsold.api.services.AuthService
 import com.ola.recoverunsold.api.services.FcmTokenService
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.FormState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,13 +35,9 @@ class LoginViewModel @Inject constructor(
     fun login(onSuccess: () -> Unit = {}) {
         apiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = authService.login(LoginRequest(email = email, password = password))
-            apiCallResult = if (response.isSuccessful) {
-                val token = response.body()
-                ApiCallResult.Success(_data = token)
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            apiCallResult = authService
+                .login(LoginRequest(email, password))
+                .toApiCallResult()
             if (apiCallResult.status == ApiStatus.SUCCESS) {
                 onSuccess()
             }

@@ -10,6 +10,7 @@ import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.core.StatusCode
 import com.ola.recoverunsold.api.requests.ForgotPasswordStartRequest
 import com.ola.recoverunsold.api.services.ForgotPasswordService
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.FormState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,14 +28,9 @@ class ForgotPasswordViewModel @Inject constructor(
     fun submit() {
         apiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = forgotPasswordService.startForgotPassword(
-                ForgotPasswordStartRequest(email)
-            )
-            apiCallResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = Unit)
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            apiCallResult = forgotPasswordService
+                .startForgotPassword(ForgotPasswordStartRequest(email))
+                .toApiCallResult()
         }
     }
 

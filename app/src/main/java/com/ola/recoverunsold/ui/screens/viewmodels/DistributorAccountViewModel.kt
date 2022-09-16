@@ -11,6 +11,7 @@ import com.ola.recoverunsold.api.requests.DistributorUpdateRequest
 import com.ola.recoverunsold.api.services.AccountService
 import com.ola.recoverunsold.models.Distributor
 import com.ola.recoverunsold.utils.misc.nullIfBlank
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
@@ -24,7 +25,7 @@ class DistributorAccountViewModel @Inject constructor(
     private val accountService: AccountService
 ) : ViewModel() {
     private val distributor = (UserObserver.user.value!! as Distributor)
-    private val token = TokenStore.get()!!
+    private val token = TokenStore.get()!!.bearerToken
     var phone by mutableStateOf(distributor.phone)
     var username by mutableStateOf(distributor.username)
     var taxId by mutableStateOf(distributor.taxId)
@@ -36,8 +37,8 @@ class DistributorAccountViewModel @Inject constructor(
     fun updateDistributor() {
         accountApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = accountService.updateDistributor(
-                token.bearerToken,
+            accountApiCallResult = accountService.updateDistributor(
+                token,
                 DistributorUpdateRequest(
                     username = username,
                     phone = phone,
@@ -45,8 +46,7 @@ class DistributorAccountViewModel @Inject constructor(
                     rccm = rccm,
                     websiteUrl = websiteUrl.nullIfBlank()
                 )
-            )
-            accountApiCallResult = if (response.isSuccessful) {
+            ).toApiCallResult {
                 UserObserver.update(
                     (UserObserver.user.value as Distributor).copy(
                         username = username,
@@ -56,9 +56,6 @@ class DistributorAccountViewModel @Inject constructor(
                         websiteUrl = websiteUrl.nullIfBlank()
                     )
                 )
-                ApiCallResult.Success(_data = Unit)
-            } else {
-                ApiCallResult.Error(code = response.code())
             }
         }
     }
@@ -66,14 +63,9 @@ class DistributorAccountViewModel @Inject constructor(
     fun deleteDistributor(onDeleteSuccess: () -> Unit) {
         accountApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = accountService.deleteAccount(token.bearerToken)
-            accountApiCallResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = Unit).also {
-                    onDeleteSuccess()
-                }
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            accountApiCallResult = accountService
+                .deleteAccount(token)
+                .toApiCallResult(onDeleteSuccess)
         }
     }
 

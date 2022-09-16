@@ -14,6 +14,7 @@ import com.ola.recoverunsold.api.services.wrappers.OrderServiceWrapper
 import com.ola.recoverunsold.models.Customer
 import com.ola.recoverunsold.models.Opinion
 import com.ola.recoverunsold.models.Order
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
@@ -46,12 +47,9 @@ class OrderDetailsViewModel @AssistedInject constructor(
     fun getOrder() {
         opinionCommentApiCallResult = ApiCallResult.Inactive
         viewModelScope.launch {
-            val response = ordersServiceWrapper.getOrder(token, orderId)
-            orderApiCallResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = null)
-            }
+            orderApiCallResult = ordersServiceWrapper
+                .getOrder(token, orderId)
+                .toApiCallResult()
         }
     }
 
@@ -59,10 +57,9 @@ class OrderDetailsViewModel @AssistedInject constructor(
         opinionCommentApiCallResult = ApiCallResult.Inactive
         viewModelScope.launch {
             _isRefreshing.emit(true)
-            val response = ordersServiceWrapper.getOrder(token, orderId)
-            if (response.isSuccessful) {
-                orderApiCallResult = ApiCallResult.Success(_data = response.body())
-            }
+            orderApiCallResult = ordersServiceWrapper
+                .getOrder(token, orderId)
+                .toApiCallResult()
             _isRefreshing.emit(false)
         }
     }

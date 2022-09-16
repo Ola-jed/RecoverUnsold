@@ -16,6 +16,7 @@ import com.ola.recoverunsold.api.services.wrappers.OrderServiceWrapper
 import com.ola.recoverunsold.api.services.wrappers.ProductServiceWrapper
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.Product
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
@@ -46,12 +47,9 @@ class OfferDetailsViewModel @AssistedInject constructor(
     fun getOffer() {
         offerApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = offerServiceWrapper.getOffer(offerId)
-            offerApiCallResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            offerApiCallResult = offerServiceWrapper
+                .getOffer(offerId)
+                .toApiCallResult()
         }
     }
 
@@ -72,7 +70,7 @@ class OfferDetailsViewModel @AssistedInject constructor(
             val response = orderService.createOrder(
                 token,
                 offerId,
-                OrderCreateRequest(withdrawalDate = withdrawalDate)
+                OrderCreateRequest(withdrawalDate)
             )
             orderApiCallResult = if (response.isSuccessful) {
                 ApiCallResult.Success(_data = Unit)

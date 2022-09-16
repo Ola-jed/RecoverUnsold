@@ -23,7 +23,11 @@ class MainViewModel @Inject constructor(private val accountService: AccountServi
 
     fun fetchData(context: Context) {
         viewModelScope.launch {
-            val storedToken = TokenStore(context).token().firstOrNull()?.toApiToken()
+            val storedToken = TokenStore(context)
+                .token()
+                .firstOrNull()
+                ?.toApiToken()
+
             try {
                 if (storedToken != null) {
                     val token = TokenStore.getOr { storedToken }

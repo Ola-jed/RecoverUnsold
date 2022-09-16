@@ -19,6 +19,7 @@ import com.ola.recoverunsold.api.services.wrappers.LocationServiceWrapper
 import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
 import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.models.Offer
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.validation.FormState
@@ -85,12 +86,9 @@ class DistributorOfferFormViewModel @AssistedInject constructor(
             locationId = location!!.id
         )
         viewModelScope.launch {
-            val response = offerServiceWrapper.createOffer(bearerToken, offerCreateRequest)
-            offerResponse = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            offerResponse = offerServiceWrapper
+                .createOffer(bearerToken, offerCreateRequest)
+                .toApiCallResult()
         }
     }
 

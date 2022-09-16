@@ -9,6 +9,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.services.HomeService
 import com.ola.recoverunsold.models.CustomerHomeData
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,9 +20,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val homeService: HomeService
-) : ViewModel() {
+class HomeViewModel @Inject constructor(private val homeService: HomeService) : ViewModel() {
     var homeDataApiCallResult: ApiCallResult<CustomerHomeData> by mutableStateOf(ApiCallResult.Inactive)
     private val _isRefreshing = MutableStateFlow(false)
     private val token = TokenStore.get()?.bearerToken
@@ -36,22 +35,18 @@ class HomeViewModel @Inject constructor(
     private fun getHomeData() {
         homeDataApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = homeService.getCustomerHomeData(token)
-            homeDataApiCallResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            homeDataApiCallResult = homeService
+                .getCustomerHomeData(token)
+                .toApiCallResult()
         }
     }
 
     fun refresh() {
         viewModelScope.launch {
             _isRefreshing.emit(true)
-            val response = homeService.getCustomerHomeData(token)
-            if (response.isSuccessful) {
-                homeDataApiCallResult = ApiCallResult.Success(_data = response.body())
-            }
+            homeDataApiCallResult = homeService
+                .getCustomerHomeData(token)
+                .toApiCallResult()
             _isRefreshing.emit(false)
         }
     }

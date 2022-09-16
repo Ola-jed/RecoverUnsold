@@ -9,6 +9,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.requests.ReviewMessageRequest
 import com.ola.recoverunsold.api.services.ReviewsService
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,12 +25,9 @@ class AboutViewModel @Inject constructor(private val reviewsService: ReviewsServ
     fun publishMessage() {
         apiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = reviewsService.publishReview(token, ReviewMessageRequest(message))
-            apiCallResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = Unit)
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            apiCallResult = reviewsService
+                .publishReview(token, ReviewMessageRequest(message))
+                .toApiCallResult()
         }
     }
 

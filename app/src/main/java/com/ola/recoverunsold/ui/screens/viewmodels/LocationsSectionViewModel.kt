@@ -13,6 +13,7 @@ import com.ola.recoverunsold.api.query.PaginationQuery
 import com.ola.recoverunsold.api.services.wrappers.LocationServiceWrapper
 import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.models.Page
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,12 +35,9 @@ class LocationsSectionViewModel @Inject constructor(
     fun getLocations() {
         locationsGetResponse = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = locationServiceWrapper.getLocations(token.bearerToken, paginationQuery)
-            locationsGetResponse = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = response.body())
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            locationsGetResponse = locationServiceWrapper
+                .getLocations(token.bearerToken, paginationQuery)
+                .toApiCallResult()
         }
     }
 

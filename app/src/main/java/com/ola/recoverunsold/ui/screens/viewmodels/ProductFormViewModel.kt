@@ -16,6 +16,7 @@ import com.ola.recoverunsold.api.requests.ProductUpdateRequest
 import com.ola.recoverunsold.api.services.wrappers.ProductServiceWrapper
 import com.ola.recoverunsold.models.Product
 import com.ola.recoverunsold.utils.misc.createFile
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.validation.FormState
@@ -69,21 +70,10 @@ class ProductFormViewModel @AssistedInject constructor(
 
     fun update() {
         productApiCall = ApiCallResult.Loading
-        val productUpdateRequest = ProductUpdateRequest(
-            name = name,
-            description = description
-        )
         viewModelScope.launch {
-            val response = productServiceWrapper.updateProduct(
-                product?.id!!,
-                bearerToken,
-                productUpdateRequest
-            )
-            productApiCall = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = Unit)
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            productApiCall = productServiceWrapper
+                .updateProduct(product?.id!!, bearerToken, ProductUpdateRequest(name, description))
+                .toApiCallResult()
         }
     }
 

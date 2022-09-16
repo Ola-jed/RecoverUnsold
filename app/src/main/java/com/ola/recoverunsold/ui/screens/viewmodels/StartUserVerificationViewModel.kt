@@ -10,6 +10,7 @@ import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.core.StatusCode
 import com.ola.recoverunsold.api.requests.UserVerificationStartRequest
 import com.ola.recoverunsold.api.services.UserVerificationService
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.FormState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,14 +28,9 @@ class StartUserVerificationViewModel @Inject constructor(
     fun submit() {
         apiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = userVerificationService.startUserVerification(
-                UserVerificationStartRequest(email)
-            )
-            apiCallResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = Unit)
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            apiCallResult = userVerificationService
+                .startUserVerification(UserVerificationStartRequest(email))
+                .toApiCallResult()
         }
     }
 

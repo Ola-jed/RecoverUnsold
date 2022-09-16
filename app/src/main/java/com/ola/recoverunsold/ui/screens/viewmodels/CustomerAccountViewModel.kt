@@ -11,6 +11,7 @@ import com.ola.recoverunsold.api.requests.CustomerUpdateRequest
 import com.ola.recoverunsold.api.services.AccountService
 import com.ola.recoverunsold.models.Customer
 import com.ola.recoverunsold.utils.misc.nullIfBlank
+import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
@@ -34,15 +35,10 @@ class CustomerAccountViewModel @Inject constructor(
     fun updateCustomer() {
         accountApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = accountService.updateCustomer(
+            accountApiCallResult = accountService.updateCustomer(
                 token.bearerToken,
-                CustomerUpdateRequest(
-                    username,
-                    firstName.nullIfBlank(),
-                    lastName.nullIfBlank()
-                )
-            )
-            accountApiCallResult = if (response.isSuccessful) {
+                CustomerUpdateRequest(username, firstName.nullIfBlank(), lastName.nullIfBlank())
+            ).toApiCallResult {
                 UserObserver.update(
                     (UserObserver.user.value as Customer).copy(
                         username = username,
@@ -50,9 +46,6 @@ class CustomerAccountViewModel @Inject constructor(
                         lastName = lastName.nullIfBlank()
                     )
                 )
-                ApiCallResult.Success(_data = Unit)
-            } else {
-                ApiCallResult.Error(code = response.code())
             }
         }
     }
@@ -60,14 +53,9 @@ class CustomerAccountViewModel @Inject constructor(
     fun deleteCustomer(onDeleteSuccess: () -> Unit) {
         accountApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
-            val response = accountService.deleteAccount(token.bearerToken)
-            accountApiCallResult = if (response.isSuccessful) {
-                ApiCallResult.Success(_data = Unit).also {
-                    onDeleteSuccess()
-                }
-            } else {
-                ApiCallResult.Error(code = response.code())
-            }
+            accountApiCallResult = accountService
+                .deleteAccount(token.bearerToken)
+                .toApiCallResult(onDeleteSuccess)
         }
     }
 
