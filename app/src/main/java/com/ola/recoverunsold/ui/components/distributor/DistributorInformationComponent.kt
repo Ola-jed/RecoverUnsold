@@ -10,6 +10,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Email
@@ -18,13 +19,11 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import com.ola.recoverunsold.R
@@ -65,7 +64,6 @@ fun DistributorInformationComponent(
                 data = distributorInformation.phone
             )
 
-
             var distributorWebsite = distributorInformation.websiteUrl
 
             if (distributorWebsite == null) {
@@ -99,10 +97,7 @@ fun DistributorInformationComponent(
                     append(distributorWebsite)
 
                     addStyle(
-                        style = SpanStyle(
-                            color = Color.Blue,
-                            textDecoration = TextDecoration.Underline
-                        ),
+                        style = SpanStyle(color = MaterialTheme.colors.primary),
                         start = 0,
                         end = distributorWebsite.length
                     )
@@ -116,7 +111,6 @@ fun DistributorInformationComponent(
                 }
 
                 val uriHandler = LocalUriHandler.current
-
                 DistributorInformationLine(
                     modifier = Modifier.padding(vertical = 5.dp),
                     leadingIcon = { Icon(Icons.Filled.Language, contentDescription = null) },

@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,22 +32,20 @@ fun CustomerOrderStatsComponent(
     val orders = customerOrderStats.totalOrders
     val amount = customerOrderStats.totalOrdersAmount
 
-    Surface(
+    Card(
         modifier = modifier,
         elevation = 20.dp,
-        shape = RoundedCornerShape(10.dp),
-        color = MaterialTheme.colors.secondary
+        shape = RoundedCornerShape(10.dp)
     ) {
         Column(modifier = Modifier.padding(5.dp)) {
             Text(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 text = stringResource(id = R.string.my_orders),
-                style = MaterialTheme.typography.h6,
-                color = MaterialTheme.colors.onSecondary
+                style = MaterialTheme.typography.h6
             )
 
             Divider(
-                color = MaterialTheme.colors.onSecondary,
+                modifier = Modifier.padding(bottom = 15.dp),
                 thickness = 2.dp
             )
 
@@ -72,8 +70,7 @@ fun CustomerOrderStatsComponent(
                             count = orders,
                             orders
                         ),
-                        maxLines = 2,
-                        color = MaterialTheme.colors.onSecondary
+                        maxLines = 2
                     )
                 }
 
@@ -90,8 +87,7 @@ fun CustomerOrderStatsComponent(
                             id = R.string.cumulative_order_value,
                             amount.formatWithoutTrailingZeros()
                         ),
-                        maxLines = 4,
-                        color = MaterialTheme.colors.onSecondary
+                        maxLines = 4
                     )
                 }
             }
