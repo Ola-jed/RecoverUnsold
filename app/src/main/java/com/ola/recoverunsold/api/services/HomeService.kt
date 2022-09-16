@@ -10,7 +10,9 @@ import retrofit2.http.QueryMap
 
 interface HomeService : BaseApiService {
     @GET(ApiUrls.homeUrl)
-    suspend fun getCustomerHomeData(): Response<CustomerHomeData>
+    suspend fun getCustomerHomeData(
+        @Header("Authorization") token: String? = null
+    ): Response<CustomerHomeData>
 
     @GET(ApiUrls.distributorsHomeUrl)
     suspend fun getDistributorHomeData(

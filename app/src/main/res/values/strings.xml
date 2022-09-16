@@ -252,4 +252,10 @@
     <string name="comment_publish_failed">Failed to publish the comment</string>
     <string name="comment_published_successfully">Comment published successfully</string>
     <string name="view_all">View all</string>
+    <string name="my_orders">My orders</string>
+    <plurals name="orders_made_number">
+        <item quantity="one">%d order made</item>
+        <item quantity="other">%d orders made</item>
+    </plurals>
+    <string name="cumulative_order_value">Amount of orders : %1$s</string>
 </resources>

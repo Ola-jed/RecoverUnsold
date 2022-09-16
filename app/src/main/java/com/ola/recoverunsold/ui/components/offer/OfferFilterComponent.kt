@@ -73,7 +73,12 @@ fun OfferFilterComponent(
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         TextButton(
             modifier = Modifier.align(Alignment.Start),
-            onClick = { itemsAreVisible = !itemsAreVisible }) {
+            onClick = { itemsAreVisible = !itemsAreVisible },
+            colors = ButtonDefaults.textButtonColors(
+                backgroundColor = MaterialTheme.colors.background.copy(alpha = 0.5F),
+                contentColor = MaterialTheme.colors.onBackground
+            )
+        ) {
             Text(stringResource(id = R.string.filters), modifier = Modifier.padding(end = 5.dp))
             if (itemsAreVisible) {
                 Icon(Icons.Default.FilterListOff, contentDescription = null)
@@ -82,6 +87,10 @@ fun OfferFilterComponent(
             }
         }
         if (itemsAreVisible) {
+            val componentsModifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally)
+
             Column(modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp)) {
                 Text(
                     stringResource(id = R.string.price_label),
@@ -89,6 +98,7 @@ fun OfferFilterComponent(
                 )
 
                 CustomTextInput(
+                    modifier = componentsModifier,
                     value = minPrice.formatWithoutTrailingZeros(),
                     onValueChange = {
                         if (it.isNotBlank()) {
@@ -104,6 +114,7 @@ fun OfferFilterComponent(
                 )
 
                 CustomTextInput(
+                    modifier = componentsModifier,
                     value = maxPrice.formatWithoutTrailingZeros(),
                     onValueChange = {
                         if (it.isNotBlank()) {
@@ -124,37 +135,31 @@ fun OfferFilterComponent(
                 )
 
                 CustomTextInput(
-                    modifier = Modifier.clickable { showMinDatePicker = true },
+                    modifier = componentsModifier.clickable { showMinDatePicker = true },
                     value = minDate?.formatDateTime() ?: "",
                     readOnly = true,
                     enabled = false,
                     onValueChange = {},
                     label = { Text(text = stringResource(R.string.minimum_date_label)) },
-                    trailingIcon = {
-                        Icon(Icons.Default.EditCalendar, contentDescription = null)
-                    }
+                    trailingIcon = { Icon(Icons.Default.EditCalendar, contentDescription = null) }
                 )
 
                 CustomTextInput(
-                    modifier = Modifier.clickable { showMaxDatePicker = true },
+                    modifier = componentsModifier.clickable { showMaxDatePicker = true },
                     value = maxDate?.formatDateTime() ?: "",
                     readOnly = true,
                     enabled = false,
                     onValueChange = {},
                     label = { Text(text = stringResource(R.string.maximum_date_label)) },
-                    trailingIcon = {
-                        Icon(Icons.Default.EditCalendar, contentDescription = null)
-                    }
+                    trailingIcon = { Icon(Icons.Default.EditCalendar, contentDescription = null) }
                 )
 
                 ExposedDropdownMenuBox(
                     expanded = showDropDownActiveLabels,
-                    onExpandedChange = {
-                        showDropDownActiveLabels = !showDropDownActiveLabels
-                    }
+                    onExpandedChange = { showDropDownActiveLabels = !showDropDownActiveLabels }
                 ) {
                     CustomTextInput(
-                        modifier = Modifier,
+                        modifier = componentsModifier,
                         value = currentDropdownActiveLabel,
                         readOnly = true,
                         onValueChange = {},
@@ -169,9 +174,7 @@ fun OfferFilterComponent(
 
                     ExposedDropdownMenu(
                         expanded = showDropDownActiveLabels,
-                        onDismissRequest = {
-                            showDropDownActiveLabels = false
-                        }
+                        onDismissRequest = { showDropDownActiveLabels = false }
                     ) {
                         activeLabelsMapping.forEach {
                             DropdownMenuItem(onClick = {
@@ -201,10 +204,8 @@ fun OfferFilterComponent(
                 }
 
                 Button(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth(0.85F),
-                    onClick = { onReset() },
+                    modifier = componentsModifier,
+                    onClick = onReset,
                     colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
                 ) {
                     Text(
@@ -214,10 +215,8 @@ fun OfferFilterComponent(
                 }
 
                 Button(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth(0.85F),
-                    onClick = { onApply() }
+                    modifier = componentsModifier,
+                    onClick = onApply
                 ) {
                     Text(text = stringResource(id = R.string.apply_filters))
                 }

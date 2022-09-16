@@ -40,6 +40,7 @@ import com.ola.recoverunsold.ui.components.app.LoadingIndicator
 import com.ola.recoverunsold.ui.components.distributor.DistributorInformationComponent
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.offer.OfferItem
+import com.ola.recoverunsold.ui.components.order.CustomerOrderStatsComponent
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.HomeViewModel
 import com.ola.recoverunsold.utils.misc.show
@@ -105,6 +106,13 @@ fun CustomerHomeScreen(
                             .fillMaxSize()
                             .verticalScroll(rememberScrollState())
                     ) {
+                        if (homeData.orderStats != null) {
+                            CustomerOrderStatsComponent(
+                                modifier = Modifier.padding(15.dp),
+                                customerOrderStats = homeData.orderStats
+                            )
+                        }
+
                         Text(
                             modifier = Modifier.padding(top = 15.dp, bottom = 15.dp, start = 15.dp),
                             text = stringResource(id = R.string.featured_offers),

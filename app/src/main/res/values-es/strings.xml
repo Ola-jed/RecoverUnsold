@@ -249,4 +249,10 @@
     <string name="comment_publish_failed">No se publica el comentario</string>
     <string name="comment_published_successfully">Comentario publicado con éxito</string>
     <string name="view_all">Ver todo</string>
+    <string name="my_orders">Mis pedidos</string>
+    <plurals name="orders_made_number">
+        <item quantity="one">%d pedido realizado</item>
+        <item quantity="other">%d pedidos realizados</item>
+    </plurals>
+    <string name="cumulative_order_value">Cantidad de pedidos : %1$s</string>
 </resources>

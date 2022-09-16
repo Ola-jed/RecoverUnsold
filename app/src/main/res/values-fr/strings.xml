@@ -249,4 +249,11 @@
     <string name="comment_publish_failed">Échec de la publication du commentaire</string>
     <string name="comment_published_successfully">Commentaire publié avec succès</string>
     <string name="view_all">Tout voir</string>
+    <string name="my_orders">Mes commandes</string>
+    <plurals name="orders_made_number">
+        <item quantity="one">%d commande passée</item>
+        <item quantity="other">%d commandes passées</item>
+        <item quantity="many">%d commandes passées</item>
+    </plurals>
+    <string name="cumulative_order_value">Montant des commandes : %1$s</string>
 </resources>
