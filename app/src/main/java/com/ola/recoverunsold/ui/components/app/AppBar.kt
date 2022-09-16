@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import kotlinx.coroutines.CoroutineScope
@@ -33,7 +34,13 @@ fun AppBar(
     }
 
     TopAppBar(
-        title = { Text(title ?: stringResource(id = R.string.app_name)) },
+        title = {
+            Text(
+                title ?: stringResource(id = R.string.app_name),
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+        },
         backgroundColor = MaterialTheme.colors.primary,
         navigationIcon = {
             if (!canGoBack) {
