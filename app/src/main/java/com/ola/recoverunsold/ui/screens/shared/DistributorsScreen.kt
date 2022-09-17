@@ -10,7 +10,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
@@ -33,6 +32,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
+import com.ola.recoverunsold.ui.components.app.NoContentComponent
 import com.ola.recoverunsold.ui.components.app.PaginationComponent
 import com.ola.recoverunsold.ui.components.distributor.DistributorInformationComponent
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
@@ -118,15 +118,10 @@ fun DistributorsScreen(
 
                     if (distributors.items.isEmpty()) {
                         item {
-                            Box(modifier = Modifier.fillMaxSize()) {
-                                Text(
-                                    stringResource(R.string.no_distributor_found),
-                                    style = MaterialTheme.typography.h6,
-                                    modifier = Modifier
-                                        .padding(horizontal = 10.dp)
-                                        .align(Alignment.Center)
-                                )
-                            }
+                            NoContentComponent(
+                                modifier = Modifier.fillMaxWidth(),
+                                message = stringResource(R.string.no_distributor_found)
+                            )
                         }
                     } else {
                         items(items = distributors.items) { item ->

@@ -43,6 +43,7 @@ import com.ola.recoverunsold.api.query.OfferFilterQuery
 import com.ola.recoverunsold.ui.components.account.UserAccountHeader
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
+import com.ola.recoverunsold.ui.components.app.NoContentComponent
 import com.ola.recoverunsold.ui.components.app.PaginationComponent
 import com.ola.recoverunsold.ui.components.distributor.DistributorInformationLine
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
@@ -159,16 +160,9 @@ fun DistributorDetailsScreen(
                                     data = distributorInformation.phone
                                 )
 
-                                var distributorWebsite = distributorInformation.websiteUrl
-                                if (distributorWebsite != null) {
-                                    if (!distributorWebsite.startsWith("http://")
-                                        && !distributorWebsite.startsWith("https://")
-                                    ) {
-                                        distributorWebsite = "http://$distributorWebsite"
-                                    }
-
+                                if (distributorInformation.websiteUrl != null) {
                                     val websiteLinkString = buildAnnotatedString {
-                                        append(distributorWebsite)
+                                        append(distributorInformation.websiteUrl)
 
                                         addStyle(
                                             style = SpanStyle(
@@ -176,14 +170,14 @@ fun DistributorDetailsScreen(
                                                 textDecoration = TextDecoration.Underline
                                             ),
                                             start = 0,
-                                            end = distributorWebsite.length
+                                            end = distributorInformation.websiteUrl.length
                                         )
 
                                         addStringAnnotation(
                                             tag = "URL",
-                                            annotation = distributorWebsite,
+                                            annotation = distributorInformation.websiteUrl,
                                             start = 0,
-                                            end = distributorWebsite.length
+                                            end = distributorInformation.websiteUrl.length
                                         )
                                     }
 
@@ -194,7 +188,24 @@ fun DistributorDetailsScreen(
                                         text = {
                                             ClickableText(
                                                 text = websiteLinkString,
-                                                onClick = { uriHandler.openUri(distributorWebsite) }
+                                                onClick = {
+                                                    val isValidUri =
+                                                        distributorInformation.websiteUrl.startsWith(
+                                                            "http://"
+                                                        )
+                                                                || distributorInformation.websiteUrl.startsWith(
+                                                            "https://"
+                                                        )
+
+                                                    val uriToOpen =
+                                                        if (!isValidUri) {
+                                                            "http://${distributorInformation.websiteUrl}"
+                                                        } else {
+                                                            distributorInformation.websiteUrl
+                                                        }
+
+                                                    uriHandler.openUri(uriToOpen)
+                                                }
                                             )
                                         }
                                     )
@@ -319,15 +330,10 @@ fun DistributorDetailsScreen(
 
                     if (offers.items.isEmpty()) {
                         item {
-                            Box(modifier = Modifier.fillMaxSize()) {
-                                Text(
-                                    stringResource(R.string.no_offers_found),
-                                    style = MaterialTheme.typography.h6,
-                                    modifier = Modifier
-                                        .padding(horizontal = 10.dp)
-                                        .align(Alignment.Center)
-                                )
-                            }
+                            NoContentComponent(
+                                modifier = Modifier.fillMaxWidth(),
+                                message = stringResource(id = R.string.no_offers_found)
+                            )
                         }
                     } else {
                         items(items = offers.items) { item ->

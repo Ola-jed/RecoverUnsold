@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
@@ -27,6 +26,7 @@ import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
+import com.ola.recoverunsold.ui.components.app.NoContentComponent
 import com.ola.recoverunsold.ui.components.app.PaginationComponent
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.order.OrderFilterComponent
@@ -101,15 +101,10 @@ fun OrdersScreen(
                     )
 
                     if (orders.items.isEmpty()) {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            Text(
-                                stringResource(R.string.no_order_found),
-                                style = MaterialTheme.typography.h6,
-                                modifier = Modifier
-                                    .padding(horizontal = 10.dp)
-                                    .align(Alignment.Center)
-                            )
-                        }
+                        NoContentComponent(
+                            modifier = Modifier.fillMaxWidth(),
+                            message = stringResource(R.string.no_order_found)
+                        )
                     } else {
                         LazyColumn(
                             modifier = Modifier

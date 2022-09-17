@@ -146,17 +146,10 @@ fun OffersScreen(
 
                     if (offers.items.isEmpty()) {
                         item {
-                            Box(modifier = Modifier.fillMaxSize()) {
-                                NoContentComponent(message = stringResource(R.string.no_offers_found))
-
-//                                Text(
-//                                    stringResource(R.string.no_offers_found),
-//                                    style = MaterialTheme.typography.h6,
-//                                    modifier = Modifier
-//                                        .padding(horizontal = 10.dp)
-//                                        .align(Alignment.Center)
-//                                )
-                            }
+                            NoContentComponent(
+                                modifier = Modifier.fillMaxWidth(),
+                                message = stringResource(R.string.no_offers_found)
+                            )
                         }
                     } else {
                         items(items = offers.items) { item ->

@@ -35,7 +35,7 @@ fun NoContentComponent(modifier: Modifier = Modifier, message: String) {
         Text(
             text = message,
             color = MaterialTheme.colors.onBackground,
-            style = MaterialTheme.typography.h5
+            style = MaterialTheme.typography.h6
         )
     }
 }

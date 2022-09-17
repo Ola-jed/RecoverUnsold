@@ -53,6 +53,7 @@ import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.DatePicker
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
+import com.ola.recoverunsold.ui.components.app.NoContentComponent
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.order.OrderItem
 import com.ola.recoverunsold.ui.navigation.Routes
@@ -199,12 +200,9 @@ fun DistributorHomeScreen(
 
                         val bars = homeData.toBars()
                         if (bars.isEmpty()) {
-                            Text(
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(vertical = 15.dp),
-                                text = stringResource(R.string.no_order_found),
-                                style = MaterialTheme.typography.body1
+                            NoContentComponent(
+                                modifier = Modifier.fillMaxWidth(),
+                                message = stringResource(R.string.no_order_found)
                             )
                         } else {
                             BarChart(
@@ -248,15 +246,10 @@ fun DistributorHomeScreen(
                         LazyRow(modifier = Modifier.fillMaxWidth()) {
                             if (orders.isEmpty()) {
                                 item {
-                                    Box(modifier = Modifier.fillMaxWidth()) {
-                                        Text(
-                                            stringResource(R.string.no_order_found),
-                                            style = MaterialTheme.typography.h6,
-                                            modifier = Modifier
-                                                .padding(horizontal = 10.dp)
-                                                .align(Alignment.Center)
-                                        )
-                                    }
+                                    NoContentComponent(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        message = stringResource(R.string.no_order_found)
+                                    )
                                 }
                             } else {
                                 items(items = orders) { item ->

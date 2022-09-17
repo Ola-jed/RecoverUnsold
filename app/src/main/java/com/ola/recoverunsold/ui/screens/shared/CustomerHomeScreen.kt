@@ -37,6 +37,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
+import com.ola.recoverunsold.ui.components.app.NoContentComponent
 import com.ola.recoverunsold.ui.components.distributor.DistributorInformationComponent
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.offer.OfferItem
@@ -120,20 +121,12 @@ fun CustomerHomeScreen(
                             style = MaterialTheme.typography.body1
                         )
 
-                        LazyRow(modifier = Modifier.fillMaxWidth()) {
-                            if (offers.isEmpty()) {
-                                item {
-                                    Box(modifier = Modifier.fillMaxWidth()) {
-                                        Text(
-                                            stringResource(R.string.no_offers_found),
-                                            style = MaterialTheme.typography.h6,
-                                            modifier = Modifier
-                                                .padding(start = 40.dp)
-                                                .align(Alignment.Center)
-                                        )
-                                    }
-                                }
-                            } else {
+                        if (offers.isEmpty()) {
+                            NoContentComponent(
+                                message = stringResource(id = R.string.no_offers_found)
+                            )
+                        } else {
+                            LazyRow(modifier = Modifier.fillMaxWidth()) {
                                 items(items = offers) { item ->
                                     OfferItem(
                                         modifier = Modifier
@@ -174,20 +167,12 @@ fun CustomerHomeScreen(
                             style = MaterialTheme.typography.body1
                         )
 
-                        LazyRow(modifier = Modifier.fillMaxWidth()) {
-                            if (distributors.isEmpty()) {
-                                item {
-                                    Box(modifier = Modifier.fillMaxSize()) {
-                                        Text(
-                                            stringResource(R.string.no_distributor_found),
-                                            style = MaterialTheme.typography.h6,
-                                            modifier = Modifier
-                                                .padding(horizontal = 10.dp)
-                                                .align(Alignment.Center)
-                                        )
-                                    }
-                                }
-                            } else {
+                        if (distributors.isEmpty()) {
+                            NoContentComponent(
+                                message = stringResource(id = R.string.no_distributor_found)
+                            )
+                        } else {
+                            LazyRow(modifier = Modifier.fillMaxWidth()) {
                                 items(items = distributors) { item ->
                                     DistributorInformationComponent(
                                         modifier = Modifier

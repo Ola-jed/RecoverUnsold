@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
@@ -41,6 +40,7 @@ import com.ola.recoverunsold.models.LatLong
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
+import com.ola.recoverunsold.ui.components.app.NoContentComponent
 import com.ola.recoverunsold.ui.components.app.PaginationComponent
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.offer.OfferRelativeDistanceItem
@@ -192,9 +192,9 @@ fun CloseOffersScreen(
                                 .align(Alignment.Center),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(
-                                stringResource(R.string.no_offers_found),
-                                style = MaterialTheme.typography.h6,
+                            NoContentComponent(
+                                modifier = Modifier.fillMaxWidth(),
+                                message = stringResource(R.string.no_offers_found)
                             )
 
                             Button(onClick = {

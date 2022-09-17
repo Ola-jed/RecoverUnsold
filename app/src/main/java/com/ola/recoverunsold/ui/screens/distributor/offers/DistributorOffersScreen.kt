@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
@@ -24,7 +23,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -32,6 +30,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
+import com.ola.recoverunsold.ui.components.app.NoContentComponent
 import com.ola.recoverunsold.ui.components.app.PaginationComponent
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.offer.OfferFilterComponent
@@ -160,16 +159,10 @@ fun DistributorOffersScreen(
 
                     if (offers.items.isEmpty()) {
                         item {
-                            Box(modifier = Modifier.fillMaxSize()) {
-                                Text(
-                                    stringResource(R.string.no_offers_found),
-                                    style = MaterialTheme.typography.h6,
-                                    modifier = Modifier
-                                        .padding(horizontal = 10.dp)
-                                        .align(Alignment.Center),
-                                    textAlign = TextAlign.Center
-                                )
-                            }
+                            NoContentComponent(
+                                modifier = Modifier.fillMaxWidth(),
+                                message = stringResource(R.string.no_offers_found)
+                            )
                         }
                     } else {
                         items(items = offers.items) { item ->
