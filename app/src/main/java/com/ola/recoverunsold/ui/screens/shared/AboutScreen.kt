@@ -40,7 +40,6 @@ import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.screens.viewmodels.AboutViewModel
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
-import com.ola.recoverunsold.utils.store.UserObserver
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -145,7 +144,7 @@ fun AboutScreen(
                 fontSize = 15.sp
             )
 
-            if (UserObserver.user.value != null) {
+            if (aboutViewModel.isAuthenticated) {
                 Button(
                     onClick = {
                         coroutineScope.launch { bottomSheetScaffoldState.bottomSheetState.expand() }

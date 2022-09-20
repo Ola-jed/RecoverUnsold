@@ -18,16 +18,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AboutViewModel @Inject constructor(private val reviewsService: ReviewsService) : ViewModel() {
-    private val token: String = TokenStore.get()!!.bearerToken
+    private val token = TokenStore.get()?.bearerToken
+    val isAuthenticated = TokenStore.get() != null
     var apiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive)
     var message by mutableStateOf("")
 
     fun publishMessage() {
-        apiCallResult = ApiCallResult.Loading
-        viewModelScope.launch {
-            apiCallResult = reviewsService
-                .publishReview(token, ReviewMessageRequest(message))
-                .toApiCallResult()
+        if (token != null) {
+            apiCallResult = ApiCallResult.Loading
+            viewModelScope.launch {
+                apiCallResult = reviewsService
+                    .publishReview(token, ReviewMessageRequest(message))
+                    .toApiCallResult()
+            }
         }
     }
 
