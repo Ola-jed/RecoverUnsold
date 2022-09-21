@@ -258,4 +258,5 @@
         <item quantity="other">%d orders made</item>
     </plurals>
     <string name="cumulative_order_value">Amount of orders : %1$s</string>
+    <string name="open_source_licenses">Open source licenses</string>
 </resources>

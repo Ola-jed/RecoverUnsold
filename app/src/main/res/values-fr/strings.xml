@@ -256,4 +256,5 @@
         <item quantity="many">%d commandes passées</item>
     </plurals>
     <string name="cumulative_order_value">Montant des commandes : %1$s</string>
+    <string name="open_source_licenses">Licenses open source</string>
 </resources>

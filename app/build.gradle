@@ -6,6 +6,7 @@ plugins {
     id 'com.google.gms.google-services'
     id 'com.google.dagger.hilt.android'
     id 'kotlin-kapt'
+    id 'com.google.android.gms.oss-licenses-plugin'
 }
 
 android {
@@ -92,6 +93,7 @@ dependencies {
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
     implementation "com.airbnb.android:lottie-compose:5.2.0"
     implementation "io.sentry:sentry-android:6.4.1"
+    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
     kapt "com.google.dagger:hilt-compiler:2.43.2"
     kapt "androidx.hilt:hilt-compiler:1.0.0"
     annotationProcessor "com.google.dagger:hilt-compiler:2.43.2"

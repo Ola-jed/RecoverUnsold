@@ -8,4 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="main_color">#121B9E</color>
+    <color name="light_primary">#121B9E</color>
+    <color name="dark_primary">#7278E0</color>
+    <color name="light_on_primary">#FFFFFF</color>
+    <color name="dark_on_primary">#FFFFFF</color>
+    <color name="light_secondary">#08283A</color>
+    <color name="dark_secondary">#08283A</color>
+    <color name="light_error">#BA1A1A</color>
+    <color name="dark_error">#FFB4AB</color>
 </resources>

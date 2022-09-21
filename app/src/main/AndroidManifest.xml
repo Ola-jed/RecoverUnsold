@@ -49,6 +49,14 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
+            android:theme="@style/Theme.RecoverUnsold.AppCompat" />
+
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
+            android:theme="@style/Theme.RecoverUnsold.AppCompat" />
+
         <service
             android:name=".services.AppFirebaseMessagingService"
             android:exported="false">
