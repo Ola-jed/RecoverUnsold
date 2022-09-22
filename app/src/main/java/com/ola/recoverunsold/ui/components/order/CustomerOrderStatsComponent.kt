@@ -39,7 +39,9 @@ fun CustomerOrderStatsComponent(
     ) {
         Column(modifier = Modifier.padding(5.dp)) {
             Text(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(vertical = 7.5.dp),
                 text = stringResource(id = R.string.my_orders),
                 style = MaterialTheme.typography.h6
             )

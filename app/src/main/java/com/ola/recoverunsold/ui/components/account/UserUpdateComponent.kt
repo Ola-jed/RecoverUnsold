@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Numbers
+import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -146,7 +147,7 @@ inline fun <reified T : User> UserUpdateComponent(
             CustomTextInput(
                 modifier = fieldsModifier,
                 value = firstName,
-                leadingIcon = { Icon(Icons.Filled.Phone, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Filled.People, contentDescription = null) },
                 label = { Text(text = stringResource(R.string.first_name_label)) },
                 onValueChange = onFirstNameChange,
                 keyboardOptions = KeyboardOptions(
@@ -162,7 +163,7 @@ inline fun <reified T : User> UserUpdateComponent(
             CustomTextInput(
                 modifier = fieldsModifier,
                 value = lastName,
-                leadingIcon = { Icon(Icons.Filled.Phone, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Filled.People, contentDescription = null) },
                 label = { Text(text = stringResource(R.string.last_name_label)) },
                 onValueChange = onLastNameChange,
                 keyboardOptions = KeyboardOptions(

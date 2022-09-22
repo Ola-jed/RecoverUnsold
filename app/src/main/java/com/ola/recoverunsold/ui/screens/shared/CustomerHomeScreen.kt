@@ -122,9 +122,7 @@ fun CustomerHomeScreen(
                         )
 
                         if (offers.isEmpty()) {
-                            NoContentComponent(
-                                message = stringResource(id = R.string.no_offers_found)
-                            )
+                            NoContentComponent(message = stringResource(id = R.string.no_offers_found))
                         } else {
                             LazyRow(modifier = Modifier.fillMaxWidth()) {
                                 items(items = offers) { item ->
@@ -176,7 +174,6 @@ fun CustomerHomeScreen(
                                 items(items = distributors) { item ->
                                     DistributorInformationComponent(
                                         modifier = Modifier
-                                            .fillParentMaxWidth(0.90F)
                                             .padding(horizontal = 20.dp, vertical = 10.dp),
                                         distributorInformation = item,
                                         onTap = {

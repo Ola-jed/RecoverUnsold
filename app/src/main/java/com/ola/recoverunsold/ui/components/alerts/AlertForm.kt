@@ -1,6 +1,7 @@
 package com.ola.recoverunsold.ui.components.alerts
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Button
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
@@ -33,17 +34,15 @@ fun AlertForm(
     onSubmit: () -> Unit
 ) {
     var showAlertTypeDropdown by remember { mutableStateOf(false) }
-    var showDistributorsLabelDropdown by remember { mutableStateOf(false) }
+    var showLabelsDropdown by remember { mutableStateOf(false) }
 
     Column(modifier = modifier) {
         ExposedDropdownMenuBox(
             expanded = showAlertTypeDropdown,
-            onExpandedChange = {
-                showAlertTypeDropdown = !showAlertTypeDropdown
-            }
+            onExpandedChange = { showAlertTypeDropdown = !showAlertTypeDropdown }
         ) {
             CustomTextInput(
-                modifier = Modifier,
+                modifier = Modifier.fillMaxWidth(),
                 value = alertType.label(),
                 readOnly = true,
                 onValueChange = {},
@@ -71,33 +70,29 @@ fun AlertForm(
 
         if (alertType == AlertType.DistributorOfferPublished) {
             ExposedDropdownMenuBox(
-                expanded = showDistributorsLabelDropdown,
-                onExpandedChange = {
-                    showDistributorsLabelDropdown = !showDistributorsLabelDropdown
-                }
+                expanded = showLabelsDropdown,
+                onExpandedChange = { showLabelsDropdown = !showLabelsDropdown }
             ) {
                 CustomTextInput(
-                    modifier = Modifier,
+                    modifier = Modifier.fillMaxWidth(),
                     value = distributorLabel?.name ?: "",
                     readOnly = true,
                     onValueChange = {},
                     label = { Text(text = stringResource(R.string.distributor)) },
                     trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = showDistributorsLabelDropdown
-                        )
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = showLabelsDropdown)
                     },
                     colors = ExposedDropdownMenuDefaults.textFieldColors()
                 )
 
                 ExposedDropdownMenu(
-                    expanded = showDistributorsLabelDropdown,
-                    onDismissRequest = { showDistributorsLabelDropdown = false }
+                    expanded = showLabelsDropdown,
+                    onDismissRequest = { showLabelsDropdown = false }
                 ) {
                     distributorLabels.forEach {
                         DropdownMenuItem(onClick = {
                             onDistributorLabelChange(it)
-                            showDistributorsLabelDropdown = false
+                            showLabelsDropdown = false
                         }) {
                             Text(text = it.name)
                         }
@@ -108,7 +103,9 @@ fun AlertForm(
 
         Button(
             onClick = onSubmit,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth()
         ) {
             Text(text = stringResource(id = R.string.submit))
         }

@@ -1,7 +1,14 @@
 package com.ola.recoverunsold.ui.components.account
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,9 +50,8 @@ fun CustomerProfileInformationSection(
                 .padding(top = 50.dp)
         ) {
             CircularProgressIndicator(
-                color = MaterialTheme.colors.primary, modifier = Modifier.align(
-                    Alignment.Center
-                )
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier.align(Alignment.Center)
             )
         }
     } else {
@@ -55,7 +61,7 @@ fun CustomerProfileInformationSection(
                     stringResource(R.string.profile_information_label),
                     modifier = Modifier
                         .padding(vertical = 10.dp),
-                    fontSize = 17.sp
+                    style = MaterialTheme.typography.h6
                 )
 
                 UserUpdateComponent<Customer>(
@@ -69,28 +75,24 @@ fun CustomerProfileInformationSection(
                     onValidationError = onValidationError
                 )
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 22.dp),
+                    onClick = onEditingEnd,
+                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
                 ) {
-                    Button(
-                        onClick = onEditingEnd,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
-                    ) {
-                        Text(
-                            stringResource(R.string.save),
-                            color = MaterialTheme.colors.onPrimary
-                        )
-                    }
-                    Button(
-                        onClick = onEditingCancel,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
-                    ) {
-                        Text(
-                            stringResource(R.string.cancel),
-                            color = MaterialTheme.colors.onError
-                        )
-                    }
+                    Text(stringResource(R.string.save), color = MaterialTheme.colors.onPrimary)
+                }
+
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 22.dp),
+                    onClick = onEditingCancel,
+                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
+                ) {
+                    Text(stringResource(R.string.cancel), color = MaterialTheme.colors.onError)
                 }
             }
         } else {
