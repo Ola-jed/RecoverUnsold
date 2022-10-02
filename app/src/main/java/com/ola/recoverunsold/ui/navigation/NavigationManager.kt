@@ -7,6 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.ola.recoverunsold.ui.screens.customer.AlertsScreen
 import com.ola.recoverunsold.ui.screens.customer.CustomerAccountScreen
 import com.ola.recoverunsold.ui.screens.customer.OrdersScreen
@@ -34,6 +35,8 @@ import com.ola.recoverunsold.ui.screens.shared.auth.RegisterScreen
 import com.ola.recoverunsold.ui.screens.shared.auth.StartUserVerificationScreen
 import com.ola.recoverunsold.ui.screens.shared.auth.UserVerificationScreen
 import com.ola.recoverunsold.ui.screens.shared.auth.UserVerificationSuccessScreen
+
+const val baseUri = "com.ola.recoverunsold"
 
 @Composable
 fun NavigationManager(navHostController: NavHostController, snackbarHostState: SnackbarHostState) {
@@ -104,7 +107,10 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
                 snackbarHostState = snackbarHostState
             )
         }
-        composable(Routes.Distributors.path) {
+        composable(
+            Routes.Distributors.path,
+            deepLinks = listOf(navDeepLink { uriPattern = "$baseUri/${Routes.Distributors.path}" })
+        ) {
             DistributorsScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState
@@ -125,7 +131,10 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
                 distributorId = backStackEntry.arguments?.getString("distributorId")!!
             )
         }
-        composable(Routes.Offers.path) {
+        composable(
+            Routes.Offers.path,
+            deepLinks = listOf(navDeepLink { uriPattern = "$baseUri/${Routes.Offers.path}" })
+        ) {
             OffersScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState
@@ -137,7 +146,12 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
                 snackbarHostState = snackbarHostState
             )
         }
-        composable(Routes.DistributorOffers.path) {
+        composable(
+            Routes.DistributorOffers.path,
+            deepLinks = listOf(navDeepLink {
+                uriPattern = "$baseUri/${Routes.DistributorOffers.path}"
+            })
+        ) {
             DistributorOffersScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState
@@ -164,19 +178,34 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
                 orderId = backStackEntry.arguments?.getString("orderId")!!
             )
         }
-        composable(Routes.DistributorAccount.path) {
+        composable(
+            Routes.DistributorAccount.path,
+            deepLinks = listOf(navDeepLink {
+                uriPattern = "$baseUri/${Routes.DistributorAccount.path}"
+            })
+        ) {
             DistributorAccountScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState
             )
         }
-        composable(Routes.DistributorOrdersReceived.path) {
+        composable(
+            Routes.DistributorOrdersReceived.path,
+            deepLinks = listOf(navDeepLink {
+                uriPattern = "$baseUri/${Routes.DistributorOrdersReceived.path}"
+            })
+        ) {
             DistributorOrdersReceivedScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState
             )
         }
-        composable(Routes.CustomerAccount.path) {
+        composable(
+            Routes.CustomerAccount.path,
+            deepLinks = listOf(navDeepLink {
+                uriPattern = "$baseUri/${Routes.CustomerAccount.path}"
+            })
+        ) {
             CustomerAccountScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState

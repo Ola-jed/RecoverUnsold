@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.fetchData(applicationContext)
+        viewModel.initializeApp(applicationContext)
         installSplashScreen().apply {
             setKeepOnScreenCondition { !viewModel.hasFinishedLoading.value }
         }

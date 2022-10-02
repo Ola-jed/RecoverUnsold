@@ -1,10 +1,18 @@
 package com.ola.recoverunsold.ui.screens.viewmodels
 
 import android.content.Context
+import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ola.recoverunsold.MainActivity
+import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.responses.TokenRoles
 import com.ola.recoverunsold.api.services.AccountService
+import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
 import com.ola.recoverunsold.utils.store.toApiToken
@@ -21,7 +29,7 @@ class MainViewModel @Inject constructor(private val accountService: AccountServi
     private val _hasFetchedData = MutableStateFlow(false)
     val hasFinishedLoading = _hasFetchedData.asStateFlow()
 
-    fun fetchData(context: Context) {
+    fun initializeApp(context: Context) {
         viewModelScope.launch {
             val storedToken = TokenStore(context)
                 .token()
@@ -32,11 +40,14 @@ class MainViewModel @Inject constructor(private val accountService: AccountServi
                 if (storedToken != null) {
                     val token = TokenStore.getOr { storedToken }
                     if (token.expirationDate.before(Date())) {
+                        defineShortcutsAnonymously(context)
                         TokenStore(context).removeToken()
                     } else {
                         val response = if (token.role == TokenRoles.CUSTOMER) {
+                            defineShortcutsAsCustomer(context)
                             accountService.getCustomer(token.bearerToken)
                         } else {
+                            defineShortcutsAsDistributor(context)
                             accountService.getDistributor(token.bearerToken)
                         }
                         if (response.isSuccessful) {
@@ -46,11 +57,146 @@ class MainViewModel @Inject constructor(private val accountService: AccountServi
                             }
                         }
                     }
+                } else {
+                    defineShortcutsAnonymously(context)
                 }
             } catch (e: Exception) {
                 // Nothing
             }
             _hasFetchedData.value = true
         }
+    }
+
+    private fun defineShortcutsAnonymously(context: Context) {
+        val shortcutManager = context.getSystemService(ShortcutManager::class.java)
+        shortcutManager.dynamicShortcuts = listOf(
+            ShortcutInfo.Builder(context, Strings.get(R.string.offers))
+                .setIntent(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://com.ola.recoverunsold/offers"),
+                        context,
+                        MainActivity::class.java
+                    )
+                )
+                .setRank(0)
+                .setIcon(Icon.createWithResource(context, R.drawable.shopping_bag))
+                .setLongLabel(Strings.get(R.string.offers))
+                .setShortLabel(Strings.get(R.string.offers))
+                .build(),
+            ShortcutInfo.Builder(context, Strings.get(R.string.distributors))
+                .setIntent(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://com.ola.recoverunsold/distributors"),
+                        context,
+                        MainActivity::class.java
+                    )
+                )
+                .setRank(1)
+                .setIcon(Icon.createWithResource(context, R.drawable.shopping_cart))
+                .setLongLabel(Strings.get(R.string.distributors))
+                .setShortLabel(Strings.get(R.string.distributors))
+                .build()
+        )
+    }
+
+    private fun defineShortcutsAsCustomer(context: Context) {
+        val shortcutManager = context.getSystemService(ShortcutManager::class.java)
+        shortcutManager.dynamicShortcuts = listOf(
+            ShortcutInfo.Builder(context, Strings.get(R.string.offers))
+                .setIntent(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://com.ola.recoverunsold/offers"),
+                        context,
+                        MainActivity::class.java
+                    )
+                )
+                .setRank(0)
+                .setIcon(Icon.createWithResource(context, R.drawable.shopping_bag))
+                .setLongLabel(Strings.get(R.string.offers))
+                .setShortLabel(Strings.get(R.string.offers))
+                .build(),
+            ShortcutInfo.Builder(context, Strings.get(R.string.distributors))
+                .setIntent(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://com.ola.recoverunsold/distributors"),
+                        context,
+                        MainActivity::class.java
+                    )
+                )
+                .setRank(1)
+                .setIcon(Icon.createWithResource(context, R.drawable.shopping_cart))
+                .setLongLabel(Strings.get(R.string.distributors))
+                .setShortLabel(Strings.get(R.string.distributors))
+                .build(),
+            ShortcutInfo.Builder(context, Strings.get(R.string.settings))
+                .setIntent(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://com.ola.recoverunsold/account/customer"),
+                        context,
+                        MainActivity::class.java
+                    )
+                )
+                .setRank(2)
+                .setIcon(Icon.createWithResource(context, R.drawable.setting))
+                .setLongLabel(Strings.get(R.string.settings))
+                .setShortLabel(Strings.get(R.string.settings))
+                .build()
+        )
+    }
+
+    private fun defineShortcutsAsDistributor(context: Context) {
+        val shortcutManager = context.getSystemService(ShortcutManager::class.java)
+        shortcutManager.dynamicShortcuts = listOf(
+            ShortcutInfo.Builder(
+                context,
+                Strings.get(R.string.offers_published)
+            )
+                .setIntent(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://com.ola.recoverunsold/distributor/offers"),
+                        context,
+                        MainActivity::class.java
+                    )
+                )
+                .setRank(0)
+                .setIcon(Icon.createWithResource(context, R.drawable.shopping_bag))
+                .setLongLabel(Strings.get(R.string.offers_published))
+                .setShortLabel(Strings.get(R.string.offers_published))
+                .build(),
+            ShortcutInfo.Builder(context, Strings.get(R.string.orders_received))
+                .setIntent(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://com.ola.recoverunsold/orders/received"),
+                        context,
+                        MainActivity::class.java
+                    )
+                )
+                .setRank(1)
+                .setIcon(Icon.createWithResource(context, R.drawable.history))
+                .setLongLabel(Strings.get(R.string.orders_received))
+                .setShortLabel(Strings.get(R.string.orders_received))
+                .build(),
+            ShortcutInfo.Builder(context, Strings.get(R.string.settings))
+                .setIntent(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://com.ola.recoverunsold/account/distributor"),
+                        context,
+                        MainActivity::class.java
+                    )
+                )
+                .setRank(2)
+                .setIcon(Icon.createWithResource(context, R.drawable.setting))
+                .setLongLabel(Strings.get(R.string.settings))
+                .setShortLabel(Strings.get(R.string.settings))
+                .build()
+        )
     }
 }
