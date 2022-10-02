@@ -91,7 +91,7 @@ fun DistributorOfferFormScreen(
                 canGoBack = true,
                 navController = navController,
                 title = stringResource(
-                    id = if (serializedOffer == null) {
+                    id = if (offer == null) {
                         R.string.create_new_offer
                     } else {
                         R.string.update_offer_label

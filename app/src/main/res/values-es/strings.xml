@@ -256,4 +256,6 @@
     </plurals>
     <string name="cumulative_order_value">Cantidad de pedidos : %1$s</string>
     <string name="open_source_licenses">Licencias de código abierto</string>
+    <string name="comment_verb">Comenta</string>
+    <string name="add_a_product">Añadir un producto</string>
 </resources>

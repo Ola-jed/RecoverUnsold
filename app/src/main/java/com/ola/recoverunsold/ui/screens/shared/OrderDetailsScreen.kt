@@ -1,6 +1,7 @@
 package com.ola.recoverunsold.ui.screens.shared
 
 import android.app.Activity
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,20 +11,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SnackbarHostState
@@ -64,6 +64,7 @@ import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
+import com.ola.recoverunsold.ui.components.app.ExtendableFab
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
 import com.ola.recoverunsold.ui.components.app.SubtitleWithIcon
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
@@ -76,6 +77,7 @@ import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 import com.ola.recoverunsold.utils.misc.internationalizedValueSingular
+import com.ola.recoverunsold.utils.misc.isScrollingUp
 import com.ola.recoverunsold.utils.misc.openMapWithCoordinates
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.misc.toIcon
@@ -99,6 +101,7 @@ fun OrderDetailsScreen(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed),
         snackbarHostState = snackbarHostState
     )
+    val listState = rememberLazyListState()
 
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
@@ -167,11 +170,19 @@ fun OrderDetailsScreen(
                     && (orderDetailsViewModel.orderApiCallResult.data?.status == OrderStatus.Completed
                     || orderDetailsViewModel.orderApiCallResult.data?.status == OrderStatus.Approved)
             if (canShowFab) {
-                FloatingActionButton(onClick = {
-                    coroutineScope.launch { bottomSheetScaffoldState.bottomSheetState.expand() }
-                }) {
-                    Icon(imageVector = Icons.Default.AddComment, contentDescription = null)
-                }
+                ExtendableFab(
+                    extended = listState.isScrollingUp(),
+                    text = { Text(stringResource(id = R.string.comment_verb)) },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.AddComment,
+                            contentDescription = null
+                        )
+                    },
+                    onClick = {
+                        coroutineScope.launch { bottomSheetScaffoldState.bottomSheetState.expand() }
+                    }
+                )
             } else {
                 Box(modifier = Modifier.size(0.dp))
             }
@@ -208,154 +219,193 @@ fun OrderDetailsScreen(
                     val order = orderDetailsViewModel.orderApiCallResult.data!!
                     val offer = order.offer!!
 
-                    Column(
+                    LazyColumn(
                         modifier = Modifier
                             .padding(horizontal = 15.dp)
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
+                            .fillMaxSize(),
+                        state = listState
                     ) {
-                        Surface(
-                            modifier = Modifier.padding(top = 15.dp),
-                            elevation = 15.dp,
-                            color = MaterialTheme.colors.secondary,
-                            shape = RoundedCornerShape(30.dp)
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 7.5.dp, vertical = 5.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                        item {
+                            Surface(
+                                modifier = Modifier.padding(top = 15.dp),
+                                elevation = 15.dp,
+                                color = MaterialTheme.colors.secondary,
+                                shape = RoundedCornerShape(30.dp)
                             ) {
-                                Icon(
-                                    imageVector = order.status.toIcon(),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colors.onSecondary
-                                )
-                                Text(
-                                    modifier = Modifier.padding(start = 3.dp),
-                                    text = order.status.internationalizedValueSingular(),
-                                    color = MaterialTheme.colors.onSecondary
-                                )
+                                Row(
+                                    modifier = Modifier.padding(
+                                        horizontal = 7.5.dp,
+                                        vertical = 5.dp
+                                    ),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = order.status.toIcon(),
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colors.onSecondary
+                                    )
+                                    Text(
+                                        modifier = Modifier.padding(start = 3.dp),
+                                        text = order.status.internationalizedValueSingular(),
+                                        color = MaterialTheme.colors.onSecondary
+                                    )
+                                }
                             }
                         }
 
-                        SubtitleWithIcon(
-                            modifier = Modifier.padding(top = 15.dp),
-                            text = stringResource(R.string.order_details),
-                            imageVector = Icons.Default.Sell
-                        )
-
-                        Text(
-                            text = stringResource(
-                                R.string.ordered_on,
-                                order.createdAt.formatDate()
-                            ),
-                            modifier = Modifier.padding(top = 15.dp),
-                            fontSize = 18.sp
-                        )
-
-                        Text(
-                            modifier = Modifier.padding(top = 15.dp),
-                            text = "${stringResource(id = R.string.to_be_picked_up_on)} : ${order.withdrawalDate.formatDateTime()}",
-                            fontSize = 18.sp
-                        )
-
-                        SubtitleWithIcon(
-                            modifier = Modifier.padding(top = 15.dp),
-                            text = stringResource(R.string.offer_details),
-                            imageVector = Icons.Default.Info
-                        )
-
-                        Text(
-                            modifier = Modifier.padding(top = 15.dp),
-                            text = stringResource(
-                                R.string.total_amount,
-                                offer.price.formatWithoutTrailingZeros()
+                        item {
+                            SubtitleWithIcon(
+                                modifier = Modifier.padding(top = 15.dp),
+                                text = stringResource(R.string.order_details),
+                                imageVector = Icons.Default.Sell
                             )
-                        )
+                        }
 
-                        if (offer.beneficiaries != null) {
+                        item {
+                            Text(
+                                text = stringResource(
+                                    R.string.ordered_on,
+                                    order.createdAt.formatDate()
+                                ),
+                                modifier = Modifier.padding(top = 15.dp),
+                                fontSize = 18.sp
+                            )
+                        }
+
+                        item {
+                            Text(
+                                modifier = Modifier.padding(top = 15.dp),
+                                text = "${stringResource(id = R.string.to_be_picked_up_on)} : ${order.withdrawalDate.formatDateTime()}",
+                                fontSize = 18.sp
+                            )
+                        }
+
+                        item {
+                            SubtitleWithIcon(
+                                modifier = Modifier.padding(top = 15.dp),
+                                text = stringResource(R.string.offer_details),
+                                imageVector = Icons.Default.Info
+                            )
+                        }
+
+                        item {
                             Text(
                                 modifier = Modifier.padding(top = 15.dp),
                                 text = stringResource(
-                                    id = R.string.offer_beneficiaries_data,
-                                    offer.beneficiaries
+                                    R.string.total_amount,
+                                    offer.price.formatWithoutTrailingZeros()
                                 )
                             )
                         }
 
-                        Text(
-                            modifier = Modifier.padding(top = 15.dp),
-                            text = stringResource(
-                                R.string.start_date_time,
-                                offer.startDate.formatDateTime()
-                            )
-                        )
 
-                        Text(
-                            modifier = Modifier.padding(top = 15.dp),
-                            text = stringResource(
-                                R.string.end_date_time,
-                                offer.startDate.addSeconds(offer.duration).formatDateTime()
-                            )
-                        )
-
-                        Text(
-                            modifier = Modifier.padding(top = 15.dp),
-                            text = stringResource(
-                                R.string.published_the,
-                                offer.createdAt.formatDate()
-                            )
-                        )
-
-                        if (!offer.products.isNullOrEmpty()) {
-                            SubtitleWithIcon(
-                                modifier = Modifier.padding(top = 20.dp, bottom = 10.dp),
-                                text = stringResource(id = R.string.products_label),
-                                imageVector = Icons.Default.ShoppingBag
-                            )
-
-                            LazyRow(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                            ) {
-                                items(items = offer.products) {
-                                    ProductItem(
-                                        modifier = Modifier
-                                            .padding(horizontal = 5.dp)
-                                            .width((LocalConfiguration.current.screenWidthDp * 0.6).dp),
-                                        product = it
+                        if (offer.beneficiaries != null) {
+                            item {
+                                Text(
+                                    modifier = Modifier.padding(top = 15.dp),
+                                    text = stringResource(
+                                        id = R.string.offer_beneficiaries_data,
+                                        offer.beneficiaries
                                     )
-                                }
+                                )
                             }
                         }
 
-                        if (offer.location != null) {
-                            SubtitleWithIcon(
-                                modifier = Modifier.padding(top = 20.dp, bottom = 10.dp),
-                                text = stringResource(id = R.string.pick_up_point),
-                                imageVector = Icons.Default.Place
+                        item {
+                            Text(
+                                modifier = Modifier.padding(top = 15.dp),
+                                text = stringResource(
+                                    R.string.start_date_time,
+                                    offer.startDate.formatDateTime()
+                                )
                             )
+                        }
 
-                            LocationItem(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 20.dp, vertical = 10.dp),
-                                location = offer.location
+                        item {
+                            Text(
+                                modifier = Modifier.padding(top = 15.dp),
+                                text = stringResource(
+                                    R.string.end_date_time,
+                                    offer.startDate.addSeconds(offer.duration).formatDateTime()
+                                )
                             )
+                        }
 
-                            val context = LocalContext.current
-                            Button(
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .fillMaxWidth(0.85F)
-                                    .padding(top = 15.dp),
-                                onClick = {
-                                    context.openMapWithCoordinates(
-                                        latitude = offer.location.coordinates.latitude,
-                                        longitude = offer.location.coordinates.longitude
-                                    )
+                        item {
+                            Text(
+                                modifier = Modifier.padding(top = 15.dp),
+                                text = stringResource(
+                                    R.string.published_the,
+                                    offer.createdAt.formatDate()
+                                )
+                            )
+                        }
+
+                        if (!offer.products.isNullOrEmpty()) {
+                            item {
+                                SubtitleWithIcon(
+                                    modifier = Modifier.padding(top = 20.dp, bottom = 10.dp),
+                                    text = stringResource(id = R.string.products_label),
+                                    imageVector = Icons.Default.ShoppingBag
+                                )
+                            }
+
+                            item {
+                                LazyRow(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                ) {
+                                    items(items = offer.products) {
+                                        ProductItem(
+                                            modifier = Modifier
+                                                .padding(horizontal = 5.dp)
+                                                .width((LocalConfiguration.current.screenWidthDp * 0.6).dp),
+                                            product = it
+                                        )
+                                    }
                                 }
-                            ) {
-                                Text(stringResource(id = R.string.view_location_on_maps))
+                            }
+
+                        }
+
+                        if (offer.location != null) {
+                            item {
+                                SubtitleWithIcon(
+                                    modifier = Modifier.padding(top = 20.dp, bottom = 10.dp),
+                                    text = stringResource(id = R.string.pick_up_point),
+                                    imageVector = Icons.Default.Place
+                                )
+                            }
+
+                            item {
+                                LocationItem(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 20.dp, vertical = 10.dp),
+                                    location = offer.location
+                                )
+                            }
+
+                            item {
+                                val context = LocalContext.current
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    Button(
+                                        modifier = Modifier
+                                            .fillMaxWidth(0.85F)
+                                            .padding(top = 15.dp),
+                                        onClick = {
+                                            context.openMapWithCoordinates(
+                                                latitude = offer.location.coordinates.latitude,
+                                                longitude = offer.location.coordinates.longitude
+                                            )
+                                        }
+                                    ) {
+                                        Text(stringResource(id = R.string.view_location_on_maps))
+                                    }
+                                }
                             }
                         }
 
@@ -363,76 +413,95 @@ fun OrderDetailsScreen(
                             val customer = order.customer
 
                             if (customer != null) {
-                                SubtitleWithIcon(
-                                    modifier = Modifier.padding(top = 15.dp),
-                                    text = stringResource(R.string.customer),
-                                    imageVector = Icons.Default.Person
-                                )
+                                item {
+                                    SubtitleWithIcon(
+                                        modifier = Modifier.padding(top = 15.dp),
+                                        text = stringResource(R.string.customer),
+                                        imageVector = Icons.Default.Person
+                                    )
+                                }
 
-                                Text(
-                                    modifier = Modifier.padding(top = 15.dp),
-                                    text = "${stringResource(id = R.string.username_label)} : ${customer.username}",
-                                    fontSize = 18.sp
-                                )
+                                item {
+                                    Text(
+                                        modifier = Modifier.padding(top = 15.dp),
+                                        text = "${stringResource(id = R.string.username_label)} : ${customer.username}",
+                                        fontSize = 18.sp
+                                    )
+                                }
 
-                                Text(
-                                    modifier = Modifier.padding(top = 15.dp),
-                                    text = "${stringResource(id = R.string.email_label)} : ${customer.email}",
-                                    fontSize = 18.sp
-                                )
+                                item {
+                                    Text(
+                                        modifier = Modifier.padding(top = 15.dp),
+                                        text = "${stringResource(id = R.string.email_label)} : ${customer.email}",
+                                        fontSize = 18.sp
+                                    )
+                                }
 
-                                Text(
-                                    modifier = Modifier.padding(top = 15.dp),
-                                    text = "${stringResource(id = R.string.member_since_label)} : ${customer.createdAt.formatDate()}",
-                                    fontSize = 18.sp
-                                )
+                                item {
+                                    Text(
+                                        modifier = Modifier.padding(top = 15.dp),
+                                        text = "${stringResource(id = R.string.member_since_label)} : ${customer.createdAt.formatDate()}",
+                                        fontSize = 18.sp
+                                    )
+                                }
                             }
                         }
 
-                        SubtitleWithIcon(
-                            modifier = Modifier.padding(top = 15.dp),
-                            text = stringResource(id = R.string.comments),
-                            imageVector = Icons.Default.Comment
-                        )
+                        item {
+                            SubtitleWithIcon(
+                                modifier = Modifier.padding(top = 15.dp),
+                                text = stringResource(id = R.string.comments),
+                                imageVector = Icons.Default.Comment
+                            )
+                        }
 
                         if (order.opinions.isEmpty()) {
-                            Text(
-                                modifier = Modifier
-                                    .padding(vertical = 15.dp)
-                                    .align(Alignment.CenterHorizontally),
-                                text = stringResource(id = R.string.no_comments_yet),
-                                fontSize = 17.sp
-                            )
+                            item {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    Text(
+                                        modifier = Modifier.padding(vertical = 15.dp),
+                                        text = stringResource(id = R.string.no_comments_yet),
+                                        fontSize = 17.sp
+                                    )
+                                }
+                            }
                         } else {
                             order.opinions.map {
-                                OpinionItem(
-                                    modifier = Modifier
-                                        .padding(15.dp)
-                                        .fillMaxWidth(),
-                                    opinion = it,
-                                    canDelete = orderDetailsViewModel.isCustomer,
-                                    onDelete = {
-                                        if (orderDetailsViewModel.isCustomer) {
-                                            orderDetailsViewModel.deleteOpinion(
-                                                opinion = it,
-                                                onSuccess = {
-                                                    coroutineScope.launch {
-                                                        snackbarHostState.show(Strings.get(R.string.comment_deleted_successfully))
-                                                        orderDetailsViewModel.getOrder()
+                                item {
+                                    OpinionItem(
+                                        modifier = Modifier
+                                            .padding(15.dp)
+                                            .fillMaxWidth(),
+                                        opinion = it,
+                                        canDelete = orderDetailsViewModel.isCustomer,
+                                        onDelete = {
+                                            if (orderDetailsViewModel.isCustomer) {
+                                                orderDetailsViewModel.deleteOpinion(
+                                                    opinion = it,
+                                                    onSuccess = {
+                                                        coroutineScope.launch {
+                                                            snackbarHostState.show(Strings.get(R.string.comment_deleted_successfully))
+                                                            orderDetailsViewModel.getOrder()
+                                                        }
+                                                    },
+                                                    onFailure = {
+                                                        coroutineScope.launch {
+                                                            snackbarHostState.show(Strings.get(R.string.comment_deletion_failed))
+                                                        }
                                                     }
-                                                },
-                                                onFailure = {
-                                                    coroutineScope.launch {
-                                                        snackbarHostState.show(Strings.get(R.string.comment_deletion_failed))
-                                                    }
-                                                }
-                                            )
+                                                )
+                                            }
                                         }
-                                    }
-                                )
+                                    )
+                                }
                             }
 
-                            Box(modifier = Modifier.height(45.dp))
+                            item {
+                                Box(modifier = Modifier.height(45.dp))
+                            }
                         }
                     }
                 }

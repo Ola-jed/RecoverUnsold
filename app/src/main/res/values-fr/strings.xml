@@ -257,4 +257,6 @@
     </plurals>
     <string name="cumulative_order_value">Montant des commandes : %1$s</string>
     <string name="open_source_licenses">Licenses open source</string>
+    <string name="comment_verb">Commenter</string>
+    <string name="add_a_product">Ajouter un produit</string>
 </resources>

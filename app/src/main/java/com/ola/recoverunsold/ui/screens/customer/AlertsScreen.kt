@@ -6,13 +6,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.Button
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SnackbarHostState
@@ -35,9 +35,11 @@ import com.ola.recoverunsold.api.core.StatusCode
 import com.ola.recoverunsold.ui.components.alerts.AlertForm
 import com.ola.recoverunsold.ui.components.alerts.AlertItem
 import com.ola.recoverunsold.ui.components.app.AppBar
+import com.ola.recoverunsold.ui.components.app.ExtendableFab
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.screens.viewmodels.AlertsViewModel
+import com.ola.recoverunsold.utils.misc.isScrollingUp
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
@@ -54,6 +56,7 @@ fun AlertsScreen(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed),
         snackbarHostState = snackbarHostState
     )
+    val listState = rememberLazyListState()
 
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
@@ -68,11 +71,14 @@ fun AlertsScreen(
         },
         drawerContent = DrawerContent(navController),
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-                coroutineScope.launch { bottomSheetScaffoldState.bottomSheetState.expand() }
-            }) {
-                Icon(Icons.Default.Add, contentDescription = null)
-            }
+            ExtendableFab(
+                extended = listState.isScrollingUp(),
+                text = { Text(stringResource(id = R.string.add)) },
+                icon = { Icon(Icons.Default.Add, contentDescription = null) },
+                onClick = {
+                    coroutineScope.launch { bottomSheetScaffoldState.bottomSheetState.expand() }
+                }
+            )
         },
         sheetContent = {
             AlertForm(
@@ -158,7 +164,8 @@ fun AlertsScreen(
                     LazyColumn(
                         modifier = Modifier
                             .padding(paddingValues)
-                            .fillMaxSize()
+                            .fillMaxSize(),
+                        state = listState
                     ) {
                         items(items = alerts) {
                             AlertItem(

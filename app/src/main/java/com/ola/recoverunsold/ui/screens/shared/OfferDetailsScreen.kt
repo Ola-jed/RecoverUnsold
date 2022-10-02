@@ -2,25 +2,26 @@ package com.ola.recoverunsold.ui.screens.shared
 
 import android.app.Activity
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SnackbarHostState
@@ -54,6 +55,7 @@ import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.DateTimePicker
+import com.ola.recoverunsold.ui.components.app.ExtendableFab
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
 import com.ola.recoverunsold.ui.components.app.SubtitleWithIcon
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
@@ -64,6 +66,7 @@ import com.ola.recoverunsold.ui.screens.viewmodels.OfferDetailsViewModel
 import com.ola.recoverunsold.utils.misc.addSeconds
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
+import com.ola.recoverunsold.utils.misc.isScrollingUp
 import com.ola.recoverunsold.utils.misc.jsonSerialize
 import com.ola.recoverunsold.utils.misc.openMapWithCoordinates
 import com.ola.recoverunsold.utils.misc.remove
@@ -88,6 +91,7 @@ fun OfferDetailsScreen(
         snackbarHostState = snackbarHostState
     )
     var showWithdrawalDatePicker by remember { mutableStateOf(false) }
+    val listState = rememberLazyListState()
 
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
@@ -103,20 +107,23 @@ fun OfferDetailsScreen(
         drawerContent = DrawerContent(navController),
         floatingActionButton = {
             if (offerDetailsViewModel.isDistributor) {
-                FloatingActionButton(onClick = {
-                    navController.navigate(
-                        Routes.OfferProduct.path
-                            .replace("{offerId}", offerId)
-                            .remove("{product}")
-                    )
-                }) {
-                    if (offerDetailsViewModel.isDistributor) {
+                ExtendableFab(
+                    extended = listState.isScrollingUp(),
+                    text = { Text(stringResource(id = R.string.add_a_product)) },
+                    icon = {
                         Icon(
                             Icons.Default.PlaylistAdd,
                             contentDescription = stringResource(id = R.string.add)
                         )
+                    },
+                    onClick = {
+                        navController.navigate(
+                            Routes.OfferProduct.path
+                                .replace("{offerId}", offerId)
+                                .remove("{product}")
+                        )
                     }
-                }
+                )
             } else {
                 Box(modifier = Modifier.size(0.dp))
             }
@@ -182,144 +189,165 @@ fun OfferDetailsScreen(
                 val offer = offerDetailsViewModel.offerApiCallResult.data!!
                 val width = LocalConfiguration.current.screenWidthDp
 
-                Column(
+
+                LazyColumn(
                     modifier = Modifier
                         .padding(paddingValues)
-                        .padding(horizontal = 15.dp)
-                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = 15.dp),
+                    state = listState
                 ) {
-                    SubtitleWithIcon(
-                        text = stringResource(id = R.string.offer_details),
-                        imageVector = Icons.Default.Info
-                    )
+                    item {
+                        SubtitleWithIcon(
+                            text = stringResource(id = R.string.offer_details),
+                            imageVector = Icons.Default.Info
+                        )
+                    }
 
-                    Text(
-                        text = stringResource(
-                            R.string.total_amount,
-                            offer.price.formatWithoutTrailingZeros()
-                        ),
-                        modifier = Modifier.padding(top = 10.dp)
-                    )
-
-                    if (offer.beneficiaries != null) {
+                    item {
                         Text(
                             text = stringResource(
-                                R.string.offer_beneficiaries_data,
-                                offer.beneficiaries
+                                R.string.total_amount,
+                                offer.price.formatWithoutTrailingZeros()
+                            ),
+                            modifier = Modifier.padding(top = 10.dp)
+                        )
+                    }
+
+                    if (offer.beneficiaries != null) {
+                        item {
+                            Text(
+                                text = stringResource(
+                                    R.string.offer_beneficiaries_data,
+                                    offer.beneficiaries
+                                ),
+                                modifier = Modifier.padding(vertical = 5.dp)
+                            )
+                        }
+                    }
+
+                    item {
+                        Text(
+                            text = stringResource(
+                                R.string.end_date_time,
+                                offer.startDate.addSeconds(offer.duration).formatDateTime()
                             ),
                             modifier = Modifier.padding(vertical = 5.dp)
                         )
                     }
 
-                    Text(
-                        text = stringResource(
-                            R.string.start_date_time,
-                            offer.startDate.formatDateTime()
-                        ),
-                        modifier = Modifier.padding(vertical = 5.dp)
-                    )
-
-                    Text(
-                        text = stringResource(
-                            R.string.end_date_time,
-                            offer.startDate.addSeconds(offer.duration).formatDateTime()
-                        ),
-                        modifier = Modifier.padding(vertical = 5.dp)
-                    )
-
                     if (!offer.products.isNullOrEmpty()) {
-                        SubtitleWithIcon(
-                            modifier = Modifier.padding(top = 20.dp, bottom = 10.dp),
-                            text = stringResource(id = R.string.products_label),
-                            imageVector = Icons.Default.ShoppingBag
-                        )
+                        item {
+                            SubtitleWithIcon(
+                                modifier = Modifier.padding(top = 20.dp, bottom = 10.dp),
+                                text = stringResource(id = R.string.products_label),
+                                imageVector = Icons.Default.ShoppingBag
+                            )
+                        }
 
-                        LazyRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            items(items = offer.products) {
-                                ProductItem(
-                                    modifier = Modifier
-                                        .padding(horizontal = 5.dp)
-                                        .width((width * 0.6).dp),
-                                    product = it,
-                                    isEditable = offer.distributorId == offerDetailsViewModel.currentUserId,
-                                    onEdit = {
-                                        navController.navigate(
-                                            Routes.OfferProduct.path
-                                                .replace("{offerId}", offerId)
-                                                .replace("{product}", it.jsonSerialize())
-                                        )
-                                    },
-                                    onDelete = {
-                                        offerDetailsViewModel.deleteProduct(
-                                            product = it,
-                                            onSuccess = {
-                                                coroutineScope.launch {
-                                                    snackbarHostState.show(
-                                                        message = Strings.get(R.string.product_deleted_successfully)
-                                                    )
+                        item {
+                            LazyRow(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                items(items = offer.products) {
+                                    ProductItem(
+                                        modifier = Modifier
+                                            .padding(horizontal = 5.dp)
+                                            .width((width * 0.6).dp),
+                                        product = it,
+                                        isEditable = offer.distributorId == offerDetailsViewModel.currentUserId,
+                                        onEdit = {
+                                            navController.navigate(
+                                                Routes.OfferProduct.path
+                                                    .replace("{offerId}", offerId)
+                                                    .replace("{product}", it.jsonSerialize())
+                                            )
+                                        },
+                                        onDelete = {
+                                            offerDetailsViewModel.deleteProduct(
+                                                product = it,
+                                                onSuccess = {
+                                                    coroutineScope.launch {
+                                                        snackbarHostState.show(
+                                                            message = Strings.get(R.string.product_deleted_successfully)
+                                                        )
+                                                    }
+                                                    offerDetailsViewModel.getOffer()
+                                                },
+                                                onError = {
+                                                    coroutineScope.launch {
+                                                        snackbarHostState.show(
+                                                            message = Strings.get(R.string.product_deletion_failed)
+                                                        )
+                                                    }
                                                 }
-                                                offerDetailsViewModel.getOffer()
-                                            },
-                                            onError = {
-                                                coroutineScope.launch {
-                                                    snackbarHostState.show(
-                                                        message = Strings.get(R.string.product_deletion_failed)
-                                                    )
-                                                }
-                                            }
-                                        )
-                                    }
-                                )
+                                            )
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
 
                     if (offer.location != null) {
-                        SubtitleWithIcon(
-                            modifier = Modifier.padding(top = 20.dp, bottom = 10.dp),
-                            text = stringResource(id = R.string.pick_up_point),
-                            imageVector = Icons.Default.Place
-                        )
+                        item {
+                            SubtitleWithIcon(
+                                modifier = Modifier.padding(top = 20.dp, bottom = 10.dp),
+                                text = stringResource(id = R.string.pick_up_point),
+                                imageVector = Icons.Default.Place
+                            )
+                        }
 
-                        LocationItem(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp, vertical = 10.dp),
-                            location = offer.location,
-                            isModifiable = false
-                        )
+                        item {
+                            LocationItem(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                                location = offer.location,
+                                isModifiable = false
+                            )
+                        }
 
-                        val context = LocalContext.current
-                        Button(
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .fillMaxWidth(0.85F)
-                                .padding(top = 15.dp),
-                            onClick = {
-                                context.openMapWithCoordinates(
-                                    latitude = offer.location.coordinates.latitude,
-                                    longitude = offer.location.coordinates.longitude
-                                )
+                        item {
+                            val context = LocalContext.current
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Button(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.85F)
+                                        .padding(top = 15.dp),
+                                    onClick = {
+                                        context.openMapWithCoordinates(
+                                            latitude = offer.location.coordinates.latitude,
+                                            longitude = offer.location.coordinates.longitude
+                                        )
+                                    }
+                                ) {
+                                    Text(stringResource(id = R.string.view_location_on_maps))
+                                }
                             }
-                        ) {
-                            Text(stringResource(id = R.string.view_location_on_maps))
                         }
                     }
 
                     if (offerDetailsViewModel.isCustomer) {
-                        Button(modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .fillMaxWidth(0.85F)
-                            .padding(bottom = 35.dp),
-                            onClick = {
-                                coroutineScope.launch {
-                                    bottomSheetScaffoldState.bottomSheetState.expand()
+                        item {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Button(modifier = Modifier
+                                    .fillMaxWidth(0.85F)
+                                    .padding(bottom = 35.dp),
+                                    onClick = {
+                                        coroutineScope.launch {
+                                            bottomSheetScaffoldState.bottomSheetState.expand()
+                                        }
+                                    }) {
+                                    Text(stringResource(id = R.string.order))
                                 }
-                            }) {
-                            Text(stringResource(id = R.string.order))
+                            }
                         }
                     }
                 }

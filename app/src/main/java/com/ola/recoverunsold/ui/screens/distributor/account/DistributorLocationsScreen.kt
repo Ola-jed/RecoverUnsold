@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -28,10 +28,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
+import com.ola.recoverunsold.ui.components.app.ExtendableFab
 import com.ola.recoverunsold.ui.components.app.PaginationComponent
 import com.ola.recoverunsold.ui.components.location.LocationItem
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.LocationsSectionViewModel
+import com.ola.recoverunsold.utils.misc.isScrollingUp
 import com.ola.recoverunsold.utils.misc.jsonSerialize
 import com.ola.recoverunsold.utils.misc.remove
 import com.ola.recoverunsold.utils.misc.show
@@ -46,6 +48,7 @@ fun DistributorLocationsScreen(
     locationsSectionViewModel: LocationsSectionViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
 
     Box(modifier = modifier) {
         when (locationsSectionViewModel.locationsGetResponse.status) {
@@ -69,13 +72,16 @@ fun DistributorLocationsScreen(
                 val locations = locationsSectionViewModel.locationsGetResponse.data!!
 
                 Scaffold(floatingActionButton = {
-                    FloatingActionButton(onClick = {
-                        navController.navigate(
-                            Routes.LocationCreateOrUpdate.path.remove("{location}")
-                        )
-                    }) {
-                        Icon(Icons.Default.Add, contentDescription = null)
-                    }
+                    ExtendableFab(
+                        extended = listState.isScrollingUp(),
+                        text = { Text(stringResource(id = R.string.add)) },
+                        icon = { Icon(Icons.Default.Add, contentDescription = null) },
+                        onClick = {
+                            navController.navigate(
+                                Routes.LocationCreateOrUpdate.path.remove("{location}")
+                            )
+                        }
+                    )
                 }) {
                     if (locations.items.isEmpty()) {
                         Row(
@@ -89,7 +95,7 @@ fun DistributorLocationsScreen(
                             )
                         }
                     } else {
-                        LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        LazyColumn(modifier = Modifier.fillMaxSize(), state = listState) {
                             items(items = locations.items) { item ->
                                 LocationItem(
                                     modifier = Modifier

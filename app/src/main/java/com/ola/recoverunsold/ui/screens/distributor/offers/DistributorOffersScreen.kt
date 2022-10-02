@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Button
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHostState
@@ -29,6 +29,7 @@ import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
+import com.ola.recoverunsold.ui.components.app.ExtendableFab
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
 import com.ola.recoverunsold.ui.components.app.NoContentComponent
 import com.ola.recoverunsold.ui.components.app.PaginationComponent
@@ -37,6 +38,7 @@ import com.ola.recoverunsold.ui.components.offer.OfferFilterComponent
 import com.ola.recoverunsold.ui.components.offer.OfferItem
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorOffersViewModel
+import com.ola.recoverunsold.utils.misc.isScrollingUp
 import com.ola.recoverunsold.utils.misc.jsonSerialize
 import com.ola.recoverunsold.utils.misc.remove
 import com.ola.recoverunsold.utils.misc.show
@@ -51,6 +53,7 @@ fun DistributorOffersScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
+    val listState = rememberLazyListState()
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -63,11 +66,14 @@ fun DistributorOffersScreen(
         },
         drawerContent = DrawerContent(navController),
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-                navController.navigate(Routes.OfferCreateOrUpdate.path.remove("{offer}"))
-            }) {
-                Icon(Icons.Default.Add, contentDescription = null)
-            }
+            ExtendableFab(
+                extended = listState.isScrollingUp(),
+                text = { Text(stringResource(id = R.string.add)) },
+                icon = { Icon(Icons.Default.Add, contentDescription = null) },
+                onClick = {
+                    navController.navigate(Routes.OfferCreateOrUpdate.path.remove("{offer}"))
+                }
+            )
         }
     ) { paddingValues ->
         when (distributorOffersViewModel.offersApiResult.status) {
@@ -100,7 +106,8 @@ fun DistributorOffersScreen(
                 LazyColumn(
                     modifier = Modifier
                         .padding(paddingValues)
-                        .fillMaxSize()
+                        .fillMaxSize(),
+                    state = listState
                 ) {
                     item {
                         Row(
