@@ -119,6 +119,7 @@ fun Context.getDeviceLocation(
     onLatLngValueUpdate: (LatLng) -> Unit,
     onLocationFetchFailed: () -> Unit
 ) {
+    // TODO : no more fused
     val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
     val locationChangeListener = fun(location: Location?) {
         if (location != null) {
