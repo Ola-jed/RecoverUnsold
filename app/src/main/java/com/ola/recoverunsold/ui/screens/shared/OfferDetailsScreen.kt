@@ -331,15 +331,18 @@ fun OfferDetailsScreen(
                         }
                     }
 
-                    if (offerDetailsViewModel.isCustomer) {
+                    if (offerDetailsViewModel.isCustomer && offer.startDate.addSeconds(offer.duration)
+                            .after(Date())
+                    ) {
                         item {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.Center
                             ) {
-                                Button(modifier = Modifier
-                                    .fillMaxWidth(0.85F)
-                                    .padding(bottom = 35.dp),
+                                Button(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.85F)
+                                        .padding(bottom = 35.dp),
                                     onClick = {
                                         coroutineScope.launch {
                                             bottomSheetScaffoldState.bottomSheetState.expand()
