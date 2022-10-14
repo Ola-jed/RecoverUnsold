@@ -3,7 +3,6 @@ package com.ola.recoverunsold.ui.components.order
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
@@ -38,14 +37,12 @@ fun OrderItem(
     Card(
         modifier = modifier,
         elevation = 10.dp,
-        shape = RoundedCornerShape(10.dp),
         onClick = onTap
     ) {
-        Column(modifier = Modifier.padding(10.dp)) {
+        Column {
             Surface(
                 elevation = 15.dp,
-                color = MaterialTheme.colors.secondary,
-                shape = RoundedCornerShape(30.dp)
+                color = MaterialTheme.colors.secondary
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = 7.5.dp, vertical = 5.dp),
@@ -69,13 +66,13 @@ fun OrderItem(
                     R.string.total_amount,
                     offer.price.formatWithoutTrailingZeros()
                 ),
-                modifier = Modifier.padding(top = 10.dp),
+                modifier = Modifier.padding(10.dp),
                 fontWeight = FontWeight.Bold,
                 fontSize = 17.sp
             )
 
             Text(
-                modifier = Modifier.padding(vertical = 5.dp),
+                modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp),
                 text = "${offer.startDate.formatDateTime()} - ${
                     Date.from(
                         offer.startDate.toInstant().plusSeconds(offer.duration.toLong())
@@ -84,6 +81,7 @@ fun OrderItem(
             )
 
             Text(
+                modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp),
                 text = stringResource(
                     R.string.published_the,
                     offer.createdAt.formatDate()
@@ -92,13 +90,13 @@ fun OrderItem(
 
             Text(
                 text = stringResource(R.string.ordered_on, order.createdAt.formatDate()),
-                modifier = Modifier.padding(top = 10.dp),
+                modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp),
                 fontWeight = FontWeight.Bold,
                 fontSize = 17.sp
             )
 
             Text(
-                modifier = Modifier.padding(vertical = 5.dp),
+                modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp),
                 text = "${stringResource(id = R.string.to_be_picked_up_on)} : ${order.withdrawalDate.formatDateTime()}",
                 fontWeight = FontWeight.Bold
             )

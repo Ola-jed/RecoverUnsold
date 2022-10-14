@@ -6,16 +6,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.EventAvailable
+import androidx.compose.material.icons.filled.Group
+import androidx.compose.material.icons.filled.Payments
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -56,7 +58,6 @@ fun OfferItem(
     Card(
         modifier = modifier,
         elevation = 10.dp,
-        shape = RoundedCornerShape(10.dp),
         onClick = onTap
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -75,38 +76,42 @@ fun OfferItem(
                     .fillMaxSize()
                     .padding(10.dp)
             ) {
-                Text(
+                OfferInformationLine(
                     modifier = Modifier.padding(top = 7.dp),
                     text = stringResource(
                         R.string.total_amount,
                         offer.price.formatWithoutTrailingZeros()
-                    )
+                    ),
+                    icon = Icons.Default.Payments
                 )
 
                 if (offer.beneficiaries != null) {
-                    Text(
+                    OfferInformationLine(
                         modifier = Modifier.padding(top = 5.dp),
                         text = stringResource(
                             R.string.offer_beneficiaries_data,
                             offer.beneficiaries
-                        )
+                        ),
+                        icon = Icons.Default.Group
                     )
                 }
 
-                Text(
+                OfferInformationLine(
                     modifier = Modifier.padding(top = 5.dp),
                     text = stringResource(
                         R.string.start_date_time,
                         startDate.formatDateTime()
-                    )
+                    ),
+                    icon = Icons.Default.EventAvailable
                 )
 
-                Text(
+                OfferInformationLine(
+                    modifier = Modifier.padding(top = 5.dp),
                     text = stringResource(
                         R.string.published_the,
                         offer.createdAt.formatDate()
                     ),
-                    modifier = Modifier.padding(top = 5.dp)
+                    icon = Icons.Default.CalendarToday
                 )
 
                 if (isEditable) {

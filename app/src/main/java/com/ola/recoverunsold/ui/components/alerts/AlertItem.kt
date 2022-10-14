@@ -3,7 +3,6 @@ package com.ola.recoverunsold.ui.components.alerts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -47,8 +46,7 @@ fun AlertItem(
 
     Surface(
         modifier = modifier,
-        elevation = 10.dp,
-        shape = RoundedCornerShape(10.dp)
+        elevation = 10.dp
     ) {
         Column(
             modifier = Modifier

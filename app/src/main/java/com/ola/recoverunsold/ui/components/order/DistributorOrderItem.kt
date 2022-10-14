@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
@@ -51,14 +50,12 @@ fun DistributorOrderItem(
     Card(
         modifier = modifier.padding(horizontal = 10.dp),
         elevation = 10.dp,
-        shape = RoundedCornerShape(10.dp),
         onClick = onMoreInformationRequest
     ) {
-        Column(modifier = Modifier.padding(10.dp)) {
+        Column {
             Surface(
                 elevation = 15.dp,
-                color = MaterialTheme.colors.secondary,
-                shape = RoundedCornerShape(30.dp)
+                color = MaterialTheme.colors.secondary
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = 7.5.dp, vertical = 5.dp),
@@ -83,25 +80,27 @@ fun DistributorOrderItem(
                     R.string.total_amount,
                     offer.price.formatWithoutTrailingZeros()
                 ),
-                modifier = Modifier.padding(top = 10.dp),
+                modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp),
                 fontWeight = FontWeight.Bold,
                 fontSize = 17.sp
             )
 
             Text(
                 text = stringResource(R.string.ordered_on, order.createdAt.formatDateTime()),
-                modifier = Modifier.padding(top = 10.dp)
+                modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp),
             )
 
             Text(
                 text = "${stringResource(id = R.string.to_be_picked_up_on)} : ${order.withdrawalDate.formatDateTime()}",
-                modifier = Modifier.padding(vertical = 10.dp),
+                modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp),
                 fontWeight = FontWeight.SemiBold
             )
 
             if (order.status == OrderStatus.Pending || order.status == OrderStatus.Rejected) {
                 Button(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(horizontal = 10.dp)
+                        .fillMaxWidth(),
                     onClick = { showAcceptOrderDialog = true }
                 ) {
                     Text(text = stringResource(id = R.string.accept_order_label))
@@ -111,7 +110,9 @@ fun DistributorOrderItem(
             if (order.status == OrderStatus.Pending || order.status == OrderStatus.Approved) {
                 Button(
                     onClick = { showRejectOrderDialog = true },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(horizontal = 10.dp)
+                        .fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
                 ) {
                     Text(
@@ -123,7 +124,9 @@ fun DistributorOrderItem(
 
             if (order.status == OrderStatus.Approved) {
                 Button(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(horizontal = 10.dp)
+                        .fillMaxWidth(),
                     onClick = { showCompleteOrderDialog = true }
                 ) {
                     Text(text = stringResource(id = R.string.finalize_order_label))

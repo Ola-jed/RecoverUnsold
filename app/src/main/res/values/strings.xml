@@ -108,8 +108,8 @@
     <string name="maximum_price_label">Maximum price</string>
     <string name="price">Price</string>
     <string name="no_offer_published">No offers published, publish one now</string>
-    <string name="start_date_time">Date and time of start : %1$s</string>
-    <string name="end_date_time">Date and time of end : %1$s</string>
+    <string name="start_date_time">Start : %1$s</string>
+    <string name="end_date_time">End : %1$s</string>
     <string name="apply_filters">Apply filters</string>
     <string name="reset">Reset</string>
     <string name="offer_deleted_successfully">Offer deleted successfully</string>

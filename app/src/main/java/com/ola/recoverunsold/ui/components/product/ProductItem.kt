@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -44,8 +43,7 @@ fun ProductItem(
 
     Surface(
         modifier = modifier,
-        elevation = 10.dp,
-        shape = RoundedCornerShape(10.dp)
+        elevation = 10.dp
     ) {
         Column(
             modifier = Modifier
@@ -63,7 +61,9 @@ fun ProductItem(
             if (product.images.isNotEmpty()) {
                 val height = (LocalConfiguration.current.screenHeightDp * 0.1).dp
                 ImageSlider(
-                    modifier = Modifier.fillMaxWidth().height(height),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(height),
                     imageUris = product.images.map { it.url }
                 )
             }

@@ -105,8 +105,8 @@
     <string name="minimum_price_label">Precio mínimo</string>
     <string name="price">Precio</string>
     <string name="no_offer_published">No se han publicado ofertas, publique una ahora</string>
-    <string name="start_date_time">Fecha y hora de inicio : %1$s</string>
-    <string name="end_date_time">Fecha y hora de finalización : %1$s</string>
+    <string name="start_date_time">Inicio : %1$s</string>
+    <string name="end_date_time">Finalización : %1$s</string>
     <string name="apply_filters">Aplicar los filtros</string>
     <string name="reset">Reiniciar</string>
     <string name="offer_deleted_successfully">Oferta eliminada con éxito</string>

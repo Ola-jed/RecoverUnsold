@@ -4,11 +4,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.EventAvailable
+import androidx.compose.material.icons.filled.Group
+import androidx.compose.material.icons.filled.Payments
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -18,6 +22,7 @@ import com.ola.recoverunsold.models.OfferWithRelativeDistance
 import com.ola.recoverunsold.ui.components.app.ImageSlider
 import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.formatDateTime
+import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 import androidx.compose.ui.platform.LocalConfiguration as LocalConfiguration1
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -36,7 +41,6 @@ fun OfferRelativeDistanceItem(
     Card(
         modifier = modifier,
         elevation = 10.dp,
-        shape = RoundedCornerShape(10.dp),
         onClick = onMoreInformationRequest
     ) {
         Column(
@@ -52,35 +56,42 @@ fun OfferRelativeDistanceItem(
                 )
             }
 
-            Text(
-                text = stringResource(R.string.total_amount, offer.price.toString()),
-                modifier = Modifier.padding(top = 10.dp)
+            OfferInformationLine(
+                modifier = Modifier.padding(top = 7.dp),
+                text = stringResource(
+                    R.string.total_amount,
+                    offer.price.formatWithoutTrailingZeros()
+                ),
+                icon = Icons.Default.Payments
             )
 
             if (offer.beneficiaries != null) {
-                Text(
+                OfferInformationLine(
+                    modifier = Modifier.padding(top = 5.dp),
                     text = stringResource(
                         R.string.offer_beneficiaries_data,
                         offer.beneficiaries
                     ),
-                    modifier = Modifier.padding(top = 5.dp)
+                    icon = Icons.Default.Group
                 )
             }
 
-            Text(
+            OfferInformationLine(
                 modifier = Modifier.padding(top = 5.dp),
                 text = stringResource(
                     R.string.start_date_time,
                     startDate.formatDateTime()
-                )
+                ),
+                icon = Icons.Default.EventAvailable
             )
 
-            Text(
+            OfferInformationLine(
                 modifier = Modifier.padding(top = 5.dp),
                 text = stringResource(
                     R.string.published_the,
                     offer.createdAt.formatDate()
-                )
+                ),
+                icon = Icons.Default.CalendarToday
             )
 
             Button(

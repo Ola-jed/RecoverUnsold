@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -24,8 +23,7 @@ fun AccountInformationTile(
         elevation = 10.dp,
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 10.dp, horizontal = 20.dp),
-        shape = RoundedCornerShape(size = 10.dp)
+            .padding(vertical = 10.dp, horizontal = 20.dp)
     ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,

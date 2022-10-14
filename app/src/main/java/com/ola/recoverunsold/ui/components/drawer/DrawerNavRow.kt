@@ -39,7 +39,7 @@ fun DrawerNavRow(
         bgColor = MaterialTheme.colors.primary.copy(alpha = 0.7f)
         textColor = MaterialTheme.colors.onPrimary
         modifierToApply = modifier
-            .clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(5.dp))
             .background(bgColor)
             .fillMaxWidth()
             .padding(top = 15.dp, bottom = 15.dp, start = 15.dp)
@@ -47,7 +47,7 @@ fun DrawerNavRow(
         bgColor = Color.Transparent
         textColor = MaterialTheme.colors.onBackground
         modifierToApply = modifier
-            .clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(5.dp))
             .background(bgColor)
             .fillMaxWidth()
             .clickable { navController.navigate(route) }
