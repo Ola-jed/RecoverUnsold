@@ -20,10 +20,7 @@ fun SubtitleWithIcon(
     text: String,
     imageVector: ImageVector
 ) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         Icon(
             imageVector,
             contentDescription = null,
@@ -33,8 +30,7 @@ fun SubtitleWithIcon(
         Text(
             text = text,
             style = MaterialTheme.typography.h6,
-            modifier = Modifier
-                .padding(vertical = 10.dp)
+            modifier = Modifier.padding(vertical = 10.dp)
         )
     }
 }

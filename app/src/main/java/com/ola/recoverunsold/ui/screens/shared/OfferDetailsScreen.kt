@@ -20,7 +20,9 @@ import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.Button
+import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -28,7 +30,11 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EditCalendar
+import androidx.compose.material.icons.filled.EventAvailable
+import androidx.compose.material.icons.filled.EventBusy
+import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.ShoppingBag
@@ -43,6 +49,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -189,7 +196,6 @@ fun OfferDetailsScreen(
                 val offer = offerDetailsViewModel.offerApiCallResult.data!!
                 val width = LocalConfiguration.current.screenWidthDp
 
-
                 LazyColumn(
                     modifier = Modifier
                         .padding(paddingValues)
@@ -197,42 +203,79 @@ fun OfferDetailsScreen(
                     state = listState
                 ) {
                     item {
-                        SubtitleWithIcon(
-                            text = stringResource(id = R.string.offer_details),
-                            imageVector = Icons.Default.Info
-                        )
-                    }
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                Icons.Default.Info,
+                                contentDescription = null,
+                                modifier = Modifier.padding(end = 3.dp)
+                            )
 
-                    item {
-                        Text(
-                            text = stringResource(
-                                R.string.total_amount,
-                                offer.price.formatWithoutTrailingZeros()
-                            ),
-                            modifier = Modifier.padding(top = 10.dp)
-                        )
-                    }
-
-                    if (offer.beneficiaries != null) {
-                        item {
                             Text(
-                                text = stringResource(
-                                    R.string.offer_beneficiaries_data,
-                                    offer.beneficiaries
-                                ),
-                                modifier = Modifier.padding(vertical = 5.dp)
+                                text = stringResource(id = R.string.offer_details),
+                                style = MaterialTheme.typography.subtitle1,
+                                modifier = Modifier.padding(vertical = 10.dp)
                             )
                         }
                     }
 
                     item {
-                        Text(
-                            text = stringResource(
-                                R.string.end_date_time,
-                                offer.startDate.addSeconds(offer.duration).formatDateTime()
-                            ),
-                            modifier = Modifier.padding(vertical = 5.dp)
-                        )
+                        Card {
+                            Column {
+                                OfferDetailsItemLine(
+                                    modifier = Modifier.padding(
+                                        top = 13.dp,
+                                        bottom = 13.dp,
+                                        start = 10.dp
+                                    ),
+                                    icon = Icons.Default.Payments,
+                                    text = stringResource(
+                                        R.string.total_amount,
+                                        offer.price.formatWithoutTrailingZeros()
+                                    )
+                                )
+                                Divider()
+                                if (offer.beneficiaries != null) {
+                                    OfferDetailsItemLine(
+                                        modifier = Modifier.padding(
+                                            top = 13.dp,
+                                            bottom = 13.dp,
+                                            start = 10.dp
+                                        ),
+                                        icon = Icons.Default.Group,
+                                        text = stringResource(
+                                            R.string.offer_beneficiaries_data,
+                                            offer.beneficiaries
+                                        )
+                                    )
+                                    Divider()
+                                }
+                                OfferDetailsItemLine(
+                                    modifier = Modifier.padding(
+                                        top = 13.dp,
+                                        bottom = 13.dp,
+                                        start = 10.dp
+                                    ),
+                                    icon = Icons.Default.EventAvailable,
+                                    text = stringResource(
+                                        R.string.start_date_time,
+                                        offer.startDate.formatDateTime()
+                                    )
+                                )
+                                Divider()
+                                OfferDetailsItemLine(
+                                    modifier = Modifier.padding(
+                                        top = 13.dp,
+                                        bottom = 13.dp,
+                                        start = 10.dp
+                                    ),
+                                    icon = Icons.Default.EventBusy,
+                                    text = stringResource(
+                                        R.string.end_date_time,
+                                        offer.startDate.addSeconds(offer.duration).formatDateTime()
+                                    )
+                                )
+                            }
+                        }
                     }
 
                     if (!offer.products.isNullOrEmpty()) {
@@ -245,10 +288,7 @@ fun OfferDetailsScreen(
                         }
 
                         item {
-                            LazyRow(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                            ) {
+                            LazyRow(modifier = Modifier.fillMaxWidth()) {
                                 items(items = offer.products) {
                                     ProductItem(
                                         modifier = Modifier
@@ -412,4 +452,20 @@ fun offerDetailsViewModel(offerId: String): OfferDetailsViewModel {
         .fromActivity<MainActivity.ViewModelFactoryProvider>(LocalContext.current as Activity)
         .offerDetailsViewModelFactory()
     return viewModel(factory = OfferDetailsViewModel.provideFactory(factory, offerId))
+}
+
+@Composable
+fun OfferDetailsItemLine(
+    modifier: Modifier = Modifier,
+    icon: ImageVector,
+    text: String
+) {
+    Row(modifier = modifier) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            modifier = Modifier.padding(end = 10.dp)
+        )
+        Text(text = text)
+    }
 }
