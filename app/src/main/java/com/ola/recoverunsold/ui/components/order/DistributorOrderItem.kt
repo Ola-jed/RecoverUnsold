@@ -12,6 +12,10 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.EventAvailable
+import androidx.compose.material.icons.filled.Payments
+import androidx.compose.material.icons.filled.ShoppingCartCheckout
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,15 +24,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Order
 import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.ui.components.app.ConfirmDialog
 import com.ola.recoverunsold.utils.misc.backgroundColor
 import com.ola.recoverunsold.utils.misc.foregroundColor
+import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 import com.ola.recoverunsold.utils.misc.internationalizedValueSingular
@@ -77,25 +80,25 @@ fun DistributorOrderItem(
                 }
             }
 
-            Text(
+            OrderInformationLine(
                 text = stringResource(
                     R.string.total_amount,
                     offer.price.formatWithoutTrailingZeros()
                 ),
-                modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp),
-                fontWeight = FontWeight.Bold,
-                fontSize = 17.sp
+                icon = Icons.Default.Payments,
+                modifier = Modifier.padding(10.dp)
             )
 
-            Text(
-                text = stringResource(R.string.ordered_on, order.createdAt.formatDateTime()),
-                modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp),
+            OrderInformationLine(
+                text = stringResource(R.string.ordered_on, order.createdAt.formatDate()),
+                icon = Icons.Default.ShoppingCartCheckout,
+                modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp)
             )
 
-            Text(
+            OrderInformationLine(
                 text = "${stringResource(id = R.string.to_be_picked_up_on)} : ${order.withdrawalDate.formatDateTime()}",
-                modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp),
-                fontWeight = FontWeight.SemiBold
+                icon = Icons.Default.EventAvailable,
+                modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp)
             )
 
             if (order.status == OrderStatus.Pending || order.status == OrderStatus.Rejected) {
