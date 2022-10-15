@@ -9,30 +9,30 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val LightColors = lightColors(
     primary = themeLightPrimary,
-    onPrimary = md_theme_light_onPrimary,
-    secondary = md_theme_light_secondary,
-    secondaryVariant = md_theme_light_secondaryVariant,
-    onSecondary = md_theme_light_onSecondary,
-    error = md_theme_light_error,
-    onError = md_theme_light_onError,
-    background = md_theme_light_background,
-    onBackground = md_theme_light_onBackground,
-    surface = md_theme_light_surface,
-    onSurface = md_theme_light_onSurface,
+    onPrimary = themeLightOnPrimary,
+    secondary = themeLightSecondary,
+    secondaryVariant = themeLightSecondaryVariant,
+    onSecondary = themeLightOnSecondary,
+    error = themeLightError,
+    onError = themeLightOnError,
+    background = themeLightBackground,
+    onBackground = themeLightOnBackground,
+    surface = themeLightSurface,
+    onSurface = themeLightOnSurface,
 )
 
 private val DarkColors = darkColors(
-    primary = md_theme_dark_primary,
-    onPrimary = md_theme_dark_onPrimary,
-    secondary = md_theme_dark_secondary,
-    secondaryVariant = md_theme_dark_secondaryVariant,
-    onSecondary = md_theme_dark_onSecondary,
-    error = md_theme_dark_error,
-    onError = md_theme_dark_onError,
-    background = md_theme_dark_background,
-    onBackground = md_theme_dark_onBackground,
-    surface = md_theme_dark_surface,
-    onSurface = md_theme_dark_onSurface,
+    primary = themeDarkPrimary,
+    onPrimary = themeDarkOnPrimary,
+    secondary = themeDarkSecondary,
+    secondaryVariant = themeDarkSecondaryVariant,
+    onSecondary = themeDarkOnSecondary,
+    error = themeDarkError,
+    onError = themeDarkOnError,
+    background = themeDarkBackground,
+    onBackground = themeDarkOnBackground,
+    surface = themeDarkSurface,
+    onSurface = themeDarkOnSurface,
 )
 
 @Composable
@@ -47,7 +47,6 @@ fun RecoverUnsoldTheme(
     }
 
     val systemUiController = rememberSystemUiController()
-
     if (darkTheme) {
         systemUiController.setSystemBarsColor(color = DarkColors.background)
     } else {

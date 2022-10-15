@@ -27,6 +27,8 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Order
 import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.ui.components.app.ConfirmDialog
+import com.ola.recoverunsold.utils.misc.backgroundColor
+import com.ola.recoverunsold.utils.misc.foregroundColor
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 import com.ola.recoverunsold.utils.misc.internationalizedValueSingular
@@ -55,7 +57,7 @@ fun DistributorOrderItem(
         Column {
             Surface(
                 elevation = 15.dp,
-                color = MaterialTheme.colors.secondary
+                color = order.status.backgroundColor()
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = 7.5.dp, vertical = 5.dp),
@@ -64,13 +66,13 @@ fun DistributorOrderItem(
                     Icon(
                         imageVector = order.status.toIcon(),
                         contentDescription = null,
-                        tint = MaterialTheme.colors.onSecondary
+                        tint = order.status.foregroundColor()
                     )
 
                     Text(
                         modifier = Modifier.padding(start = 3.dp),
                         text = order.status.internationalizedValueSingular(),
-                        color = MaterialTheme.colors.onSecondary
+                        color = order.status.foregroundColor()
                     )
                 }
             }

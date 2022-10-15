@@ -9,6 +9,7 @@ import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.annotation.ColorInt
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
@@ -38,6 +39,7 @@ import com.ola.recoverunsold.models.AlertType
 import com.ola.recoverunsold.models.DistributorHomeData
 import com.ola.recoverunsold.models.LatLong
 import com.ola.recoverunsold.models.OrderStatus
+import com.ola.recoverunsold.ui.theme.AppCustomColors
 import com.ola.recoverunsold.utils.resources.Strings
 import me.bytebeats.views.charts.bar.BarChartData
 import okhttp3.Cache
@@ -373,6 +375,26 @@ fun OrderStatus.toIcon(): ImageVector {
         OrderStatus.Approved -> Icons.Default.Check
         OrderStatus.Rejected -> Icons.Default.Block
         OrderStatus.Completed -> Icons.Default.DoneAll
+    }
+}
+
+@Composable
+fun OrderStatus.backgroundColor(): Color {
+    return when (this) {
+        OrderStatus.Pending -> AppCustomColors.warning
+        OrderStatus.Approved -> MaterialTheme.colors.primary
+        OrderStatus.Rejected -> MaterialTheme.colors.error
+        OrderStatus.Completed -> AppCustomColors.success
+    }
+}
+
+@Composable
+fun OrderStatus.foregroundColor(): Color {
+    return when (this) {
+        OrderStatus.Pending -> AppCustomColors.onWarning
+        OrderStatus.Approved -> MaterialTheme.colors.onPrimary
+        OrderStatus.Rejected -> MaterialTheme.colors.onError
+        OrderStatus.Completed -> AppCustomColors.onSuccess
     }
 }
 

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Order
+import com.ola.recoverunsold.utils.misc.backgroundColor
+import com.ola.recoverunsold.utils.misc.foregroundColor
 import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
@@ -42,7 +43,7 @@ fun OrderItem(
         Column {
             Surface(
                 elevation = 15.dp,
-                color = MaterialTheme.colors.secondary
+                color = order.status.backgroundColor()
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = 7.5.dp, vertical = 5.dp),
@@ -51,12 +52,13 @@ fun OrderItem(
                     Icon(
                         imageVector = order.status.toIcon(),
                         contentDescription = null,
-                        tint = MaterialTheme.colors.onSecondary
+                        tint = order.status.foregroundColor()
                     )
+
                     Text(
                         modifier = Modifier.padding(start = 3.dp),
                         text = order.status.internationalizedValueSingular(),
-                        color = MaterialTheme.colors.onSecondary
+                        color = order.status.foregroundColor()
                     )
                 }
             }
