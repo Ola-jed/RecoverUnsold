@@ -97,7 +97,7 @@
     <string name="delete_location_label">Supprimer le site</string>
     <string name="delete_location_question">Voulez-vous supprimer ce site ?</string>
     <string name="offer_beneficiaries_data">Quantité totale : %1$d</string>
-    <string name="total_amount">Montant total : %1$s</string>
+    <string name="total_amount">Montant total : %1$s XOF</string>
     <string name="delete_offer_label">Suppression de cette offre</string>
     <string name="delete_offer_question">Voulez-vous supprimer cette offre ?</string>
     <string name="filters">Filtres</string>

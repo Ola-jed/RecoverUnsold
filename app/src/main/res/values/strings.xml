@@ -100,7 +100,7 @@
     <string name="delete_location_label">Delete location</string>
     <string name="delete_location_question">Do you want to delete this location ?</string>
     <string name="offer_beneficiaries_data">Total quantity : %1$d</string>
-    <string name="total_amount">Total amount : %1$s</string>
+    <string name="total_amount">Total amount : %1$s XOF</string>
     <string name="delete_offer_label">Delete offer</string>
     <string name="delete_offer_question">Do you want to delete this offer ?</string>
     <string name="filters">Filters</string>
