@@ -20,9 +20,7 @@ import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.Button
-import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -30,11 +28,7 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EditCalendar
-import androidx.compose.material.icons.filled.EventAvailable
-import androidx.compose.material.icons.filled.EventBusy
-import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.ShoppingBag
@@ -49,7 +43,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -67,12 +60,12 @@ import com.ola.recoverunsold.ui.components.app.LoadingIndicator
 import com.ola.recoverunsold.ui.components.app.SubtitleWithIcon
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.location.LocationItem
+import com.ola.recoverunsold.ui.components.offer.OfferDetailsComponent
 import com.ola.recoverunsold.ui.components.product.ProductItem
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.OfferDetailsViewModel
 import com.ola.recoverunsold.utils.misc.addSeconds
 import com.ola.recoverunsold.utils.misc.formatDateTime
-import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 import com.ola.recoverunsold.utils.misc.isScrollingUp
 import com.ola.recoverunsold.utils.misc.jsonSerialize
 import com.ola.recoverunsold.utils.misc.openMapWithCoordinates
@@ -203,79 +196,14 @@ fun OfferDetailsScreen(
                     state = listState
                 ) {
                     item {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                Icons.Default.Info,
-                                contentDescription = null,
-                                modifier = Modifier.padding(end = 3.dp)
-                            )
-
-                            Text(
-                                text = stringResource(id = R.string.offer_details),
-                                style = MaterialTheme.typography.subtitle1,
-                                modifier = Modifier.padding(vertical = 10.dp)
-                            )
-                        }
+                        SubtitleWithIcon(
+                            text = stringResource(id = R.string.offer_details),
+                            imageVector = Icons.Default.Info
+                        )
                     }
 
                     item {
-                        Card {
-                            Column {
-                                OfferDetailsItemLine(
-                                    modifier = Modifier.padding(
-                                        top = 13.dp,
-                                        bottom = 13.dp,
-                                        start = 10.dp
-                                    ),
-                                    icon = Icons.Default.Payments,
-                                    text = stringResource(
-                                        R.string.total_amount,
-                                        offer.price.formatWithoutTrailingZeros()
-                                    )
-                                )
-                                Divider()
-                                if (offer.beneficiaries != null) {
-                                    OfferDetailsItemLine(
-                                        modifier = Modifier.padding(
-                                            top = 13.dp,
-                                            bottom = 13.dp,
-                                            start = 10.dp
-                                        ),
-                                        icon = Icons.Default.Group,
-                                        text = stringResource(
-                                            R.string.offer_beneficiaries_data,
-                                            offer.beneficiaries
-                                        )
-                                    )
-                                    Divider()
-                                }
-                                OfferDetailsItemLine(
-                                    modifier = Modifier.padding(
-                                        top = 13.dp,
-                                        bottom = 13.dp,
-                                        start = 10.dp
-                                    ),
-                                    icon = Icons.Default.EventAvailable,
-                                    text = stringResource(
-                                        R.string.start_date_time,
-                                        offer.startDate.formatDateTime()
-                                    )
-                                )
-                                Divider()
-                                OfferDetailsItemLine(
-                                    modifier = Modifier.padding(
-                                        top = 13.dp,
-                                        bottom = 13.dp,
-                                        start = 10.dp
-                                    ),
-                                    icon = Icons.Default.EventBusy,
-                                    text = stringResource(
-                                        R.string.end_date_time,
-                                        offer.startDate.addSeconds(offer.duration).formatDateTime()
-                                    )
-                                )
-                            }
-                        }
+                        OfferDetailsComponent(offer = offer)
                     }
 
                     if (!offer.products.isNullOrEmpty()) {
@@ -332,7 +260,6 @@ fun OfferDetailsScreen(
                     if (offer.location != null) {
                         item {
                             SubtitleWithIcon(
-                                modifier = Modifier.padding(top = 20.dp, bottom = 10.dp),
                                 text = stringResource(id = R.string.pick_up_point),
                                 imageVector = Icons.Default.Place
                             )
@@ -452,20 +379,4 @@ fun offerDetailsViewModel(offerId: String): OfferDetailsViewModel {
         .fromActivity<MainActivity.ViewModelFactoryProvider>(LocalContext.current as Activity)
         .offerDetailsViewModelFactory()
     return viewModel(factory = OfferDetailsViewModel.provideFactory(factory, offerId))
-}
-
-@Composable
-fun OfferDetailsItemLine(
-    modifier: Modifier = Modifier,
-    icon: ImageVector,
-    text: String
-) {
-    Row(modifier = modifier) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            modifier = Modifier.padding(end = 10.dp)
-        )
-        Text(text = text)
-    }
 }

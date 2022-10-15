@@ -22,21 +22,24 @@ import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.Button
+import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddComment
 import androidx.compose.material.icons.filled.Comment
+import androidx.compose.material.icons.filled.EventAvailable
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Sell
 import androidx.compose.material.icons.filled.ShoppingBag
+import androidx.compose.material.icons.filled.ShoppingCartCheckout
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -65,17 +68,19 @@ import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.ExtendableFab
+import com.ola.recoverunsold.ui.components.app.ItemDetailsLine
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
 import com.ola.recoverunsold.ui.components.app.SubtitleWithIcon
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.location.LocationItem
+import com.ola.recoverunsold.ui.components.offer.OfferDetailsComponent
 import com.ola.recoverunsold.ui.components.opinion.OpinionItem
 import com.ola.recoverunsold.ui.components.product.ProductItem
 import com.ola.recoverunsold.ui.screens.viewmodels.OrderDetailsViewModel
-import com.ola.recoverunsold.utils.misc.addSeconds
+import com.ola.recoverunsold.utils.misc.backgroundColor
+import com.ola.recoverunsold.utils.misc.foregroundColor
 import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.formatDateTime
-import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 import com.ola.recoverunsold.utils.misc.internationalizedValueSingular
 import com.ola.recoverunsold.utils.misc.isScrollingUp
 import com.ola.recoverunsold.utils.misc.openMapWithCoordinates
@@ -229,8 +234,7 @@ fun OrderDetailsScreen(
                             Surface(
                                 modifier = Modifier.padding(top = 15.dp),
                                 elevation = 15.dp,
-                                color = MaterialTheme.colors.secondary,
-                                shape = RoundedCornerShape(30.dp)
+                                color = order.status.backgroundColor()
                             ) {
                                 Row(
                                     modifier = Modifier.padding(
@@ -242,12 +246,13 @@ fun OrderDetailsScreen(
                                     Icon(
                                         imageVector = order.status.toIcon(),
                                         contentDescription = null,
-                                        tint = MaterialTheme.colors.onSecondary
+                                        tint = order.status.foregroundColor()
                                     )
+
                                     Text(
                                         modifier = Modifier.padding(start = 3.dp),
                                         text = order.status.internationalizedValueSingular(),
-                                        color = MaterialTheme.colors.onSecondary
+                                        color = order.status.foregroundColor()
                                     )
                                 }
                             }
@@ -262,22 +267,33 @@ fun OrderDetailsScreen(
                         }
 
                         item {
-                            Text(
-                                text = stringResource(
-                                    R.string.ordered_on,
-                                    order.createdAt.formatDate()
-                                ),
-                                modifier = Modifier.padding(top = 15.dp),
-                                fontSize = 18.sp
-                            )
-                        }
-
-                        item {
-                            Text(
-                                modifier = Modifier.padding(top = 15.dp),
-                                text = "${stringResource(id = R.string.to_be_picked_up_on)} : ${order.withdrawalDate.formatDateTime()}",
-                                fontSize = 18.sp
-                            )
+                            Card {
+                                Column {
+                                    ItemDetailsLine(
+                                        modifier = Modifier.padding(
+                                            top = 13.dp,
+                                            bottom = 13.dp,
+                                            start = 10.dp
+                                        ),
+                                        icon = Icons.Default.ShoppingCartCheckout,
+                                        text = stringResource(
+                                            R.string.ordered_on,
+                                            order.createdAt.formatDate()
+                                        )
+                                    )
+                                    Divider()
+                                    ItemDetailsLine(
+                                        modifier = Modifier.padding(
+                                            top = 13.dp,
+                                            bottom = 13.dp,
+                                            start = 10.dp
+                                        ),
+                                        icon = Icons.Default.EventAvailable,
+                                        text = "${stringResource(id = R.string.to_be_picked_up_on)} : ${order.withdrawalDate.formatDateTime()}",
+                                    )
+                                    Divider()
+                                }
+                            }
                         }
 
                         item {
@@ -289,56 +305,7 @@ fun OrderDetailsScreen(
                         }
 
                         item {
-                            Text(
-                                modifier = Modifier.padding(top = 15.dp),
-                                text = stringResource(
-                                    R.string.total_amount,
-                                    offer.price.formatWithoutTrailingZeros()
-                                )
-                            )
-                        }
-
-
-                        if (offer.beneficiaries != null) {
-                            item {
-                                Text(
-                                    modifier = Modifier.padding(top = 15.dp),
-                                    text = stringResource(
-                                        id = R.string.offer_beneficiaries_data,
-                                        offer.beneficiaries
-                                    )
-                                )
-                            }
-                        }
-
-                        item {
-                            Text(
-                                modifier = Modifier.padding(top = 15.dp),
-                                text = stringResource(
-                                    R.string.start_date_time,
-                                    offer.startDate.formatDateTime()
-                                )
-                            )
-                        }
-
-                        item {
-                            Text(
-                                modifier = Modifier.padding(top = 15.dp),
-                                text = stringResource(
-                                    R.string.end_date_time,
-                                    offer.startDate.addSeconds(offer.duration).formatDateTime()
-                                )
-                            )
-                        }
-
-                        item {
-                            Text(
-                                modifier = Modifier.padding(top = 15.dp),
-                                text = stringResource(
-                                    R.string.published_the,
-                                    offer.createdAt.formatDate()
-                                )
-                            )
+                            OfferDetailsComponent(offer = offer)
                         }
 
                         if (!offer.products.isNullOrEmpty()) {
