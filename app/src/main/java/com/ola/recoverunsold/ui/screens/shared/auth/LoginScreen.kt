@@ -130,7 +130,7 @@ fun LoginScreen(
                     }
                 }
             },
-            loading = loginViewModel.apiCallResult.status == ApiStatus.LOADING,
+            loading = loginViewModel.loading,
             errorMessage = loginViewModel.errorMessage(),
             navController = navController,
             snackbarHostState = snackbarHostState,
@@ -174,6 +174,7 @@ fun LoginScreenContent(
     isSuccessful: Boolean
 ) {
     val focusManager = LocalFocusManager.current
+//    Log.e("LOADING", loading.toString())
 
     Column(
         modifier = modifier

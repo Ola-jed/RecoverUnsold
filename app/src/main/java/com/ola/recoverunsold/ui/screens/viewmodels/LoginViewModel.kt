@@ -31,15 +31,21 @@ class LoginViewModel @Inject constructor(
     var email by mutableStateOf("")
     var password by mutableStateOf("")
     var formState by mutableStateOf(FormState())
+    var loading by mutableStateOf(false)
 
     fun login(onSuccess: () -> Unit = {}) {
+        loading = true
         apiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             apiCallResult = authService
                 .login(LoginRequest(email, password))
                 .toApiCallResult()
             if (apiCallResult.status == ApiStatus.SUCCESS) {
-                onSuccess()
+                onSuccess().also {
+                    loading = false
+                }
+            } else {
+                loading = false
             }
         }
     }
