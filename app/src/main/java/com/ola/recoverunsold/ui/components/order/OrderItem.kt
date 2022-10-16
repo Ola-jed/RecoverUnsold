@@ -9,7 +9,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.EventAvailable
 import androidx.compose.material.icons.filled.Payments
@@ -83,15 +82,6 @@ fun OrderItem(
                     ).formatDateTime()
                 }",
                 icon = Icons.Default.DateRange,
-                modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp)
-            )
-
-            OrderInformationLine(
-                text = stringResource(
-                    R.string.published_the,
-                    offer.createdAt.formatDate()
-                ),
-                icon = Icons.Default.CalendarMonth,
                 modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp)
             )
 
