@@ -467,7 +467,7 @@ fun OrderDetailsScreen(
                             }
 
                             item {
-                                Box(modifier = Modifier.height(45.dp))
+                                Box(modifier = Modifier.height(65.dp))
                             }
                         }
                     }

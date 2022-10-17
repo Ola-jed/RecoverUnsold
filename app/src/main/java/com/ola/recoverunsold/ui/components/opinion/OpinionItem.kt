@@ -1,6 +1,9 @@
 package com.ola.recoverunsold.ui.components.opinion
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -34,26 +37,33 @@ fun OpinionItem(
 
     Surface(
         modifier = modifier,
-        elevation = 20.dp
+        elevation = 5.dp
     ) {
         Column(modifier = Modifier.padding(5.dp)) {
             Text(opinion.comment)
 
-            Text(
-                modifier = Modifier.padding(top = 5.dp),
-                text = stringResource(id = R.string.published_the, opinion.createdAt.formatDate()),
-                style = MaterialTheme.typography.caption
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier.padding(top = 5.dp),
+                    text = stringResource(
+                        id = R.string.published_the,
+                        opinion.createdAt.formatDate()
+                    ),
+                    style = MaterialTheme.typography.caption
+                )
 
-            if (canDelete) {
-                IconButton(
-                    modifier = Modifier.align(Alignment.End),
-                    onClick = { showDeleteConfirmationDialog = true }) {
-                    Icon(
-                        Icons.Default.Delete,
-                        tint = MaterialTheme.colors.error,
-                        contentDescription = null
-                    )
+                if (canDelete) {
+                    IconButton(onClick = { showDeleteConfirmationDialog = true }) {
+                        Icon(
+                            Icons.Default.Delete,
+                            tint = MaterialTheme.colors.error,
+                            contentDescription = null
+                        )
+                    }
                 }
             }
         }

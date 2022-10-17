@@ -45,7 +45,7 @@ fun OrderItem(
     ) {
         Column {
             Surface(
-                elevation = 15.dp,
+                modifier = Modifier.align(Alignment.End),
                 color = order.status.backgroundColor()
             ) {
                 Row(
