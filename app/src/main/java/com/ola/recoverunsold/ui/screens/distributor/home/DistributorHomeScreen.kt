@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -42,11 +43,11 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.himanshoe.charty.line.CurveLineChart
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
@@ -60,16 +61,9 @@ import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorHomeViewModel
 import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.show
-import com.ola.recoverunsold.utils.misc.toBars
+import com.ola.recoverunsold.utils.misc.toLineData
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
-import me.bytebeats.views.charts.bar.BarChart
-import me.bytebeats.views.charts.bar.BarChartData
-import me.bytebeats.views.charts.bar.render.bar.SimpleBarDrawer
-import me.bytebeats.views.charts.bar.render.label.SimpleLabelDrawer
-import me.bytebeats.views.charts.bar.render.xaxis.SimpleXAxisDrawer
-import me.bytebeats.views.charts.bar.render.yaxis.SimpleYAxisDrawer
-import me.bytebeats.views.charts.simpleChartAnimation
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -132,7 +126,6 @@ fun DistributorHomeScreen(
                     val homeData = homeViewModel.homeDataApiCallResult.data!!
                     val orders = homeData.orders
                     val screenHeight = LocalConfiguration.current.screenHeightDp
-                    val onBgColor = MaterialTheme.colors.onBackground
 
                     Column(
                         modifier = Modifier
@@ -198,38 +191,26 @@ fun DistributorHomeScreen(
                             )
                         }
 
-                        val bars = homeData.toBars()
-                        if (bars.isEmpty()) {
+                        val lineData = homeData.toLineData()
+                        if (lineData.isEmpty()) {
                             NoContentComponent(
                                 modifier = Modifier.fillMaxWidth(),
                                 message = stringResource(R.string.no_order_found)
                             )
                         } else {
-                            BarChart(
-                                barChartData = BarChartData(
-                                    bars = bars,
-                                    maxBarValue = if (bars.isEmpty()) 5F else bars.maxOf { it.value }
-                                ),
+                            CurveLineChart(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height((screenHeight * 0.4).dp)
                                     .padding(vertical = 10.dp),
-                                animation = simpleChartAnimation(),
-                                barDrawer = SimpleBarDrawer(),
-                                xAxisDrawer = SimpleXAxisDrawer(
-                                    axisLineColor = onBgColor,
-                                    axisLineThickness = 2.dp
+                                lineData = lineData,
+                                chartColors = listOf(
+                                    MaterialTheme.colors.secondary,
+                                    MaterialTheme.colors.secondary
                                 ),
-                                yAxisDrawer = SimpleYAxisDrawer(
-                                    axisLineColor = onBgColor,
-                                    labelTextColor = onBgColor,
-                                    labelValueFormatter = { it.toInt().toString() },
-                                    drawLabelEvery = 6,
-                                    axisLineThickness = 2.dp
-                                ),
-                                labelDrawer = SimpleLabelDrawer(
-                                    labelTextSize = 13.sp,
-                                    labelTextColor = onBgColor
+                                lineColors = listOf(
+                                    MaterialTheme.colors.primary,
+                                    MaterialTheme.colors.primary
                                 )
                             )
                         }
@@ -247,7 +228,7 @@ fun DistributorHomeScreen(
                             if (orders.isEmpty()) {
                                 item {
                                     NoContentComponent(
-                                        modifier = Modifier.fillMaxWidth(),
+                                        modifier = Modifier.width(LocalConfiguration.current.screenWidthDp.dp),
                                         message = stringResource(R.string.no_order_found)
                                     )
                                 }

@@ -1,8 +1,6 @@
 package com.ola.recoverunsold.ui.screens.distributor.account
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,6 +27,7 @@ import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.ui.components.app.ExtendableFab
+import com.ola.recoverunsold.ui.components.app.NoContentComponent
 import com.ola.recoverunsold.ui.components.app.PaginationComponent
 import com.ola.recoverunsold.ui.components.location.LocationItem
 import com.ola.recoverunsold.ui.navigation.Routes
@@ -84,16 +83,10 @@ fun DistributorLocationsScreen(
                     )
                 }) {
                     if (locations.items.isEmpty()) {
-                        Row(
+                        NoContentComponent(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Text(
-                                stringResource(R.string.no_location_create_one),
-                                style = MaterialTheme.typography.h6,
-                                modifier = Modifier.padding(horizontal = 10.dp)
-                            )
-                        }
+                            message = stringResource(R.string.no_location_create_one)
+                        )
                     } else {
                         LazyColumn(modifier = Modifier.fillMaxSize(), state = listState) {
                             items(items = locations.items) { item ->
