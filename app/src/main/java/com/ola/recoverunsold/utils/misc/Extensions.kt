@@ -33,7 +33,6 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
-import com.himanshoe.charty.bar.model.BarData
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.models.AlertType
@@ -42,6 +41,7 @@ import com.ola.recoverunsold.models.LatLong
 import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.ui.theme.AppCustomColors
 import com.ola.recoverunsold.utils.resources.Strings
+import me.bytebeats.views.charts.bar.BarChartData
 import okhttp3.Cache
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
@@ -58,6 +58,18 @@ import java.util.Date
 import java.util.Locale
 import kotlin.math.absoluteValue
 
+private val colorsDeciles = arrayOf(
+    Color(red = 255, green = 0, blue = 0),
+    Color(red = 229, green = 25, blue = 0),
+    Color(red = 204, green = 51, blue = 0),
+    Color(red = 178, green = 76, blue = 0),
+    Color(red = 153, green = 102, blue = 0),
+    Color(red = 127, green = 127, blue = 0),
+    Color(red = 102, green = 153, blue = 0),
+    Color(red = 76, green = 178, blue = 0),
+    Color(red = 51, green = 204, blue = 0),
+    Color(red = 25, green = 229, blue = 0)
+)
 private val dateTimeFormatter = DateFormat
     .getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault())
 private const val cacheSize = 5242880L
@@ -399,11 +411,20 @@ fun AlertType.label(): String {
 /**
  * Convert the data of orders for a distributor to bars for the chart
  */
-fun DistributorHomeData.toBarData(): List<BarData> {
-    return ordersPerDay.entries
-        .sortedBy { it.value }
-        .filter { it.value != 0 }
-        .map { BarData(xValue = it.key.format("dd/mm/YY"), yValue = it.value.toFloat()) }
+fun DistributorHomeData.toBars(): List<BarChartData.Bar> {
+    if (ordersPerDay.isEmpty()) {
+        return emptyList()
+    }
+
+    val maxOrdersPerDayDivided = (ordersPerDay.values.maxOf { it }) / 10F
+    val ordersPerDayDeciles = (1..10).map { maxOrdersPerDayDivided * it }
+    return ordersPerDay.map {
+        BarChartData.Bar(
+            value = it.value.toFloat(),
+            label = it.key.formatDate(),
+            color = colorsDeciles[ordersPerDayDeciles.indexOf(ordersPerDayDeciles.first { value -> value >= it.value })]
+        )
+    }.filter { it.value != 0F }
 }
 
 fun <T> Response<T>.toApiCallResult(onSuccess: (() -> Unit)? = null): ApiCallResult<T> {

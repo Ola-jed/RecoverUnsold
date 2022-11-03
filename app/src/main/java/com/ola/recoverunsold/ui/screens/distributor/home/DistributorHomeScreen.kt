@@ -43,11 +43,11 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.himanshoe.charty.bar.BarChart
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
@@ -61,9 +61,16 @@ import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorHomeViewModel
 import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.show
-import com.ola.recoverunsold.utils.misc.toBarData
+import com.ola.recoverunsold.utils.misc.toBars
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
+import me.bytebeats.views.charts.bar.BarChart
+import me.bytebeats.views.charts.bar.BarChartData
+import me.bytebeats.views.charts.bar.render.bar.SimpleBarDrawer
+import me.bytebeats.views.charts.bar.render.label.SimpleLabelDrawer
+import me.bytebeats.views.charts.bar.render.xaxis.SimpleXAxisDrawer
+import me.bytebeats.views.charts.bar.render.yaxis.SimpleYAxisDrawer
+import me.bytebeats.views.charts.simpleChartAnimation
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -127,6 +134,7 @@ fun DistributorHomeScreen(
                     val orders = homeData.orders
                     val screenHeight = LocalConfiguration.current.screenHeightDp
                     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+                    val onBgColor = MaterialTheme.colors.onBackground
 
                     Column(
                         modifier = Modifier
@@ -192,21 +200,39 @@ fun DistributorHomeScreen(
                             )
                         }
 
-                        val barData = homeData.toBarData()
-                        if (barData.isEmpty()) {
+                        val bars = homeData.toBars()
+                        if (bars.isEmpty()) {
                             NoContentComponent(
                                 modifier = Modifier.fillMaxWidth(),
                                 message = stringResource(R.string.no_order_found)
                             )
                         } else {
                             BarChart(
+                                barChartData = BarChartData(
+                                    bars = bars,
+                                    maxBarValue = bars.maxOf { it.value }
+                                ),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height((screenHeight * 0.4).dp)
-                                    .padding(horizontal = 20.dp, vertical = 10.dp),
-                                barData = barData,
-                                color = MaterialTheme.colors.secondary,
-                                onBarClick = {}
+                                    .padding(vertical = 10.dp),
+                                animation = simpleChartAnimation(),
+                                barDrawer = SimpleBarDrawer(),
+                                xAxisDrawer = SimpleXAxisDrawer(
+                                    axisLineColor = onBgColor,
+                                    axisLineThickness = 2.dp
+                                ),
+                                yAxisDrawer = SimpleYAxisDrawer(
+                                    axisLineColor = onBgColor,
+                                    labelTextColor = onBgColor,
+                                    labelValueFormatter = { it.toInt().toString() },
+                                    drawLabelEvery = 6,
+                                    axisLineThickness = 2.dp
+                                ),
+                                labelDrawer = SimpleLabelDrawer(
+                                    labelTextSize = 13.sp,
+                                    labelTextColor = onBgColor
+                                )
                             )
                         }
 
