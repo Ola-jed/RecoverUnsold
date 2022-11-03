@@ -259,4 +259,7 @@
     <string name="open_source_licenses">Licenses open source</string>
     <string name="comment_verb">Commenter</string>
     <string name="add_a_product">Ajouter un produit</string>
+    <string name="coming_soon">À venir</string>
+    <string name="ongoing">En cours</string>
+    <string name="ended">Terminée</string>
 </resources>

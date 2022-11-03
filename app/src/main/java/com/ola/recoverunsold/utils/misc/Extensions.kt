@@ -17,7 +17,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DoneAll
+import androidx.compose.material.icons.filled.EventAvailable
+import androidx.compose.material.icons.filled.EventBusy
 import androidx.compose.material.icons.filled.HourglassTop
+import androidx.compose.material.icons.filled.NextWeek
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -38,6 +41,7 @@ import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.models.AlertType
 import com.ola.recoverunsold.models.DistributorHomeData
 import com.ola.recoverunsold.models.LatLong
+import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.ui.theme.AppCustomColors
 import com.ola.recoverunsold.utils.resources.Strings
@@ -395,6 +399,31 @@ fun OrderStatus.foregroundColor(): Color {
         OrderStatus.Approved -> MaterialTheme.colors.onPrimary
         OrderStatus.Rejected -> MaterialTheme.colors.onError
         OrderStatus.Completed -> AppCustomColors.onSuccess
+    }
+}
+
+/**
+ * Get the label to display or this offer
+ */
+fun Offer.statusLabel(): String {
+    val now = Date()
+    return if (startDate.after(now)) {
+        Strings.get(R.string.coming_soon)
+    } else if (startDate.addSeconds(duration).before(now)) {
+        Strings.get(R.string.ended)
+    } else {
+        Strings.get(R.string.ongoing)
+    }
+}
+
+fun Offer.statusIcon(): ImageVector {
+    val now = Date()
+    return if (startDate.after(now)) {
+        Icons.Default.NextWeek
+    } else if (startDate.addSeconds(duration).before(now)) {
+        Icons.Default.EventBusy
+    } else {
+        Icons.Default.EventAvailable
     }
 }
 

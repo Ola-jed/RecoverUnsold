@@ -261,4 +261,7 @@
     <string name="open_source_licenses">Open source licenses</string>
     <string name="comment_verb">Comment</string>
     <string name="add_a_product">Add a product</string>
+    <string name="coming_soon">Coming soon</string>
+    <string name="ongoing">Ongoing</string>
+    <string name="ended">Ended</string>
 </resources>

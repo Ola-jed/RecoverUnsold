@@ -61,6 +61,7 @@ import com.ola.recoverunsold.ui.components.app.SubtitleWithIcon
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.location.LocationItem
 import com.ola.recoverunsold.ui.components.offer.OfferDetailsComponent
+import com.ola.recoverunsold.ui.components.offer.OfferStatusBadge
 import com.ola.recoverunsold.ui.components.product.ProductItem
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.OfferDetailsViewModel
@@ -197,10 +198,20 @@ fun OfferDetailsScreen(
                     state = listState
                 ) {
                     item {
-                        SubtitleWithIcon(
-                            text = stringResource(id = R.string.offer_details),
-                            imageVector = Icons.Default.Info
-                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 10.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            SubtitleWithIcon(
+                                text = stringResource(id = R.string.offer_details),
+                                imageVector = Icons.Default.Info
+                            )
+
+                            OfferStatusBadge(offer = offer)
+                        }
                     }
 
                     item {
