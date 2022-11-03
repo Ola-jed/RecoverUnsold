@@ -294,7 +294,10 @@ fun DistributorLocationFormScreenContent(
             if (currentIndex == maxIndex) {
                 Button(onClick = onSubmit, enabled = !loading) {
                     if (loading) {
-                        CircularProgressIndicator(color = MaterialTheme.colors.background)
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = MaterialTheme.colors.background
+                        )
                     } else {
                         Text(text = stringResource(R.string.submit))
                         Icon(Icons.Default.Send, contentDescription = null)

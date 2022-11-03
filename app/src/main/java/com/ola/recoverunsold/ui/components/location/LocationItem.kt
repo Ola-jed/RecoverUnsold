@@ -24,7 +24,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -59,7 +58,6 @@ fun LocationItem(
                     contentScale = ContentScale.Crop,
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(top = 5.dp)
                         .height(height)
                         .align(Alignment.CenterHorizontally)
                 )
@@ -67,19 +65,18 @@ fun LocationItem(
 
             Text(
                 location.name,
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.h6,
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 10.dp)
+                    .align(Alignment.Start)
+                    .padding(start = 5.dp, bottom = 10.dp)
             )
 
             if (location.indication != null) {
                 Text(
                     location.indication,
-                    textAlign = TextAlign.Center,
                     modifier = Modifier
-                        .padding(bottom = 10.dp)
-                        .align(Alignment.CenterHorizontally)
+                        .align(Alignment.Start)
+                        .padding(start = 5.dp, bottom = 10.dp)
                 )
             }
 

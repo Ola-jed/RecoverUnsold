@@ -3,6 +3,7 @@ package com.ola.recoverunsold.ui.screens.distributor.account
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -93,7 +94,7 @@ fun DistributorLocationsScreen(
                                 LocationItem(
                                     modifier = Modifier
                                         .fillParentMaxWidth()
-                                        .padding(horizontal = 20.dp, vertical = 10.dp),
+                                        .padding(horizontal = 10.dp, vertical = 10.dp),
                                     location = item,
                                     isModifiable = true,
                                     onEdit = {
@@ -133,6 +134,9 @@ fun DistributorLocationsScreen(
                                     onPrevious = { locationsSectionViewModel.getPrevious() },
                                     onNext = { locationsSectionViewModel.getNext() }
                                 )
+                            }
+                            item {
+                                Box(modifier = Modifier.height(70.dp))
                             }
                         }
                     }
