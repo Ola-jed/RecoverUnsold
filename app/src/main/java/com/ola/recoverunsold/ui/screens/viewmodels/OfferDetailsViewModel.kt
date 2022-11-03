@@ -94,6 +94,18 @@ class OfferDetailsViewModel @AssistedInject constructor(
         else -> null
     }
 
+    fun maxOf(x: Date?, y: Date?): Date {
+        return if (x == null && y == null) {
+            Date()
+        } else if (x == null) {
+            y!!
+        } else if (y == null) {
+            x
+        } else {
+            if (x.after(y)) x else y
+        }
+    }
+
     @AssistedFactory
     interface Factory {
         fun create(offerId: String): OfferDetailsViewModel

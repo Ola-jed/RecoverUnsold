@@ -1,7 +1,9 @@
 package com.ola.recoverunsold.ui.components.order
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
@@ -44,36 +46,38 @@ fun OrderItem(
         onClick = onTap
     ) {
         Column {
-            Surface(
-                modifier = Modifier.align(Alignment.End),
-                color = order.status.backgroundColor()
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 7.5.dp, vertical = 5.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = order.status.toIcon(),
-                        contentDescription = null,
-                        tint = order.status.foregroundColor()
-                    )
+                OrderInformationLine(
+                    text = stringResource(
+                        R.string.total_amount,
+                        offer.price.formatWithoutTrailingZeros()
+                    ),
+                    icon = Icons.Default.Payments,
+                    modifier = Modifier.padding(10.dp)
+                )
 
-                    Text(
-                        modifier = Modifier.padding(start = 3.dp),
-                        text = order.status.internationalizedValueSingular(),
-                        color = order.status.foregroundColor()
-                    )
+                Surface(color = order.status.backgroundColor()) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 7.5.dp, vertical = 5.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = order.status.toIcon(),
+                            contentDescription = null,
+                            tint = order.status.foregroundColor()
+                        )
+
+                        Text(
+                            modifier = Modifier.padding(start = 3.dp),
+                            text = order.status.internationalizedValueSingular(),
+                            color = order.status.foregroundColor()
+                        )
+                    }
                 }
             }
-
-            OrderInformationLine(
-                text = stringResource(
-                    R.string.total_amount,
-                    offer.price.formatWithoutTrailingZeros()
-                ),
-                icon = Icons.Default.Payments,
-                modifier = Modifier.padding(10.dp)
-            )
 
             OrderInformationLine(
                 text = "${offer.startDate.formatDateTime()} - ${

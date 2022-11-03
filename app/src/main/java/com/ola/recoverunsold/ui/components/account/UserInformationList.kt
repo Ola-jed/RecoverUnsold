@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Numbers
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.Web
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,7 +33,7 @@ fun UserInformationList(user: User, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 10.dp),
+            .padding(horizontal = 10.dp, vertical = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         UserAccountHeader(

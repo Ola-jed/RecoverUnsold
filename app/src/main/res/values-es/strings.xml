@@ -97,7 +97,7 @@
     <string name="delete_location_label">Borrar ubicación</string>
     <string name="delete_location_question">¿ Desea eliminar esta ubicación ?</string>
     <string name="offer_beneficiaries_data">Cantidad total : %1$d</string>
-    <string name="total_amount">Importe total : %1$s XOF</string>
+    <string name="total_amount">Importe : %1$s XOF</string>
     <string name="delete_offer_label">Borrar oferta</string>
     <string name="delete_offer_question">¿ Desea eliminar esta oferta ?</string>
     <string name="filters">Filtros</string>

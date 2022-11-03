@@ -116,7 +116,7 @@ fun DistributorOrdersReceivedScreen(
                                 DistributorOrderItem(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = 15.dp, vertical = 20.dp),
+                                        .padding(horizontal = 10.dp, vertical = 20.dp),
                                     order = it,
                                     onMoreInformationRequest = {
                                         navController.navigate(
@@ -133,7 +133,7 @@ fun DistributorOrdersReceivedScreen(
                                                     snackbarHostState.show(
                                                         message = Strings.get(R.string.order_successfully_accepted)
                                                     )
-                                                    delay(7000)
+                                                    delay(500)
                                                 }
                                             },
                                             onFailure = {
@@ -141,7 +141,7 @@ fun DistributorOrdersReceivedScreen(
                                                     snackbarHostState.show(
                                                         message = Strings.get(R.string.unknown_error_occured)
                                                     )
-                                                    delay(7000)
+                                                    delay(500)
                                                 }
                                             }
                                         )
@@ -155,7 +155,7 @@ fun DistributorOrdersReceivedScreen(
                                                     snackbarHostState.show(
                                                         message = Strings.get(R.string.order_successfully_rejected)
                                                     )
-                                                    delay(7000)
+                                                    delay(500)
                                                 }
                                             },
                                             onFailure = {
@@ -163,7 +163,7 @@ fun DistributorOrdersReceivedScreen(
                                                     snackbarHostState.show(
                                                         message = Strings.get(R.string.unknown_error_occured)
                                                     )
-                                                    delay(7000)
+                                                    delay(500)
                                                 }
                                             }
                                         )
@@ -177,7 +177,7 @@ fun DistributorOrdersReceivedScreen(
                                                     snackbarHostState.show(
                                                         message = Strings.get(R.string.order_completed_successfully)
                                                     )
-                                                    delay(7000)
+                                                    delay(500)
                                                 }
                                             },
                                             onFailure = {
@@ -185,7 +185,7 @@ fun DistributorOrdersReceivedScreen(
                                                     snackbarHostState.show(
                                                         message = Strings.get(R.string.unknown_error_occured)
                                                     )
-                                                    delay(7000)
+                                                    delay(500)
                                                 }
                                             }
                                         )

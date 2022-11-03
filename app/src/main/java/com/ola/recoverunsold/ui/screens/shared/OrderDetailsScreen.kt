@@ -32,7 +32,9 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddComment
+import androidx.compose.material.icons.filled.CalendarViewDay
 import androidx.compose.material.icons.filled.Comment
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.EventAvailable
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
@@ -335,6 +337,57 @@ fun OrderDetailsScreen(
 
                         }
 
+                        if (!orderDetailsViewModel.isCustomer) {
+                            val customer = order.customer
+
+                            if (customer != null) {
+                                item {
+                                    SubtitleWithIcon(
+                                        modifier = Modifier.padding(top = 15.dp),
+                                        text = stringResource(R.string.customer),
+                                        imageVector = Icons.Default.Person
+                                    )
+                                }
+
+                                item {
+                                    Card {
+                                        Column {
+                                            ItemDetailsLine(
+                                                modifier = Modifier.padding(
+                                                    top = 13.dp,
+                                                    bottom = 13.dp,
+                                                    start = 10.dp
+                                                ),
+                                                icon = Icons.Default.Person,
+                                                text = "${stringResource(id = R.string.username_label)} : ${customer.username}"
+                                            )
+                                            Divider()
+                                            ItemDetailsLine(
+                                                modifier = Modifier.padding(
+                                                    top = 13.dp,
+                                                    bottom = 13.dp,
+                                                    start = 10.dp
+                                                ),
+                                                icon = Icons.Default.Email,
+                                                text = "${stringResource(id = R.string.email_label)} : ${customer.email}"
+                                            )
+                                            Divider()
+                                            ItemDetailsLine(
+                                                modifier = Modifier.padding(
+                                                    top = 13.dp,
+                                                    bottom = 13.dp,
+                                                    start = 10.dp
+                                                ),
+                                                icon = Icons.Default.CalendarViewDay,
+                                                text = "${stringResource(id = R.string.member_since_label)} : ${customer.createdAt.formatDate()}"
+                                            )
+                                            Divider()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                         if (offer.location != null) {
                             item {
                                 SubtitleWithIcon(
@@ -348,7 +401,7 @@ fun OrderDetailsScreen(
                                 LocationItem(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = 20.dp, vertical = 10.dp),
+                                        .padding(horizontal = 8.dp, vertical = 10.dp),
                                     location = offer.location
                                 )
                             }
@@ -372,44 +425,6 @@ fun OrderDetailsScreen(
                                     ) {
                                         Text(stringResource(id = R.string.view_location_on_maps))
                                     }
-                                }
-                            }
-                        }
-
-                        if (!orderDetailsViewModel.isCustomer) {
-                            val customer = order.customer
-
-                            if (customer != null) {
-                                item {
-                                    SubtitleWithIcon(
-                                        modifier = Modifier.padding(top = 15.dp),
-                                        text = stringResource(R.string.customer),
-                                        imageVector = Icons.Default.Person
-                                    )
-                                }
-
-                                item {
-                                    Text(
-                                        modifier = Modifier.padding(top = 15.dp),
-                                        text = "${stringResource(id = R.string.username_label)} : ${customer.username}",
-                                        fontSize = 18.sp
-                                    )
-                                }
-
-                                item {
-                                    Text(
-                                        modifier = Modifier.padding(top = 15.dp),
-                                        text = "${stringResource(id = R.string.email_label)} : ${customer.email}",
-                                        fontSize = 18.sp
-                                    )
-                                }
-
-                                item {
-                                    Text(
-                                        modifier = Modifier.padding(top = 15.dp),
-                                        text = "${stringResource(id = R.string.member_since_label)} : ${customer.createdAt.formatDate()}",
-                                        fontSize = 18.sp
-                                    )
                                 }
                             }
                         }

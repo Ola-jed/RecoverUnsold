@@ -33,7 +33,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
-import com.himanshoe.charty.line.model.LineData
+import com.himanshoe.charty.bar.model.BarData
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.models.AlertType
@@ -57,19 +57,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.math.absoluteValue
-
-//private val colorsDeciles = arrayOf(
-//    Color(red = 255, green = 0, blue = 0),
-//    Color(red = 229, green = 25, blue = 0),
-//    Color(red = 204, green = 51, blue = 0),
-//    Color(red = 178, green = 76, blue = 0),
-//    Color(red = 153, green = 102, blue = 0),
-//    Color(red = 127, green = 127, blue = 0),
-//    Color(red = 102, green = 153, blue = 0),
-//    Color(red = 76, green = 178, blue = 0),
-//    Color(red = 51, green = 204, blue = 0),
-//    Color(red = 25, green = 229, blue = 0)
-//)
 
 private val dateTimeFormatter = DateFormat
     .getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault())
@@ -412,14 +399,11 @@ fun AlertType.label(): String {
 /**
  * Convert the data of orders for a distributor to bars for the chart
  */
-fun DistributorHomeData.toLineData(): List<LineData> {
-    return if (ordersPerDay.isEmpty() || ordersPerDay.all { it.value == 0 }) {
-        emptyList()
-    } else {
-        ordersPerDay.entries
-            .sortedBy { it.value }
-            .map { LineData(xValue = it.key.formatDate(), yValue = it.value.toFloat()) }
-    }
+fun DistributorHomeData.toBarData(): List<BarData> {
+    return ordersPerDay.entries
+        .sortedBy { it.value }
+        .filter { it.value != 0 }
+        .map { BarData(xValue = it.key.format("dd/mm/YY"), yValue = it.value.toFloat()) }
 }
 
 fun <T> Response<T>.toApiCallResult(onSuccess: (() -> Unit)? = null): ApiCallResult<T> {

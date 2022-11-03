@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -117,7 +118,7 @@ fun DistributorOffersScreen(
                             OfferFilterComponent(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(20.dp),
+                                    .padding(vertical = 20.dp, horizontal = 10.dp),
                                 minPrice = distributorOffersViewModel.offerFilterQuery.minPrice,
                                 maxPrice = distributorOffersViewModel.offerFilterQuery.maxPrice,
                                 minDate = distributorOffersViewModel.offerFilterQuery.minDate,
@@ -176,7 +177,7 @@ fun DistributorOffersScreen(
                             OfferItem(
                                 modifier = Modifier
                                     .fillParentMaxWidth()
-                                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                                    .padding(horizontal = 10.dp, vertical = 10.dp),
                                 offer = item,
                                 isEditable = true,
                                 onTap = {
@@ -225,6 +226,10 @@ fun DistributorOffersScreen(
                                 onPrevious = { distributorOffersViewModel.getPrevious() },
                                 onNext = { distributorOffersViewModel.getNext() }
                             )
+                        }
+
+                        item {
+                            Box(modifier = Modifier.height(70.dp))
                         }
                     }
                 }

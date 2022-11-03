@@ -22,7 +22,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.EditCalendar
+import androidx.compose.material.icons.filled.Event
+import androidx.compose.material.icons.filled.EventBusy
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -222,7 +223,7 @@ fun DistributorOfferFormContent(
             enabled = false,
             onValueChange = {},
             label = { Text(text = stringResource(R.string.start_date_time_label)) },
-            trailingIcon = { Icon(Icons.Default.EditCalendar, contentDescription = null) }
+            trailingIcon = { Icon(Icons.Default.Event, contentDescription = null) }
         )
 
         CustomTextInput(
@@ -232,7 +233,7 @@ fun DistributorOfferFormContent(
             enabled = false,
             onValueChange = {},
             label = { Text(text = stringResource(R.string.end_date_time_label)) },
-            trailingIcon = { Icon(Icons.Default.EditCalendar, contentDescription = null) }
+            trailingIcon = { Icon(Icons.Default.EventBusy, contentDescription = null) }
         )
 
         CustomTextInput(
@@ -346,7 +347,7 @@ fun DistributorOfferFormContent(
                             FormType.Update -> Strings.get(R.string.offer_updated_successfully)
                         }
                     )
-                    delay(900)
+                    delay(500)
                     onSuccess()
                 }
             }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -38,7 +39,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -90,7 +90,7 @@ fun OfferDetailsScreen(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed),
         snackbarHostState = snackbarHostState
     )
-    var showWithdrawalDatePicker by remember { mutableStateOf(false) }
+    var showWithdrawalDatePicker by mutableStateOf(false)
     val listState = rememberLazyListState()
 
     BottomSheetScaffold(
@@ -136,6 +136,7 @@ fun OfferDetailsScreen(
                     .align(Alignment.CenterHorizontally)
                     .padding(30.dp),
                 withdrawalDate = offerDetailsViewModel.withdrawalDate,
+                minWithdrawalDate = offerDetailsViewModel.maxOf(offer?.startDate, Date()),
                 maxWithdrawalDate = offer?.startDate?.addSeconds(offer.duration),
                 onWithdrawalDateChange = { offerDetailsViewModel.withdrawalDate = it },
                 onSubmit = { offerDetailsViewModel.orderProduct() },
@@ -269,7 +270,7 @@ fun OfferDetailsScreen(
                             LocationItem(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                                    .padding(horizontal = 6.dp, vertical = 10.dp),
                                 location = offer.location,
                                 isModifiable = false
                             )
@@ -320,6 +321,10 @@ fun OfferDetailsScreen(
                             }
                         }
                     }
+
+                    item {
+                        Box(modifier = Modifier.height(75.dp))
+                    }
                 }
             }
         }
@@ -330,6 +335,7 @@ fun OfferDetailsScreen(
 fun OrderForm(
     modifier: Modifier = Modifier,
     withdrawalDate: Date,
+    minWithdrawalDate: Date,
     maxWithdrawalDate: Date?,
     onWithdrawalDateChange: (Date) -> Unit,
     onSubmit: () -> Unit,
@@ -367,7 +373,7 @@ fun OrderForm(
                 onDatePickerHide()
             },
             date = withdrawalDate,
-            minDate = Date(),
+            minDate = minWithdrawalDate,
             maxDate = maxWithdrawalDate
         )
     }

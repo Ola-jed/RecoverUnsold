@@ -128,7 +128,7 @@ fun DistributorsScreen(
                             DistributorInformationComponent(
                                 modifier = Modifier
                                     .fillParentMaxWidth()
-                                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                                    .padding(horizontal = 10.dp, vertical = 10.dp),
                                 distributorInformation = item,
                                 onTap = {
                                     navController.navigate(

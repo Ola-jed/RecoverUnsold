@@ -47,7 +47,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.himanshoe.charty.line.CurveLineChart
+import com.himanshoe.charty.bar.BarChart
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
@@ -61,7 +61,7 @@ import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorHomeViewModel
 import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.show
-import com.ola.recoverunsold.utils.misc.toLineData
+import com.ola.recoverunsold.utils.misc.toBarData
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -126,6 +126,7 @@ fun DistributorHomeScreen(
                     val homeData = homeViewModel.homeDataApiCallResult.data!!
                     val orders = homeData.orders
                     val screenHeight = LocalConfiguration.current.screenHeightDp
+                    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
 
                     Column(
                         modifier = Modifier
@@ -191,27 +192,21 @@ fun DistributorHomeScreen(
                             )
                         }
 
-                        val lineData = homeData.toLineData()
-                        if (lineData.isEmpty()) {
+                        val barData = homeData.toBarData()
+                        if (barData.isEmpty()) {
                             NoContentComponent(
                                 modifier = Modifier.fillMaxWidth(),
                                 message = stringResource(R.string.no_order_found)
                             )
                         } else {
-                            CurveLineChart(
+                            BarChart(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height((screenHeight * 0.4).dp)
-                                    .padding(vertical = 10.dp),
-                                lineData = lineData,
-                                chartColors = listOf(
-                                    MaterialTheme.colors.secondary,
-                                    MaterialTheme.colors.secondary
-                                ),
-                                lineColors = listOf(
-                                    MaterialTheme.colors.primary,
-                                    MaterialTheme.colors.primary
-                                )
+                                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                                barData = barData,
+                                color = MaterialTheme.colors.secondary,
+                                onBarClick = {}
                             )
                         }
 
@@ -228,7 +223,7 @@ fun DistributorHomeScreen(
                             if (orders.isEmpty()) {
                                 item {
                                     NoContentComponent(
-                                        modifier = Modifier.width(LocalConfiguration.current.screenWidthDp.dp),
+                                        modifier = Modifier.width(screenWidth),
                                         message = stringResource(R.string.no_order_found)
                                     )
                                 }
@@ -236,8 +231,8 @@ fun DistributorHomeScreen(
                                 items(items = orders) { item ->
                                     OrderItem(
                                         modifier = Modifier
-                                            .fillParentMaxWidth(0.90F)
-                                            .padding(horizontal = 20.dp, vertical = 10.dp),
+                                            .width(screenWidth)
+                                            .padding(horizontal = 10.dp, vertical = 10.dp),
                                         order = item,
                                         onTap = {
                                             navController.navigate(

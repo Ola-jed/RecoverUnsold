@@ -271,7 +271,7 @@ fun DistributorProductFormScreenContent(
                             FormType.Update -> Strings.get(R.string.product_updated_successfully)
                         }
                     )
-                    delay(900)
+                    delay(500)
                     onSuccess()
                 }
             }
