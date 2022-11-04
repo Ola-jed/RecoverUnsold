@@ -93,6 +93,7 @@ fun OfferDetailsScreen(
     )
     var showWithdrawalDatePicker by mutableStateOf(false)
     val listState = rememberLazyListState()
+    val context = LocalContext.current
 
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
@@ -283,30 +284,14 @@ fun OfferDetailsScreen(
                                     .fillMaxWidth()
                                     .padding(horizontal = 6.dp, vertical = 10.dp),
                                 location = offer.location,
-                                isModifiable = false
-                            )
-                        }
-
-                        item {
-                            val context = LocalContext.current
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Button(
-                                    modifier = Modifier
-                                        .fillMaxWidth(0.85F)
-                                        .padding(top = 15.dp),
-                                    onClick = {
-                                        context.openMapWithCoordinates(
-                                            latitude = offer.location.coordinates.latitude,
-                                            longitude = offer.location.coordinates.longitude
-                                        )
-                                    }
-                                ) {
-                                    Text(stringResource(id = R.string.view_location_on_maps))
+                                isModifiable = false,
+                                onClick = {
+                                    context.openMapWithCoordinates(
+                                        latitude = offer.location.coordinates.latitude,
+                                        longitude = offer.location.coordinates.longitude
+                                    )
                                 }
-                            }
+                            )
                         }
                     }
 

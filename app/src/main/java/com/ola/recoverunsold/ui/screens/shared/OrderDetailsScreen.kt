@@ -1,7 +1,6 @@
 package com.ola.recoverunsold.ui.screens.shared
 
 import android.app.Activity
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -58,7 +57,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -412,28 +410,15 @@ fun OrderDetailsScreen(
                             }
                         }
 
-                        item {
-                            SubtitleWithIcon(
-                                modifier = Modifier.padding(top = 15.dp),
-                                text = stringResource(id = R.string.comments),
-                                imageVector = Icons.Default.Comment
-                            )
-                        }
-
-                        if (order.opinions.isEmpty()) {
+                        if (order.opinions.isNotEmpty()) {
                             item {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.Center
-                                ) {
-                                    Text(
-                                        modifier = Modifier.padding(vertical = 15.dp),
-                                        text = stringResource(id = R.string.no_comments_yet),
-                                        fontSize = 17.sp
-                                    )
-                                }
+                                SubtitleWithIcon(
+                                    modifier = Modifier.padding(top = 15.dp),
+                                    text = stringResource(id = R.string.comments),
+                                    imageVector = Icons.Default.Comment
+                                )
                             }
-                        } else {
+
                             order.opinions.map {
                                 item {
                                     OpinionItem(
@@ -463,10 +448,10 @@ fun OrderDetailsScreen(
                                     )
                                 }
                             }
+                        }
 
-                            item {
-                                Box(modifier = Modifier.height(65.dp))
-                            }
+                        item {
+                            Box(modifier = Modifier.height(65.dp))
                         }
                     }
                 }
