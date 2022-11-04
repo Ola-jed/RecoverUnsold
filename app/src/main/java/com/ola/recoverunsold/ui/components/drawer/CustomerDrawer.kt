@@ -20,7 +20,7 @@ import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.runtime.Composable
@@ -120,8 +120,8 @@ fun CustomerDrawer(
             DrawerNavRow(
                 navController = navController,
                 route = Routes.CustomerAccount.path,
-                text = R.string.settings,
-                leadingIcon = Icons.Outlined.Settings,
+                text = R.string.account,
+                leadingIcon = Icons.Outlined.Person,
                 modifier = Modifier.padding(vertical = 5.dp)
             )
             DrawerNavRow(
