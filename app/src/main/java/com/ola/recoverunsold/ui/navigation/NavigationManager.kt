@@ -25,6 +25,7 @@ import com.ola.recoverunsold.ui.screens.shared.HomeScreen
 import com.ola.recoverunsold.ui.screens.shared.OfferDetailsScreen
 import com.ola.recoverunsold.ui.screens.shared.OffersScreen
 import com.ola.recoverunsold.ui.screens.shared.OrderDetailsScreen
+import com.ola.recoverunsold.ui.screens.shared.SettingsScreen
 import com.ola.recoverunsold.ui.screens.shared.auth.CustomerRegisterScreen
 import com.ola.recoverunsold.ui.screens.shared.auth.DistributorRegisterScreen
 import com.ola.recoverunsold.ui.screens.shared.auth.ForgotPasswordScreen
@@ -103,6 +104,12 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
         }
         composable(Routes.PasswordResetSuccess.path) {
             PasswordResetSuccessScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState
+            )
+        }
+        composable(Routes.Settings.path) {
+            SettingsScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState
             )

@@ -261,4 +261,8 @@
     <string name="coming_soon">Próximamente</string>
     <string name="ongoing">En curso</string>
     <string name="ended">Terminado</string>
+    <string name="theme">Tema</string>
+    <string name="language">Idioma</string>
+    <string name="build_version">Versión de fabricación</string>
+    <string name="general">General</string>
 </resources>

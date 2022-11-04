@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -35,17 +36,19 @@ import com.ola.recoverunsold.ui.components.app.ConfirmDialog
  * The component to show information about a distributor's location
  * Can have edit and delete buttons if they are showed to their owner
  */
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun LocationItem(
     modifier: Modifier = Modifier,
     location: Location,
     isModifiable: Boolean = false,
     onEdit: () -> Unit = {},
-    onDelete: () -> Unit = {}
+    onDelete: () -> Unit = {},
+    onClick: () -> Unit = {}
 ) {
     var showDeleteConfirmationDialog by rememberSaveable { mutableStateOf(false) }
 
-    Card(modifier = modifier, elevation = 15.dp) {
+    Card(modifier = modifier, elevation = 15.dp, onClick = onClick) {
         Column {
             if (location.image != null) {
                 val height = (LocalConfiguration.current.screenHeightDp * 0.2).dp

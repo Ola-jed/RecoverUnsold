@@ -19,8 +19,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -117,9 +117,9 @@ fun DistributorDrawer(
             )
             DrawerNavRow(
                 navController = navController,
-                route = Routes.About.path,
-                text = R.string.about,
-                leadingIcon = Icons.Outlined.Info,
+                route = Routes.Settings.path,
+                text = R.string.settings,
+                leadingIcon = Icons.Outlined.Settings,
                 modifier = Modifier.padding(vertical = 5.dp)
             )
             Spacer(Modifier.weight(4f))

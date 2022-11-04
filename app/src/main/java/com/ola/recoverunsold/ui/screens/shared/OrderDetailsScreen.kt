@@ -109,6 +109,7 @@ fun OrderDetailsScreen(
         snackbarHostState = snackbarHostState
     )
     val listState = rememberLazyListState()
+    val context = LocalContext.current
 
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
@@ -293,7 +294,6 @@ fun OrderDetailsScreen(
                                         icon = Icons.Default.EventAvailable,
                                         text = "${stringResource(id = R.string.to_be_picked_up_on)} : ${order.withdrawalDate.formatDateTime()}",
                                     )
-                                    Divider()
                                 }
                             }
                         }
@@ -381,7 +381,6 @@ fun OrderDetailsScreen(
                                                 icon = Icons.Default.CalendarViewDay,
                                                 text = "${stringResource(id = R.string.member_since_label)} : ${customer.createdAt.formatDate()}"
                                             )
-                                            Divider()
                                         }
                                     }
                                 }
@@ -402,30 +401,14 @@ fun OrderDetailsScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(horizontal = 8.dp, vertical = 10.dp),
-                                    location = offer.location
-                                )
-                            }
-
-                            item {
-                                val context = LocalContext.current
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.Center
-                                ) {
-                                    Button(
-                                        modifier = Modifier
-                                            .fillMaxWidth(0.85F)
-                                            .padding(top = 15.dp),
-                                        onClick = {
-                                            context.openMapWithCoordinates(
-                                                latitude = offer.location.coordinates.latitude,
-                                                longitude = offer.location.coordinates.longitude
-                                            )
-                                        }
-                                    ) {
-                                        Text(stringResource(id = R.string.view_location_on_maps))
+                                    location = offer.location,
+                                    onClick = {
+                                        context.openMapWithCoordinates(
+                                            latitude = offer.location.coordinates.latitude,
+                                            longitude = offer.location.coordinates.longitude
+                                        )
                                     }
-                                }
+                                )
                             }
                         }
 

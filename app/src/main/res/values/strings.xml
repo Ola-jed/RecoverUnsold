@@ -264,4 +264,8 @@
     <string name="coming_soon">Coming soon</string>
     <string name="ongoing">Ongoing</string>
     <string name="ended">Ended</string>
+    <string name="theme">Theme</string>
+    <string name="language">Language</string>
+    <string name="build_version">Build version</string>
+    <string name="general">General</string>
 </resources>

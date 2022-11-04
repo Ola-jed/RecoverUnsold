@@ -1,11 +1,9 @@
 package com.ola.recoverunsold.ui.screens.shared
 
-import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -15,37 +13,24 @@ import androidx.compose.material.BottomSheetState
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.PopupProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
@@ -77,7 +62,8 @@ fun AboutScreen(
                 coroutineScope = coroutineScope,
                 scaffoldState = bottomSheetScaffoldState,
                 title = stringResource(id = R.string.about),
-                actions = { AboutScreenActions() }
+                canGoBack = true,
+                navController = navController
             )
         },
         drawerContent = DrawerContent(navController),
@@ -174,38 +160,6 @@ fun AboutScreen(
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun AboutScreenActions() {
-    val context = LocalContext.current
-    var expanded by remember { mutableStateOf(false) }
-
-    IconButton(onClick = { expanded = true }) {
-        Icon(imageVector = Icons.Default.MoreVert, contentDescription = null)
-    }
-
-    DropdownMenu(
-        modifier = Modifier.width(width = 250.dp),
-        expanded = expanded,
-        onDismissRequest = { expanded = false },
-        offset = DpOffset(x = (-102).dp, y = (-64).dp),
-        properties = PopupProperties()
-    ) {
-        DropdownMenuItem(
-            onClick = {
-                expanded = false
-                context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
-            },
-            enabled = true
-        ) {
-            Text(
-                text = stringResource(id = R.string.open_source_licenses),
-                fontWeight = FontWeight.Medium,
-                fontSize = 16.sp
-            )
         }
     }
 }
