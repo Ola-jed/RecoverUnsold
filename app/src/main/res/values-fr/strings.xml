@@ -267,4 +267,5 @@
     <string name="build_version">Version de build</string>
     <string name="general">Généraux</string>
     <string name="open_source_description">Si vous aimez cette application, n\'hésitez pas à faire un tour sur la page Github</string>
+    <string name="actions">Actions</string>
 </resources>

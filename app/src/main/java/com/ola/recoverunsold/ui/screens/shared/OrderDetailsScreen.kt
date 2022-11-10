@@ -21,11 +21,13 @@ import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -41,13 +43,17 @@ import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Sell
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.icons.filled.ShoppingCartCheckout
+import androidx.compose.material.icons.filled.TouchApp
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -66,6 +72,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
+import com.ola.recoverunsold.ui.components.app.ConfirmDialog
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.ExtendableFab
 import com.ola.recoverunsold.ui.components.app.ItemDetailsLine
@@ -224,6 +231,66 @@ fun OrderDetailsScreen(
                 else -> {
                     val order = orderDetailsViewModel.orderApiCallResult.data!!
                     val offer = order.offer!!
+                    var showAcceptOrderDialog by remember { mutableStateOf(false) }
+                    var showRejectOrderDialog by remember { mutableStateOf(false) }
+                    var showCompleteOrderDialog by remember { mutableStateOf(false) }
+                    val onOrderAccept = {
+                        orderDetailsViewModel.acceptOrder(
+                            onSuccess = {
+                                coroutineScope.launch {
+                                    snackbarHostState.show(
+                                        message = Strings.get(R.string.order_successfully_accepted)
+                                    )
+                                    delay(500)
+                                }
+                            },
+                            onFailure = {
+                                coroutineScope.launch {
+                                    snackbarHostState.show(
+                                        message = Strings.get(R.string.unknown_error_occured)
+                                    )
+                                }
+                            }
+                        )
+                    }
+                    val onOrderReject = {
+                        orderDetailsViewModel.rejectOrder(
+                            onSuccess = {
+                                coroutineScope.launch {
+                                    snackbarHostState.show(
+                                        message = Strings.get(R.string.order_successfully_rejected)
+                                    )
+                                    delay(500)
+                                }
+                            },
+                            onFailure = {
+                                coroutineScope.launch {
+                                    snackbarHostState.show(
+                                        message = Strings.get(R.string.unknown_error_occured)
+                                    )
+                                }
+                            }
+                        )
+                    }
+                    val onOrderComplete = {
+                        orderDetailsViewModel.completeOrder(
+                            onSuccess = {
+                                coroutineScope.launch {
+                                    snackbarHostState.show(
+                                        message = Strings.get(R.string.order_completed_successfully)
+                                    )
+                                    delay(500)
+                                }
+                            },
+                            onFailure = {
+                                coroutineScope.launch {
+                                    snackbarHostState.show(
+                                        message = Strings.get(R.string.unknown_error_occured)
+                                    )
+                                }
+                            }
+                        )
+                    }
 
                     LazyColumn(
                         modifier = Modifier
@@ -450,8 +517,94 @@ fun OrderDetailsScreen(
                             }
                         }
 
+                        if (orderDetailsViewModel.isOrderOwner(order)) {
+                            item {
+                                SubtitleWithIcon(
+                                    modifier = Modifier.padding(top = 15.dp),
+                                    text = stringResource(R.string.actions),
+                                    imageVector = Icons.Default.TouchApp
+                                )
+
+                                if (order.status == OrderStatus.Pending || order.status == OrderStatus.Rejected) {
+                                    Button(
+                                        modifier = Modifier
+                                            .padding(horizontal = 10.dp)
+                                            .fillMaxWidth(),
+                                        onClick = { showAcceptOrderDialog = true }
+                                    ) {
+                                        Text(text = stringResource(id = R.string.accept_order_label))
+                                    }
+                                }
+
+                                if (order.status == OrderStatus.Pending || order.status == OrderStatus.Approved) {
+                                    Button(
+                                        onClick = { showRejectOrderDialog = true },
+                                        modifier = Modifier
+                                            .padding(horizontal = 10.dp)
+                                            .fillMaxWidth(),
+                                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
+                                    ) {
+                                        Text(
+                                            text = stringResource(id = R.string.reject_order_label),
+                                            color = MaterialTheme.colors.onError
+                                        )
+                                    }
+                                }
+
+                                if (order.status == OrderStatus.Approved) {
+                                    Button(
+                                        modifier = Modifier
+                                            .padding(horizontal = 10.dp)
+                                            .fillMaxWidth(),
+                                        onClick = { showCompleteOrderDialog = true }
+                                    ) {
+                                        Text(text = stringResource(id = R.string.finalize_order_label))
+                                    }
+                                }
+                            }
+                        }
+
                         item {
                             Box(modifier = Modifier.height(65.dp))
+                        }
+
+                        item {
+                            if (showAcceptOrderDialog) {
+                                ConfirmDialog(
+                                    title = stringResource(R.string.accept_order_label),
+                                    content = stringResource(R.string.accept_order_question),
+                                    onDismiss = { showAcceptOrderDialog = false },
+                                    onConfirm = {
+                                        showAcceptOrderDialog = false
+                                        onOrderAccept()
+                                    }
+                                )
+                            }
+
+                            if (showRejectOrderDialog) {
+                                ConfirmDialog(
+                                    title = stringResource(R.string.reject_order_label),
+                                    content = stringResource(R.string.reject_order_question),
+                                    onDismiss = { showRejectOrderDialog = false },
+                                    onConfirm = {
+                                        showRejectOrderDialog = false
+                                        onOrderReject()
+                                    },
+                                    isDanger = true
+                                )
+                            }
+
+                            if (showCompleteOrderDialog) {
+                                ConfirmDialog(
+                                    title = stringResource(R.string.finalize_order_label),
+                                    content = stringResource(R.string.finalize_order_question),
+                                    onDismiss = { showCompleteOrderDialog = false },
+                                    onConfirm = {
+                                        showCompleteOrderDialog = false
+                                        onOrderComplete()
+                                    }
+                                )
+                            }
                         }
                     }
                 }

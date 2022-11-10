@@ -270,4 +270,5 @@
     <string name="general">General</string>
     <string name="open_source_label" translatable="false">Open source</string>
     <string name="open_source_description">If you like this application, do not hesitate to visit the Github page</string>
+    <string name="actions">Actions</string>
 </resources>

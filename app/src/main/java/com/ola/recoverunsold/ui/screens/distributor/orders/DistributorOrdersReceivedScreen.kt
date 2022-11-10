@@ -35,7 +35,6 @@ import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.OrdersReceivedViewModel
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.resources.Strings
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -124,72 +123,6 @@ fun DistributorOrdersReceivedScreen(
                                                 .path
                                                 .replace("{orderId}", it.id)
                                         )
-                                    },
-                                    onOrderAccept = {
-                                        ordersReceivedViewModel.acceptOrder(
-                                            order = it,
-                                            onSuccess = {
-                                                coroutineScope.launch {
-                                                    snackbarHostState.show(
-                                                        message = Strings.get(R.string.order_successfully_accepted)
-                                                    )
-                                                    delay(500)
-                                                }
-                                            },
-                                            onFailure = {
-                                                coroutineScope.launch {
-                                                    snackbarHostState.show(
-                                                        message = Strings.get(R.string.unknown_error_occured)
-                                                    )
-                                                    delay(500)
-                                                }
-                                            }
-                                        )
-                                        ordersReceivedViewModel.getOrders()
-                                    },
-                                    onOrderReject = {
-                                        ordersReceivedViewModel.rejectOrder(
-                                            order = it,
-                                            onSuccess = {
-                                                coroutineScope.launch {
-                                                    snackbarHostState.show(
-                                                        message = Strings.get(R.string.order_successfully_rejected)
-                                                    )
-                                                    delay(500)
-                                                }
-                                            },
-                                            onFailure = {
-                                                coroutineScope.launch {
-                                                    snackbarHostState.show(
-                                                        message = Strings.get(R.string.unknown_error_occured)
-                                                    )
-                                                    delay(500)
-                                                }
-                                            }
-                                        )
-                                        ordersReceivedViewModel.getOrders()
-                                    },
-                                    onOrderComplete = {
-                                        ordersReceivedViewModel.completeOrder(
-                                            order = it,
-                                            onSuccess = {
-                                                coroutineScope.launch {
-                                                    snackbarHostState.show(
-                                                        message = Strings.get(R.string.order_completed_successfully)
-                                                    )
-                                                    delay(500)
-                                                }
-                                            },
-                                            onFailure = {
-                                                coroutineScope.launch {
-                                                    snackbarHostState.show(
-                                                        message = Strings.get(R.string.unknown_error_occured)
-                                                    )
-                                                    delay(500)
-                                                }
-                                            }
-                                        )
-                                        ordersReceivedViewModel.getOrders()
                                     }
                                 )
                             }

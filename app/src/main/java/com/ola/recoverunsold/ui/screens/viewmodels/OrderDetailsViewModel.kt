@@ -12,6 +12,7 @@ import com.ola.recoverunsold.api.requests.OpinionCreateRequest
 import com.ola.recoverunsold.api.services.OpinionsService
 import com.ola.recoverunsold.api.services.wrappers.OrderServiceWrapper
 import com.ola.recoverunsold.models.Customer
+import com.ola.recoverunsold.models.Distributor
 import com.ola.recoverunsold.models.Opinion
 import com.ola.recoverunsold.models.Order
 import com.ola.recoverunsold.utils.misc.toApiCallResult
@@ -89,6 +90,47 @@ class OrderDetailsViewModel @AssistedInject constructor(
                 onFailure()
             }
         }
+    }
+
+    fun acceptOrder(onSuccess: () -> Unit, onFailure: () -> Unit) {
+        viewModelScope.launch {
+            val response = ordersServiceWrapper.acceptOrder(token, orderId)
+            if (response.isSuccessful) {
+                getOrder()
+                onSuccess()
+            } else {
+                onFailure()
+            }
+        }
+    }
+
+    fun rejectOrder(onSuccess: () -> Unit, onFailure: () -> Unit) {
+        viewModelScope.launch {
+            val response = ordersServiceWrapper.rejectOrder(token, orderId)
+            if (response.isSuccessful) {
+                getOrder()
+                onSuccess()
+            } else {
+                onFailure()
+            }
+        }
+    }
+
+    fun completeOrder(onSuccess: () -> Unit, onFailure: () -> Unit) {
+        viewModelScope.launch {
+            val response = ordersServiceWrapper.completeOrder(token, orderId)
+            if (response.isSuccessful) {
+                getOrder()
+                onSuccess()
+            } else {
+                onFailure()
+            }
+        }
+    }
+
+    fun isOrderOwner(order: Order): Boolean {
+        return order.offer?.distributorId == UserObserver.user.value?.id
+                && (UserObserver.user.value is Distributor)
     }
 
     fun errorMessage(): String? = when (orderApiCallResult.statusCode) {

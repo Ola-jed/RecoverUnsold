@@ -54,39 +54,6 @@ class OrdersReceivedViewModel @Inject constructor(
         orderQuery = OrderFilterQuery()
     }
 
-    fun acceptOrder(order: Order, onSuccess: () -> Unit, onFailure: () -> Unit) {
-        viewModelScope.launch {
-            val response = orderServiceWrapper.acceptOrder(token, order.id)
-            if (response.isSuccessful) {
-                onSuccess()
-            } else {
-                onFailure()
-            }
-        }
-    }
-
-    fun rejectOrder(order: Order, onSuccess: () -> Unit, onFailure: () -> Unit) {
-        viewModelScope.launch {
-            val response = orderServiceWrapper.rejectOrder(token, order.id)
-            if (response.isSuccessful) {
-                onSuccess()
-            } else {
-                onFailure()
-            }
-        }
-    }
-
-    fun completeOrder(order: Order, onSuccess: () -> Unit, onFailure: () -> Unit) {
-        viewModelScope.launch {
-            val response = orderServiceWrapper.completeOrder(token, order.id)
-            if (response.isSuccessful) {
-                onSuccess()
-            } else {
-                onFailure()
-            }
-        }
-    }
-
     fun errorMessage(): String? {
         return when (ordersGetResponse.statusCode) {
             StatusCode.Unauthorized.code -> Strings.get(R.string.not_authenticated_full_message)

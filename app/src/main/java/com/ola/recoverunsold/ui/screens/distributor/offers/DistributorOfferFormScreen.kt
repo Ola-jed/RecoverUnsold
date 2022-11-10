@@ -2,6 +2,7 @@ package com.ola.recoverunsold.ui.screens.distributor.offers
 
 import android.app.Activity
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,12 +34,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -198,23 +197,12 @@ fun DistributorOfferFormContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.Center
     ) {
         val fieldsModifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
-
-        Text(
-            text = when (formType) {
-                FormType.Create -> stringResource(id = R.string.create_new_offer)
-                FormType.Update -> stringResource(id = R.string.update_offer_label)
-            },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 15.dp, bottom = 25.dp),
-            style = MaterialTheme.typography.h6,
-            fontWeight = FontWeight.Bold
-        )
 
         CustomTextInput(
             modifier = fieldsModifier.clickable { showStartDatePicker = true },
