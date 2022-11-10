@@ -81,7 +81,7 @@ fun DistributorProductFormScreen(
                 canGoBack = true,
                 navController = navController,
                 title = stringResource(
-                    id = if (serializedProduct == null) {
+                    id = if (serializedProduct.isNullOrBlank()) {
                         R.string.new_product
                     } else {
                         R.string.update_product
@@ -104,17 +104,11 @@ fun DistributorProductFormScreen(
             onImageDeleted = { productFormViewModel.images.removeIf { uri -> uri == it } },
             onValidationSuccess = {
                 productFormViewModel.formState = productFormViewModel.formState
-                    .copy(
-                        isValid = true,
-                        errorMessage = null
-                    )
+                    .copy(isValid = true, errorMessage = null)
             },
             onValidationError = {
                 productFormViewModel.formState = productFormViewModel.formState
-                    .copy(
-                        isValid = false,
-                        errorMessage = it
-                    )
+                    .copy(isValid = false, errorMessage = it)
             },
             loading = productFormViewModel.productApiCall.status == ApiStatus.LOADING,
             snackbarHostState = snackbarHostState,
@@ -256,9 +250,7 @@ fun DistributorProductFormScreenContent(
 
         if (errorMessage != null) {
             LaunchedEffect(snackbarHostState) {
-                coroutineScope.launch {
-                    snackbarHostState.show(message = errorMessage)
-                }
+                coroutineScope.launch { snackbarHostState.show(message = errorMessage) }
             }
         }
 
