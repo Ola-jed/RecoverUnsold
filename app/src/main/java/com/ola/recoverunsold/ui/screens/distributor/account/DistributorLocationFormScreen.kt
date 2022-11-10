@@ -21,8 +21,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.TextFields
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -266,7 +264,6 @@ fun DistributorLocationFormScreenContent(
                 Button(onClick = {
                     currentIndex--
                 }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = null)
                     Text(text = stringResource(id = R.string.previous))
                 }
             }
@@ -282,7 +279,6 @@ fun DistributorLocationFormScreenContent(
                     }
                 }) {
                     Text(text = stringResource(id = R.string.next))
-                    Icon(Icons.Default.ArrowForward, contentDescription = null)
                 }
             }
 
