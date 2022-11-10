@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -72,7 +73,8 @@ fun DistributorOrderItem(
                         Text(
                             modifier = Modifier.padding(start = 3.dp),
                             text = order.status.internationalizedValueSingular(),
-                            color = order.status.foregroundColor()
+                            color = order.status.foregroundColor(),
+                            style = MaterialTheme.typography.body2
                         )
                     }
                 }
