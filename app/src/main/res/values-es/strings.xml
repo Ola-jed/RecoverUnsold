@@ -265,4 +265,5 @@
     <string name="language">Idioma</string>
     <string name="build_version">Versión de fabricación</string>
     <string name="general">General</string>
+    <string name="open_source_description">Si te gusta esta aplicación, no dudes en visitar la página de Github</string>
 </resources>

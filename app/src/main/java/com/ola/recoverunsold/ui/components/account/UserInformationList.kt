@@ -37,8 +37,7 @@ fun UserInformationList(user: User, modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         UserAccountHeader(
-            id = user.createdAt.toString(),
-            name = user.username,
+            email = user.email,
             size = 90.dp,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )

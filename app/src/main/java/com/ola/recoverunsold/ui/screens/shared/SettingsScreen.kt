@@ -107,6 +107,23 @@ fun SettingsScreen(
                     fontSize = 18.sp
                 )
             }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { uriHandler.openUri("https://github.com/Ola-jed/RecoverUnsold/") }
+                    .padding(vertical = 15.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.open_source_label),
+                    modifier = Modifier.padding(start = 15.dp),
+                    fontSize = 18.sp
+                )
+                Text(
+                    text = stringResource(id = R.string.open_source_description),
+                    modifier = Modifier.padding(start = 15.dp),
+                    fontSize = 18.sp
+                )
+            }
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .clickable {

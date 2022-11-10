@@ -25,8 +25,7 @@ fun CustomerInformationComponent(customer: Customer, modifier: Modifier = Modifi
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         UserAccountHeader(
-            id = customer.createdAt.toString(),
-            name = customer.username,
+            email = customer.email,
             size = 90.dp,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )

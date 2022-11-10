@@ -7,7 +7,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
 import android.provider.OpenableColumns
-import androidx.annotation.ColorInt
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SnackbarDuration
@@ -31,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
-import androidx.core.graphics.ColorUtils
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
@@ -54,13 +52,14 @@ import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+import java.math.BigInteger
+import java.security.MessageDigest
 import java.text.DateFormat
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import kotlin.math.absoluteValue
 
 private val colorsDeciles = arrayOf(
     Color(red = 255, green = 0, blue = 0),
@@ -78,15 +77,6 @@ private val dateTimeFormatter = DateFormat
     .getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault())
 private const val cacheSize = 5242880L
 val gson = Gson()
-
-/**
- * Convert a color string to Hsl
- */
-@ColorInt
-fun String.toHslColor(saturation: Float = 0.5f, lightness: Float = 0.4f): Int {
-    val hue = fold(0) { acc, char -> char.code + acc * 37 } % 360
-    return ColorUtils.HSLToColor(floatArrayOf(hue.absoluteValue.toFloat(), saturation, lightness))
-}
 
 /**
  * Returns a new String obtained by removing all the occurrences of a specific String
@@ -236,6 +226,11 @@ fun copyStreamToFile(inputStream: InputStream, outputFile: File) {
             output.flush()
         }
     }
+}
+
+fun String.md5(): String {
+    val messageDigest = MessageDigest.getInstance("MD5")
+    return BigInteger(1, messageDigest.digest(this.toByteArray())).toString(16)
 }
 
 /**

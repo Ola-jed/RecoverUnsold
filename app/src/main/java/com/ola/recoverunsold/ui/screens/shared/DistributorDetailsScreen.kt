@@ -137,8 +137,7 @@ fun DistributorDetailsScreen(
                             horizontalArrangement = Arrangement.Center
                         ) {
                             UserAccountHeader(
-                                id = distributorInformation.id,
-                                name = distributorInformation.username,
+                                email = distributorInformation.email,
                                 size = (configuration.screenWidthDp * 0.25).dp
                             )
                         }
