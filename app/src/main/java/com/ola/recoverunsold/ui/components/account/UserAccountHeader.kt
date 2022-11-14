@@ -21,12 +21,12 @@ import com.ola.recoverunsold.utils.misc.md5
 fun UserAccountHeader(
     email: String,
     modifier: Modifier = Modifier,
-    size: Dp = 40.dp,
+    size: Dp = 40.dp
 ) {
     Box(modifier.size(size), contentAlignment = Alignment.Center) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data("http://gravatar.com/avatar/${email.md5()}")
+                .data("http://gravatar.com/avatar/${email.md5()}?d=identicon")
                 .placeholder(R.mipmap.placeholder)
                 .crossfade(true)
                 .build(),
