@@ -1,5 +1,9 @@
 package com.ola.recoverunsold.ui.screens.shared
 
+import android.content.Context
+import android.content.Intent
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,13 +30,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import co.opensi.kkiapay.uikit.Kkiapay
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.ola.recoverunsold.App
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
@@ -57,6 +64,7 @@ fun CustomerHomeScreen(
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
     val isRefreshing by homeViewModel.isRefreshing.collectAsState()
+    val context = LocalContext.current
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -101,6 +109,34 @@ fun CustomerHomeScreen(
                     val homeData = homeViewModel.homeDataApiCallResult.data!!
                     val offers = homeData.offers
                     val distributors = homeData.distributors
+
+                    Kkiapay.get()
+                        .setListener { status, transactionId ->
+                            Toast.makeText(
+                                context,
+                                "Transaction: ${status.name} -> $transactionId",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+                    val activity = object : AppCompatActivity() {
+                        override fun getApplicationContext(): Context = App.instance
+
+                        @Deprecated("Deprecated in Java")
+                        override fun startActivityForResult(intent: Intent, requestCode: Int) {
+                        }
+                    }
+
+                    Kkiapay
+                        .get()
+                        .requestPayment(
+                            activity,
+                            1,
+                            "Paiement de services",
+                            "Nom Prenom",
+                            "olabijed@gmail.com",
+                            phone = "+22967975095"
+                        )
 
                     Column(
                         modifier = Modifier
