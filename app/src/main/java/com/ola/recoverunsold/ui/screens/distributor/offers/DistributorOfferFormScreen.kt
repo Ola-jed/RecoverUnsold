@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,6 +22,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.Switch
+import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Event
@@ -34,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -53,6 +57,7 @@ import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.DateTimePicker
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorOfferFormViewModel
+import com.ola.recoverunsold.ui.theme.AppCustomColors
 import com.ola.recoverunsold.utils.misc.FormType
 import com.ola.recoverunsold.utils.misc.addSeconds
 import com.ola.recoverunsold.utils.misc.formatDateTime
@@ -106,12 +111,14 @@ fun DistributorOfferFormScreen(
             startDate = distributorOfferFormViewModel.startDate,
             endDate = distributorOfferFormViewModel.endDate,
             beneficiaries = distributorOfferFormViewModel.beneficiaries,
+            onlinePayment = distributorOfferFormViewModel.onlinePayment,
             price = distributorOfferFormViewModel.price,
             locations = distributorOfferFormViewModel.locations,
             location = distributorOfferFormViewModel.location,
             onStartDateChange = { distributorOfferFormViewModel.startDate = it },
             onEndDateChange = { distributorOfferFormViewModel.endDate = it },
             onBeneficiariesChange = { distributorOfferFormViewModel.beneficiaries = it },
+            onOnlinePaymentChange = { distributorOfferFormViewModel.onlinePayment = it },
             onPriceChange = { distributorOfferFormViewModel.price = it },
             onLocationChange = { distributorOfferFormViewModel.location = it },
             onSubmit = {
@@ -171,12 +178,14 @@ fun DistributorOfferFormContent(
     startDate: Date?,
     endDate: Date?,
     beneficiaries: Int,
+    onlinePayment: Boolean,
     price: Double,
     locations: List<Location>,
     location: Location?,
     onStartDateChange: (Date) -> Unit,
     onEndDateChange: (Date) -> Unit,
     onBeneficiariesChange: (Int) -> Unit,
+    onOnlinePaymentChange: (Boolean) -> Unit,
     onPriceChange: (Double) -> Unit,
     onLocationChange: (Location) -> Unit,
     onSubmit: () -> Unit,
@@ -286,7 +295,29 @@ fun DistributorOfferFormContent(
             canBeEmpty = true
         )
 
-        Button(modifier = fieldsModifier, onClick = onSubmit, enabled = !loading) {
+        Row(
+            modifier = fieldsModifier,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(stringResource(id = R.string.online_payment))
+            Switch(
+                checked = onlinePayment,
+                onCheckedChange = onOnlinePaymentChange,
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = MaterialTheme.colors.primary,
+                    uncheckedThumbColor = MaterialTheme.colors.primary,
+                    checkedTrackColor = AppCustomColors.success,
+                    uncheckedTrackColor = MaterialTheme.colors.onBackground,
+                )
+            )
+        }
+
+        Button(
+            modifier = fieldsModifier.padding(top = 5.dp),
+            onClick = onSubmit,
+            enabled = !loading
+        ) {
             if (loading) {
                 CircularProgressIndicator(color = MaterialTheme.colors.background)
             } else {

@@ -272,4 +272,6 @@
     <string name="open_source_description">If you like this application, do not hesitate to visit the Github page</string>
     <string name="actions">Actions</string>
     <string name="guest">Guest</string>
+    <string name="online_payment">Online payment</string>
+    <string name="pay">Pay</string>
 </resources>

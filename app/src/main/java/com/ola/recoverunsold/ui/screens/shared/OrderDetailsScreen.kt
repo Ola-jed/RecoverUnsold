@@ -1,6 +1,9 @@
 package com.ola.recoverunsold.ui.screens.shared
 
 import android.app.Activity
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -65,6 +68,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import co.opensi.kkiapay.uikit.Kkiapay
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ola.recoverunsold.MainActivity
@@ -384,22 +388,37 @@ fun OrderDetailsScreen(
                                 )
                             }
 
-                            item {
-                                LazyRow(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                ) {
-                                    items(items = offer.products) {
+                            if (offer.products.count() == 1) {
+                                item {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.Center
+                                    ) {
                                         ProductItem(
                                             modifier = Modifier
                                                 .padding(horizontal = 5.dp)
                                                 .width((LocalConfiguration.current.screenWidthDp * 0.6).dp),
-                                            product = it
+                                            product = offer.products.first()
                                         )
                                     }
                                 }
+                            } else {
+                                item {
+                                    LazyRow(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                    ) {
+                                        items(items = offer.products) {
+                                            ProductItem(
+                                                modifier = Modifier
+                                                    .padding(horizontal = 5.dp)
+                                                    .width((LocalConfiguration.current.screenWidthDp * 0.6).dp),
+                                                product = it
+                                            )
+                                        }
+                                    }
+                                }
                             }
-
                         }
 
                         if (!orderDetailsViewModel.isCustomer) {
@@ -474,6 +493,42 @@ fun OrderDetailsScreen(
                                         )
                                     }
                                 )
+                            }
+                        }
+
+                        val canPay = orderDetailsViewModel.isCustomer
+                                && order.offer.onlinePayment
+                                && order.status == OrderStatus.Approved
+
+                        if (canPay) {
+                            item {
+                                Button(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 8.dp),
+                                    onClick = {
+                                        Kkiapay.get()
+                                            .setListener { status, transactionId ->
+                                                // TODO
+                                                Toast.makeText(
+                                                    context,
+                                                    "Transaction: ${status.name} -> $transactionId",
+                                                    Toast.LENGTH_LONG
+                                                ).show()
+                                            }
+
+                                        Kkiapay.get()
+                                            .requestPayment(
+                                                context as AppCompatActivity,
+                                                offer.price.toInt(),
+                                                "Paiement de l'offre",
+                                                "${orderDetailsViewModel.customer.firstName ?: ""} ${orderDetailsViewModel.customer.lastName ?: ""}",
+                                                orderDetailsViewModel.customer.email,
+                                                phone = ""
+                                            )
+                                    }) {
+                                    Text(text = stringResource(id = R.string.pay))
+                                }
                             }
                         }
 

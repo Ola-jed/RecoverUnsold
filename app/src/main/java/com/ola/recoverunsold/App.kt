@@ -15,11 +15,11 @@ class App : Application() {
         super.onCreate()
         Kkiapay.init(
             applicationContext,
-            "d96163be613b25aa2e82b3e7163116af14cf2f04",
+            BuildConfig.KKIAPAY_API_KEY,
             SdkConfig(
                 themeColor = R.color.main_color,
                 imageResource = R.raw.logo,
-                enableSandbox = true
+                enableSandbox = false
             )
         )
         instance = this

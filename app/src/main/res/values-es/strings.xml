@@ -268,4 +268,6 @@
     <string name="open_source_description">Si te gusta esta aplicación, no dudes en visitar la página de Github</string>
     <string name="actions">Acciones</string>
     <string name="guest">Invitado</string>
+    <string name="online_payment">Pago en línea</string>
+    <string name="pay">Pagar</string>
 </resources>

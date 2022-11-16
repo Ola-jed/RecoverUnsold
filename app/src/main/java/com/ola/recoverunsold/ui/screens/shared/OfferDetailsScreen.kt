@@ -229,24 +229,27 @@ fun OfferDetailsScreen(
                         }
 
                         item {
-                            LazyRow(modifier = Modifier.fillMaxWidth()) {
-                                items(items = offer.products) {
+                            if (offer.products.count() == 1) {
+                                val product = offer.products.first()
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
                                     ProductItem(
                                         modifier = Modifier
-                                            .padding(horizontal = 5.dp)
                                             .width((width * 0.6).dp),
-                                        product = it,
+                                        product = product,
                                         isEditable = offer.distributorId == offerDetailsViewModel.currentUserId,
                                         onEdit = {
                                             navController.navigate(
                                                 Routes.OfferProduct.path
                                                     .replace("{offerId}", offerId)
-                                                    .replace("{product}", it.jsonSerialize())
+                                                    .replace("{product}", product.jsonSerialize())
                                             )
                                         },
                                         onDelete = {
                                             offerDetailsViewModel.deleteProduct(
-                                                product = it,
+                                                product = product,
                                                 onSuccess = {
                                                     coroutineScope.launch {
                                                         snackbarHostState.show(
@@ -265,6 +268,45 @@ fun OfferDetailsScreen(
                                             )
                                         }
                                     )
+                                }
+                            } else {
+                                LazyRow(modifier = Modifier.fillMaxWidth()) {
+                                    items(items = offer.products) {
+                                        ProductItem(
+                                            modifier = Modifier
+                                                .padding(horizontal = 5.dp)
+                                                .width((width * 0.6).dp),
+                                            product = it,
+                                            isEditable = offer.distributorId == offerDetailsViewModel.currentUserId,
+                                            onEdit = {
+                                                navController.navigate(
+                                                    Routes.OfferProduct.path
+                                                        .replace("{offerId}", offerId)
+                                                        .replace("{product}", it.jsonSerialize())
+                                                )
+                                            },
+                                            onDelete = {
+                                                offerDetailsViewModel.deleteProduct(
+                                                    product = it,
+                                                    onSuccess = {
+                                                        coroutineScope.launch {
+                                                            snackbarHostState.show(
+                                                                message = Strings.get(R.string.product_deleted_successfully)
+                                                            )
+                                                        }
+                                                        offerDetailsViewModel.getOffer()
+                                                    },
+                                                    onError = {
+                                                        coroutineScope.launch {
+                                                            snackbarHostState.show(
+                                                                message = Strings.get(R.string.product_deletion_failed)
+                                                            )
+                                                        }
+                                                    }
+                                                )
+                                            }
+                                        )
+                                    }
                                 }
                             }
                         }

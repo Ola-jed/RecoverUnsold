@@ -6,6 +6,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.EventBusy
 import androidx.compose.material.icons.filled.Group
@@ -90,6 +91,18 @@ fun OfferDetailsComponent(offer: Offer) {
                 text = stringResource(
                     R.string.published_the,
                     offer.createdAt.formatDate()
+                )
+            )
+            Divider()
+            ItemDetailsLine(
+                modifier = Modifier.padding(
+                    top = 13.dp,
+                    bottom = 13.dp,
+                    start = 10.dp
+                ),
+                icon = Icons.Default.CreditCard,
+                text = "${stringResource(R.string.online_payment)} : " + stringResource(
+                    if (offer.onlinePayment) R.string.yes else R.string.no
                 )
             )
         }

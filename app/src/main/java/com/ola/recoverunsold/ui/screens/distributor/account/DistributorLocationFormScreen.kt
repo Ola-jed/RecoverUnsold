@@ -234,7 +234,7 @@ fun DistributorLocationFormScreenContent(
 
                 LocationMap(
                     modifier = Modifier.size(
-                        height = (LocalConfiguration.current.screenHeightDp * 0.5).dp,
+                        height = (LocalConfiguration.current.screenHeightDp * 0.7).dp,
                         width = (LocalConfiguration.current.screenHeightDp * 0.7).dp
                     ),
                     latLng = if (location != null) {

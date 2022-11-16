@@ -6,6 +6,7 @@ data class Offer(
     val id: String,
     val startDate: Date,
     val duration: ULong,
+    val onlinePayment: Boolean,
     val beneficiaries: Int? = null,
     val price: Double,
     val createdAt: Date,

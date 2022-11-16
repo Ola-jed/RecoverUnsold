@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Theme.RecoverUnsold" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/purple_700</item>
-    </style>
-
-    <style name="Theme.RecoverUnsold.AppCompat" parent="Theme.AppCompat.DayNight">
+    <style name="Theme.RecoverUnsold.AppCompat" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorPrimaryDark">@color/dark_primary</item>
         <item name="colorSecondary">@color/light_secondary</item>

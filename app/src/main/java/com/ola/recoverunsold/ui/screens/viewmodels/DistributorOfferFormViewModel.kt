@@ -52,6 +52,7 @@ class DistributorOfferFormViewModel @AssistedInject constructor(
     var beneficiaries by mutableStateOf(offer?.beneficiaries ?: 0)
     var price by mutableStateOf(offer?.price ?: 0.0)
     var location by mutableStateOf(offer?.location)
+    var onlinePayment by mutableStateOf(offer?.onlinePayment ?: false)
     var products: MutableList<ProductCreateData> = mutableStateListOf()
 
     init {
@@ -82,6 +83,7 @@ class DistributorOfferFormViewModel @AssistedInject constructor(
             startDate = startDate!!,
             duration = (endDate!!.time.toULong() - startDate!!.time.toULong()) / 1000UL,
             beneficiaries = if (beneficiaries == 0) null else beneficiaries,
+            onlinePayment = onlinePayment,
             price = price,
             locationId = location!!.id
         )
@@ -98,6 +100,7 @@ class DistributorOfferFormViewModel @AssistedInject constructor(
             startDate = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(startDate!!),
             duration = (endDate!!.time.toULong() - startDate!!.time.toULong()) / 1000UL,
             beneficiaries = if (beneficiaries == 0) null else beneficiaries,
+            onlinePayment = onlinePayment,
             price = price,
             locationId = location!!.id
         )
