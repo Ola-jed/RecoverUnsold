@@ -23,6 +23,8 @@ jobs:
         run: echo ${{ secrets.MAPS_API_KEY }} >> /home/runner/work/RecoverUnsold/RecoverUnsold/local.properties
       - name: Insert the sentry dsn into the local.properties file
         run: echo ${{ secrets.SENTRY_DSN }} >> /home/runner/work/RecoverUnsold/RecoverUnsold/local.properties
+      - name: Insert the Kkiapay secret into the local.properties file
+        run: echo ${{ secrets.KKIAPAY_API_KEY }} >> /home/runner/work/RecoverUnsold/RecoverUnsold/local.properties
       - name: Generate Release APK
         run: ./gradlew assembleRelease
       - name: Sign APK
