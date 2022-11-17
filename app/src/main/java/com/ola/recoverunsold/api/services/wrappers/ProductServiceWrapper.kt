@@ -30,12 +30,10 @@ class ProductServiceWrapper(private val productService: ProductService) {
 
     suspend fun createProduct(
         id: String,
-        token: String,
         productCreateRequest: ProductCreateRequest
     ): Response<Product> {
         return productService.createProduct(
             id,
-            token,
             productCreateRequest.name.toMultipartRequestBody(),
             productCreateRequest.description.toMultipartRequestBody(),
             productCreateRequest.images
@@ -44,20 +42,14 @@ class ProductServiceWrapper(private val productService: ProductService) {
 
     suspend fun updateProduct(
         id: String,
-        token: String,
         productUpdateRequest: ProductUpdateRequest
     ): Response<Void> {
-        return productService.updateProduct(
-            id,
-            token,
-            productUpdateRequest
-        )
+        return productService.updateProduct(id, productUpdateRequest)
     }
 
     suspend fun deleteProduct(
-        id: String,
-        token: String
+        id: String
     ): Response<Void> {
-        return productService.deleteProduct(id, token)
+        return productService.deleteProduct(id)
     }
 }

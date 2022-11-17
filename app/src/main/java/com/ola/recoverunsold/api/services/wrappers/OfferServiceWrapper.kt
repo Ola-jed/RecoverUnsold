@@ -38,11 +38,9 @@ class OfferServiceWrapper(private val offerService: OfferService) {
     }
 
     suspend fun createOffer(
-        token: String,
         offerCreateRequest: OfferCreateRequest
     ): Response<Offer> {
         return offerService.createOffer(
-            token,
             formatter.format(offerCreateRequest.startDate).toMultipartRequestBody(),
             offerCreateRequest.duration.toMultipartRequestBody(),
             offerCreateRequest.beneficiaries?.toMultipartRequestBody(),
@@ -53,18 +51,13 @@ class OfferServiceWrapper(private val offerService: OfferService) {
     }
 
     suspend fun updateOffer(
-        token: String,
         id: String,
         offerUpdateRequest: OfferUpdateRequest
     ): NoContentResponse {
-        return offerService.updateOffer(
-            token,
-            id,
-            offerUpdateRequest
-        )
+        return offerService.updateOffer(id, offerUpdateRequest)
     }
 
-    suspend fun deleteOffer(token: String, id: String): NoContentResponse {
-        return offerService.deleteOffer(token, id)
+    suspend fun deleteOffer(id: String): NoContentResponse {
+        return offerService.deleteOffer(id)
     }
 }

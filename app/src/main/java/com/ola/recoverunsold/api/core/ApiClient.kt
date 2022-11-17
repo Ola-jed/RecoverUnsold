@@ -9,7 +9,10 @@ import com.ola.recoverunsold.models.AlertType
 import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.utils.misc.hasNetwork
 import com.ola.recoverunsold.utils.misc.httpCache
+import com.ola.recoverunsold.utils.store.TokenStore
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
@@ -36,6 +39,19 @@ object ApiClient {
             }
         }
 
+    private val jwtHeaderInterceptor = object : Interceptor {
+        override fun intercept(chain: Interceptor.Chain): Response {
+            val request = chain.request()
+            val bearerTokenHeaderValue =
+                TokenStore.get()?.bearerToken ?: return chain.proceed(request)
+            return chain.proceed(
+                request.newBuilder()
+                    .header("Authorization", bearerTokenHeaderValue)
+                    .build()
+            )
+        }
+    }
+
     private val httpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .cache(App.instance.httpCache())
@@ -43,6 +59,7 @@ object ApiClient {
             .readTimeout(2, TimeUnit.MINUTES)
             .writeTimeout(1, TimeUnit.MINUTES)
             .addInterceptor(logger)
+            .addInterceptor(jwtHeaderInterceptor)
             .addInterceptor { chain ->
                 chain.proceed(
                     chain.request()

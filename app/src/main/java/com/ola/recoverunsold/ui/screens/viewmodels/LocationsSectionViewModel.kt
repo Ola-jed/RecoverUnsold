@@ -15,7 +15,6 @@ import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
-import com.ola.recoverunsold.utils.store.TokenStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,7 +23,6 @@ import javax.inject.Inject
 class LocationsSectionViewModel @Inject constructor(
     private val locationServiceWrapper: LocationServiceWrapper
 ) : ViewModel() {
-    private val token = TokenStore.get()!!
     var locationsGetResponse: ApiCallResult<Page<Location>> by mutableStateOf(ApiCallResult.Inactive)
     private var paginationQuery by mutableStateOf(PaginationQuery())
 
@@ -36,7 +34,7 @@ class LocationsSectionViewModel @Inject constructor(
         locationsGetResponse = ApiCallResult.Loading
         viewModelScope.launch {
             locationsGetResponse = locationServiceWrapper
-                .getLocations(token.bearerToken, paginationQuery)
+                .getLocations(paginationQuery)
                 .toApiCallResult()
         }
     }
@@ -53,7 +51,7 @@ class LocationsSectionViewModel @Inject constructor(
 
     fun deleteLocation(location: Location, onSuccess: () -> Unit, onFailure: () -> Unit) {
         viewModelScope.launch {
-            val response = locationServiceWrapper.deleteLocation(token.bearerToken, location.id)
+            val response = locationServiceWrapper.deleteLocation(location.id)
             if (response.isSuccessful) {
                 onSuccess()
             } else {

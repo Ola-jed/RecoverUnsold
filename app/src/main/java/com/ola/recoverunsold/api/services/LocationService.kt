@@ -8,7 +8,6 @@ import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -34,14 +33,12 @@ interface LocationService : BaseApiService {
 
     @GET(ApiUrls.locationsUrl)
     suspend fun getLocations(
-        @Header("Authorization") authorization: String,
         @QueryMap pagination: Map<String, String>
     ): Response<Page<Location>>
 
     @POST(ApiUrls.locationsUrl)
     @Multipart
     suspend fun createLocation(
-        @Header("Authorization") authorization: String,
         @Part image: MultipartBody.Part? = null,
         @Part("indication") indication: RequestBody? = null,
         @Part("name") name: RequestBody,
@@ -52,7 +49,6 @@ interface LocationService : BaseApiService {
     @PUT(ApiUrls.locationsUrl + "/{id}")
     @Multipart
     suspend fun updateLocation(
-        @Header("Authorization") authorization: String,
         @Path("id") id: String,
         @Part image: MultipartBody.Part? = null,
         @Part("indication") indication: RequestBody? = null,
@@ -63,7 +59,6 @@ interface LocationService : BaseApiService {
 
     @DELETE(ApiUrls.locationsUrl + "/{id}")
     suspend fun deleteLocation(
-        @Header("Authorization") authorization: String,
         @Path("id") id: String
     ): NoContentResponse
 }

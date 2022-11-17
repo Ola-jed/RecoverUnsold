@@ -13,7 +13,6 @@ import com.ola.recoverunsold.models.Distributor
 import com.ola.recoverunsold.utils.misc.nullIfBlank
 import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
-import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
 import com.ola.recoverunsold.utils.validation.FormState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +24,6 @@ class DistributorAccountViewModel @Inject constructor(
     private val accountService: AccountService
 ) : ViewModel() {
     private val distributor = (UserObserver.user.value!! as Distributor)
-    private val token = TokenStore.get()!!.bearerToken
     var phone by mutableStateOf(distributor.phone)
     var username by mutableStateOf(distributor.username)
     var taxId by mutableStateOf(distributor.taxId)
@@ -38,7 +36,6 @@ class DistributorAccountViewModel @Inject constructor(
         accountApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             accountApiCallResult = accountService.updateDistributor(
-                token,
                 DistributorUpdateRequest(
                     username = username,
                     phone = phone,
@@ -64,7 +61,7 @@ class DistributorAccountViewModel @Inject constructor(
         accountApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             accountApiCallResult = accountService
-                .deleteAccount(token)
+                .deleteAccount()
                 .toApiCallResult(onDeleteSuccess)
         }
     }

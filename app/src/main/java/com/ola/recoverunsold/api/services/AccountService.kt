@@ -10,40 +10,30 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.PUT
 
 interface AccountService : BaseApiService {
     @GET(ApiUrls.accountUrl)
-    suspend fun getCustomer(
-        @Header("Authorization") authorization: String
-    ): Response<Customer>
+    suspend fun getCustomer(): Response<Customer>
 
     @GET(ApiUrls.accountUrl)
-    suspend fun getDistributor(
-        @Header("Authorization") authorization: String
-    ): Response<Distributor>
+    suspend fun getDistributor(): Response<Distributor>
 
     @PUT(ApiUrls.customerAccountUrl)
     suspend fun updateCustomer(
-        @Header("Authorization") authorization: String,
         @Body customerUpdateRequest: CustomerUpdateRequest
     ): NoContentResponse
 
     @PUT(ApiUrls.distributorAccountUrl)
     suspend fun updateDistributor(
-        @Header("Authorization") authorization: String,
         @Body distributorUpdateRequest: DistributorUpdateRequest
     ): NoContentResponse
 
     @PUT(ApiUrls.accountPasswordUrl)
     suspend fun updatePassword(
-        @Header("Authorization") authorization: String,
         @Body passwordUpdateRequest: PasswordUpdateRequest
     ): NoContentResponse
 
     @DELETE(ApiUrls.accountUrl)
-    suspend fun deleteAccount(
-        @Header("Authorization") authorization: String
-    ): NoContentResponse
+    suspend fun deleteAccount(): NoContentResponse
 }

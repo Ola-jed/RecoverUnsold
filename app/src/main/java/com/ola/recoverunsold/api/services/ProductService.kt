@@ -10,7 +10,6 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -40,7 +39,6 @@ interface ProductService : BaseApiService {
     @Multipart
     suspend fun createProduct(
         @Path("id") id: String,
-        @Header("Authorization") authorization: String,
         @Part("name") name: RequestBody,
         @Part("description") description: RequestBody,
         @Part images: List<MultipartBody.Part>? = null
@@ -49,13 +47,11 @@ interface ProductService : BaseApiService {
     @PUT(ApiUrls.productsUrl + "/{id}")
     suspend fun updateProduct(
         @Path("id") id: String,
-        @Header("Authorization") authorization: String,
         @Body productUpdateRequest: ProductUpdateRequest
     ): NoContentResponse
 
     @DELETE(ApiUrls.productsUrl + "/{id}")
     suspend fun deleteProduct(
         @Path("id") id: String,
-        @Header("Authorization") authorization: String
     ): NoContentResponse
 }

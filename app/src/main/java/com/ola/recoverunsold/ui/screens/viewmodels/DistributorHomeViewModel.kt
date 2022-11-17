@@ -13,7 +13,6 @@ import com.ola.recoverunsold.models.DistributorHomeData
 import com.ola.recoverunsold.utils.misc.minusSeconds
 import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
-import com.ola.recoverunsold.utils.store.TokenStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,7 +27,6 @@ private const val secondsPerWeek: ULong = 604800UL
 class DistributorHomeViewModel @Inject constructor(
     private val homeService: HomeService
 ) : ViewModel() {
-    private val token = TokenStore.get()!!.bearerToken
     var homeDataApiCallResult: ApiCallResult<DistributorHomeData> by mutableStateOf(ApiCallResult.Inactive)
     var periodQuery: PeriodQuery by mutableStateOf(
         PeriodQuery(
@@ -49,7 +47,7 @@ class DistributorHomeViewModel @Inject constructor(
         homeDataApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             homeDataApiCallResult = homeService
-                .getDistributorHomeData(token = token, period = periodQuery.toQueryMap())
+                .getDistributorHomeData(periodQuery.toQueryMap())
                 .toApiCallResult()
         }
     }
@@ -58,7 +56,7 @@ class DistributorHomeViewModel @Inject constructor(
         viewModelScope.launch {
             _isRefreshing.emit(true)
             homeDataApiCallResult = homeService
-                .getDistributorHomeData(token = token, period = periodQuery.toQueryMap())
+                .getDistributorHomeData(periodQuery.toQueryMap())
                 .toApiCallResult()
             _isRefreshing.emit(false)
         }

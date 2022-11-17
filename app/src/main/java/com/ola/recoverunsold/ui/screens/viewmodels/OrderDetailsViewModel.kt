@@ -17,7 +17,6 @@ import com.ola.recoverunsold.models.Opinion
 import com.ola.recoverunsold.models.Order
 import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
-import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -32,7 +31,6 @@ class OrderDetailsViewModel @AssistedInject constructor(
     private val opinionsService: OpinionsService,
     @Assisted val orderId: String
 ) : ViewModel() {
-    private val token = TokenStore.get()!!.bearerToken
     var orderApiCallResult: ApiCallResult<Order> by mutableStateOf(ApiCallResult.Inactive)
     var opinionComment by mutableStateOf("")
     var opinionCommentApiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive)
@@ -50,7 +48,7 @@ class OrderDetailsViewModel @AssistedInject constructor(
         opinionCommentApiCallResult = ApiCallResult.Inactive
         viewModelScope.launch {
             orderApiCallResult = ordersServiceWrapper
-                .getOrder(token, orderId)
+                .getOrder(orderId)
                 .toApiCallResult()
         }
     }
@@ -60,7 +58,7 @@ class OrderDetailsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             _isRefreshing.emit(true)
             orderApiCallResult = ordersServiceWrapper
-                .getOrder(token, orderId)
+                .getOrder(orderId)
                 .toApiCallResult()
             _isRefreshing.emit(false)
         }
@@ -71,7 +69,6 @@ class OrderDetailsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val response = opinionsService.createOpinion(
                 orderId,
-                token,
                 OpinionCreateRequest(opinionComment)
             )
             opinionCommentApiCallResult = if (response.isSuccessful) {
@@ -84,7 +81,7 @@ class OrderDetailsViewModel @AssistedInject constructor(
 
     fun deleteOpinion(opinion: Opinion, onSuccess: () -> Unit, onFailure: () -> Unit) {
         viewModelScope.launch {
-            val response = opinionsService.deleteOpinion(opinion.id, token)
+            val response = opinionsService.deleteOpinion(opinion.id)
             if (response.isSuccessful) {
                 onSuccess()
             } else {
@@ -95,7 +92,7 @@ class OrderDetailsViewModel @AssistedInject constructor(
 
     fun acceptOrder(onSuccess: () -> Unit, onFailure: () -> Unit) {
         viewModelScope.launch {
-            val response = ordersServiceWrapper.acceptOrder(token, orderId)
+            val response = ordersServiceWrapper.acceptOrder(orderId)
             if (response.isSuccessful) {
                 getOrder()
                 onSuccess()
@@ -107,7 +104,7 @@ class OrderDetailsViewModel @AssistedInject constructor(
 
     fun rejectOrder(onSuccess: () -> Unit, onFailure: () -> Unit) {
         viewModelScope.launch {
-            val response = ordersServiceWrapper.rejectOrder(token, orderId)
+            val response = ordersServiceWrapper.rejectOrder(orderId)
             if (response.isSuccessful) {
                 getOrder()
                 onSuccess()
@@ -119,7 +116,7 @@ class OrderDetailsViewModel @AssistedInject constructor(
 
     fun completeOrder(onSuccess: () -> Unit, onFailure: () -> Unit) {
         viewModelScope.launch {
-            val response = ordersServiceWrapper.completeOrder(token, orderId)
+            val response = ordersServiceWrapper.completeOrder(orderId)
             if (response.isSuccessful) {
                 getOrder()
                 onSuccess()

@@ -13,7 +13,6 @@ import com.ola.recoverunsold.models.Customer
 import com.ola.recoverunsold.utils.misc.nullIfBlank
 import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
-import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
 import com.ola.recoverunsold.utils.validation.FormState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +24,6 @@ class CustomerAccountViewModel @Inject constructor(
     private val accountService: AccountService
 ) : ViewModel() {
     private val customer = (UserObserver.user.value!! as Customer)
-    private val token = TokenStore.get()!!
     var username by mutableStateOf(customer.username)
     var firstName by mutableStateOf(customer.firstName ?: "")
     var lastName by mutableStateOf(customer.lastName ?: "")
@@ -36,7 +34,6 @@ class CustomerAccountViewModel @Inject constructor(
         accountApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             accountApiCallResult = accountService.updateCustomer(
-                token.bearerToken,
                 CustomerUpdateRequest(username, firstName.nullIfBlank(), lastName.nullIfBlank())
             ).toApiCallResult {
                 UserObserver.update(
@@ -54,7 +51,7 @@ class CustomerAccountViewModel @Inject constructor(
         accountApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             accountApiCallResult = accountService
-                .deleteAccount(token.bearerToken)
+                .deleteAccount()
                 .toApiCallResult(onDeleteSuccess)
         }
     }

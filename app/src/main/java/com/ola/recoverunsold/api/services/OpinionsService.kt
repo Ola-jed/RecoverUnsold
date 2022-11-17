@@ -11,26 +11,22 @@ interface OpinionsService : BaseApiService {
     @POST(ApiUrls.ordersUrl + "/{id}/Opinions")
     suspend fun createOpinion(
         @Path("id") id: String,
-        @Header("Authorization") authorization: String,
         @Body opinionCreateRequest: OpinionCreateRequest
     ): Response<Opinion>
 
     @POST(ApiUrls.opinionsUrl + "/{id}")
     suspend fun getOpinion(
         @Path("id") id: String,
-        @Header("Authorization") authorization: String
     ): Response<Opinion>
 
     @PUT(ApiUrls.opinionsUrl + "/{id}")
     suspend fun updateOpinion(
         @Path("id") id: String,
-        @Header("Authorization") authorization: String,
         @Body opinionUpdateRequest: OpinionUpdateRequest
     ): NoContentResponse
 
     @DELETE(ApiUrls.opinionsUrl + "/{id}")
     suspend fun deleteOpinion(
         @Path("id") id: String,
-        @Header("Authorization") authorization: String
     ): NoContentResponse
 }

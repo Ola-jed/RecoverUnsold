@@ -9,58 +9,43 @@ import com.ola.recoverunsold.models.Page
 import retrofit2.Response
 
 class OrderServiceWrapper(private val orderService: OrderService) {
-    suspend fun getOrder(authorization: String, id: String): Response<Order> {
-        return orderService.getOrder(authorization, id)
+    suspend fun getOrder(id: String): Response<Order> {
+        return orderService.getOrder(id)
     }
 
     suspend fun getCustomerOrders(
-        authorization: String,
         orderFilterQuery: OrderFilterQuery
-    ): Response<Page<Order>> {
-        return orderService.getCustomerOrders(authorization, orderFilterQuery.toQueryMap())
-    }
+    ): Response<Page<Order>> = orderService.getCustomerOrders(orderFilterQuery.toQueryMap())
 
     suspend fun getDistributorOrders(
-        authorization: String,
         orderFilterQuery: OrderFilterQuery
     ): Response<Page<Order>> {
-        return orderService.getDistributorOrders(authorization, orderFilterQuery.toQueryMap())
+        return orderService.getDistributorOrders(orderFilterQuery.toQueryMap())
     }
 
     suspend fun getOfferOrders(
-        authorization: String,
         id: String,
         orderFilterQuery: OrderFilterQuery
     ): Response<Page<Order>> {
-        return orderService.getOfferOrders(authorization, id, orderFilterQuery.toQueryMap())
+        return orderService.getOfferOrders(id, orderFilterQuery.toQueryMap())
     }
 
     suspend fun createOrder(
-        authorization: String,
         orderId: String,
         orderCreateRequest: OrderCreateRequest
     ): Response<Order> {
-        return orderService.createOrder(authorization, orderId, orderCreateRequest)
+        return orderService.createOrder(orderId, orderCreateRequest)
     }
 
-    suspend fun acceptOrder(
-        authorization: String,
-        orderId: String
-    ): NoContentResponse {
-        return orderService.acceptOrder(authorization, orderId)
+    suspend fun acceptOrder(orderId: String): NoContentResponse {
+        return orderService.acceptOrder(orderId)
     }
 
-    suspend fun rejectOrder(
-        authorization: String,
-        orderId: String
-    ): NoContentResponse {
-        return orderService.rejectOrder(authorization, orderId)
+    suspend fun rejectOrder(orderId: String): NoContentResponse {
+        return orderService.rejectOrder(orderId)
     }
 
-    suspend fun completeOrder(
-        authorization: String,
-        orderId: String
-    ): NoContentResponse {
-        return orderService.completeOrder(authorization, orderId)
+    suspend fun completeOrder(orderId: String): NoContentResponse {
+        return orderService.completeOrder(orderId)
     }
 }

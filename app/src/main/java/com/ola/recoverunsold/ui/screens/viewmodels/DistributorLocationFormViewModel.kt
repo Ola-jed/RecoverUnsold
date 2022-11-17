@@ -60,7 +60,7 @@ class DistributorLocationFormViewModel @AssistedInject constructor(
         )
         viewModelScope.launch {
             apiCallResult = locationServiceWrapper
-                .createLocation(token, locationRequest)
+                .createLocation(locationRequest)
                 .toApiCallResult()
         }
     }
@@ -84,11 +84,7 @@ class DistributorLocationFormViewModel @AssistedInject constructor(
             }
         )
         viewModelScope.launch {
-            val response = locationServiceWrapper.updateLocation(
-                token,
-                location?.id!!,
-                locationRequest
-            )
+            val response = locationServiceWrapper.updateLocation(location?.id!!, locationRequest)
             apiCallResult = if (response.isSuccessful) {
                 ApiCallResult.Success(_data = Location.Dummy)
             } else {

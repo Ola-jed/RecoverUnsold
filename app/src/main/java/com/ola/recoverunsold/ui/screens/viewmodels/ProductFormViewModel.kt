@@ -18,7 +18,6 @@ import com.ola.recoverunsold.models.Product
 import com.ola.recoverunsold.utils.misc.createFile
 import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
-import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.validation.FormState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -33,7 +32,6 @@ class ProductFormViewModel @AssistedInject constructor(
     @Assisted private val offerId: String,
     @Assisted private val product: Product? = null
 ) : ViewModel() {
-    private val bearerToken = TokenStore.get()!!.bearerToken
     var formState by mutableStateOf(FormState())
     var name by mutableStateOf(product?.name ?: "")
     var description by mutableStateOf(product?.description ?: "")
@@ -55,11 +53,7 @@ class ProductFormViewModel @AssistedInject constructor(
             }
         )
         viewModelScope.launch {
-            val response = productServiceWrapper.createProduct(
-                offerId,
-                bearerToken,
-                productCreateRequest
-            )
+            val response = productServiceWrapper.createProduct(offerId, productCreateRequest)
             productApiCall = if (response.isSuccessful) {
                 ApiCallResult.Success(_data = Unit)
             } else {
@@ -72,7 +66,7 @@ class ProductFormViewModel @AssistedInject constructor(
         productApiCall = ApiCallResult.Loading
         viewModelScope.launch {
             productApiCall = productServiceWrapper
-                .updateProduct(product?.id!!, bearerToken, ProductUpdateRequest(name, description))
+                .updateProduct(product?.id!!, ProductUpdateRequest(name, description))
                 .toApiCallResult()
         }
     }

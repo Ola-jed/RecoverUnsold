@@ -15,7 +15,6 @@ import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
-import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -57,9 +56,8 @@ class DistributorOffersViewModel @Inject constructor(
     }
 
     fun deleteOffer(offer: Offer, onSuccess: () -> Unit, onFailure: () -> Unit) {
-        val token = TokenStore.get()!!
         viewModelScope.launch {
-            val response = offerServiceWrapper.deleteOffer(token.bearerToken, offer.id)
+            val response = offerServiceWrapper.deleteOffer(offer.id)
             if (response.isSuccessful) {
                 onSuccess()
             } else {

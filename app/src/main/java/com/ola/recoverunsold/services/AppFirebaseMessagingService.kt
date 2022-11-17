@@ -43,7 +43,7 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
         }
         scope.launch {
             try {
-                fcmTokenService.createFcmToken(apiToken.bearerToken, FcmTokenCreateRequest(token))
+                fcmTokenService.createFcmToken(FcmTokenCreateRequest(token))
                 super.onNewToken(token)
             } catch (e: Exception) {
                 Log.d("AppFirebaseMessagingService", "Token sending failed : ${e.message}")

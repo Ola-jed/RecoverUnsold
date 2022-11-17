@@ -14,7 +14,6 @@ import com.ola.recoverunsold.models.Order
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
-import com.ola.recoverunsold.utils.store.TokenStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,7 +22,6 @@ import javax.inject.Inject
 class CustomerOrderViewModel @Inject constructor(
     private val orderServiceWrapper: OrderServiceWrapper
 ) : ViewModel() {
-    private val token = TokenStore.get()!!.bearerToken
     var ordersGetResponse: ApiCallResult<Page<Order>> by mutableStateOf(ApiCallResult.Inactive)
     var orderQuery by mutableStateOf(OrderFilterQuery())
 
@@ -35,7 +33,7 @@ class CustomerOrderViewModel @Inject constructor(
         ordersGetResponse = ApiCallResult.Loading
         viewModelScope.launch {
             ordersGetResponse = orderServiceWrapper
-                .getCustomerOrders(token, orderQuery)
+                .getCustomerOrders(orderQuery)
                 .toApiCallResult()
         }
     }

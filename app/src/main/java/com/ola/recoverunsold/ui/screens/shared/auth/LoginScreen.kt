@@ -103,16 +103,13 @@ fun LoginScreen(
                                     .token
                                     .addOnSuccessListener {
                                         runBlocking {
-                                            fcmService.createFcmToken(
-                                                token.bearerToken,
-                                                FcmTokenCreateRequest(it)
-                                            )
+                                            fcmService.createFcmToken(FcmTokenCreateRequest(it))
                                         }
                                     }
                                 val response = if (token.role == TokenRoles.CUSTOMER) {
-                                    accountService.getCustomer(token.bearerToken)
+                                    accountService.getCustomer()
                                 } else {
-                                    accountService.getDistributor(token.bearerToken)
+                                    accountService.getDistributor()
                                 }
                                 if (response.isSuccessful) {
                                     val user = response.body()

@@ -11,7 +11,6 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -44,7 +43,6 @@ interface OfferService : BaseApiService {
     @POST(ApiUrls.offersUrl)
     @Multipart
     suspend fun createOffer(
-        @Header("Authorization") authorization: String,
         @Part("startDate") startDate: RequestBody,
         @Part("duration") duration: RequestBody,
         @Part("beneficiaries") beneficiaries: RequestBody? = null,
@@ -55,14 +53,12 @@ interface OfferService : BaseApiService {
 
     @PUT(ApiUrls.offersUrl + "/{id}")
     suspend fun updateOffer(
-        @Header("Authorization") authorization: String,
         @Path("id") id: String,
         @Body offerUpdateRequest: OfferUpdateRequest
     ): NoContentResponse
 
     @DELETE(ApiUrls.offersUrl + "/{id}")
     suspend fun deleteOffer(
-        @Header("Authorization") authorization: String,
         @Path("id") id: String
     ): NoContentResponse
 }

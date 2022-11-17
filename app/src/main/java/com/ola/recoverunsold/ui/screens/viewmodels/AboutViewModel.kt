@@ -28,7 +28,7 @@ class AboutViewModel @Inject constructor(private val reviewsService: ReviewsServ
             apiCallResult = ApiCallResult.Loading
             viewModelScope.launch {
                 apiCallResult = reviewsService
-                    .publishReview(token, ReviewMessageRequest(message))
+                    .publishReview(ReviewMessageRequest(message))
                     .toApiCallResult()
             }
         }

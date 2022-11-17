@@ -21,7 +21,6 @@ import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
-import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.validation.FormState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -35,7 +34,6 @@ class DistributorOfferFormViewModel @AssistedInject constructor(
     private val locationServiceWrapper: LocationServiceWrapper,
     @Assisted private val offer: Offer?
 ) : ViewModel() {
-    private val bearerToken = TokenStore.get()!!.bearerToken
     private var locationPaginationQuery by mutableStateOf(PaginationQuery(perPage = 50))
     private var locationsResponse by mutableStateOf(ApiStatus.INACTIVE)
     var formState by mutableStateOf(FormState())
@@ -62,10 +60,7 @@ class DistributorOfferFormViewModel @AssistedInject constructor(
     private fun fetchPublishedLocations() {
         locationsResponse = ApiStatus.LOADING
         viewModelScope.launch {
-            val response = locationServiceWrapper.getLocations(
-                bearerToken,
-                locationPaginationQuery
-            )
+            val response = locationServiceWrapper.getLocations(locationPaginationQuery)
             if (response.isSuccessful) {
                 val responsePage = response.body()!!
                 locations.addAll(responsePage.items)
@@ -89,7 +84,7 @@ class DistributorOfferFormViewModel @AssistedInject constructor(
         )
         viewModelScope.launch {
             offerResponse = offerServiceWrapper
-                .createOffer(bearerToken, offerCreateRequest)
+                .createOffer(offerCreateRequest)
                 .toApiCallResult()
         }
     }
@@ -106,7 +101,6 @@ class DistributorOfferFormViewModel @AssistedInject constructor(
         )
         viewModelScope.launch {
             val response = offerServiceWrapper.updateOffer(
-                bearerToken,
                 offer!!.id,
                 offerUpdateRequest
             )

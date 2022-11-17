@@ -15,7 +15,6 @@ import com.ola.recoverunsold.models.AlertType
 import com.ola.recoverunsold.models.DistributorLabel
 import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
-import com.ola.recoverunsold.utils.store.TokenStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +24,6 @@ class AlertsViewModel @Inject constructor(
     private val alertsService: AlertsService,
     private val distributorsService: DistributorService
 ) : ViewModel() {
-    private val token = TokenStore.get()!!.bearerToken
     var alertsApiCallResult: ApiCallResult<List<Alert>> by mutableStateOf(ApiCallResult.Inactive)
     var distributorsLabels: List<DistributorLabel> = emptyList()
     var alertType by mutableStateOf(AlertType.AnyOfferPublished)
@@ -40,7 +38,7 @@ class AlertsViewModel @Inject constructor(
         alertsApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             alertsApiCallResult = alertsService
-                .getAlerts(token)
+                .getAlerts()
                 .toApiCallResult()
         }
     }
@@ -64,7 +62,7 @@ class AlertsViewModel @Inject constructor(
                     distributorLabel!!.id
                 }
             )
-            val response = alertsService.createAlert(token, alertCreateRequest)
+            val response = alertsService.createAlert(alertCreateRequest)
             if (response.isSuccessful) {
                 onSuccess()
             } else {
@@ -75,7 +73,7 @@ class AlertsViewModel @Inject constructor(
 
     fun deleteAlert(alert: Alert, onSuccess: () -> Unit, onFailure: () -> Unit) {
         viewModelScope.launch {
-            val response = alertsService.deleteAlert(token, alert.id)
+            val response = alertsService.deleteAlert(alert.id)
             if (response.isSuccessful) {
                 onSuccess()
             } else {

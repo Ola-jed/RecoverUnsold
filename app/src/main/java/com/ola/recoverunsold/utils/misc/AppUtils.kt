@@ -11,7 +11,7 @@ suspend fun Context.logout() {
     if (token != null) {
         try {
             val fcmTokenService: FcmTokenService = ApiClient.buildService()
-            fcmTokenService.deleteAllFcmTokens(token.bearerToken)
+            fcmTokenService.deleteAllFcmTokens()
         } catch (e: Exception) {
             // Nothing because we should not hinder the user experience
         }

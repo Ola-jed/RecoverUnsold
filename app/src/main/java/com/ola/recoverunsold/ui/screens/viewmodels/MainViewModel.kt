@@ -45,10 +45,10 @@ class MainViewModel @Inject constructor(private val accountService: AccountServi
                     } else {
                         val response = if (token.role == TokenRoles.CUSTOMER) {
                             defineShortcutsAsCustomer(context)
-                            accountService.getCustomer(token.bearerToken)
+                            accountService.getCustomer()
                         } else {
                             defineShortcutsAsDistributor(context)
-                            accountService.getDistributor(token.bearerToken)
+                            accountService.getDistributor()
                         }
                         if (response.isSuccessful) {
                             val user = response.body()

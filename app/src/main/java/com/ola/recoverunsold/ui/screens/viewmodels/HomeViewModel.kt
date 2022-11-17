@@ -11,7 +11,6 @@ import com.ola.recoverunsold.api.services.HomeService
 import com.ola.recoverunsold.models.CustomerHomeData
 import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
-import com.ola.recoverunsold.utils.store.TokenStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +22,6 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(private val homeService: HomeService) : ViewModel() {
     var homeDataApiCallResult: ApiCallResult<CustomerHomeData> by mutableStateOf(ApiCallResult.Inactive)
     private val _isRefreshing = MutableStateFlow(false)
-    private val token = TokenStore.get()?.bearerToken
 
     val isRefreshing: StateFlow<Boolean>
         get() = _isRefreshing.asStateFlow()
@@ -36,7 +34,7 @@ class HomeViewModel @Inject constructor(private val homeService: HomeService) : 
         homeDataApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             homeDataApiCallResult = homeService
-                .getCustomerHomeData(token)
+                .getCustomerHomeData()
                 .toApiCallResult()
         }
     }
@@ -45,7 +43,7 @@ class HomeViewModel @Inject constructor(private val homeService: HomeService) : 
         viewModelScope.launch {
             _isRefreshing.emit(true)
             homeDataApiCallResult = homeService
-                .getCustomerHomeData(token)
+                .getCustomerHomeData()
                 .toApiCallResult()
             _isRefreshing.emit(false)
         }

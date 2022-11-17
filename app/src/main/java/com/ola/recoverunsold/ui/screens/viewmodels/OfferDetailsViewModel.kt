@@ -55,7 +55,7 @@ class OfferDetailsViewModel @AssistedInject constructor(
 
     fun deleteProduct(product: Product, onSuccess: () -> Unit, onError: () -> Unit) {
         viewModelScope.launch {
-            val response = productServiceWrapper.deleteProduct(product.id, token)
+            val response = productServiceWrapper.deleteProduct(product.id)
             if (response.isSuccessful) {
                 onSuccess()
             } else {
@@ -68,7 +68,6 @@ class OfferDetailsViewModel @AssistedInject constructor(
         orderApiCallResult = ApiCallResult.Loading
         viewModelScope.launch {
             val response = orderService.createOrder(
-                token,
                 offerId,
                 OrderCreateRequest(withdrawalDate)
             )

@@ -18,10 +18,9 @@ class LocationServiceWrapper(private val locationService: LocationService) {
     }
 
     suspend fun getLocations(
-        bearerToken: String,
         paginationQuery: PaginationQuery
     ): Response<Page<Location>> {
-        return locationService.getLocations(bearerToken, paginationQuery.toQueryMap())
+        return locationService.getLocations(paginationQuery.toQueryMap())
     }
 
     suspend fun searchLocations(
@@ -36,11 +35,9 @@ class LocationServiceWrapper(private val locationService: LocationService) {
     }
 
     suspend fun createLocation(
-        bearerToken: String,
         locationCreateOrUpdateRequest: LocationCreateOrUpdateRequest
     ): Response<Location> {
         return locationService.createLocation(
-            bearerToken,
             locationCreateOrUpdateRequest.image,
             locationCreateOrUpdateRequest.indication?.toMultipartRequestBody(),
             locationCreateOrUpdateRequest.name.toMultipartRequestBody(),
@@ -50,12 +47,10 @@ class LocationServiceWrapper(private val locationService: LocationService) {
     }
 
     suspend fun updateLocation(
-        bearerToken: String,
         id: String,
         locationCreateOrUpdateRequest: LocationCreateOrUpdateRequest
     ): NoContentResponse {
         return locationService.updateLocation(
-            bearerToken,
             id,
             locationCreateOrUpdateRequest.image,
             locationCreateOrUpdateRequest.indication?.toMultipartRequestBody(),
@@ -66,9 +61,8 @@ class LocationServiceWrapper(private val locationService: LocationService) {
     }
 
     suspend fun deleteLocation(
-        bearerToken: String,
         id: String
     ): NoContentResponse {
-        return locationService.deleteLocation(bearerToken, id)
+        return locationService.deleteLocation(id)
     }
 }
