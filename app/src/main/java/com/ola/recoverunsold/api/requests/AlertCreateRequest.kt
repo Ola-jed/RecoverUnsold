@@ -1,8 +1,11 @@
 package com.ola.recoverunsold.api.requests
 
 import com.ola.recoverunsold.models.AlertType
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class AlertCreateRequest(
-    val alertType: AlertType,
-    val distributorId: String? = null
+    @Json(name = "alertType") val alertType: AlertType,
+    @Json(name = "distributorId") val distributorId: String? = null
 )

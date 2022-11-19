@@ -1,11 +1,14 @@
 package com.ola.recoverunsold.api.responses
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import java.util.Date
 
+@JsonClass(generateAdapter = true)
 data class Token(
-    val role: String,
-    val token: String,
-    val expirationDate: Date
+    @Json(name = "role") val role: String,
+    @Json(name = "token") val token: String,
+    @Json(name = "expirationDate") val expirationDate: Date
 ) {
     val bearerToken get() = "Bearer $token"
 }

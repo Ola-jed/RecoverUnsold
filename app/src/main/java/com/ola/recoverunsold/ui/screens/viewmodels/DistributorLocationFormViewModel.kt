@@ -37,7 +37,7 @@ class DistributorLocationFormViewModel @AssistedInject constructor(
     var name by mutableStateOf(location?.name ?: "")
     var indication by mutableStateOf(location?.indication ?: "")
     var imageUri by mutableStateOf<Uri?>(null)
-    var latLong by mutableStateOf(location?.coordinates ?: LatLong.zero())
+    var latLong by mutableStateOf(location?.coordinates ?: LatLong.zero)
     val token = TokenStore.get()!!.bearerToken
 
     fun create(context: Context) {

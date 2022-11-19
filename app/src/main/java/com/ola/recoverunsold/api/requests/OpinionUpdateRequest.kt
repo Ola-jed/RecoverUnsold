@@ -1,3 +1,7 @@
 package com.ola.recoverunsold.api.requests
 
-data class OpinionUpdateRequest(val comment: String)
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
+data class OpinionUpdateRequest(@Json(name = "comment") val comment: String)

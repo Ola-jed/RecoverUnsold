@@ -1,15 +1,16 @@
 package com.ola.recoverunsold.api.core
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.ola.recoverunsold.App
 import com.ola.recoverunsold.BuildConfig
 import com.ola.recoverunsold.api.services.BaseApiService
 import com.ola.recoverunsold.models.AlertType
 import com.ola.recoverunsold.models.OrderStatus
+import com.ola.recoverunsold.utils.adapters.DateAdapter
+import com.ola.recoverunsold.utils.adapters.ULongAdapter
 import com.ola.recoverunsold.utils.misc.hasNetwork
 import com.ola.recoverunsold.utils.misc.httpCache
 import com.ola.recoverunsold.utils.store.TokenStore
+import com.squareup.moshi.Moshi
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -17,17 +18,19 @@ import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import java.lang.reflect.Type
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
 object ApiClient {
-    private val gson: Gson by lazy {
-        GsonBuilder().setLenient()
-            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-            .registerTypeAdapter(OrderStatus::class.java, OrderStatus.Serializer())
-            .registerTypeAdapter(AlertType::class.java, AlertType.Serializer())
-            .create()
+    val moshi: Moshi by lazy {
+        Moshi.Builder()
+            .add(AlertType.JsonAdapter())
+            .add(OrderStatus.JsonAdapter())
+            .add(Date::class.java, DateAdapter)
+            .add(ULong::class.java, ULongAdapter)
+            .build()
     }
 
     private val logger = HttpLoggingInterceptor()
@@ -42,11 +45,10 @@ object ApiClient {
     private val jwtHeaderInterceptor = object : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val request = chain.request()
-            val bearerTokenHeaderValue =
-                TokenStore.get()?.bearerToken ?: return chain.proceed(request)
+            val tokenHeaderValue = TokenStore.get()?.bearerToken ?: return chain.proceed(request)
             return chain.proceed(
                 request.newBuilder()
-                    .header("Authorization", bearerTokenHeaderValue)
+                    .header("Authorization", tokenHeaderValue)
                     .build()
             )
         }
@@ -102,7 +104,7 @@ object ApiClient {
             .baseUrl(ApiUrls.apiBaseUrl)
             .client(httpClient)
             .addConverterFactory(nullOnEmptyConverterFactory)
-            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }
 

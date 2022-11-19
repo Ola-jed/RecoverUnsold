@@ -76,55 +76,57 @@ fun CustomerAccountScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            CustomerProfileInformationSection(
-                customer = user!! as Customer,
-                username = customerAccountServiceViewModel.username,
-                firstName = customerAccountServiceViewModel.firstName,
-                lastName = customerAccountServiceViewModel.lastName,
-                isEditing = isEditing,
-                onEditingStart = { isEditing = true },
-                onEditingEnd = {
-                    if (!customerAccountServiceViewModel.formState.isValid) {
-                        coroutineScope.launch {
-                            snackbarHostState.show(
-                                message = customerAccountServiceViewModel.formState.errorMessage
-                                    ?: Strings.get(R.string.invalid_data)
-                            )
-                        }
-                    } else {
-                        customerAccountServiceViewModel.updateCustomer()
-                        isEditing = false
-                    }
-                },
-                onEditingCancel = { isEditing = false },
-                loading = customerAccountServiceViewModel.accountApiCallResult.status == ApiStatus.LOADING,
-                onUsernameChange = { customerAccountServiceViewModel.username = it },
-                onFirstNameChange = { customerAccountServiceViewModel.firstName = it },
-                onLastNameChange = { customerAccountServiceViewModel.lastName = it },
-                onDelete = {
-                    customerAccountServiceViewModel.deleteCustomer {
-                        coroutineScope.launch {
-                            context.logout()
-                            navController.navigate(Routes.Home.path) {
-                                popUpTo(Routes.Home.path) { inclusive = true }
+            if (user != null) {
+                CustomerProfileInformationSection(
+                    customer = user!! as Customer,
+                    username = customerAccountServiceViewModel.username,
+                    firstName = customerAccountServiceViewModel.firstName,
+                    lastName = customerAccountServiceViewModel.lastName,
+                    isEditing = isEditing,
+                    onEditingStart = { isEditing = true },
+                    onEditingEnd = {
+                        if (!customerAccountServiceViewModel.formState.isValid) {
+                            coroutineScope.launch {
+                                snackbarHostState.show(
+                                    message = customerAccountServiceViewModel.formState.errorMessage
+                                        ?: Strings.get(R.string.invalid_data)
+                                )
                             }
-                            snackbarHostState.show(
-                                message = Strings.get(R.string.account_deleted_successfully)
-                            )
+                        } else {
+                            customerAccountServiceViewModel.updateCustomer()
+                            isEditing = false
                         }
+                    },
+                    onEditingCancel = { isEditing = false },
+                    loading = customerAccountServiceViewModel.accountApiCallResult.status == ApiStatus.LOADING,
+                    onUsernameChange = { customerAccountServiceViewModel.username = it },
+                    onFirstNameChange = { customerAccountServiceViewModel.firstName = it },
+                    onLastNameChange = { customerAccountServiceViewModel.lastName = it },
+                    onDelete = {
+                        customerAccountServiceViewModel.deleteCustomer {
+                            coroutineScope.launch {
+                                context.logout()
+                                navController.navigate(Routes.Home.path) {
+                                    popUpTo(Routes.Home.path) { inclusive = true }
+                                }
+                                snackbarHostState.show(
+                                    message = Strings.get(R.string.account_deleted_successfully)
+                                )
+                            }
+                        }
+                    },
+                    onValidationSuccess = {
+                        customerAccountServiceViewModel.formState = customerAccountServiceViewModel
+                            .formState
+                            .copy(isValid = true, errorMessage = null)
+                    },
+                    onValidationError = {
+                        customerAccountServiceViewModel.formState = customerAccountServiceViewModel
+                            .formState
+                            .copy(isValid = false, errorMessage = it)
                     }
-                },
-                onValidationSuccess = {
-                    customerAccountServiceViewModel.formState = customerAccountServiceViewModel
-                        .formState
-                        .copy(isValid = true, errorMessage = null)
-                },
-                onValidationError = {
-                    customerAccountServiceViewModel.formState = customerAccountServiceViewModel
-                        .formState
-                        .copy(isValid = false, errorMessage = it)
-                }
-            )
+                )
+            }
         }
     }
 }

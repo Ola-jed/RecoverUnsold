@@ -1,12 +1,16 @@
 package com.ola.recoverunsold.models
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class Page<T>(
-    val items: List<T>,
-    val pageNumber: Int,
-    val pageSize: Int,
-    val hasNext: Boolean,
-    val total: Int,
-    val baseUrl: String? = null,
-    val previousUrl: String? = null,
-    val nextUrl: String? = null
+    @Json(name = "items") val items: List<T>,
+    @Json(name = "pageNumber") val pageNumber: Int,
+    @Json(name = "pageSize") val pageSize: Int,
+    @Json(name = "hasNext") val hasNext: Boolean,
+    @Json(name = "total") val total: Int,
+    @Json(name = "baseUrl") val baseUrl: String? = null,
+    @Json(name = "previousUrl") val previousUrl: String? = null,
+    @Json(name = "nextUrl") val nextUrl: String? = null
 )

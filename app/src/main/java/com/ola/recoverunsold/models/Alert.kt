@@ -1,7 +1,11 @@
 package com.ola.recoverunsold.models
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class Alert(
-    val id: String,
-    val alertType: AlertType,
-    val distributorInformation: DistributorInformation? = null
+    @Json(name = "id") val id: String,
+    @Json(name = "alertType") val alertType: AlertType,
+    @Json(name = "distributorInformation") val distributorInformation: DistributorInformation? = null
 )

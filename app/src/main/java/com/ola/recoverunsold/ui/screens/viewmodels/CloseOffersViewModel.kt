@@ -28,7 +28,7 @@ class CloseOffersViewModel @Inject constructor(
     var offerDistanceFilterQuery by mutableStateOf(
         OfferDistanceFilterQuery(
             distance = 1.0,
-            latLong = LatLong.zero()
+            latLong = LatLong.zero
         )
     )
     var closeOffersApiResult: ApiCallResult<Page<OfferWithRelativeDistance>> by mutableStateOf(

@@ -1,9 +1,7 @@
 package com.ola.recoverunsold.models
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import java.lang.reflect.Type
+import com.squareup.moshi.FromJson
+import com.squareup.moshi.ToJson
 
 enum class OrderStatus {
     Pending,
@@ -11,13 +9,20 @@ enum class OrderStatus {
     Rejected,
     Completed;
 
-    internal class Serializer : JsonDeserializer<OrderStatus> {
-        override fun deserialize(
-            json: JsonElement?,
-            typeOfT: Type?,
-            context: JsonDeserializationContext?
-        ): OrderStatus {
-            return when (json?.asInt) {
+    internal class JsonAdapter {
+        @ToJson
+        fun toJson(orderStatus: OrderStatus): Int {
+            return when (orderStatus) {
+                Pending -> 0
+                Approved -> 1
+                Rejected -> 2
+                Completed -> 3
+            }
+        }
+
+        @FromJson
+        fun fromJson(value: Int): OrderStatus {
+            return when (value) {
                 0 -> Pending
                 1 -> Approved
                 2 -> Rejected

@@ -1,3 +1,7 @@
 package com.ola.recoverunsold.models
 
-data class FcmToken(val value: String)
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
+data class FcmToken(@Json(name = "value") val value: String)

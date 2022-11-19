@@ -1,16 +1,19 @@
 package com.ola.recoverunsold.models
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import java.util.Date
 
+@JsonClass(generateAdapter = true)
 data class Offer(
-    val id: String,
-    val startDate: Date,
-    val duration: ULong,
-    val onlinePayment: Boolean,
-    val beneficiaries: Int? = null,
-    val price: Double,
-    val createdAt: Date,
-    val distributorId: String,
-    val location: Location? = null,
-    val products: List<Product>? = null
+    @Json(name = "id") val id: String,
+    @Json(name = "startDate") val startDate: Date,
+    @Json(name = "duration") val duration: ULong,
+    @Json(name = "onlinePayment") val onlinePayment: Boolean,
+    @Json(name = "beneficiaries") val beneficiaries: Int? = null,
+    @Json(name = "price") val price: Double,
+    @Json(name = "createdAt") val createdAt: Date,
+    @Json(name = "distributorId") val distributorId: String,
+    @Json(name = "location") val location: Location? = null,
+    @Json(name = "products") val products: List<Product>? = null
 )

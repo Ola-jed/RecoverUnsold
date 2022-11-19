@@ -1,19 +1,19 @@
 package com.ola.recoverunsold.models
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import java.util.Date
 
+@JsonClass(generateAdapter = true)
 data class Location(
-    val id: String,
-    val name: String,
-    val coordinates: LatLong,
-    val indication: String? = null,
-    val image: String? = null,
-    val createdAt: Date
+    @Json(name = "id") val id: String,
+    @Json(name = "name") val name: String,
+    @Json(name = "coordinates") val coordinates: LatLong,
+    @Json(name = "indication") val indication: String? = null,
+    @Json(name = "image") val image: String? = null,
+    @Json(name = "createdAt") val createdAt: Date
 ) {
     companion object {
-        /**
-         * A fake location for api calls
-         */
-        val Dummy: Location = Location("", "", LatLong.zero(), createdAt = Date())
+        val Dummy: Location = Location("", "", LatLong.zero, createdAt = Date())
     }
 }

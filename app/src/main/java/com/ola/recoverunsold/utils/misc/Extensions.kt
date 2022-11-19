@@ -33,9 +33,9 @@ import androidx.core.content.getSystemService
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
-import com.google.gson.Gson
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
+import com.ola.recoverunsold.api.core.ApiClient
 import com.ola.recoverunsold.models.AlertType
 import com.ola.recoverunsold.models.DistributorHomeData
 import com.ola.recoverunsold.models.LatLong
@@ -76,7 +76,6 @@ private val colorsDeciles = arrayOf(
 private val dateTimeFormatter = DateFormat
     .getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault())
 private const val cacheSize = 5242880L
-val gson = Gson()
 
 /**
  * Returns a new String obtained by removing all the occurrences of a specific String
@@ -90,15 +89,15 @@ inline fun <reified T> String?.jsonDeserialize(): T? {
     return if (this == null) {
         null
     } else {
-        gson.fromJson(this, T::class.java)
+        ApiClient.moshi.adapter(T::class.java).fromJson(this)
     }
 }
 
 /**
  * Serialize any object to a json String
  */
-fun <T> T.jsonSerialize(): String {
-    return gson.toJson(this)
+inline fun <reified T> T.jsonSerialize(): String {
+    return ApiClient.moshi.adapter(T::class.java).toJson(this)
 }
 
 /**
