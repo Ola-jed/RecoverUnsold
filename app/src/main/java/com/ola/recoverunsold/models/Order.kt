@@ -8,7 +8,6 @@ import java.util.Date
 data class Order(
     @Json(name = "id") val id: String,
     @Json(name = "status") val status: OrderStatus,
-    @Json(name = "customerId") val customerId: String,
     @Json(name = "customer") val customer: Customer? = null,
     @Json(name = "offerId") val offerId: String,
     @Json(name = "offer") val offer: Offer?,
