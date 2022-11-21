@@ -59,8 +59,8 @@ import com.ola.recoverunsold.utils.store.UserObserver
 import com.ola.recoverunsold.utils.validation.EmailValidator
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 @Composable
 fun LoginScreen(
@@ -108,12 +108,11 @@ fun LoginScreen(
                                         userData.distributor()
                                     }
                                 )
-
                                 val fcmService = loginViewModel.fcmTokenService()
                                 FirebaseMessaging.getInstance()
                                     .token
                                     .addOnSuccessListener {
-                                        runBlocking {
+                                        CoroutineScope(Dispatchers.Main).launch {
                                             fcmService.createFcmToken(FcmTokenCreateRequest(it))
                                         }
                                     }
