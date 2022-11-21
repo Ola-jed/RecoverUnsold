@@ -10,7 +10,7 @@ import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.api.core.StatusCode
 import com.ola.recoverunsold.api.requests.LoginRequest
-import com.ola.recoverunsold.api.responses.Token
+import com.ola.recoverunsold.api.responses.AuthenticationResult
 import com.ola.recoverunsold.api.services.AccountService
 import com.ola.recoverunsold.api.services.AuthService
 import com.ola.recoverunsold.api.services.FcmTokenService
@@ -27,7 +27,7 @@ class LoginViewModel @Inject constructor(
     private val accountService: AccountService,
     private val fcmTokenService: FcmTokenService
 ) : ViewModel() {
-    var apiCallResult: ApiCallResult<Token> by mutableStateOf(ApiCallResult.Inactive)
+    var apiCallResult: ApiCallResult<AuthenticationResult> by mutableStateOf(ApiCallResult.Inactive)
     var email by mutableStateOf("")
     var password by mutableStateOf("")
     var formState by mutableStateOf(FormState())
@@ -41,9 +41,7 @@ class LoginViewModel @Inject constructor(
                 .login(LoginRequest(email, password))
                 .toApiCallResult()
             if (apiCallResult.status == ApiStatus.SUCCESS) {
-                onSuccess().also {
-                    loading = false
-                }
+                onSuccess().also { loading = false }
             } else {
                 loading = false
             }

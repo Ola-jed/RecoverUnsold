@@ -48,9 +48,9 @@ fun RecoverUnsoldTheme(
 
     val systemUiController = rememberSystemUiController()
     if (darkTheme) {
-        systemUiController.setSystemBarsColor(color = DarkColors.background)
+        systemUiController.setSystemBarsColor(color = DarkColors.primary)
     } else {
-        systemUiController.setSystemBarsColor(color = LightColors.background)
+        systemUiController.setSystemBarsColor(color = LightColors.primary)
     }
 
     MaterialTheme(

@@ -91,13 +91,24 @@ fun LoginScreen(
                     }
                 } else {
                     loginViewModel.login {
-                        val token = (loginViewModel.apiCallResult as ApiCallResult.Success)._data
+                        val authenticationResult =
+                            (loginViewModel.apiCallResult as ApiCallResult.Success)._data
                         coroutineScope.launch {
-                            if (token != null) {
+                            if (authenticationResult != null) {
+                                val token = authenticationResult.appToken
                                 tokenStore.removeToken()
                                 tokenStore.storeToken(token)
                                 TokenStore.init { token }
-                                val accountService = loginViewModel.accountService()
+
+                                val userData = authenticationResult.userData
+                                UserObserver.update(
+                                    if (userData.role == TokenRoles.CUSTOMER) {
+                                        userData.customer()
+                                    } else {
+                                        userData.distributor()
+                                    }
+                                )
+
                                 val fcmService = loginViewModel.fcmTokenService()
                                 FirebaseMessaging.getInstance()
                                     .token
@@ -106,21 +117,8 @@ fun LoginScreen(
                                             fcmService.createFcmToken(FcmTokenCreateRequest(it))
                                         }
                                     }
-                                val response = if (token.role == TokenRoles.CUSTOMER) {
-                                    accountService.getCustomer()
-                                } else {
-                                    accountService.getDistributor()
-                                }
-                                if (response.isSuccessful) {
-                                    val user = response.body()
-                                    if (user != null) {
-                                        UserObserver.update(user)
-                                    }
-                                }
                                 navController.navigate(Routes.Home.path) {
-                                    popUpTo(Routes.Home.path) {
-                                        inclusive = true
-                                    }
+                                    popUpTo(Routes.Home.path) { inclusive = true }
                                 }
                             }
                         }
@@ -171,7 +169,6 @@ fun LoginScreenContent(
     isSuccessful: Boolean
 ) {
     val focusManager = LocalFocusManager.current
-//    Log.e("LOADING", loading.toString())
 
     Column(
         modifier = modifier
@@ -285,9 +282,7 @@ fun LoginScreenContent(
             if (isSuccessful) {
                 LaunchedEffect(snackbarHostState) {
                     navController.navigate(Routes.Home.path) {
-                        popUpTo(Routes.Home.path) {
-                            inclusive = true
-                        }
+                        popUpTo(Routes.Home.path) { inclusive = true }
                     }
                 }
             }
