@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.ola.recoverunsold.R
 
@@ -22,8 +22,6 @@ fun LoadingIndicator(modifier: Modifier = Modifier) {
             .padding(25.dp), contentAlignment = Alignment.Center
     ) {
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loader))
-        val progress by animateLottieCompositionAsState(composition)
-
-        LottieAnimation(composition = composition, progress = { progress })
+        LottieAnimation(composition = composition, iterations = LottieConstants.IterateForever)
     }
 }

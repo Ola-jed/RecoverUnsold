@@ -188,7 +188,7 @@ fun OffersScreen(
                                 Button(onClick = {
                                     navController.navigate(Routes.CloseOffers.path)
                                 }) {
-                                    Text(stringResource(id = R.string.view_current_offers_near_me))
+                                    Text(stringResource(id = R.string.offers_nearby))
                                 }
                             }
                         }
