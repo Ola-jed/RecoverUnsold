@@ -9,24 +9,34 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.BottomSheetScaffold
+import androidx.compose.material.BottomSheetState
+import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.Button
-import androidx.compose.material.Scaffold
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.NearMe
+import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -34,7 +44,6 @@ import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.ola.recoverunsold.R
-import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.models.LatLong
 import com.ola.recoverunsold.ui.components.app.AppBar
@@ -55,34 +64,103 @@ import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.IntegerValidator
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun CloseOffersScreen(
     navController: NavController,
     snackbarHostState: SnackbarHostState,
     closeOffersViewModel: CloseOffersViewModel = hiltViewModel()
 ) {
-    val coroutineScope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
     val context = LocalContext.current
-    val locationPermissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
     val lifecycleOwner = LocalLifecycleOwner.current
+    val coroutineScope = rememberCoroutineScope()
+    val locationPermissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed),
+        snackbarHostState = snackbarHostState
+    )
 
-    Scaffold(
-        scaffoldState = scaffoldState,
+    BottomSheetScaffold(
+        scaffoldState = bottomSheetScaffoldState,
         topBar = {
             AppBar(
                 coroutineScope = coroutineScope,
-                scaffoldState = scaffoldState,
+                scaffoldState = bottomSheetScaffoldState,
                 title = stringResource(id = R.string.close_offers),
                 canGoBack = true,
                 navController = navController
             )
         },
-        drawerContent = DrawerContent(navController)
+        drawerContent = DrawerContent(navController),
+        sheetContent = {
+            CloseOffersFormContent(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+                distance = closeOffersViewModel.offerDistanceFilterQuery.distance,
+                onDistanceUpdate = {
+                    closeOffersViewModel.offerDistanceFilterQuery =
+                        closeOffersViewModel
+                            .offerDistanceFilterQuery
+                            .copy(distance = it)
+                },
+                onDistanceValidationError = {
+                    closeOffersViewModel.formState =
+                        closeOffersViewModel.formState.copy(
+                            isValid = false,
+                            errorMessage = it
+                        )
+                },
+                onDistanceValidationSuccess = {
+                    closeOffersViewModel.formState =
+                        closeOffersViewModel.formState.copy(
+                            isValid = true,
+                            errorMessage = null
+                        )
+                },
+                onSubmit = {
+                    if (!closeOffersViewModel.formState.isValid) {
+                        coroutineScope.launch {
+                            snackbarHostState.show(
+                                message = closeOffersViewModel.formState.errorMessage
+                                    ?: Strings.get(R.string.invalid_data)
+                            )
+                        }
+                    } else {
+                        coroutineScope.launch {
+                            bottomSheetScaffoldState.bottomSheetState.collapse()
+                        }
+                        closeOffersViewModel.getCloseOffers()
+                    }
+                }
+            )
+        },
+        sheetPeekHeight = 0.dp,
+        sheetElevation = 25.dp,
+        sheetGesturesEnabled = true,
+        sheetShape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp),
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+                coroutineScope.launch {
+                    if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
+                        bottomSheetScaffoldState.bottomSheetState.expand()
+                    } else {
+                        bottomSheetScaffoldState.bottomSheetState.collapse()
+                    }
+                }
+            }) {
+                Icon(imageVector = Icons.Default.NearMe, contentDescription = null)
+            }
+        }
     ) { paddingValues ->
         when (closeOffersViewModel.closeOffersApiResult.status) {
             ApiStatus.INACTIVE -> {
+                Text(
+                    text = stringResource(id = R.string.enter_search_department),
+                    modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp),
+                    fontSize = 19.sp
+                )
+
                 DisposableEffect(key1 = lifecycleOwner, effect = {
                     val observer = LifecycleEventObserver { _, event ->
                         if (event == Lifecycle.Event.ON_START) {
@@ -106,45 +184,6 @@ fun CloseOffersScreen(
                                     snackbarHostState.show(
                                         message = Strings.get(R.string.location_fetch_failed)
                                     )
-                                }
-                            }
-                        )
-
-                        CloseOffersFormContent(
-                            modifier = Modifier
-                                .padding(paddingValues)
-                                .fillMaxSize(),
-                            distance = closeOffersViewModel.offerDistanceFilterQuery.distance,
-                            onDistanceUpdate = {
-                                closeOffersViewModel.offerDistanceFilterQuery =
-                                    closeOffersViewModel
-                                        .offerDistanceFilterQuery
-                                        .copy(distance = it)
-                            },
-                            onDistanceValidationError = {
-                                closeOffersViewModel.formState =
-                                    closeOffersViewModel.formState.copy(
-                                        isValid = false,
-                                        errorMessage = it
-                                    )
-                            },
-                            onDistanceValidationSuccess = {
-                                closeOffersViewModel.formState =
-                                    closeOffersViewModel.formState.copy(
-                                        isValid = true,
-                                        errorMessage = null
-                                    )
-                            },
-                            onSubmit = {
-                                if (!closeOffersViewModel.formState.isValid) {
-                                    coroutineScope.launch {
-                                        snackbarHostState.show(
-                                            message = closeOffersViewModel.formState.errorMessage
-                                                ?: Strings.get(R.string.invalid_data)
-                                        )
-                                    }
-                                } else {
-                                    closeOffersViewModel.getCloseOffers()
                                 }
                             }
                         )
@@ -186,23 +225,10 @@ fun CloseOffersScreen(
 
                 if (offers.items.isEmpty()) {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        Column(
-                            modifier = Modifier
-                                .padding(horizontal = 10.dp)
-                                .align(Alignment.Center),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            NoContentComponent(
-                                modifier = Modifier.fillMaxWidth(),
-                                message = stringResource(R.string.no_offers_found)
-                            )
-
-                            Button(onClick = {
-                                closeOffersViewModel.closeOffersApiResult = ApiCallResult.Inactive
-                            }) {
-                                Text(stringResource(id = R.string.change_search_radius))
-                            }
-                        }
+                        NoContentComponent(
+                            modifier = Modifier.fillMaxWidth(),
+                            message = stringResource(R.string.no_offers_found)
+                        )
                     }
                 } else {
                     LazyColumn(
@@ -257,30 +283,36 @@ fun CloseOffersFormContent(
     onDistanceValidationSuccess: () -> Unit,
     onSubmit: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
+
     Column(
-        modifier = modifier, verticalArrangement = Arrangement.Center,
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(
-            text = stringResource(id = R.string.enter_search_department),
-            modifier = Modifier.padding(start = 15.dp, end = 15.dp, bottom = 15.dp),
-            textAlign = TextAlign.Center
-        )
+        val modifierToApply = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp)
 
         CustomTextInput(
+            modifier = modifierToApply,
             value = distance.formatWithoutTrailingZeros(),
             onValueChange = { onDistanceUpdate(it.toSecureInt().toDouble()) },
             label = { Text(text = stringResource(R.string.distance)) },
             keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
+                imeAction = ImeAction.Search,
                 keyboardType = KeyboardType.Number
             ),
+            keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
             validator = IntegerValidator(),
             onValidationError = onDistanceValidationError,
             onValidationSuccess = onDistanceValidationSuccess
         )
 
-        Button(onClick = onSubmit) {
+        Button(
+            onClick = onSubmit,
+            modifier = modifierToApply.padding(bottom = 10.dp)
+        ) {
             Text(text = stringResource(id = R.string.search))
         }
     }
