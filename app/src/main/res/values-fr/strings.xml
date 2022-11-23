@@ -271,4 +271,5 @@
     <string name="guest">Invité</string>
     <string name="online_payment">Paiement en ligne</string>
     <string name="pay">Payer</string>
+    <string name="km_away">A %1$s km</string>
 </resources>

@@ -274,4 +274,5 @@
     <string name="guest">Guest</string>
     <string name="online_payment">Online payment</string>
     <string name="pay">Pay</string>
+    <string name="km_away">%1$s km away</string>
 </resources>

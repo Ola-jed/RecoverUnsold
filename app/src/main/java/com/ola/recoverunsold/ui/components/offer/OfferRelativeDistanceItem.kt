@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.EventAvailable
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Payments
+import androidx.compose.material.icons.filled.Route
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -83,6 +84,15 @@ fun OfferRelativeDistanceItem(
                     startDate.formatDateTime()
                 ),
                 icon = Icons.Default.EventAvailable
+            )
+
+            OfferInformationLine(
+                modifier = Modifier.padding(top = 5.dp),
+                text = stringResource(
+                    R.string.km_away,
+                    String.format("%2f", offerWithRelativeDistance.distance)
+                ),
+                icon = Icons.Default.Route
             )
 
             OfferInformationLine(
