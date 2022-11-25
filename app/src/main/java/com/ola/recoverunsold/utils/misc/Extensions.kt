@@ -86,7 +86,7 @@ fun String.remove(partToRemove: String): String = this.replace(partToRemove, "")
  * Deserialize a Json String to a specific type
  */
 inline fun <reified T> String?.jsonDeserialize(): T? {
-    return if (this == null) {
+    return if (this.isNullOrBlank()) {
         null
     } else {
         ApiClient.moshi.adapter(T::class.java).fromJson(this)
