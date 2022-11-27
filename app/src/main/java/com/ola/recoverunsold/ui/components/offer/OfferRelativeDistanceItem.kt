@@ -7,14 +7,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Text
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.EventAvailable
 import androidx.compose.material.icons.filled.Group
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.Route
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -104,13 +107,12 @@ fun OfferRelativeDistanceItem(
                 icon = Icons.Default.CalendarToday
             )
 
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 5.dp),
-                onClick = onMapShowRequest
-            ) {
-                Text(text = stringResource(id = R.string.view_location_on_maps))
+            Button(onClick = onMapShowRequest, modifier = Modifier.align(Alignment.End)) {
+                Icon(
+                    imageVector = Icons.Default.Map,
+                    contentDescription = null,
+                    tint = MaterialTheme.colors.onPrimary
+                )
             }
         }
     }

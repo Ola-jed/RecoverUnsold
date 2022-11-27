@@ -56,7 +56,6 @@ fun DistributorInformationComponent(
             )
 
             var distributorWebsite = distributorInformation.websiteUrl
-
             if (distributorWebsite == null) {
                 DistributorInformationLine(
                     modifier = Modifier.padding(vertical = 5.dp),
