@@ -2,7 +2,6 @@ package com.ola.recoverunsold.api.services
 
 import com.ola.recoverunsold.api.core.ApiUrls
 import com.ola.recoverunsold.api.requests.OfferUpdateRequest
-import com.ola.recoverunsold.api.requests.ProductCreateRequest
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.OfferWithRelativeDistance
 import com.ola.recoverunsold.models.Page
@@ -47,8 +46,7 @@ interface OfferService : BaseApiService {
         @Part("duration") duration: RequestBody,
         @Part("beneficiaries") beneficiaries: RequestBody? = null,
         @Part("price") price: RequestBody,
-        @Part("locationId") locationId: RequestBody,
-        @Part("products") products: List<ProductCreateRequest>? = null
+        @Part("locationId") locationId: RequestBody
     ): Response<Offer>
 
     @PUT(ApiUrls.offersUrl + "/{id}")

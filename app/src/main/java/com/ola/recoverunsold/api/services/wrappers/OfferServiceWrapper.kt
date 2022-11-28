@@ -46,7 +46,6 @@ class OfferServiceWrapper(private val offerService: OfferService) {
             offerCreateRequest.beneficiaries?.toMultipartRequestBody(),
             offerCreateRequest.price.toMultipartRequestBody(),
             offerCreateRequest.locationId.toMultipartRequestBody(),
-            offerCreateRequest.products
         )
     }
 

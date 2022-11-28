@@ -26,7 +26,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.Date
 
 class DistributorOfferFormViewModel @AssistedInject constructor(
@@ -92,7 +91,7 @@ class DistributorOfferFormViewModel @AssistedInject constructor(
     fun update() {
         offerResponse = ApiCallResult.Loading
         val offerUpdateRequest = OfferUpdateRequest(
-            startDate = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(startDate!!),
+            startDate = startDate!!,
             duration = (endDate!!.time.toULong() - startDate!!.time.toULong()) / 1000UL,
             beneficiaries = if (beneficiaries == 0) null else beneficiaries,
             onlinePayment = onlinePayment,

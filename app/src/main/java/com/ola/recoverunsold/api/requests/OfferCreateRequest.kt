@@ -1,13 +1,15 @@
 package com.ola.recoverunsold.api.requests
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import java.util.Date
 
+@JsonClass(generateAdapter = true)
 data class OfferCreateRequest(
-    val startDate: Date,
-    val duration: ULong,
-    val onlinePayment: Boolean,
-    val beneficiaries: Int? = null,
-    val price: Double,
-    val locationId: String,
-    val products: List<ProductCreateRequest>? = null
+    @Json(name = "startDate") val startDate: Date,
+    @Json(name = "duration") val duration: ULong,
+    @Json(name = "onlinePayment") val onlinePayment: Boolean,
+    @Json(name = "beneficiaries") val beneficiaries: Int? = null,
+    @Json(name = "price") val price: Double,
+    @Json(name = "locationId") val locationId: String
 )
