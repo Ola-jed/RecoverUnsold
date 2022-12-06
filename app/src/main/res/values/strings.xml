@@ -275,4 +275,7 @@
     <string name="online_payment">Online payment</string>
     <string name="pay">Pay</string>
     <string name="km_away">%1$s km away</string>
+    <string name="order_payment">Payment of an order</string>
+    <string name="transaction_failed">The transaction could not be executed successfully</string>
+    <string name="transaction_successfully_completed">Transaction successfully completed</string>
 </resources>

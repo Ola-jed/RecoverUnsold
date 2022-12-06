@@ -1,7 +1,6 @@
 package com.ola.recoverunsold.ui.screens.shared
 
 import android.app.Activity
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -68,6 +67,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import co.opensi.kkiapay.STATUS
 import co.opensi.kkiapay.uikit.Kkiapay
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -510,18 +510,27 @@ fun OrderDetailsScreen(
                                         Kkiapay.get()
                                             .setListener { status, transactionId ->
                                                 // TODO
-                                                Toast.makeText(
-                                                    context,
-                                                    "Transaction: ${status.name} -> $transactionId",
-                                                    Toast.LENGTH_LONG
-                                                ).show()
+                                                if (status == STATUS.SUCCESS) {
+                                                    // TODO : api call to store the payment
+                                                    coroutineScope.launch {
+                                                        scaffoldState.snackbarHostState.show(
+                                                            Strings.get(R.string.transaction_successfully_completed)
+                                                        )
+                                                    }
+                                                } else {
+                                                    coroutineScope.launch {
+                                                        scaffoldState.snackbarHostState.show(
+                                                            Strings.get(R.string.transaction_failed)
+                                                        )
+                                                    }
+                                                }
                                             }
 
                                         Kkiapay.get()
                                             .requestPayment(
                                                 context as AppCompatActivity,
                                                 offer.price.toInt(),
-                                                "Paiement de l'offre",
+                                                Strings.get(R.string.order_payment),
                                                 "${orderDetailsViewModel.customer.firstName ?: ""} ${orderDetailsViewModel.customer.lastName ?: ""}",
                                                 orderDetailsViewModel.customer.email,
                                                 phone = ""

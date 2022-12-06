@@ -271,4 +271,7 @@
     <string name="online_payment">Pago en línea</string>
     <string name="pay">Pagar</string>
     <string name="km_away">A %1$s kilómetros</string>
+    <string name="order_payment">Pago de un pedido</string>
+    <string name="transaction_failed">La transacción no ha podido ser ejecutada con éxito</string>
+    <string name="transaction_successfully_completed">Transacción completada con éxito</string>
 </resources>
