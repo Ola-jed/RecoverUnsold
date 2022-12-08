@@ -570,13 +570,7 @@ fun OrderDetailsScreen(
                                                         onSuccess = {
                                                             showPaymentSuccessDialog = true
                                                         },
-                                                        onFailure = {
-                                                            coroutineScope.launch {
-                                                                scaffoldState.snackbarHostState.show(
-                                                                    Strings.get(R.string.invalid_payment)
-                                                                )
-                                                            }
-                                                        }
+                                                        onFailure = {}
                                                     )
                                                 } else {
                                                     coroutineScope.launch {
