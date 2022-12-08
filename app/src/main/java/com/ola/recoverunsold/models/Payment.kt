@@ -8,5 +8,5 @@ import java.util.Date
 data class Payment(
     @Json(name = "transactionId") val transactionId: String,
     @Json(name = "orderId") val orderId: String,
-    @Json(name = "createdAt") val createdAt: Date,
+    @Json(name = "createdAt") val createdAt: Date
 )

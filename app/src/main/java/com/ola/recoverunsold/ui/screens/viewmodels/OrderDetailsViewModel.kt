@@ -136,15 +136,18 @@ class OrderDetailsViewModel @AssistedInject constructor(
             if (response.isSuccessful) {
                 onSuccess()
                 getOrder()
+                return@launch
             } else {
                 onFailure()
+                return@launch
             }
         }
     }
 
     fun canPay(order: Order): Boolean {
         return isCustomer && (order.offer?.onlinePayment ?: false)
-                && order.status == OrderStatus.Approved && order.payment == null
+                && order.status == OrderStatus.Approved
+                && order.payment == null
     }
 
     fun isOrderOwner(order: Order): Boolean {

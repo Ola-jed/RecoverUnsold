@@ -276,4 +276,7 @@
     <string name="transaction_failed">La transaction n\'a pas pu être exécutée avec succès</string>
     <string name="transaction_successfully_completed">Transaction effectuée avec succès</string>
     <string name="invalid_payment">Paiement invalide</string>
+    <string name="no_featured_offers">Aucune offre à la une</string>
+    <string name="payment_made_successfully">Paiement effectué avec succès</string>
+    <string name="paid">Payée</string>
 </resources>

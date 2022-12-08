@@ -57,7 +57,7 @@ import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.DateTimePicker
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorOfferFormViewModel
-import com.ola.recoverunsold.ui.theme.AppCustomColors
+import com.ola.recoverunsold.ui.theme.success
 import com.ola.recoverunsold.utils.misc.FormType
 import com.ola.recoverunsold.utils.misc.addSeconds
 import com.ola.recoverunsold.utils.misc.formatDateTime
@@ -307,7 +307,7 @@ fun DistributorOfferFormContent(
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = MaterialTheme.colors.primary,
                     uncheckedThumbColor = MaterialTheme.colors.primary,
-                    checkedTrackColor = AppCustomColors.success,
+                    checkedTrackColor = MaterialTheme.colors.success,
                     uncheckedTrackColor = MaterialTheme.colors.onBackground,
                 )
             )

@@ -275,4 +275,7 @@
     <string name="transaction_failed">La transacción no ha podido ser ejecutada con éxito</string>
     <string name="transaction_successfully_completed">Transacción completada con éxito</string>
     <string name="invalid_payment">Pago no válido</string>
+    <string name="no_featured_offers">Ninguna oferta destacada</string>
+    <string name="payment_made_successfully">Pago efectuado correctamente</string>
+    <string name="paid">Pagado</string>
 </resources>

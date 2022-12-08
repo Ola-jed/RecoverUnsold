@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.BottomSheetValue
@@ -40,6 +41,7 @@ import androidx.compose.material.icons.filled.Comment
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.EventAvailable
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Paid
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Sell
@@ -64,11 +66,16 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import co.opensi.kkiapay.STATUS
 import co.opensi.kkiapay.uikit.Kkiapay
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ola.recoverunsold.MainActivity
@@ -238,6 +245,7 @@ fun OrderDetailsScreen(
                     var showAcceptOrderDialog by remember { mutableStateOf(false) }
                     var showRejectOrderDialog by remember { mutableStateOf(false) }
                     var showCompleteOrderDialog by remember { mutableStateOf(false) }
+                    var showPaymentSuccessDialog by remember { mutableStateOf(false) }
                     val onOrderAccept = {
                         orderDetailsViewModel.acceptOrder(
                             onSuccess = {
@@ -293,6 +301,42 @@ fun OrderDetailsScreen(
                                     )
                                 }
                             }
+                        )
+                    }
+
+                    if (showPaymentSuccessDialog) {
+                        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.check))
+                        val progress by animateLottieCompositionAsState(composition)
+
+                        AlertDialog(
+                            onDismissRequest = { showPaymentSuccessDialog = false },
+                            title = {
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(
+                                        text = stringResource(id = R.string.payment_made_successfully),
+                                        style = MaterialTheme.typography.subtitle1,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            },
+                            text = {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(165.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    LottieAnimation(
+                                        modifier = Modifier.size(150.dp),
+                                        composition = composition,
+                                        progress = { progress }
+                                    )
+                                }
+                            },
+                            buttons = {}
                         )
                     }
 
@@ -362,6 +406,20 @@ fun OrderDetailsScreen(
                                         ),
                                         icon = Icons.Default.EventAvailable,
                                         text = "${stringResource(id = R.string.to_be_picked_up_on)} : ${order.withdrawalDate.formatDateTime()}",
+                                    )
+                                    Divider()
+                                    ItemDetailsLine(
+                                        modifier = Modifier.padding(
+                                            top = 13.dp,
+                                            bottom = 13.dp,
+                                            start = 10.dp
+                                        ),
+                                        icon = Icons.Default.Paid,
+                                        text = "${stringResource(id = R.string.paid)} : ${
+                                            stringResource(
+                                                id = (if (order.payment == null) R.string.no else R.string.yes)
+                                            )
+                                        }",
                                     )
                                 }
                             }
@@ -510,11 +568,7 @@ fun OrderDetailsScreen(
                                                     orderDetailsViewModel.verifyPayment(
                                                         transactionId = transactionId,
                                                         onSuccess = {
-                                                            coroutineScope.launch {
-                                                                scaffoldState.snackbarHostState.show(
-                                                                    Strings.get(R.string.transaction_successfully_completed)
-                                                                )
-                                                            }
+                                                            showPaymentSuccessDialog = true
                                                         },
                                                         onFailure = {
                                                             coroutineScope.launch {

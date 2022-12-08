@@ -122,7 +122,7 @@ fun CustomerHomeScreen(
                         )
 
                         if (offers.isEmpty()) {
-                            NoContentComponent(message = stringResource(id = R.string.no_offers_found))
+                            NoContentComponent(message = stringResource(id = R.string.no_featured_offers))
                         } else {
                             LazyRow(modifier = Modifier.fillMaxWidth()) {
                                 items(items = offers) { item ->
