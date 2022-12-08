@@ -1,5 +1,6 @@
 package com.ola.recoverunsold
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -12,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
+import co.opensi.kkiapay.uikit.Kkiapay
 import com.ola.recoverunsold.ui.navigation.NavigationManager
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorDetailsViewModel
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorLocationFormViewModel
@@ -61,5 +63,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    @Deprecated(
+        "Deprecated in Java", ReplaceWith(
+            "super.onActivityResult(requestCode, resultCode, data)",
+            "androidx.appcompat.app.AppCompatActivity"
+        )
+    )
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Kkiapay.get().handleActivityResult(requestCode, resultCode, data)
     }
 }
