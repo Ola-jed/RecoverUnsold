@@ -1,5 +1,9 @@
 package com.ola.recoverunsold.ui.components.account
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,16 +13,21 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Help
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Numbers
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -27,6 +36,7 @@ import com.ola.recoverunsold.models.Customer
 import com.ola.recoverunsold.models.Distributor
 import com.ola.recoverunsold.models.User
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
+import com.ola.recoverunsold.ui.components.app.Tooltip
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import com.ola.recoverunsold.utils.validation.PhoneValidator
 
@@ -35,6 +45,7 @@ import com.ola.recoverunsold.utils.validation.PhoneValidator
  *
  * Some variations depending on the status of the User(Distributor/Customer)
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 inline fun <reified T : User> UserUpdateComponent(
     modifier: Modifier = Modifier,
@@ -81,10 +92,32 @@ inline fun <reified T : User> UserUpdateComponent(
         )
 
         if (T::class == Distributor::class) {
+            val showPhoneTooltip = remember { mutableStateOf(false) }
+
             CustomTextInput(
                 modifier = fieldsModifier,
                 value = phone,
                 leadingIcon = { Icon(Icons.Filled.Phone, contentDescription = null) },
+                trailingIcon = {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.End)
+                            .padding(end = 5.dp)
+                            .combinedClickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = rememberRipple(),
+                                role = Role.Button,
+                                onClick = { showPhoneTooltip.value = true },
+                                onLongClick = { showPhoneTooltip.value = true }
+                            )
+                    ) {
+                        Icon(imageVector = Icons.Default.Help, contentDescription = null)
+                    }
+
+                    Tooltip(showPhoneTooltip) {
+                        Text(text = stringResource(id = R.string.distributor_phone_indication))
+                    }
+                },
                 label = { Text(text = stringResource(R.string.phone_label)) },
                 onValueChange = onPhoneChange,
                 keyboardOptions = KeyboardOptions(

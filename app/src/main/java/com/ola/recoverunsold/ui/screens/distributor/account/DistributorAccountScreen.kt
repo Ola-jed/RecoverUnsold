@@ -149,13 +149,9 @@ fun DistributorAccountScreen(
                             coroutineScope.launch {
                                 context.logout()
                                 navController.navigate(Routes.Home.path) {
-                                    popUpTo(Routes.Home.path) {
-                                        inclusive = true
-                                    }
+                                    popUpTo(Routes.Home.path) { inclusive = true }
                                 }
-                                snackbarHostState.show(
-                                    Strings.get(R.string.account_deleted_successfully)
-                                )
+                                snackbarHostState.show(Strings.get(R.string.account_deleted_successfully))
                             }
                         }
                     },
@@ -186,9 +182,7 @@ fun DistributorAccountScreen(
             if (distributorAccountViewModel.accountApiCallResult.status == ApiStatus.SUCCESS) {
                 LaunchedEffect(snackbarHostState) {
                     coroutineScope.launch {
-                        snackbarHostState.show(
-                            message = Strings.get(R.string.account_updated_successfully)
-                        )
+                        snackbarHostState.show(Strings.get(R.string.account_updated_successfully))
                     }
                 }
             }
@@ -196,9 +190,7 @@ fun DistributorAccountScreen(
             if (distributorAccountViewModel.errorMessage() != null) {
                 LaunchedEffect(snackbarHostState) {
                     coroutineScope.launch {
-                        snackbarHostState.show(
-                            message = distributorAccountViewModel.errorMessage()!!
-                        )
+                        snackbarHostState.show(distributorAccountViewModel.errorMessage()!!)
                     }
                 }
             }

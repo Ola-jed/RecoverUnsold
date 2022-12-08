@@ -279,4 +279,5 @@
     <string name="no_featured_offers">Aucune offre à la une</string>
     <string name="payment_made_successfully">Paiement effectué avec succès</string>
     <string name="paid">Payée</string>
+    <string name="distributor_phone_indication">Ce numéro de téléphone sera utilisé pour vous reverser les frais de vos ventes réalisées en ligne. N\'activez pas les paiements en ligne si ce numéro n\'est pas un numéro Mobile Money. Ce système sera modifié ultérieurement.</string>
 </resources>
