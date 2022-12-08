@@ -41,7 +41,10 @@ import com.ola.recoverunsold.models.DistributorHomeData
 import com.ola.recoverunsold.models.LatLong
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.OrderStatus
-import com.ola.recoverunsold.ui.theme.AppCustomColors
+import com.ola.recoverunsold.ui.theme.onSuccess
+import com.ola.recoverunsold.ui.theme.onWarning
+import com.ola.recoverunsold.ui.theme.success
+import com.ola.recoverunsold.ui.theme.warning
 import com.ola.recoverunsold.utils.resources.Strings
 import me.bytebeats.views.charts.bar.BarChartData
 import okhttp3.Cache
@@ -379,20 +382,20 @@ fun OrderStatus.toIcon(): ImageVector {
 @Composable
 fun OrderStatus.backgroundColor(): Color {
     return when (this) {
-        OrderStatus.Pending -> AppCustomColors.warning
+        OrderStatus.Pending -> MaterialTheme.colors.warning
         OrderStatus.Approved -> MaterialTheme.colors.primary
         OrderStatus.Rejected -> MaterialTheme.colors.error
-        OrderStatus.Completed -> AppCustomColors.success
+        OrderStatus.Completed -> MaterialTheme.colors.success
     }
 }
 
 @Composable
 fun OrderStatus.foregroundColor(): Color {
     return when (this) {
-        OrderStatus.Pending -> AppCustomColors.onWarning
+        OrderStatus.Pending -> MaterialTheme.colors.onWarning
         OrderStatus.Approved -> MaterialTheme.colors.onPrimary
         OrderStatus.Rejected -> MaterialTheme.colors.onError
-        OrderStatus.Completed -> AppCustomColors.onSuccess
+        OrderStatus.Completed -> MaterialTheme.colors.onSuccess
     }
 }
 
