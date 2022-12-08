@@ -496,10 +496,7 @@ fun OrderDetailsScreen(
                             }
                         }
 
-                        val canPay = orderDetailsViewModel.isCustomer
-                                && order.offer.onlinePayment
-                                && order.status == OrderStatus.Approved
-
+                        val canPay = orderDetailsViewModel.canPay(order)
                         if (canPay) {
                             item {
                                 Button(
@@ -509,14 +506,24 @@ fun OrderDetailsScreen(
                                     onClick = {
                                         Kkiapay.get()
                                             .setListener { status, transactionId ->
-                                                // TODO
-                                                if (status == STATUS.SUCCESS) {
-                                                    // TODO : api call to store the payment
-                                                    coroutineScope.launch {
-                                                        scaffoldState.snackbarHostState.show(
-                                                            Strings.get(R.string.transaction_successfully_completed)
-                                                        )
-                                                    }
+                                                if (status == STATUS.SUCCESS && transactionId != null) {
+                                                    orderDetailsViewModel.verifyPayment(
+                                                        transactionId = transactionId,
+                                                        onSuccess = {
+                                                            coroutineScope.launch {
+                                                                scaffoldState.snackbarHostState.show(
+                                                                    Strings.get(R.string.transaction_successfully_completed)
+                                                                )
+                                                            }
+                                                        },
+                                                        onFailure = {
+                                                            coroutineScope.launch {
+                                                                scaffoldState.snackbarHostState.show(
+                                                                    Strings.get(R.string.invalid_payment)
+                                                                )
+                                                            }
+                                                        }
+                                                    )
                                                 } else {
                                                     coroutineScope.launch {
                                                         scaffoldState.snackbarHostState.show(

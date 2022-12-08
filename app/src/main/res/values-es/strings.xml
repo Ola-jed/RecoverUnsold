@@ -274,4 +274,5 @@
     <string name="order_payment">Pago de un pedido</string>
     <string name="transaction_failed">La transacción no ha podido ser ejecutada con éxito</string>
     <string name="transaction_successfully_completed">Transacción completada con éxito</string>
+    <string name="invalid_payment">Pago no válido</string>
 </resources>

@@ -11,6 +11,7 @@ data class Order(
     @Json(name = "customer") val customer: Customer? = null,
     @Json(name = "offerId") val offerId: String,
     @Json(name = "offer") val offer: Offer?,
+    @Json(name = "payment") val payment: Payment?,
     @Json(name = "withdrawalDate") val withdrawalDate: Date,
     @Json(name = "createdAt") val createdAt: Date,
     @Json(name = "opinions") val opinions: List<Opinion>

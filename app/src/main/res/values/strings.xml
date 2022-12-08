@@ -278,4 +278,5 @@
     <string name="order_payment">Payment of an order</string>
     <string name="transaction_failed">The transaction could not be executed successfully</string>
     <string name="transaction_successfully_completed">Transaction successfully completed</string>
+    <string name="invalid_payment">Invalid payment</string>
 </resources>

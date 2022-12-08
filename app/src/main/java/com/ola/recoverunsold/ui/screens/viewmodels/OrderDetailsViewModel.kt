@@ -9,12 +9,15 @@ import androidx.lifecycle.viewModelScope
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.requests.OpinionCreateRequest
+import com.ola.recoverunsold.api.requests.TransactionRequest
 import com.ola.recoverunsold.api.services.OpinionsService
+import com.ola.recoverunsold.api.services.PaymentsService
 import com.ola.recoverunsold.api.services.wrappers.OrderServiceWrapper
 import com.ola.recoverunsold.models.Customer
 import com.ola.recoverunsold.models.Distributor
 import com.ola.recoverunsold.models.Opinion
 import com.ola.recoverunsold.models.Order
+import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.utils.misc.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.UserObserver
@@ -29,6 +32,7 @@ import kotlinx.coroutines.launch
 class OrderDetailsViewModel @AssistedInject constructor(
     private val ordersServiceWrapper: OrderServiceWrapper,
     private val opinionsService: OpinionsService,
+    private val paymentsService: PaymentsService,
     @Assisted val orderId: String
 ) : ViewModel() {
     var orderApiCallResult: ApiCallResult<Order> by mutableStateOf(ApiCallResult.Inactive)
@@ -124,6 +128,23 @@ class OrderDetailsViewModel @AssistedInject constructor(
                 onFailure()
             }
         }
+    }
+
+    fun verifyPayment(transactionId: String, onSuccess: () -> Unit, onFailure: () -> Unit) {
+        viewModelScope.launch {
+            val response = paymentsService.payOrder(orderId, TransactionRequest(transactionId))
+            if (response.isSuccessful) {
+                onSuccess()
+                getOrder()
+            } else {
+                onFailure()
+            }
+        }
+    }
+
+    fun canPay(order: Order): Boolean {
+        return isCustomer && (order.offer?.onlinePayment ?: false)
+                && order.status == OrderStatus.Approved && order.payment == null
     }
 
     fun isOrderOwner(order: Order): Boolean {
