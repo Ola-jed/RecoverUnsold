@@ -26,6 +26,7 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
      * We send the token only if we have an api token to make an authenticated request
      * If a token is generated and the user is not logged yet, we send it later
      * And if the device have google play services enabled because otherwise, they won't work
+     * @param token The new fcm token generated
      */
     override fun onNewToken(token: String) {
         Log.d("AppFirebaseMessagingService", "New token generated : $token")
@@ -35,7 +36,7 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
             .isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
 
         if (apiToken == null || !isGooglePlayAvailable) {
-            Log.i(
+            Log.e(
                 "AppFirebaseMessagingService",
                 "Api token is null or no google play services available"
             )
