@@ -55,7 +55,6 @@ fun ImagePicker(
         it?.let { it1 -> onImagePicked(it1) }
     }
 
-
     Column {
         Text(
             stringResource(id = R.string.pick_an_image),

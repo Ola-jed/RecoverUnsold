@@ -9,6 +9,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
@@ -40,8 +42,8 @@ fun LocalImagesList(
         items(items = imageUris) { uri ->
             LocalImageItem(
                 modifier = Modifier
-                    .padding(horizontal = 15.dp)
-                    .fillParentMaxHeight(),
+                    .padding(horizontal = 10.dp)
+                    .size(150.dp),
                 uri = uri,
                 onDelete = { onDelete(uri) }
             )
@@ -75,6 +77,7 @@ fun LocalImageItem(
         Box(modifier = Modifier.fillMaxSize()) {
             Image(
                 bitmap = bitmap.asImageBitmap(),
+                contentScale = ContentScale.FillBounds,
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize()
