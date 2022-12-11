@@ -246,6 +246,7 @@ fun OrderDetailsScreen(
                     var showRejectOrderDialog by remember { mutableStateOf(false) }
                     var showCompleteOrderDialog by remember { mutableStateOf(false) }
                     var showPaymentSuccessDialog by remember { mutableStateOf(false) }
+                    var showPaymentErrorDialog by remember { mutableStateOf(false) }
                     val onOrderAccept = {
                         orderDetailsViewModel.acceptOrder(
                             onSuccess = {
@@ -317,6 +318,42 @@ fun OrderDetailsScreen(
                                 ) {
                                     Text(
                                         text = stringResource(id = R.string.payment_made_successfully),
+                                        style = MaterialTheme.typography.subtitle1,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            },
+                            text = {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(165.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    LottieAnimation(
+                                        modifier = Modifier.size(150.dp),
+                                        composition = composition,
+                                        progress = { progress }
+                                    )
+                                }
+                            },
+                            buttons = {}
+                        )
+                    }
+
+                    if (showPaymentErrorDialog) {
+                        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.error))
+                        val progress by animateLottieCompositionAsState(composition)
+
+                        AlertDialog(
+                            onDismissRequest = { showPaymentErrorDialog = false },
+                            title = {
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(
+                                        text = stringResource(id = R.string.payment_failure),
                                         style = MaterialTheme.typography.subtitle1,
                                         textAlign = TextAlign.Center
                                     )
@@ -573,11 +610,7 @@ fun OrderDetailsScreen(
                                                         onFailure = {}
                                                     )
                                                 } else {
-                                                    coroutineScope.launch {
-                                                        scaffoldState.snackbarHostState.show(
-                                                            Strings.get(R.string.transaction_failed)
-                                                        )
-                                                    }
+                                                    showPaymentErrorDialog = true
                                                 }
                                             }
 

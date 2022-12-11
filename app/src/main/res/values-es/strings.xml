@@ -279,4 +279,5 @@
     <string name="payment_made_successfully">Pago efectuado correctamente</string>
     <string name="paid">Pagado</string>
     <string name="distributor_phone_indication">Este número de teléfono se utilizará para pagarle por sus ventas en línea. No active los pagos en línea si este número no es un número de Mobile Money. Este sistema se modificará más adelante.</string>
+    <string name="payment_failure">Falta de pago</string>
 </resources>
