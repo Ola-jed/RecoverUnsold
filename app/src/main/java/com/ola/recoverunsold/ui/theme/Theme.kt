@@ -5,7 +5,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.ola.recoverunsold.utils.store.ThemeObserver
+
+const val THEME_PREFERENCES = "theme"
+const val THEME_MODE = "theme-mode"
 
 private val LightColors = lightColors(
     primary = themeLightPrimary,
@@ -40,18 +46,16 @@ fun RecoverUnsoldTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colors = if (darkTheme) {
-        DarkColors
-    } else {
-        LightColors
+    val themeMode by ThemeObserver.themeMode.collectAsState()
+
+    val colors = when (themeMode) {
+        ThemeMode.Dark -> DarkColors
+        ThemeMode.Light -> LightColors
+        else -> if (darkTheme) DarkColors else LightColors
     }
 
     val systemUiController = rememberSystemUiController()
-    if (darkTheme) {
-        systemUiController.setSystemBarsColor(color = DarkColors.primaryVariant)
-    } else {
-        systemUiController.setSystemBarsColor(color = LightColors.primaryVariant)
-    }
+    systemUiController.setSystemBarsColor(color = colors.primaryVariant)
 
     MaterialTheme(
         colors = colors,

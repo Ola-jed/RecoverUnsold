@@ -12,7 +12,11 @@ import com.ola.recoverunsold.MainActivity
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.responses.TokenRoles
 import com.ola.recoverunsold.api.services.AccountService
+import com.ola.recoverunsold.ui.theme.THEME_MODE
+import com.ola.recoverunsold.ui.theme.THEME_PREFERENCES
+import com.ola.recoverunsold.ui.theme.ThemeMode
 import com.ola.recoverunsold.utils.resources.Strings
+import com.ola.recoverunsold.utils.store.ThemeObserver
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
 import com.ola.recoverunsold.utils.store.toApiToken
@@ -30,6 +34,10 @@ class MainViewModel @Inject constructor(private val accountService: AccountServi
     val hasFinishedLoading = _hasFetchedData.asStateFlow()
 
     fun initializeApp(context: Context) {
+        // Load the stored theme
+        val sharedPrefs = context.getSharedPreferences(THEME_PREFERENCES, Context.MODE_PRIVATE)
+        val modeAsInt = sharedPrefs.getInt(THEME_MODE, ThemeMode.Auto.value)
+        ThemeObserver.update(ThemeMode.getByValue(modeAsInt))
         viewModelScope.launch {
             val storedToken = TokenStore(context)
                 .token()

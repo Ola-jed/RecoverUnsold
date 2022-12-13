@@ -30,8 +30,10 @@ import com.ola.recoverunsold.BuildConfig
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
+import com.ola.recoverunsold.ui.components.theme.ThemeDialog
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.SettingsViewModel
+import com.ola.recoverunsold.ui.theme.ThemeMode
 
 @Composable
 fun SettingsScreen(
@@ -70,6 +72,7 @@ fun SettingsScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable { settingsViewModel.showThemeDialog = true }
                     .padding(vertical = 15.dp)
             ) {
                 Text(
@@ -92,7 +95,7 @@ fun SettingsScreen(
             Divider()
             Text(
                 text = stringResource(id = R.string.about),
-                modifier = Modifier.padding(start = 15.dp, top = 10.dp),
+                modifier = Modifier.padding(start = 15.dp, top = 25.dp),
                 fontWeight = FontWeight.ExtraBold,
                 color = MaterialTheme.colors.primary
             )
@@ -148,6 +151,17 @@ fun SettingsScreen(
                     fontSize = 18.sp
                 )
             }
+        }
+
+        if (settingsViewModel.showThemeDialog) {
+            ThemeDialog(
+                current = settingsViewModel.theme ?: ThemeMode.Auto,
+                onChange = {
+                    settingsViewModel.updateCurrentTheme(context, it)
+                    settingsViewModel.showThemeDialog = false
+                },
+                onDismiss = { settingsViewModel.showThemeDialog = false }
+            )
         }
     }
 }
