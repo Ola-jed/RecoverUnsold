@@ -14,4 +14,9 @@ Mobile application for an application that helps to facilitate the disposal of u
 - Payments : [KKiaPay](https://kkiapay.me/)
 
 ## Api
+
 The github repository for the api is hosted here : https://github.com/Ola-jed/RecoverUnsoldBackend
+
+### TODO
+
+- [ ] Fix the locale picker not updating the app language after the restart

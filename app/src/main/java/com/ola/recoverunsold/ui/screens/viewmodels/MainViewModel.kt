@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.drawable.Icon
 import android.net.Uri
 import androidx.lifecycle.ViewModel
@@ -12,10 +14,9 @@ import com.ola.recoverunsold.MainActivity
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.responses.TokenRoles
 import com.ola.recoverunsold.api.services.AccountService
-import com.ola.recoverunsold.ui.theme.THEME_MODE
-import com.ola.recoverunsold.ui.theme.THEME_PREFERENCES
-import com.ola.recoverunsold.ui.theme.ThemeMode
 import com.ola.recoverunsold.utils.resources.Strings
+import com.ola.recoverunsold.utils.store.AppPreferences
+import com.ola.recoverunsold.utils.store.LocaleObserver
 import com.ola.recoverunsold.utils.store.ThemeObserver
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.util.Date
 import javax.inject.Inject
+import java.util.Locale as AndroidLocale
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val accountService: AccountService) : ViewModel() {
@@ -34,10 +36,8 @@ class MainViewModel @Inject constructor(private val accountService: AccountServi
     val hasFinishedLoading = _hasFetchedData.asStateFlow()
 
     fun initializeApp(context: Context) {
-        // Load the stored theme
-        val sharedPrefs = context.getSharedPreferences(THEME_PREFERENCES, Context.MODE_PRIVATE)
-        val modeAsInt = sharedPrefs.getInt(THEME_MODE, ThemeMode.Auto.value)
-        ThemeObserver.update(ThemeMode.getByValue(modeAsInt))
+        setTheme(context)
+        setLocale(context)
         viewModelScope.launch {
             val storedToken = TokenStore(context)
                 .token()
@@ -73,6 +73,22 @@ class MainViewModel @Inject constructor(private val accountService: AccountServi
             }
             _hasFetchedData.value = true
         }
+    }
+
+    private fun setTheme(context: Context) {
+        ThemeObserver.update(AppPreferences.getTheme(context))
+    }
+
+    private fun setLocale(context: Context) {
+        val locale = AppPreferences.getLocale(context)
+        val phoneLocale = AndroidLocale(locale.code)
+        val resources: Resources = context.resources
+        val config: Configuration = resources.configuration
+        config.setLocale(phoneLocale)
+        context.createConfigurationContext(config)
+        context.resources.updateConfiguration(config, context.resources.displayMetrics)
+        AndroidLocale.setDefault(phoneLocale)
+        LocaleObserver.update(locale)
     }
 
     private fun defineShortcutsAnonymously(context: Context) {

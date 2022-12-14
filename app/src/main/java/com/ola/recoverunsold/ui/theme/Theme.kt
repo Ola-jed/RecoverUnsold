@@ -10,9 +10,6 @@ import androidx.compose.runtime.getValue
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ola.recoverunsold.utils.store.ThemeObserver
 
-const val THEME_PREFERENCES = "theme"
-const val THEME_MODE = "theme-mode"
-
 private val LightColors = lightColors(
     primary = themeLightPrimary,
     onPrimary = themeLightOnPrimary,

@@ -29,11 +29,13 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.ola.recoverunsold.BuildConfig
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.ui.components.app.AppBar
+import com.ola.recoverunsold.ui.components.app.LocaleDialog
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.theme.ThemeDialog
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.SettingsViewModel
 import com.ola.recoverunsold.ui.theme.ThemeMode
+import com.ola.recoverunsold.utils.misc.Locale
 
 @Composable
 fun SettingsScreen(
@@ -84,6 +86,7 @@ fun SettingsScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable { settingsViewModel.showLocaleDialog = true }
                     .padding(vertical = 15.dp)
             ) {
                 Text(
@@ -161,6 +164,17 @@ fun SettingsScreen(
                     settingsViewModel.showThemeDialog = false
                 },
                 onDismiss = { settingsViewModel.showThemeDialog = false }
+            )
+        }
+
+        if (settingsViewModel.showLocaleDialog) {
+            LocaleDialog(
+                current = settingsViewModel.currentLocale ?: Locale.Auto,
+                onChange = {
+                    settingsViewModel.updateCurrentLocale(context, it)
+                    settingsViewModel.showLocaleDialog = false
+                },
+                onDismiss = { settingsViewModel.showLocaleDialog = false }
             )
         }
     }

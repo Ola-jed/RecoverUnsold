@@ -283,5 +283,7 @@
     <string name="select_a_theme">Seleccione un tema</string>
     <string name="light">Luminoso</string>
     <string name="dark">Oscuro</string>
-    <string name="follow_system">Seguir el tema del sistema (por defecto)</string>
+    <string name="select_a_language">Seleccionar idioma</string>
+    <string name="follow_system_theme">Seguir el tema del sistema (por defecto)</string>
+    <string name="follow_system_language">Seguir el idioma del sistema (por defecto)</string>
 </resources>

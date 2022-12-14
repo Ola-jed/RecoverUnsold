@@ -284,5 +284,7 @@
     <string name="select_a_theme">Sélectionner un thème</string>
     <string name="light">Clair</string>
     <string name="dark">Sombre</string>
-    <string name="follow_system">Suivre le thème du système (par défaut)</string>
+    <string name="select_a_language">Sélectionner la langue</string>
+    <string name="follow_system_theme">Suivre le thème du système (par défaut)</string>
+    <string name="follow_system_language">Suivre la langue du système (par défaut)</string>
 </resources>

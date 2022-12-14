@@ -1,4 +1,4 @@
-package com.ola.recoverunsold.ui.components.theme
+package com.ola.recoverunsold.ui.components.app
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,23 +16,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
-import com.ola.recoverunsold.ui.theme.ThemeMode
-import java.util.Locale
+import com.ola.recoverunsold.utils.misc.Locale
 
 @Composable
-fun ThemeDialog(
-    current: ThemeMode,
-    onChange: (ThemeMode) -> Unit,
+fun LocaleDialog(
+    current: Locale,
+    onChange: (Locale) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val themeOptions = listOf(
-        Triple(current == ThemeMode.Light, { onChange(ThemeMode.Light) }, R.string.light),
-        Triple(current == ThemeMode.Dark, { onChange(ThemeMode.Dark) }, R.string.dark),
-        Triple(
-            current == ThemeMode.Auto,
-            { onChange(ThemeMode.Auto) },
-            R.string.follow_system_theme
-        )
+    val localeOptions = listOf(
+        Triple(current == Locale.En, { onChange(Locale.En) }, R.string.english),
+        Triple(current == Locale.Fr, { onChange(Locale.Fr) }, R.string.french),
+        Triple(current == Locale.Es, { onChange(Locale.Es) }, R.string.spanish),
+        Triple(current == Locale.Auto, { onChange(Locale.Auto) }, R.string.follow_system_language),
     )
 
     AlertDialog(
@@ -40,7 +36,7 @@ fun ThemeDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = stringResource(id = R.string.select_a_theme),
+                text = stringResource(id = R.string.select_a_language),
                 style = MaterialTheme.typography.h6
             )
         },
@@ -50,7 +46,7 @@ fun ThemeDialog(
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp)
             ) {
-                themeOptions.forEach {
+                localeOptions.forEach {
                     Row(
                         Modifier
                             .fillMaxWidth()
@@ -74,7 +70,7 @@ fun ThemeDialog(
         dismissButton = {
             TextButton(modifier = Modifier.padding(bottom = 3.dp), onClick = onDismiss) {
                 Text(
-                    text = stringResource(id = R.string.cancel).uppercase(Locale.getDefault())
+                    text = stringResource(id = R.string.cancel).uppercase(java.util.Locale.getDefault())
                 )
             }
         },
