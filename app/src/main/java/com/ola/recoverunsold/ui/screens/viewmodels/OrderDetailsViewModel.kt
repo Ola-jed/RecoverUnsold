@@ -39,7 +39,7 @@ class OrderDetailsViewModel @AssistedInject constructor(
     var opinionComment by mutableStateOf("")
     var opinionCommentApiCallResult: ApiCallResult<Unit> by mutableStateOf(ApiCallResult.Inactive)
     val isCustomer = UserObserver.user.value is Customer
-    val customer = UserObserver.user.value as Customer
+    val customer = UserObserver.user.value as? Customer
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean>
         get() = _isRefreshing.asStateFlow()

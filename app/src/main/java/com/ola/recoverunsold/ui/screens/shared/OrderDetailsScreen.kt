@@ -619,8 +619,8 @@ fun OrderDetailsScreen(
                                                 context as AppCompatActivity,
                                                 offer.price.toInt(),
                                                 Strings.get(R.string.order_payment),
-                                                "${orderDetailsViewModel.customer.firstName ?: ""} ${orderDetailsViewModel.customer.lastName ?: ""}",
-                                                orderDetailsViewModel.customer.email,
+                                                "${orderDetailsViewModel.customer?.firstName ?: ""} ${orderDetailsViewModel.customer?.lastName ?: ""}",
+                                                orderDetailsViewModel.customer?.email!!,
                                                 phone = ""
                                             )
                                     }) {
