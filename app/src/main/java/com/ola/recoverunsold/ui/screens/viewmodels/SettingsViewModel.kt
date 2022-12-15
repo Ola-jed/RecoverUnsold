@@ -3,7 +3,6 @@ package com.ola.recoverunsold.ui.screens.viewmodels
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -24,13 +23,13 @@ class SettingsViewModel @Inject constructor() : ViewModel() {
     var currentLocale = LocaleObserver.locale.value
 
     fun updateCurrentLocale(context: Context, locale: Locale) {
-        val phoneLocale = java.util.Locale(locale.code)
-        java.util.Locale.setDefault(phoneLocale)
-        context.resources
-        val config = Configuration()
-        config.setLocale(phoneLocale)
-        context.createConfigurationContext(config)
-        context.resources.updateConfiguration(config, context.resources.displayMetrics)
+//        val phoneLocale = java.util.Locale(locale.code)
+//        java.util.Locale.setDefault(phoneLocale)
+//        context.resources
+//        val config = Configuration()
+//        config.setLocale(phoneLocale)
+//        context.createConfigurationContext(config)
+//        context.resources.updateConfiguration(config, context.resources.displayMetrics)
         AppPreferences.updateLocale(context, locale)
         LocaleObserver.update(locale)
         currentLocale = locale

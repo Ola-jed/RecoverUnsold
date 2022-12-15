@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
-import android.content.res.Configuration
-import android.content.res.Resources
 import android.graphics.drawable.Icon
 import android.net.Uri
 import androidx.lifecycle.ViewModel
@@ -28,7 +26,6 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.util.Date
 import javax.inject.Inject
-import java.util.Locale as AndroidLocale
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val accountService: AccountService) : ViewModel() {
@@ -81,13 +78,13 @@ class MainViewModel @Inject constructor(private val accountService: AccountServi
 
     private fun setLocale(context: Context) {
         val locale = AppPreferences.getLocale(context)
-        val phoneLocale = AndroidLocale(locale.code)
-        val resources: Resources = context.resources
-        val config: Configuration = resources.configuration
-        config.setLocale(phoneLocale)
-        context.createConfigurationContext(config)
-        context.resources.updateConfiguration(config, context.resources.displayMetrics)
-        AndroidLocale.setDefault(phoneLocale)
+//        val phoneLocale = AndroidLocale(locale.code)
+//        val resources: Resources = context.resources
+//        val config: Configuration = resources.configuration
+//        config.setLocale(phoneLocale)
+//        context.createConfigurationContext(config)
+//        context.resources.updateConfiguration(config, context.resources.displayMetrics)
+//        AndroidLocale.setDefault(phoneLocale)
         LocaleObserver.update(locale)
     }
 
