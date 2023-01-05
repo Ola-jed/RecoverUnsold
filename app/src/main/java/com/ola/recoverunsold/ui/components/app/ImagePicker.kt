@@ -42,7 +42,8 @@ import com.ola.recoverunsold.R
 fun ImagePicker(
     modifier: Modifier = Modifier,
     imageUri: Uri? = null,
-    onImagePicked: (Uri) -> Unit
+    onImagePicked: (Uri) -> Unit,
+    maxImageSize: Long = Long.MAX_VALUE
 ) {
     val context = LocalContext.current
     var imageUriData by rememberSaveable { mutableStateOf(imageUri) }
@@ -52,7 +53,10 @@ fun ImagePicker(
         contract = ActivityResultContracts.GetContent(),
     ) {
         imageUriData = it
-        it?.let { it1 -> onImagePicked(it1) }
+        it?.let { it1 ->
+            onImagePicked(it1)
+            // TODO : Check if the file size is correct
+        }
     }
 
     Column {
