@@ -286,4 +286,5 @@
     <string name="select_a_language">Seleccionar idioma</string>
     <string name="follow_system_theme">Seguir el tema del sistema (por defecto)</string>
     <string name="follow_system_language">Seguir el idioma del sistema (por defecto)</string>
+    <string name="chosen_image_too_big">La imagen elegida es demasiado grande</string>
 </resources>

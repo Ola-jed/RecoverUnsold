@@ -226,7 +226,8 @@ fun DistributorProductFormScreenContent(
                     .height((LocalConfiguration.current.screenHeightDp * 0.25).dp)
                     .padding(bottom = 25.dp),
                 imageUri = currentImageUri,
-                onImagePicked = onImageAdded
+                onImagePicked = onImageAdded,
+                maxImageSize = 1000
             )
 
             if (imageUris.isNotEmpty()) {

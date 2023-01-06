@@ -293,4 +293,5 @@
     <string name="spanish" translatable="false">Español</string>
     <string name="select_a_language">Select language</string>
     <string name="follow_system_language">Follow system language (default)</string>
+    <string name="chosen_image_too_big">The chosen image is too big</string>
 </resources>
