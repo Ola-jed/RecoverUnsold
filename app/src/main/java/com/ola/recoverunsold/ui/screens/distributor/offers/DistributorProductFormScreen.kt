@@ -227,7 +227,7 @@ fun DistributorProductFormScreenContent(
                     .padding(bottom = 25.dp),
                 imageUri = currentImageUri,
                 onImagePicked = onImageAdded,
-                maxImageSize = 1000
+                maxImageSize = 2000000L // 2 Mo
             )
 
             if (imageUris.isNotEmpty()) {

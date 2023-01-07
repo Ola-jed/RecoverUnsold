@@ -45,7 +45,6 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.ola.recoverunsold.R
 
-
 /**
  * A custom image picker with a preview
  */
@@ -58,16 +57,13 @@ fun ImagePicker(
 ) {
     val context = LocalContext.current
     var imageUriData by rememberSaveable { mutableStateOf(imageUri) }
-    var isChosenFileSizeInvalid by mutableStateOf(false)
+    var isChosenFileSizeInvalid by remember { mutableStateOf(false) }
     val bitmap: MutableState<Bitmap?> = remember { mutableStateOf(null) }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
     ) {
-        imageUriData = it
         it?.let { uri ->
-            onImagePicked(uri)
-            // TODO : Check if the file size is correct
             val cursor = context.contentResolver.query(uri, null, null, null, null, null)
             cursor.use { crsr ->
                 if (crsr != null && crsr.moveToFirst()) {
@@ -79,6 +75,10 @@ fun ImagePicker(
                     }
                 }
             }
+        }
+        if (it != null && !isChosenFileSizeInvalid) {
+            imageUriData = it
+            onImagePicked(it)
         }
     }
 
