@@ -20,5 +20,5 @@ The github repository for the api is hosted here : https://github.com/Ola-jed/Re
 ### TODO
 
 - [ ] Fix the locale picker not updating the app language after the restart
-- [ ] Prevent image picker from choosing images more than 1.5 mo
+- [x] Prevent image picker from choosing images more than 1.5 mo
 
