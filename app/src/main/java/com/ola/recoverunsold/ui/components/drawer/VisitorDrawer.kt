@@ -48,7 +48,7 @@ fun VisitorDrawer(navController: NavController): @Composable ColumnScope.() -> U
         ) {
             Column {
                 UserAccountHeader(
-                    email = "email${Random.nextInt()}@email.com",
+                    email = "email${VisitorDrawerUtils.randomInteger}@email.com",
                     size = configuration.screenHeightDp.dp / 10
                 )
 
@@ -105,4 +105,8 @@ fun VisitorDrawer(navController: NavController): @Composable ColumnScope.() -> U
             )
         }
     }
+}
+
+object VisitorDrawerUtils {
+    val randomInteger = Random.nextInt()
 }
