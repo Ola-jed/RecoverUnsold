@@ -6,20 +6,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ExposedDropdownMenuBox
-import androidx.compose.material.ExposedDropdownMenuDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EditCalendar
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.FilterListOff
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,7 +41,7 @@ import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 import com.ola.recoverunsold.utils.misc.toSecureDouble
 import java.util.Date
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OfferFilterComponent(
     modifier: Modifier = Modifier,
@@ -64,7 +64,7 @@ fun OfferFilterComponent(
         stringResource(id = R.string.n_a) to null
     )
     var showDropDownActiveLabels by rememberSaveable { mutableStateOf(false) }
-    val currentDropdownActiveLabel by mutableStateOf(activeLabelsMapping.filter { it.value == active }.keys.first())
+    val currentDropdownActiveLabel by remember { mutableStateOf(activeLabelsMapping.filter { it.value == active }.keys.first()) }
     var itemsAreVisible by rememberSaveable { mutableStateOf(false) }
     var showMinDatePicker by remember { mutableStateOf(false) }
     var showMaxDatePicker by remember { mutableStateOf(false) }
@@ -75,8 +75,8 @@ fun OfferFilterComponent(
             modifier = Modifier.align(Alignment.Start),
             onClick = { itemsAreVisible = !itemsAreVisible },
             colors = ButtonDefaults.textButtonColors(
-                backgroundColor = MaterialTheme.colors.background.copy(alpha = 0.5F),
-                contentColor = MaterialTheme.colors.onBackground
+                containerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.5F),
+                contentColor = MaterialTheme.colorScheme.onBackground
             )
         ) {
             Text(stringResource(id = R.string.filters), modifier = Modifier.padding(end = 5.dp))
@@ -94,7 +94,7 @@ fun OfferFilterComponent(
             Column(modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp)) {
                 Text(
                     stringResource(id = R.string.price_label),
-                    style = MaterialTheme.typography.h6
+                    style = MaterialTheme.typography.titleLarge
                 )
 
                 CustomTextInput(
@@ -131,7 +131,7 @@ fun OfferFilterComponent(
 
                 Text(
                     stringResource(id = R.string.date_label),
-                    style = MaterialTheme.typography.h6
+                    style = MaterialTheme.typography.titleLarge
                 )
 
                 CustomTextInput(
@@ -180,9 +180,9 @@ fun OfferFilterComponent(
                             DropdownMenuItem(onClick = {
                                 onActiveChange(it.value)
                                 showDropDownActiveLabels = false
-                            }) {
+                            }, text = {
                                 Text(text = it.key)
-                            }
+                            })
                         }
                     }
                 }
@@ -206,11 +206,11 @@ fun OfferFilterComponent(
                 Button(
                     modifier = componentsModifier,
                     onClick = onReset,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) {
                     Text(
                         text = stringResource(id = R.string.reset),
-                        color = MaterialTheme.colors.onError
+                        color = MaterialTheme.colorScheme.onError
                     )
                 }
 

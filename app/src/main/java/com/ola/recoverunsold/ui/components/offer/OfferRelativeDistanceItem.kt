@@ -4,11 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.EventAvailable
@@ -16,6 +11,12 @@ import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.Route
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +30,7 @@ import com.ola.recoverunsold.utils.misc.formatDateTime
 import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 import androidx.compose.ui.platform.LocalConfiguration as LocalConfiguration1
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OfferRelativeDistanceItem(
     modifier: Modifier = Modifier,
@@ -44,7 +45,7 @@ fun OfferRelativeDistanceItem(
 
     Card(
         modifier = modifier,
-        elevation = 10.dp,
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
         onClick = onMoreInformationRequest
     ) {
         Column(
@@ -111,7 +112,7 @@ fun OfferRelativeDistanceItem(
                 Icon(
                     imageVector = Icons.Default.Map,
                     contentDescription = null,
-                    tint = MaterialTheme.colors.onPrimary
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }

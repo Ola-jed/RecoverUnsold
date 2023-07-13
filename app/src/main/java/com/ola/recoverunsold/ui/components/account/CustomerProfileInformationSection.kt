@@ -4,11 +4,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,7 +50,7 @@ fun CustomerProfileInformationSection(
                 .padding(top = 50.dp)
         ) {
             CircularProgressIndicator(
-                color = MaterialTheme.colors.primary,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.align(Alignment.Center)
             )
         }
@@ -61,7 +61,7 @@ fun CustomerProfileInformationSection(
                     stringResource(R.string.profile_information_label),
                     modifier = Modifier
                         .padding(vertical = 10.dp),
-                    style = MaterialTheme.typography.h6
+                    style = MaterialTheme.typography.titleLarge
                 )
 
                 UserUpdateComponent<Customer>(
@@ -80,9 +80,9 @@ fun CustomerProfileInformationSection(
                         .fillMaxWidth()
                         .padding(horizontal = 22.dp),
                     onClick = onEditingEnd,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text(stringResource(R.string.save), color = MaterialTheme.colors.onPrimary)
+                    Text(stringResource(R.string.save), color = MaterialTheme.colorScheme.onPrimary)
                 }
 
                 Button(
@@ -90,9 +90,9 @@ fun CustomerProfileInformationSection(
                         .fillMaxWidth()
                         .padding(horizontal = 22.dp),
                     onClick = onEditingCancel,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) {
-                    Text(stringResource(R.string.cancel), color = MaterialTheme.colors.onError)
+                    Text(stringResource(R.string.cancel), color = MaterialTheme.colorScheme.onError)
                 }
             }
         } else {
@@ -115,11 +115,11 @@ fun CustomerProfileInformationSection(
                 Button(
                     modifier = buttonsModifier,
                     onClick = { showDialog = true },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) {
                     Text(
                         stringResource(R.string.delete_account),
-                        color = MaterialTheme.colors.onError
+                        color = MaterialTheme.colorScheme.onError
                     )
                 }
 

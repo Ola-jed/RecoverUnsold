@@ -18,10 +18,8 @@ class TokenStore(context: Context) {
             token.toBuilder()
                 .setRole(apiToken.role)
                 .setToken(apiToken.token)
-                .setExpirationDate(
-                    Timestamp.newBuilder()
-                        .setSeconds(apiToken.expirationDate.time)
-                ).build()
+                .setExpirationDate(Timestamp.newBuilder().setSeconds(apiToken.expirationDate.time))
+                .build()
         }
     }
 

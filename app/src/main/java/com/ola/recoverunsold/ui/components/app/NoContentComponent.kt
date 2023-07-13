@@ -2,8 +2,8 @@ package com.ola.recoverunsold.ui.components.app
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -34,8 +34,8 @@ fun NoContentComponent(modifier: Modifier = Modifier, message: String) {
 
         Text(
             text = message,
-            color = MaterialTheme.colors.onBackground,
-            style = MaterialTheme.typography.h6
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.titleLarge
         )
     }
 }

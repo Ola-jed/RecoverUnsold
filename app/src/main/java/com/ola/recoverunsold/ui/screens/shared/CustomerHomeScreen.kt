@@ -9,16 +9,18 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -55,156 +57,169 @@ fun CustomerHomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val isRefreshing by homeViewModel.isRefreshing.collectAsState()
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = {
-            AppBar(
-                coroutineScope = coroutineScope,
-                scaffoldState = scaffoldState,
-                title = stringResource(id = R.string.home)
-            )
-        },
-        drawerContent = DrawerContent(navController)
-    ) { paddingValues ->
-        SwipeRefresh(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
-            onRefresh = { homeViewModel.refresh() }
-        ) {
-            when (homeViewModel.homeDataApiCallResult.status) {
-                ApiStatus.LOADING, ApiStatus.INACTIVE -> LoadingIndicator()
-                ApiStatus.ERROR -> {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        Button(
-                            onClick = { homeViewModel.refresh() },
-                            modifier = Modifier.align(Alignment.Center)
-                        ) {
-                            Text(stringResource(id = R.string.retry))
-                        }
-                    }
-
-                    LaunchedEffect(snackbarHostState) {
-                        coroutineScope.launch {
-                            snackbarHostState.show(
-                                message = homeViewModel.errorMessage()
-                                    ?: Strings.get(R.string.unknown_error_occured)
-                            )
-                        }
-                    }
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = { DrawerContent(navController) },
+        content = {
+            Scaffold(
+                topBar = {
+                    AppBar(
+                        coroutineScope = coroutineScope,
+                        drawerState = drawerState,
+                        title = stringResource(id = R.string.home)
+                    )
                 }
-                else -> {
-                    val homeData = homeViewModel.homeDataApiCallResult.data!!
-                    val offers = homeData.offers
-                    val distributors = homeData.distributors
+            ) { paddingValues ->
+                SwipeRefresh(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+                    onRefresh = { homeViewModel.refresh() }
+                ) {
+                    when (homeViewModel.homeDataApiCallResult.status) {
+                        ApiStatus.LOADING, ApiStatus.INACTIVE -> LoadingIndicator()
+                        ApiStatus.ERROR -> {
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                Button(
+                                    onClick = { homeViewModel.refresh() },
+                                    modifier = Modifier.align(Alignment.Center)
+                                ) {
+                                    Text(stringResource(id = R.string.retry))
+                                }
+                            }
 
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
-                    ) {
-                        if (homeData.orderStats != null) {
-                            CustomerOrderStatsComponent(
-                                modifier = Modifier.padding(15.dp),
-                                customerOrderStats = homeData.orderStats
-                            )
-                        }
-
-                        Text(
-                            modifier = Modifier.padding(top = 15.dp, bottom = 15.dp, start = 15.dp),
-                            text = stringResource(id = R.string.featured_offers),
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.body1
-                        )
-
-                        if (offers.isEmpty()) {
-                            NoContentComponent(message = stringResource(id = R.string.no_featured_offers))
-                        } else {
-                            LazyRow(modifier = Modifier.fillMaxWidth()) {
-                                items(items = offers) { item ->
-                                    OfferItem(
-                                        modifier = Modifier
-                                            .fillParentMaxWidth(0.90F)
-                                            .padding(horizontal = 20.dp, vertical = 10.dp),
-                                        offer = item,
-                                        onTap = {
-                                            navController.navigate(
-                                                Routes.OfferDetails
-                                                    .path
-                                                    .replace("{offerId}", item.id)
-                                            )
-                                        }
+                            LaunchedEffect(snackbarHostState) {
+                                coroutineScope.launch {
+                                    snackbarHostState.show(
+                                        message = homeViewModel.errorMessage()
+                                            ?: Strings.get(R.string.unknown_error_occured)
                                     )
                                 }
                             }
                         }
 
-                        TextButton(
-                            modifier = Modifier
-                                .align(Alignment.End)
-                                .padding(end = 10.dp),
-                            onClick = { navController.navigate(Routes.Offers.path) }
-                        ) {
-                            Text(stringResource(id = R.string.view_all))
+                        else -> {
+                            val homeData = homeViewModel.homeDataApiCallResult.data!!
+                            val offers = homeData.offers
+                            val distributors = homeData.distributors
 
-                            Icon(
-                                modifier = Modifier.padding(start = 5.dp),
-                                imageVector = Icons.Default.KeyboardDoubleArrowRight,
-                                contentDescription = null
-                            )
-                        }
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .verticalScroll(rememberScrollState())
+                            ) {
+                                if (homeData.orderStats != null) {
+                                    CustomerOrderStatsComponent(
+                                        modifier = Modifier.padding(15.dp),
+                                        customerOrderStats = homeData.orderStats
+                                    )
+                                }
 
-                        Text(
-                            modifier = Modifier.padding(top = 25.dp, bottom = 15.dp, start = 15.dp),
-                            text = stringResource(id = R.string.some_of_our_distributors),
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.body1
-                        )
+                                Text(
+                                    modifier = Modifier.padding(
+                                        top = 15.dp,
+                                        bottom = 15.dp,
+                                        start = 15.dp
+                                    ),
+                                    text = stringResource(id = R.string.featured_offers),
+                                    fontWeight = FontWeight.Bold,
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
 
-                        if (distributors.isEmpty()) {
-                            NoContentComponent(
-                                message = stringResource(id = R.string.no_distributor_found)
-                            )
-                        } else {
-                            LazyRow(modifier = Modifier.fillMaxWidth()) {
-                                items(items = distributors) { item ->
-                                    DistributorInformationComponent(
-                                        modifier = Modifier
-                                            .padding(horizontal = 20.dp, vertical = 10.dp),
-                                        distributorInformation = item,
-                                        onTap = {
-                                            navController.navigate(
-                                                Routes.DistributorDetails
-                                                    .path
-                                                    .replace("{distributorId}", item.id)
+                                if (offers.isEmpty()) {
+                                    NoContentComponent(message = stringResource(id = R.string.no_featured_offers))
+                                } else {
+                                    LazyRow(modifier = Modifier.fillMaxWidth()) {
+                                        items(items = offers) { item ->
+                                            OfferItem(
+                                                modifier = Modifier
+                                                    .fillParentMaxWidth(0.90F)
+                                                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                                                offer = item,
+                                                onTap = {
+                                                    navController.navigate(
+                                                        Routes.OfferDetails
+                                                            .path
+                                                            .replace("{offerId}", item.id)
+                                                    )
+                                                }
                                             )
                                         }
+                                    }
+                                }
+
+                                TextButton(
+                                    modifier = Modifier
+                                        .align(Alignment.End)
+                                        .padding(end = 10.dp),
+                                    onClick = { navController.navigate(Routes.Offers.path) }
+                                ) {
+                                    Text(stringResource(id = R.string.view_all))
+
+                                    Icon(
+                                        modifier = Modifier.padding(start = 5.dp),
+                                        imageVector = Icons.Default.KeyboardDoubleArrowRight,
+                                        contentDescription = null
+                                    )
+                                }
+
+                                Text(
+                                    modifier = Modifier.padding(
+                                        top = 25.dp,
+                                        bottom = 15.dp,
+                                        start = 15.dp
+                                    ),
+                                    text = stringResource(id = R.string.some_of_our_distributors),
+                                    fontWeight = FontWeight.Bold,
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+
+                                if (distributors.isEmpty()) {
+                                    NoContentComponent(
+                                        message = stringResource(id = R.string.no_distributor_found)
+                                    )
+                                } else {
+                                    LazyRow(modifier = Modifier.fillMaxWidth()) {
+                                        items(items = distributors) { item ->
+                                            DistributorInformationComponent(
+                                                modifier = Modifier
+                                                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                                                distributorInformation = item,
+                                                onTap = {
+                                                    navController.navigate(
+                                                        Routes.DistributorDetails
+                                                            .path
+                                                            .replace("{distributorId}", item.id)
+                                                    )
+                                                }
+                                            )
+                                        }
+                                    }
+                                }
+
+                                TextButton(
+                                    modifier = Modifier
+                                        .align(Alignment.End)
+                                        .padding(end = 10.dp),
+                                    onClick = { navController.navigate(Routes.Distributors.path) }
+                                ) {
+                                    Text(stringResource(id = R.string.view_all))
+
+                                    Icon(
+                                        modifier = Modifier.padding(start = 5.dp),
+                                        imageVector = Icons.Default.KeyboardDoubleArrowRight,
+                                        contentDescription = null
                                     )
                                 }
                             }
-                        }
-
-                        TextButton(
-                            modifier = Modifier
-                                .align(Alignment.End)
-                                .padding(end = 10.dp),
-                            onClick = { navController.navigate(Routes.Distributors.path) }
-                        ) {
-                            Text(stringResource(id = R.string.view_all))
-
-                            Icon(
-                                modifier = Modifier.padding(start = 5.dp),
-                                imageVector = Icons.Default.KeyboardDoubleArrowRight,
-                                contentDescription = null
-                            )
                         }
                     }
                 }
             }
         }
-    }
+    )
 }

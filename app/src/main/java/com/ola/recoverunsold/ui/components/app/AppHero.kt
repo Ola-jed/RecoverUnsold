@@ -5,9 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,10 +18,12 @@ import com.ola.recoverunsold.R
 @Composable
 fun AppHero(modifier: Modifier = Modifier, text: String) {
     val painter = painterResource(id = R.mipmap.ic_launcher_foreground)
+
     Surface(
         modifier = modifier,
-        elevation = 50.dp,
-        color = MaterialTheme.colors.primary,
+        shadowElevation = 50.dp,
+        tonalElevation = 50.dp,
+        color = MaterialTheme.colorScheme.primary,
         shape = RoundedCornerShape(
             topStart = 0.dp,
             topEnd = 0.dp,
@@ -44,7 +46,7 @@ fun AppHero(modifier: Modifier = Modifier, text: String) {
                 modifier = Modifier
                     .align(Alignment.End)
                     .padding(end = 20.dp, bottom = 30.dp),
-                style = MaterialTheme.typography.h6
+                style = MaterialTheme.typography.titleLarge
             )
         }
     }

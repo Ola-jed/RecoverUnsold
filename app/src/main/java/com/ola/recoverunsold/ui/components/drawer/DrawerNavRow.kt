@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,8 +36,8 @@ fun DrawerNavRow(
     val textColor: Color
     val modifierToApply: Modifier
     if (isCurrent) {
-        bgColor = MaterialTheme.colors.primary.copy(alpha = 0.7f)
-        textColor = MaterialTheme.colors.onPrimary
+        bgColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
+        textColor = MaterialTheme.colorScheme.onPrimary
         modifierToApply = modifier
             .clip(RoundedCornerShape(5.dp))
             .background(bgColor)
@@ -45,7 +45,7 @@ fun DrawerNavRow(
             .padding(top = 15.dp, bottom = 15.dp, start = 15.dp)
     } else {
         bgColor = Color.Transparent
-        textColor = MaterialTheme.colors.onBackground
+        textColor = MaterialTheme.colorScheme.onBackground
         modifierToApply = modifier
             .clip(RoundedCornerShape(5.dp))
             .background(bgColor)

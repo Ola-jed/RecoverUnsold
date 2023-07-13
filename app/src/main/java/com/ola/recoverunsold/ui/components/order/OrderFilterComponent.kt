@@ -4,14 +4,14 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.Chip
-import androidx.compose.material.ChipDefaults
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,7 +22,7 @@ import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.utils.misc.internationalizedValue
 import com.ola.recoverunsold.utils.misc.toIcon
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrderFilterComponent(
     modifier: Modifier = Modifier,
@@ -32,12 +32,13 @@ fun OrderFilterComponent(
     val onBgModified = Color.Black.copy(alpha = 0.1F)
 
     Row(modifier = modifier.horizontalScroll(rememberScrollState())) {
-        Chip(
+        FilterChip(
+            selected = orderStatus == null,
             modifier = Modifier.padding(end = 5.dp),
             onClick = { onOrderStatusChange(null) },
-            colors = ChipDefaults.chipColors(
-                backgroundColor = if (orderStatus == null) {
-                    MaterialTheme.colors.primary
+            colors = FilterChipDefaults.filterChipColors(
+                containerColor = if (orderStatus == null) {
+                    MaterialTheme.colorScheme.primary
                 } else {
                     onBgModified
                 }
@@ -47,50 +48,51 @@ fun OrderFilterComponent(
                     imageVector = Icons.Default.List,
                     contentDescription = stringResource(id = R.string.all),
                     tint = if (orderStatus == null) {
-                        MaterialTheme.colors.onPrimary
+                        MaterialTheme.colorScheme.onPrimary
                     } else {
-                        MaterialTheme.colors.onBackground
+                        MaterialTheme.colorScheme.onBackground
+                    }
+                )
+            },
+            label = {
+                Text(
+                    text = stringResource(id = R.string.all),
+                    color = if (orderStatus == null) {
+                        MaterialTheme.colorScheme.onPrimary
+                    } else {
+                        MaterialTheme.colorScheme.onBackground
                     }
                 )
             }
-        ) {
-            Text(
-                text = stringResource(id = R.string.all),
-                color = if (orderStatus == null) {
-                    MaterialTheme.colors.onPrimary
-                } else {
-                    MaterialTheme.colors.onBackground
-                }
-            )
-        }
+        )
 
         OrderStatus.values().forEach {
             val bgColor = if (it == orderStatus) {
-                MaterialTheme.colors.primary
+                MaterialTheme.colorScheme.primary
             } else {
                 onBgModified
             }
 
             val fgColor = if (it == orderStatus) {
-                MaterialTheme.colors.onPrimary
+                MaterialTheme.colorScheme.onPrimary
             } else {
-                MaterialTheme.colors.onBackground
+                MaterialTheme.colorScheme.onBackground
             }
 
-            Chip(
+            FilterChip(
+                selected = it == orderStatus,
                 modifier = Modifier.padding(end = 5.dp),
                 onClick = { onOrderStatusChange(it) },
-                colors = ChipDefaults.chipColors(backgroundColor = bgColor),
+                colors = FilterChipDefaults.filterChipColors(containerColor = bgColor),
                 leadingIcon = {
                     Icon(
                         imageVector = it.toIcon(),
                         contentDescription = it.name,
                         tint = fgColor
                     )
-                }
-            ) {
-                Text(text = it.internationalizedValue(), color = fgColor)
-            }
+                },
+                label = { Text(text = it.internationalizedValue(), color = fgColor) }
+            )
         }
     }
 }

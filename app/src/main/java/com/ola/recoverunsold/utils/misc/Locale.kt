@@ -7,7 +7,11 @@ enum class Locale(val code: String) {
     Auto("");
 
     companion object {
-        private val VALUES = values()
-        fun getByCode(code: String) = VALUES.firstOrNull { it.code == code } ?: Auto
+        fun getByCode(code: String): Locale = when (code) {
+            "fr" -> Fr
+            "en" -> En
+            "es" -> Es
+            else -> Auto
+        }
     }
 }

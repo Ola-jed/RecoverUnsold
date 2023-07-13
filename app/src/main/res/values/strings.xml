@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RecoverUnsold</string>
+    <string name="app_name">Recover Unsold</string>
     <string name="email_label">Email</string>
     <string name="email_placeholder">user@email.com</string>
     <string name="login_label">Welcome</string>
@@ -19,7 +19,7 @@
     <string name="who_are_you">Who are you ?</string>
     <string name="invalid_data">Invalid data</string>
     <string name="user_not_found">User not found</string>
-    <string name="forgot_password_indications">Enter your email address to receive the password reset code</string>
+    <string name="forgot_password_indications">Enter your email address</string>
     <string name="send_code_action">Send the code</string>
     <string name="code_already_sent">Code already sent ?</string>
     <string name="code_sent_successfully">Code sent successfully, check your mail inbox</string>

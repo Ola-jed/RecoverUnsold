@@ -12,9 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.outlined.History
@@ -22,6 +19,9 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ShoppingBag
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -55,8 +55,8 @@ fun DistributorDrawer(
                 .background(
                     brush = Brush.linearGradient(
                         colors = listOf(
-                            MaterialTheme.colors.secondary,
-                            MaterialTheme.colors.secondaryVariant
+                            MaterialTheme.colorScheme.secondary,
+                            MaterialTheme.colorScheme.primary
                         )
                     )
                 )
@@ -71,13 +71,13 @@ fun DistributorDrawer(
 
                 Text(
                     user.username,
-                    color = MaterialTheme.colors.onSecondary,
+                    color = MaterialTheme.colorScheme.onSecondary,
                     modifier = Modifier.padding(top = 6.dp)
                 )
 
                 Text(
                     user.email,
-                    color = MaterialTheme.colors.onSecondary,
+                    color = MaterialTheme.colorScheme.onSecondary,
                     modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
                 )
             }

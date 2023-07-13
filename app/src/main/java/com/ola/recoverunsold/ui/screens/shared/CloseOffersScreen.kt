@@ -13,20 +13,23 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.BottomSheetScaffold
-import androidx.compose.material.BottomSheetState
-import androidx.compose.material.BottomSheetValue
-import androidx.compose.material.Button
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NearMe
-import androidx.compose.material.rememberBottomSheetScaffoldState
+import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,7 +68,7 @@ import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.IntegerValidator
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CloseOffersScreen(
     navController: NavController,
@@ -76,207 +79,218 @@ fun CloseOffersScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     val coroutineScope = rememberCoroutineScope()
     val locationPermissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed),
+        bottomSheetState = SheetState(skipPartiallyExpanded = true),
         snackbarHostState = snackbarHostState
     )
 
-    BottomSheetScaffold(
-        scaffoldState = bottomSheetScaffoldState,
-        topBar = {
-            AppBar(
-                coroutineScope = coroutineScope,
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = { DrawerContent(navController) },
+        content = {
+            BottomSheetScaffold(
                 scaffoldState = bottomSheetScaffoldState,
-                title = stringResource(id = R.string.close_offers),
-                canGoBack = true,
-                navController = navController
-            )
-        },
-        drawerContent = DrawerContent(navController),
-        sheetContent = {
-            CloseOffersFormContent(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                distance = closeOffersViewModel.offerDistanceFilterQuery.distance,
-                onDistanceUpdate = {
-                    closeOffersViewModel.offerDistanceFilterQuery =
-                        closeOffersViewModel
-                            .offerDistanceFilterQuery
-                            .copy(distance = it)
-                },
-                onDistanceValidationError = {
-                    closeOffersViewModel.formState =
-                        closeOffersViewModel.formState.copy(
-                            isValid = false,
-                            errorMessage = it
-                        )
-                },
-                onDistanceValidationSuccess = {
-                    closeOffersViewModel.formState =
-                        closeOffersViewModel.formState.copy(
-                            isValid = true,
-                            errorMessage = null
-                        )
-                },
-                onSubmit = {
-                    if (!closeOffersViewModel.formState.isValid) {
-                        coroutineScope.launch {
-                            snackbarHostState.show(
-                                message = closeOffersViewModel.formState.errorMessage
-                                    ?: Strings.get(R.string.invalid_data)
-                            )
+                topBar = {
+                    AppBar(
+                        coroutineScope = coroutineScope,
+                        drawerState = drawerState,
+                        title = stringResource(id = R.string.close_offers),
+                        canGoBack = true,
+                        navController = navController,
+                        actions = {
+                            FloatingActionButton(onClick = {
+                                coroutineScope.launch {
+                                    if (bottomSheetScaffoldState.bottomSheetState.isVisible) {
+                                        bottomSheetScaffoldState.bottomSheetState.hide()
+                                    } else {
+                                        bottomSheetScaffoldState.bottomSheetState.expand()
+                                    }
+                                }
+                            }) {
+                                Icon(imageVector = Icons.Default.NearMe, contentDescription = null)
+                            }
                         }
-                    } else {
-                        coroutineScope.launch {
-                            bottomSheetScaffoldState.bottomSheetState.collapse()
-                        }
-                        closeOffersViewModel.getCloseOffers()
-                    }
-                }
-            )
-        },
-        sheetPeekHeight = 0.dp,
-        sheetElevation = 25.dp,
-        sheetGesturesEnabled = true,
-        sheetShape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp),
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
-                coroutineScope.launch {
-                    if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
-                        bottomSheetScaffoldState.bottomSheetState.expand()
-                    } else {
-                        bottomSheetScaffoldState.bottomSheetState.collapse()
-                    }
-                }
-            }) {
-                Icon(imageVector = Icons.Default.NearMe, contentDescription = null)
-            }
-        }
-    ) { paddingValues ->
-        when (closeOffersViewModel.closeOffersApiResult.status) {
-            ApiStatus.INACTIVE -> {
-                Text(
-                    text = stringResource(id = R.string.enter_search_department),
-                    modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp),
-                    fontSize = 19.sp
-                )
-
-                DisposableEffect(key1 = lifecycleOwner, effect = {
-                    val observer = LifecycleEventObserver { _, event ->
-                        if (event == Lifecycle.Event.ON_START) {
-                            locationPermissionState.launchPermissionRequest()
-                        }
-                    }
-                    lifecycleOwner.lifecycle.addObserver(observer)
-                    onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
-                })
-
-                when {
-                    locationPermissionState.hasPermission -> {
-                        context.getDeviceLocation(
-                            onLatLngValueUpdate = {
-                                closeOffersViewModel.offerDistanceFilterQuery = closeOffersViewModel
+                    )
+                },
+                sheetContent = {
+                    CloseOffersFormContent(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        distance = closeOffersViewModel.offerDistanceFilterQuery.distance,
+                        onDistanceUpdate = {
+                            closeOffersViewModel.offerDistanceFilterQuery =
+                                closeOffersViewModel
                                     .offerDistanceFilterQuery
-                                    .copy(latLong = LatLong(it.latitude, it.longitude))
-                            },
-                            onLocationFetchFailed = {
+                                    .copy(distance = it)
+                        },
+                        onDistanceValidationError = {
+                            closeOffersViewModel.formState =
+                                closeOffersViewModel.formState.copy(
+                                    isValid = false,
+                                    errorMessage = it
+                                )
+                        },
+                        onDistanceValidationSuccess = {
+                            closeOffersViewModel.formState =
+                                closeOffersViewModel.formState.copy(
+                                    isValid = true,
+                                    errorMessage = null
+                                )
+                        },
+                        onSubmit = {
+                            if (!closeOffersViewModel.formState.isValid) {
                                 coroutineScope.launch {
                                     snackbarHostState.show(
-                                        message = Strings.get(R.string.location_fetch_failed)
+                                        message = closeOffersViewModel.formState.errorMessage
+                                            ?: Strings.get(R.string.invalid_data)
+                                    )
+                                }
+                            } else {
+                                coroutineScope.launch {
+                                    bottomSheetScaffoldState.bottomSheetState.hide()
+                                }
+                                closeOffersViewModel.getCloseOffers()
+                            }
+                        }
+                    )
+                },
+                sheetPeekHeight = 0.dp,
+                sheetTonalElevation = 25.dp,
+                sheetShadowElevation = 25.dp,
+                sheetShape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp)
+            ) { paddingValues ->
+                when (closeOffersViewModel.closeOffersApiResult.status) {
+                    ApiStatus.INACTIVE -> {
+                        Text(
+                            text = stringResource(id = R.string.enter_search_department),
+                            modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp),
+                            fontSize = 19.sp
+                        )
+
+                        DisposableEffect(key1 = lifecycleOwner, effect = {
+                            val observer = LifecycleEventObserver { _, event ->
+                                if (event == Lifecycle.Event.ON_START) {
+                                    locationPermissionState.launchPermissionRequest()
+                                }
+                            }
+                            lifecycleOwner.lifecycle.addObserver(observer)
+                            onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+                        })
+
+                        when {
+                            locationPermissionState.hasPermission -> {
+                                context.getDeviceLocation(
+                                    onLatLngValueUpdate = {
+                                        closeOffersViewModel.offerDistanceFilterQuery =
+                                            closeOffersViewModel
+                                                .offerDistanceFilterQuery
+                                                .copy(latLong = LatLong(it.latitude, it.longitude))
+                                    },
+                                    onLocationFetchFailed = {
+                                        coroutineScope.launch {
+                                            snackbarHostState.show(
+                                                message = Strings.get(R.string.location_fetch_failed)
+                                            )
+                                        }
+                                    }
+                                )
+                            }
+
+                            else -> {
+                                LaunchedEffect(coroutineScope) {
+                                    snackbarHostState.show(
+                                        message = Strings.get(R.string.feature_requiring_permission)
                                     )
                                 }
                             }
-                        )
-                    }
-                    else -> {
-                        coroutineScope.launch {
-                            snackbarHostState.show(
-                                message = Strings.get(R.string.feature_requiring_permission)
-                            )
                         }
                     }
-                }
-            }
-            ApiStatus.LOADING -> LoadingIndicator()
-            ApiStatus.ERROR -> {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(10.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            closeOffersViewModel.errorMessage()
-                                ?: stringResource(id = R.string.unknown_error_occured),
-                            modifier = Modifier.padding(bottom = 10.dp)
-                        )
 
-                        Button(
-                            modifier = Modifier.align(Alignment.CenterHorizontally),
-                            onClick = { closeOffersViewModel.getCloseOffers() }) {
-                            Text(text = stringResource(id = R.string.retry))
-                        }
-                    }
-                }
-            }
-            ApiStatus.SUCCESS -> {
-                val offers = closeOffersViewModel.closeOffersApiResult.data!!
-
-                if (offers.items.isEmpty()) {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        NoContentComponent(
-                            modifier = Modifier.fillMaxWidth(),
-                            message = stringResource(R.string.no_offers_found)
-                        )
-                    }
-                } else {
-                    LazyColumn(
-                        modifier = Modifier
-                            .padding(paddingValues)
-                            .fillMaxSize()
-                    ) {
-                        items(items = offers.items) { item ->
-                            OfferRelativeDistanceItem(
+                    ApiStatus.LOADING -> LoadingIndicator()
+                    ApiStatus.ERROR -> {
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            Column(
                                 modifier = Modifier
-                                    .fillParentMaxWidth()
-                                    .padding(horizontal = 20.dp, vertical = 10.dp),
-                                offerWithRelativeDistance = item,
-                                onMoreInformationRequest = {
-                                    navController.navigate(
-                                        Routes.OfferDetails.path.replace(
-                                            "{offerId}",
-                                            item.offer.id
-                                        )
-                                    )
-                                },
-                                onMapShowRequest = {
-                                    context.openMapWithCoordinates(
-                                        latitude = item.offer.location!!.coordinates.latitude,
-                                        longitude = item.offer.location.coordinates.longitude
+                                    .align(Alignment.Center)
+                                    .padding(10.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    closeOffersViewModel.errorMessage()
+                                        ?: stringResource(id = R.string.unknown_error_occured),
+                                    modifier = Modifier.padding(bottom = 10.dp)
+                                )
+
+                                Button(
+                                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                                    onClick = { closeOffersViewModel.getCloseOffers() }) {
+                                    Text(text = stringResource(id = R.string.retry))
+                                }
+                            }
+                        }
+                    }
+
+                    ApiStatus.SUCCESS -> {
+                        val offers = closeOffersViewModel.closeOffersApiResult.data!!
+
+                        if (offers.items.isEmpty()) {
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                NoContentComponent(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    message = stringResource(R.string.no_offers_found)
+                                )
+                            }
+                        } else {
+                            LazyColumn(
+                                modifier = Modifier
+                                    .padding(paddingValues)
+                                    .fillMaxSize()
+                            ) {
+                                items(items = offers.items) { item ->
+                                    OfferRelativeDistanceItem(
+                                        modifier = Modifier
+                                            .fillParentMaxWidth()
+                                            .padding(horizontal = 20.dp, vertical = 10.dp),
+                                        offerWithRelativeDistance = item,
+                                        onMoreInformationRequest = {
+                                            navController.navigate(
+                                                Routes.OfferDetails.path.replace(
+                                                    "{offerId}",
+                                                    item.offer.id
+                                                )
+                                            )
+                                        },
+                                        onMapShowRequest = {
+                                            context.openMapWithCoordinates(
+                                                latitude = item.offer.location!!.coordinates.latitude,
+                                                longitude = item.offer.location.coordinates.longitude
+                                            )
+                                        }
                                     )
                                 }
-                            )
-                        }
 
-                        item {
-                            PaginationComponent(
-                                modifier = Modifier.fillMaxWidth(),
-                                page = offers,
-                                onPrevious = { closeOffersViewModel.getPrevious() },
-                                onNext = { closeOffersViewModel.getNext() }
-                            )
-                        }
+                                item {
+                                    PaginationComponent(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        page = offers,
+                                        onPrevious = { closeOffersViewModel.getPrevious() },
+                                        onNext = { closeOffersViewModel.getNext() }
+                                    )
+                                }
 
-                        item {
-                            Box(modifier = Modifier.height(75.dp))
+                                item {
+                                    Box(modifier = Modifier.height(75.dp))
+                                }
+                            }
                         }
                     }
                 }
             }
         }
-    }
+    )
 }
 
 @Composable

@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,7 +20,8 @@ fun AccountInformationTile(
     data: String
 ) {
     Surface(
-        elevation = 10.dp,
+        shadowElevation = 10.dp,
+        tonalElevation = 10.dp,
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 10.dp, horizontal = 20.dp)

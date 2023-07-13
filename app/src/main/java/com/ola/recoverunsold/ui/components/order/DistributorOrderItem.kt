@@ -5,17 +5,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EventAvailable
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCartCheckout
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +32,7 @@ import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
 import com.ola.recoverunsold.utils.misc.internationalizedValueSingular
 import com.ola.recoverunsold.utils.misc.toIcon
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DistributorOrderItem(
     modifier: Modifier = Modifier,
@@ -42,7 +43,7 @@ fun DistributorOrderItem(
 
     Card(
         modifier = modifier.padding(horizontal = 10.dp),
-        elevation = 10.dp,
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
         onClick = onMoreInformationRequest
     ) {
         Column {
@@ -74,7 +75,7 @@ fun DistributorOrderItem(
                             modifier = Modifier.padding(start = 3.dp),
                             text = order.status.internationalizedValueSingular(),
                             color = order.status.foregroundColor(),
-                            style = MaterialTheme.typography.body2
+                            style = MaterialTheme.typography.bodyMedium
                         )
                     }
                 }

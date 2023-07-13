@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,151 +46,156 @@ fun OffersScreen(
     offersViewModel: OffersViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = {
-            AppBar(
-                coroutineScope = coroutineScope,
-                scaffoldState = scaffoldState,
-                title = stringResource(id = R.string.offers)
-            )
-        },
-        drawerContent = DrawerContent(navController)
-    ) { paddingValues ->
-        when (offersViewModel.offersApiResult.status) {
-            ApiStatus.LOADING -> LoadingIndicator()
-            ApiStatus.ERROR -> {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    Button(
-                        onClick = {
-                            offersViewModel.resetFilter()
-                            offersViewModel.getOffers()
-                        },
-                        modifier = Modifier.align(Alignment.Center)
-                    ) {
-                        Text(stringResource(id = R.string.retry))
-                    }
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = { DrawerContent(navController) },
+        content = {
+            Scaffold(
+                topBar = {
+                    AppBar(
+                        coroutineScope = coroutineScope,
+                        drawerState = drawerState,
+                        title = stringResource(id = R.string.offers)
+                    )
                 }
-
-                LaunchedEffect(snackbarHostState) {
-                    coroutineScope.launch {
-                        snackbarHostState.show(
-                            message = offersViewModel.errorMessage()
-                                ?: Strings.get(R.string.unknown_error_occured)
-                        )
-                    }
-                }
-            }
-            else -> {
-                val offers = offersViewModel.offersApiResult.data!!
-
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .fillMaxSize()
-                ) {
-                    item {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Start
-                        ) {
-                            OfferFilterComponent(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(20.dp),
-                                minPrice = offersViewModel.offerFilterQuery.minPrice,
-                                maxPrice = offersViewModel.offerFilterQuery.maxPrice,
-                                minDate = offersViewModel.offerFilterQuery.minDate,
-                                maxDate = offersViewModel.offerFilterQuery.maxDate,
-                                active = offersViewModel.offerFilterQuery.active,
-                                onMinPriceChange = {
-                                    offersViewModel.offerFilterQuery =
-                                        offersViewModel.offerFilterQuery.copy(
-                                            minPrice = it
-                                        )
-                                },
-                                onMaxPriceChange = {
-                                    offersViewModel.offerFilterQuery =
-                                        offersViewModel.offerFilterQuery.copy(
-                                            maxPrice = it
-                                        )
-                                },
-                                onMinDateChange = {
-                                    offersViewModel.offerFilterQuery =
-                                        offersViewModel.offerFilterQuery.copy(
-                                            minDate = it
-                                        )
-                                },
-                                onMaxDateChange = {
-                                    offersViewModel.offerFilterQuery =
-                                        offersViewModel.offerFilterQuery.copy(
-                                            maxDate = it
-                                        )
-                                },
-                                onActiveChange = {
-                                    offersViewModel.offerFilterQuery =
-                                        offersViewModel.offerFilterQuery.copy(
-                                            active = it
-                                        )
-                                },
-                                onApply = {
-                                    offersViewModel.getOffers()
-                                },
-                                onReset = {
+            ) { paddingValues ->
+                when (offersViewModel.offersApiResult.status) {
+                    ApiStatus.LOADING -> LoadingIndicator()
+                    ApiStatus.ERROR -> {
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            Button(
+                                onClick = {
                                     offersViewModel.resetFilter()
                                     offersViewModel.getOffers()
-                                }
-                            )
+                                },
+                                modifier = Modifier.align(Alignment.Center)
+                            ) {
+                                Text(stringResource(id = R.string.retry))
+                            }
+                        }
+
+                        LaunchedEffect(snackbarHostState) {
+                            coroutineScope.launch {
+                                snackbarHostState.show(
+                                    message = offersViewModel.errorMessage()
+                                        ?: Strings.get(R.string.unknown_error_occured)
+                                )
+                            }
                         }
                     }
 
-                    if (offers.items.isEmpty()) {
-                        item {
-                            NoContentComponent(
-                                modifier = Modifier.fillMaxWidth(),
-                                message = stringResource(R.string.no_offers_found)
-                            )
-                        }
-                    } else {
-                        items(items = offers.items) { item ->
-                            OfferItem(
-                                modifier = Modifier
-                                    .fillParentMaxWidth()
-                                    .padding(horizontal = 20.dp, vertical = 10.dp),
-                                offer = item,
-                                onTap = {
-                                    navController.navigate(
-                                        Routes.OfferDetails.path.replace(
-                                            "{offerId}",
-                                            item.id
-                                        )
+                    else -> {
+                        val offers = offersViewModel.offersApiResult.data!!
+
+                        LazyColumn(
+                            modifier = Modifier
+                                .padding(paddingValues)
+                                .fillMaxSize()
+                        ) {
+                            item {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Start
+                                ) {
+                                    OfferFilterComponent(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(20.dp),
+                                        minPrice = offersViewModel.offerFilterQuery.minPrice,
+                                        maxPrice = offersViewModel.offerFilterQuery.maxPrice,
+                                        minDate = offersViewModel.offerFilterQuery.minDate,
+                                        maxDate = offersViewModel.offerFilterQuery.maxDate,
+                                        active = offersViewModel.offerFilterQuery.active,
+                                        onMinPriceChange = {
+                                            offersViewModel.offerFilterQuery =
+                                                offersViewModel.offerFilterQuery.copy(
+                                                    minPrice = it
+                                                )
+                                        },
+                                        onMaxPriceChange = {
+                                            offersViewModel.offerFilterQuery =
+                                                offersViewModel.offerFilterQuery.copy(
+                                                    maxPrice = it
+                                                )
+                                        },
+                                        onMinDateChange = {
+                                            offersViewModel.offerFilterQuery =
+                                                offersViewModel.offerFilterQuery.copy(
+                                                    minDate = it
+                                                )
+                                        },
+                                        onMaxDateChange = {
+                                            offersViewModel.offerFilterQuery =
+                                                offersViewModel.offerFilterQuery.copy(
+                                                    maxDate = it
+                                                )
+                                        },
+                                        onActiveChange = {
+                                            offersViewModel.offerFilterQuery =
+                                                offersViewModel.offerFilterQuery.copy(
+                                                    active = it
+                                                )
+                                        },
+                                        onApply = {
+                                            offersViewModel.getOffers()
+                                        },
+                                        onReset = {
+                                            offersViewModel.resetFilter()
+                                            offersViewModel.getOffers()
+                                        }
                                     )
                                 }
-                            )
-                        }
+                            }
 
-                        item {
-                            PaginationComponent(
-                                modifier = Modifier.fillMaxWidth(),
-                                page = offers,
-                                onPrevious = { offersViewModel.getPrevious() },
-                                onNext = { offersViewModel.getNext() }
-                            )
-                        }
+                            if (offers.items.isEmpty()) {
+                                item {
+                                    NoContentComponent(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        message = stringResource(R.string.no_offers_found)
+                                    )
+                                }
+                            } else {
+                                items(items = offers.items) { item ->
+                                    OfferItem(
+                                        modifier = Modifier
+                                            .fillParentMaxWidth()
+                                            .padding(horizontal = 20.dp, vertical = 10.dp),
+                                        offer = item,
+                                        onTap = {
+                                            navController.navigate(
+                                                Routes.OfferDetails.path.replace(
+                                                    "{offerId}",
+                                                    item.id
+                                                )
+                                            )
+                                        }
+                                    )
+                                }
 
-                        item {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(20.dp),
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Button(onClick = {
-                                    navController.navigate(Routes.CloseOffers.path)
-                                }) {
-                                    Text(stringResource(id = R.string.offers_nearby))
+                                item {
+                                    PaginationComponent(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        page = offers,
+                                        onPrevious = { offersViewModel.getPrevious() },
+                                        onNext = { offersViewModel.getNext() }
+                                    )
+                                }
+
+                                item {
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(20.dp),
+                                        horizontalArrangement = Arrangement.Center
+                                    ) {
+                                        Button(onClick = {
+                                            navController.navigate(Routes.CloseOffers.path)
+                                        }) {
+                                            Text(stringResource(id = R.string.offers_nearby))
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -196,5 +203,5 @@ fun OffersScreen(
                 }
             }
         }
-    }
+    )
 }

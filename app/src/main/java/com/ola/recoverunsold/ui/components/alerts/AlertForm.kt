@@ -2,12 +2,12 @@ package com.ola.recoverunsold.ui.components.alerts
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Button
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ExposedDropdownMenuBox
-import androidx.compose.material.ExposedDropdownMenuDefaults
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,7 +22,7 @@ import com.ola.recoverunsold.models.DistributorLabel
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.utils.misc.label
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlertForm(
     modifier: Modifier = Modifier,
@@ -61,9 +61,9 @@ fun AlertForm(
                     DropdownMenuItem(onClick = {
                         onAlertTypeChange(it)
                         showAlertTypeDropdown = false
-                    }) {
+                    }, text = {
                         Text(text = it.label())
-                    }
+                    })
                 }
             }
         }
@@ -93,9 +93,9 @@ fun AlertForm(
                         DropdownMenuItem(onClick = {
                             onDistributorLabelChange(it)
                             showLabelsDropdown = false
-                        }) {
+                        }, text = {
                             Text(text = it.name)
-                        }
+                        })
                     }
                 }
             }

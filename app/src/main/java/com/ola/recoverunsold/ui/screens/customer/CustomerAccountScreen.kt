@@ -5,13 +5,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NotificationsActive
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -46,87 +48,94 @@ fun CustomerAccountScreen(
     customerAccountServiceViewModel: CustomerAccountViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
     val user by UserObserver.user.collectAsState()
     var isEditing by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = {
-            AppBar(
-                coroutineScope = coroutineScope,
-                scaffoldState = scaffoldState,
-                title = stringResource(id = R.string.account),
-                actions = {
-                    IconButton(onClick = { navController.navigate(Routes.Alerts.path) }) {
-                        Icon(
-                            modifier = Modifier.padding(start = 5.dp),
-                            imageVector = Icons.Default.NotificationsActive,
-                            contentDescription = null
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = { DrawerContent(navController) },
+        content = {
+            Scaffold(
+                topBar = {
+                    AppBar(
+                        coroutineScope = coroutineScope,
+                        drawerState = drawerState,
+                        title = stringResource(id = R.string.account),
+                        actions = {
+                            IconButton(onClick = { navController.navigate(Routes.Alerts.path) }) {
+                                Icon(
+                                    modifier = Modifier.padding(start = 5.dp),
+                                    imageVector = Icons.Default.NotificationsActive,
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    )
+                },
+            ) { padding ->
+                Column(
+                    modifier = Modifier
+                        .padding(padding)
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    if (user != null) {
+                        CustomerProfileInformationSection(
+                            customer = user!! as Customer,
+                            username = customerAccountServiceViewModel.username,
+                            firstName = customerAccountServiceViewModel.firstName,
+                            lastName = customerAccountServiceViewModel.lastName,
+                            isEditing = isEditing,
+                            onEditingStart = { isEditing = true },
+                            onEditingEnd = {
+                                if (!customerAccountServiceViewModel.formState.isValid) {
+                                    coroutineScope.launch {
+                                        snackbarHostState.show(
+                                            message = customerAccountServiceViewModel.formState.errorMessage
+                                                ?: Strings.get(R.string.invalid_data)
+                                        )
+                                    }
+                                } else {
+                                    customerAccountServiceViewModel.updateCustomer()
+                                    isEditing = false
+                                }
+                            },
+                            onEditingCancel = { isEditing = false },
+                            loading = customerAccountServiceViewModel.accountApiCallResult.status == ApiStatus.LOADING,
+                            onUsernameChange = { customerAccountServiceViewModel.username = it },
+                            onFirstNameChange = { customerAccountServiceViewModel.firstName = it },
+                            onLastNameChange = { customerAccountServiceViewModel.lastName = it },
+                            onDelete = {
+                                customerAccountServiceViewModel.deleteCustomer {
+                                    coroutineScope.launch {
+                                        context.logout()
+                                        navController.navigate(Routes.Home.path) {
+                                            popUpTo(Routes.Home.path) { inclusive = true }
+                                        }
+                                        snackbarHostState.show(
+                                            message = Strings.get(R.string.account_deleted_successfully)
+                                        )
+                                    }
+                                }
+                            },
+                            onValidationSuccess = {
+                                customerAccountServiceViewModel.formState =
+                                    customerAccountServiceViewModel
+                                        .formState
+                                        .copy(isValid = true, errorMessage = null)
+                            },
+                            onValidationError = {
+                                customerAccountServiceViewModel.formState =
+                                    customerAccountServiceViewModel
+                                        .formState
+                                        .copy(isValid = false, errorMessage = it)
+                            }
                         )
                     }
                 }
-            )
-        },
-        drawerContent = DrawerContent(navController)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            if (user != null) {
-                CustomerProfileInformationSection(
-                    customer = user!! as Customer,
-                    username = customerAccountServiceViewModel.username,
-                    firstName = customerAccountServiceViewModel.firstName,
-                    lastName = customerAccountServiceViewModel.lastName,
-                    isEditing = isEditing,
-                    onEditingStart = { isEditing = true },
-                    onEditingEnd = {
-                        if (!customerAccountServiceViewModel.formState.isValid) {
-                            coroutineScope.launch {
-                                snackbarHostState.show(
-                                    message = customerAccountServiceViewModel.formState.errorMessage
-                                        ?: Strings.get(R.string.invalid_data)
-                                )
-                            }
-                        } else {
-                            customerAccountServiceViewModel.updateCustomer()
-                            isEditing = false
-                        }
-                    },
-                    onEditingCancel = { isEditing = false },
-                    loading = customerAccountServiceViewModel.accountApiCallResult.status == ApiStatus.LOADING,
-                    onUsernameChange = { customerAccountServiceViewModel.username = it },
-                    onFirstNameChange = { customerAccountServiceViewModel.firstName = it },
-                    onLastNameChange = { customerAccountServiceViewModel.lastName = it },
-                    onDelete = {
-                        customerAccountServiceViewModel.deleteCustomer {
-                            coroutineScope.launch {
-                                context.logout()
-                                navController.navigate(Routes.Home.path) {
-                                    popUpTo(Routes.Home.path) { inclusive = true }
-                                }
-                                snackbarHostState.show(
-                                    message = Strings.get(R.string.account_deleted_successfully)
-                                )
-                            }
-                        }
-                    },
-                    onValidationSuccess = {
-                        customerAccountServiceViewModel.formState = customerAccountServiceViewModel
-                            .formState
-                            .copy(isValid = true, errorMessage = null)
-                    },
-                    onValidationError = {
-                        customerAccountServiceViewModel.formState = customerAccountServiceViewModel
-                            .formState
-                            .copy(isValid = false, errorMessage = it)
-                    }
-                )
             }
         }
-    }
+    )
 }

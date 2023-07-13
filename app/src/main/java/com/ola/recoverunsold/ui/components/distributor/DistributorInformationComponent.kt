@@ -3,16 +3,17 @@ package com.ola.recoverunsold.ui.components.distributor
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -24,7 +25,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.DistributorInformation
 import com.ola.recoverunsold.utils.misc.formatDate
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DistributorInformationComponent(
     modifier: Modifier = Modifier,
@@ -33,7 +34,9 @@ fun DistributorInformationComponent(
 ) {
     Card(
         modifier = modifier,
-        elevation = 10.dp,
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 10.dp
+        ),
         onClick = { onTap?.invoke() }
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
@@ -75,7 +78,7 @@ fun DistributorInformationComponent(
                     append(distributorWebsite)
 
                     addStyle(
-                        style = SpanStyle(color = MaterialTheme.colors.primary),
+                        style = SpanStyle(color = MaterialTheme.colorScheme.primary),
                         start = 0,
                         end = distributorWebsite.length
                     )

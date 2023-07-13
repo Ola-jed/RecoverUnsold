@@ -8,14 +8,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -54,10 +54,11 @@ fun DistributorLocationsScreen(
         when (locationsSectionViewModel.locationsGetResponse.status) {
             ApiStatus.LOADING -> {
                 CircularProgressIndicator(
-                    color = MaterialTheme.colors.primary,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
+
             ApiStatus.ERROR -> {
                 LaunchedEffect(snackbarHostState) {
                     coroutineScope.launch {
@@ -68,6 +69,7 @@ fun DistributorLocationsScreen(
                     }
                 }
             }
+
             else -> {
                 val locations = locationsSectionViewModel.locationsGetResponse.data!!
 
@@ -82,10 +84,12 @@ fun DistributorLocationsScreen(
                             )
                         }
                     )
-                }) {
+                }) { padding ->
                     if (locations.items.isEmpty()) {
                         NoContentComponent(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(padding),
                             message = stringResource(R.string.no_location_create_one)
                         )
                     } else {

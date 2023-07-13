@@ -7,14 +7,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +43,8 @@ fun ProductItem(
 
     Surface(
         modifier = modifier,
-        elevation = 10.dp
+        tonalElevation = 10.dp,
+        shadowElevation = 10.dp
     ) {
         Column(
             modifier = Modifier
@@ -52,7 +53,7 @@ fun ProductItem(
         ) {
             Text(
                 product.name,
-                style = MaterialTheme.typography.h6,
+                style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier
                     .padding(bottom = 10.dp)
                     .align(Alignment.CenterHorizontally)
@@ -86,7 +87,7 @@ fun ProductItem(
                     IconButton(onClick = { showDeleteConfirmationDialog = true }) {
                         Icon(
                             Icons.Default.Delete,
-                            tint = MaterialTheme.colors.error,
+                            tint = MaterialTheme.colorScheme.error,
                             contentDescription = null
                         )
                     }

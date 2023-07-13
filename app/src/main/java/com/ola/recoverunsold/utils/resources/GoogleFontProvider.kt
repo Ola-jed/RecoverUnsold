@@ -1,10 +1,8 @@
 package com.ola.recoverunsold.utils.resources
 
-import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import com.ola.recoverunsold.R
 
-@OptIn(ExperimentalTextApi::class)
 val googleFontProvider = GoogleFont.Provider(
     providerAuthority = "com.google.android.gms.fonts",
     providerPackage = "com.google.android.gms",

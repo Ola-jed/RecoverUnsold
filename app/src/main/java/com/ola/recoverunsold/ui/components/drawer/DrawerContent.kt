@@ -1,6 +1,6 @@
 package com.ola.recoverunsold.ui.components.drawer
 
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -10,12 +10,14 @@ import com.ola.recoverunsold.models.Distributor
 import com.ola.recoverunsold.utils.store.UserObserver
 
 @Composable
-fun DrawerContent(navController: NavController): @Composable ColumnScope.() -> Unit {
+fun DrawerContent(navController: NavController) {
     val user by UserObserver.user.collectAsState()
 
-    return when (user) {
-        null -> VisitorDrawer(navController = navController)
-        is Customer -> CustomerDrawer(user as Customer, navController)
-        is Distributor -> DistributorDrawer(user as Distributor, navController)
-    }
+    return ModalDrawerSheet(
+        content = when (user) {
+            null -> VisitorDrawer(navController = navController)
+            is Customer -> CustomerDrawer(user as Customer, navController)
+            is Distributor -> DistributorDrawer(user as Distributor, navController)
+        }
+    )
 }

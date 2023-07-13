@@ -8,13 +8,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -55,145 +57,154 @@ fun DistributorAccountScreen(
     val locationsIndex = 1
 
     val coroutineScope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
     val scrollState = rememberScrollState()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val user by UserObserver.user.collectAsState()
     var isEditing by rememberSaveable { mutableStateOf(false) }
     var tabIndex by rememberSaveable { mutableStateOf(0) }
     val tabTitles = listOf(stringResource(R.string.information), stringResource(R.string.locations))
     val context = LocalContext.current
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = {
-            AppBar(
-                coroutineScope = coroutineScope,
-                scaffoldState = scaffoldState,
-                title = stringResource(id = R.string.account)
-            )
-        },
-        drawerContent = DrawerContent(navController)
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
-                .run { if (tabIndex == profileIndex) verticalScroll(scrollState) else this },
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            TabRow(selectedTabIndex = tabIndex,
-                backgroundColor = MaterialTheme.colors.primary,
-                modifier = Modifier
-                    .padding(vertical = 8.dp, horizontal = 8.dp)
-                    .clip(RoundedCornerShape(50)),
-                indicator = { Box {} }
-            ) {
-                tabTitles.forEachIndexed { index, text ->
-                    val selected = tabIndex == index
-                    Tab(
-                        modifier = if (selected) {
-                            Modifier
-                                .clip(RoundedCornerShape(50))
-                                .background(MaterialTheme.colors.background)
-                        } else {
-                            Modifier
-                                .clip(RoundedCornerShape(50))
-                                .background(MaterialTheme.colors.primary)
-                        },
-                        selected = selected,
-                        onClick = { tabIndex = index },
-                        text = {
-                            Text(
-                                text = text, color = if (selected) {
-                                    MaterialTheme.colors.onBackground
-                                } else {
-                                    MaterialTheme.colors.onPrimary
-                                }
-                            )
-                        }
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = { DrawerContent(navController) },
+        content = {
+            Scaffold(
+                topBar = {
+                    AppBar(
+                        coroutineScope = coroutineScope,
+                        drawerState = drawerState,
+                        title = stringResource(id = R.string.account)
                     )
                 }
-            }
-            when (tabIndex) {
-                profileIndex -> DistributorProfileInformationSection(
-                    distributor = user!! as Distributor,
-                    username = distributorAccountViewModel.username,
-                    phone = distributorAccountViewModel.phone,
-                    rccm = distributorAccountViewModel.rccm,
-                    taxId = distributorAccountViewModel.taxId,
-                    websiteUrl = distributorAccountViewModel.websiteUrl,
-                    isEditing = isEditing,
-                    onEditingStart = { isEditing = true },
-                    onEditingEnd = {
-                        if (!distributorAccountViewModel.formState.isValid) {
-                            coroutineScope.launch {
-                                snackbarHostState.show(
-                                    message = distributorAccountViewModel.formState.errorMessage
-                                        ?: Strings.get(R.string.invalid_data)
-                                )
-                            }
-                        } else {
-                            distributorAccountViewModel.updateDistributor()
-                            isEditing = false
-                        }
-                    },
-                    onEditingCancel = { isEditing = false },
-                    loading = distributorAccountViewModel.accountApiCallResult.status == ApiStatus.LOADING,
-                    onUsernameChange = { distributorAccountViewModel.username = it },
-                    onPhoneChange = { distributorAccountViewModel.phone = it },
-                    onRccmChange = { distributorAccountViewModel.rccm = it },
-                    onTaxIdChange = { distributorAccountViewModel.taxId = it },
-                    onWebsiteUrlChange = { distributorAccountViewModel.websiteUrl = it },
-                    onDelete = {
-                        distributorAccountViewModel.deleteDistributor {
-                            coroutineScope.launch {
-                                context.logout()
-                                navController.navigate(Routes.Home.path) {
-                                    popUpTo(Routes.Home.path) { inclusive = true }
+            ) { padding ->
+                Column(
+                    modifier = Modifier
+                        .padding(padding)
+                        .fillMaxSize()
+                        .run { if (tabIndex == profileIndex) verticalScroll(scrollState) else this },
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    TabRow(
+                        selectedTabIndex = tabIndex,
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .padding(vertical = 8.dp, horizontal = 8.dp)
+                            .clip(RoundedCornerShape(50)),
+                        indicator = { Box {} }
+                    ) {
+                        tabTitles.forEachIndexed { index, text ->
+                            val selected = tabIndex == index
+
+                            Tab(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(50))
+                                    .background(
+                                        if (selected) {
+                                            MaterialTheme.colorScheme.background
+                                        } else {
+                                            MaterialTheme.colorScheme.primary
+                                        }
+                                    ),
+                                selected = selected,
+                                onClick = { tabIndex = index },
+                                text = {
+                                    Text(
+                                        text = text,
+                                        color = if (selected) {
+                                            MaterialTheme.colorScheme.onBackground
+                                        } else {
+                                            MaterialTheme.colorScheme.onPrimary
+                                        }
+                                    )
                                 }
-                                snackbarHostState.show(Strings.get(R.string.account_deleted_successfully))
+                            )
+                        }
+                    }
+                    when (tabIndex) {
+                        profileIndex -> DistributorProfileInformationSection(
+                            distributor = user!! as Distributor,
+                            username = distributorAccountViewModel.username,
+                            phone = distributorAccountViewModel.phone,
+                            rccm = distributorAccountViewModel.rccm,
+                            taxId = distributorAccountViewModel.taxId,
+                            websiteUrl = distributorAccountViewModel.websiteUrl,
+                            isEditing = isEditing,
+                            onEditingStart = { isEditing = true },
+                            onEditingEnd = {
+                                if (!distributorAccountViewModel.formState.isValid) {
+                                    coroutineScope.launch {
+                                        snackbarHostState.show(
+                                            message = distributorAccountViewModel.formState.errorMessage
+                                                ?: Strings.get(R.string.invalid_data)
+                                        )
+                                    }
+                                } else {
+                                    distributorAccountViewModel.updateDistributor()
+                                    isEditing = false
+                                }
+                            },
+                            onEditingCancel = { isEditing = false },
+                            loading = distributorAccountViewModel.accountApiCallResult.status == ApiStatus.LOADING,
+                            onUsernameChange = { distributorAccountViewModel.username = it },
+                            onPhoneChange = { distributorAccountViewModel.phone = it },
+                            onRccmChange = { distributorAccountViewModel.rccm = it },
+                            onTaxIdChange = { distributorAccountViewModel.taxId = it },
+                            onWebsiteUrlChange = { distributorAccountViewModel.websiteUrl = it },
+                            onDelete = {
+                                distributorAccountViewModel.deleteDistributor {
+                                    coroutineScope.launch {
+                                        context.logout()
+                                        navController.navigate(Routes.Home.path) {
+                                            popUpTo(Routes.Home.path) { inclusive = true }
+                                        }
+                                        snackbarHostState.show(Strings.get(R.string.account_deleted_successfully))
+                                    }
+                                }
+                            },
+                            onValidationSuccess = {
+                                distributorAccountViewModel.formState =
+                                    distributorAccountViewModel.formState
+                                        .copy(
+                                            isValid = true,
+                                            errorMessage = null
+                                        )
+                            },
+                            onValidationError = {
+                                distributorAccountViewModel.formState =
+                                    distributorAccountViewModel.formState.copy(
+                                        isValid = false,
+                                        errorMessage = it
+                                    )
+                            }
+                        )
+
+                        locationsIndex -> DistributorLocationsScreen(
+                            modifier = Modifier.fillMaxSize(),
+                            navController = navController,
+                            snackbarHostState = snackbarHostState
+                        )
+
+                        else -> Box(Modifier)
+                    }
+
+                    if (distributorAccountViewModel.accountApiCallResult.status == ApiStatus.SUCCESS) {
+                        LaunchedEffect(snackbarHostState) {
+                            coroutineScope.launch {
+                                snackbarHostState.show(Strings.get(R.string.account_updated_successfully))
                             }
                         }
-                    },
-                    onValidationSuccess = {
-                        distributorAccountViewModel.formState =
-                            distributorAccountViewModel.formState
-                                .copy(
-                                    isValid = true,
-                                    errorMessage = null
-                                )
-                    },
-                    onValidationError = {
-                        distributorAccountViewModel.formState =
-                            distributorAccountViewModel.formState.copy(
-                                isValid = false,
-                                errorMessage = it
-                            )
                     }
-                )
-                locationsIndex -> DistributorLocationsScreen(
-                    modifier = Modifier.fillMaxSize(),
-                    navController = navController,
-                    snackbarHostState = snackbarHostState
-                )
-                else -> Box(Modifier)
-            }
 
-            if (distributorAccountViewModel.accountApiCallResult.status == ApiStatus.SUCCESS) {
-                LaunchedEffect(snackbarHostState) {
-                    coroutineScope.launch {
-                        snackbarHostState.show(Strings.get(R.string.account_updated_successfully))
-                    }
-                }
-            }
-
-            if (distributorAccountViewModel.errorMessage() != null) {
-                LaunchedEffect(snackbarHostState) {
-                    coroutineScope.launch {
-                        snackbarHostState.show(distributorAccountViewModel.errorMessage()!!)
+                    if (distributorAccountViewModel.errorMessage() != null) {
+                        LaunchedEffect(snackbarHostState) {
+                            coroutineScope.launch {
+                                snackbarHostState.show(distributorAccountViewModel.errorMessage()!!)
+                            }
+                        }
                     }
                 }
             }
         }
-    }
+    )
 }

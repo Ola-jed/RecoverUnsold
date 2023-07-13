@@ -21,12 +21,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuPositionProvider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.contentColorFor
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuPositionProvider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -68,8 +69,8 @@ import kotlinx.coroutines.delay
  * @param expanded Whether the tooltip is currently visible to the user
  * @param offset [DpOffset] to be added to the position of the tooltip
  *
- * @see androidx.compose.material.DropdownMenu
- * @see androidx.compose.material.DropdownMenuPositionProvider
+ * @see androidx.compose.material3.DropdownMenu
+ * @see androidx.compose.material3.DropdownMenuPositionProvider
  * @see androidx.compose.ui.window.Popup
  *
  * @author Artyom Krivolapov
@@ -128,7 +129,7 @@ fun Tooltip(
 }
 
 
-/** @see androidx.compose.material.DropdownMenuContent */
+/** @see androidx.compose.material3.DropdownMenuContent */
 @Composable
 private fun TooltipContent(
     expandedStates: MutableTransitionState<Boolean>,
@@ -154,11 +155,15 @@ private fun TooltipContent(
     ) { if (it) 1f else 0f }
 
     Card(
-        backgroundColor = backgroundColor.copy(alpha = 0.75f),
-        contentColor = MaterialTheme.colors.contentColorFor(backgroundColor)
-            .takeOrElse { backgroundColor.onColor() },
+        colors = CardDefaults.cardColors(
+            containerColor = backgroundColor.copy(alpha = 0.95f),
+            contentColor = MaterialTheme.colorScheme.contentColorFor(backgroundColor)
+                .takeOrElse { backgroundColor.onColor() }
+        ),
         modifier = Modifier.alpha(alpha),
-        elevation = TooltipElevation,
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = TooltipElevation
+        ),
     ) {
         val p = TooltipPadding
         Column(
@@ -182,7 +187,7 @@ private const val InTransitionDuration = 64
 private const val OutTransitionDuration = 240
 
 // Default timeout before tooltip close
-private const val TooltipTimeout = 2_000L - OutTransitionDuration
+private const val TooltipTimeout = 4_000L - OutTransitionDuration
 
 
 // Color helpers

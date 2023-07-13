@@ -1,17 +1,15 @@
 package com.ola.recoverunsold.utils.misc
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Location
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.SnackbarResult
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.Check
@@ -20,6 +18,10 @@ import androidx.compose.material.icons.filled.EventAvailable
 import androidx.compose.material.icons.filled.EventBusy
 import androidx.compose.material.icons.filled.HourglassTop
 import androidx.compose.material.icons.filled.NextWeek
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -28,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import com.google.android.gms.location.LocationServices
@@ -61,6 +64,10 @@ import java.text.DateFormat
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
 
@@ -117,7 +124,6 @@ fun Context.getDeviceLocation(
     onLatLngValueUpdate: (LatLng) -> Unit,
     onLocationFetchFailed: () -> Unit
 ) {
-    // TODO : no more fused
     val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
     val locationChangeListener = fun(location: Location?) {
         if (location != null) {
@@ -125,6 +131,17 @@ fun Context.getDeviceLocation(
         } else {
             onLocationFetchFailed()
         }
+    }
+
+    if (ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        return
     }
     fusedLocationProviderClient.getCurrentLocation(
         Priority.PRIORITY_BALANCED_POWER_ACCURACY,
@@ -382,20 +399,20 @@ fun OrderStatus.toIcon(): ImageVector {
 @Composable
 fun OrderStatus.backgroundColor(): Color {
     return when (this) {
-        OrderStatus.Pending -> MaterialTheme.colors.warning
-        OrderStatus.Approved -> MaterialTheme.colors.primary
-        OrderStatus.Rejected -> MaterialTheme.colors.error
-        OrderStatus.Completed -> MaterialTheme.colors.success
+        OrderStatus.Pending -> MaterialTheme.colorScheme.warning
+        OrderStatus.Approved -> MaterialTheme.colorScheme.primary
+        OrderStatus.Rejected -> MaterialTheme.colorScheme.error
+        OrderStatus.Completed -> MaterialTheme.colorScheme.success
     }
 }
 
 @Composable
 fun OrderStatus.foregroundColor(): Color {
     return when (this) {
-        OrderStatus.Pending -> MaterialTheme.colors.onWarning
-        OrderStatus.Approved -> MaterialTheme.colors.onPrimary
-        OrderStatus.Rejected -> MaterialTheme.colors.onError
-        OrderStatus.Completed -> MaterialTheme.colors.onSuccess
+        OrderStatus.Pending -> MaterialTheme.colorScheme.onWarning
+        OrderStatus.Approved -> MaterialTheme.colorScheme.onPrimary
+        OrderStatus.Rejected -> MaterialTheme.colorScheme.onError
+        OrderStatus.Completed -> MaterialTheme.colorScheme.onSuccess
     }
 }
 
@@ -490,4 +507,16 @@ fun LazyListState.isScrollingUp(): Boolean {
             }
         }
     }.value
+}
+
+fun Date.toLocalDate(): LocalDate {
+    return LocalDateTime.ofInstant(this.toInstant(), ZoneId.systemDefault()).toLocalDate()!!
+}
+
+fun LocalDate.toDate(): Date {
+    return Date.from(
+        LocalDateTime.of(this, LocalTime.MIDNIGHT)
+            .atZone(ZoneId.systemDefault())
+            .toInstant()
+    )
 }

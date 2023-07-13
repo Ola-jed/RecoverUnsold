@@ -6,11 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Delete
@@ -18,6 +13,12 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.EventAvailable
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Payments
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,7 +41,7 @@ import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
  * A component to show information about an offer
  * Can have edit and delete buttons if they are showed to their owner
  */
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OfferItem(
     modifier: Modifier = Modifier,
@@ -57,7 +58,7 @@ fun OfferItem(
 
     Card(
         modifier = modifier,
-        elevation = 10.dp,
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
         onClick = onTap
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -125,7 +126,7 @@ fun OfferItem(
                         IconButton(onClick = { showDeleteConfirmationDialog = true }) {
                             Icon(
                                 Icons.Default.Delete,
-                                tint = MaterialTheme.colors.error,
+                                tint = MaterialTheme.colorScheme.error,
                                 contentDescription = null
                             )
                         }

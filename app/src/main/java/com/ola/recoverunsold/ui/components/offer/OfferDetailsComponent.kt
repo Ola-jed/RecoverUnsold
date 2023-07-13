@@ -2,8 +2,6 @@ package com.ola.recoverunsold.ui.components.offer
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.CreditCard
@@ -11,6 +9,8 @@ import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.EventBusy
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Payments
+import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource

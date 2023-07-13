@@ -19,7 +19,8 @@ fun LoadingIndicator(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(25.dp), contentAlignment = Alignment.Center
+            .padding(25.dp),
+        contentAlignment = Alignment.Center
     ) {
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loader))
         LottieAnimation(composition = composition, iterations = LottieConstants.IterateForever)

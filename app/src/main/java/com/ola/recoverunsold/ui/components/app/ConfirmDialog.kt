@@ -3,11 +3,11 @@ package com.ola.recoverunsold.ui.components.app
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -35,7 +35,7 @@ fun ConfirmDialog(
                     Text(
                         title,
                         modifier = Modifier.padding(vertical = 8.dp),
-                        style = MaterialTheme.typography.subtitle1
+                        style = MaterialTheme.typography.titleMedium
                     )
                 }
                 Text(content)
@@ -45,16 +45,16 @@ fun ConfirmDialog(
             Button(
                 onClick = onDismiss,
                 colors = if (!isDanger) {
-                    ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
+                    ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 } else {
-                    ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
+                    ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 }
             ) {
                 Text(
                     stringResource(id = R.string.no), color = if (!isDanger) {
-                        MaterialTheme.colors.onError
+                        MaterialTheme.colorScheme.onError
                     } else {
-                        MaterialTheme.colors.onPrimary
+                        MaterialTheme.colorScheme.onPrimary
                     }
                 )
             }
@@ -62,16 +62,16 @@ fun ConfirmDialog(
         confirmButton = {
             Button(
                 onClick = onConfirm, colors = if (isDanger) {
-                    ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
+                    ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 } else {
-                    ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
+                    ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 }
             ) {
                 Text(
                     stringResource(id = R.string.yes), color = if (isDanger) {
-                        MaterialTheme.colors.onError
+                        MaterialTheme.colorScheme.onError
                     } else {
-                        MaterialTheme.colors.onPrimary
+                        MaterialTheme.colorScheme.onPrimary
                     }
                 )
             }

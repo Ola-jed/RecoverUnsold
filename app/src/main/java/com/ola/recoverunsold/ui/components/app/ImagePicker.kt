@@ -16,13 +16,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -86,7 +86,7 @@ fun ImagePicker(
         Text(
             stringResource(id = R.string.pick_an_image),
             modifier = Modifier.padding(start = 20.dp),
-            style = MaterialTheme.typography.h6
+            style = MaterialTheme.typography.titleLarge
         )
         Surface(
             modifier = modifier
@@ -130,6 +130,7 @@ fun ImagePicker(
 
         AlertDialog(
             onDismissRequest = { isChosenFileSizeInvalid = false },
+            confirmButton = {},
             title = {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -137,7 +138,7 @@ fun ImagePicker(
                 ) {
                     Text(
                         text = stringResource(id = R.string.chosen_image_too_big),
-                        style = MaterialTheme.typography.subtitle1,
+                        style = MaterialTheme.typography.titleMedium,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -156,7 +157,6 @@ fun ImagePicker(
                     )
                 }
             },
-            buttons = {}
         )
     }
 }

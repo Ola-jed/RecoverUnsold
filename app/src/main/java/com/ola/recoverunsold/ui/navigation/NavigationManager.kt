@@ -1,6 +1,6 @@
 package com.ola.recoverunsold.ui.navigation
 
-import androidx.compose.material.SnackbarHostState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -56,8 +56,7 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
         }
         composable(Routes.Register.path) {
             RegisterScreen(
-                navController = navHostController,
-                snackbarHostState = snackbarHostState
+                navController = navHostController
             )
         }
         composable(Routes.CustomerRegister.path) {
@@ -98,20 +97,17 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
         }
         composable(Routes.UserVerificationSuccess.path) {
             UserVerificationSuccessScreen(
-                navController = navHostController,
-                snackbarHostState = snackbarHostState
+                navController = navHostController
             )
         }
         composable(Routes.PasswordResetSuccess.path) {
             PasswordResetSuccessScreen(
-                navController = navHostController,
-                snackbarHostState = snackbarHostState
+                navController = navHostController
             )
         }
         composable(Routes.Settings.path) {
             SettingsScreen(
-                navController = navHostController,
-                snackbarHostState = snackbarHostState
+                navController = navHostController
             )
         }
         composable(

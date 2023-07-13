@@ -15,20 +15,22 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EditCalendar
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -62,6 +64,8 @@ import com.ola.recoverunsold.ui.screens.viewmodels.DistributorHomeViewModel
 import com.ola.recoverunsold.utils.misc.formatDate
 import com.ola.recoverunsold.utils.misc.show
 import com.ola.recoverunsold.utils.misc.toBars
+import com.ola.recoverunsold.utils.misc.toDate
+import com.ola.recoverunsold.utils.misc.toLocalDate
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
 import me.bytebeats.views.charts.bar.BarChart
@@ -71,11 +75,6 @@ import me.bytebeats.views.charts.bar.render.label.SimpleLabelDrawer
 import me.bytebeats.views.charts.bar.render.xaxis.SimpleXAxisDrawer
 import me.bytebeats.views.charts.bar.render.yaxis.SimpleYAxisDrawer
 import me.bytebeats.views.charts.simpleChartAnimation
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZoneId
-import java.util.Date
 
 @Composable
 fun DistributorHomeScreen(
@@ -84,254 +83,254 @@ fun DistributorHomeScreen(
     homeViewModel: DistributorHomeViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val isRefreshing by homeViewModel.isRefreshing.collectAsState()
     var showPeriodStartDialog by remember { mutableStateOf(false) }
     var showPeriodEndDialog by remember { mutableStateOf(false) }
     var isDateRegionExpanded by remember { mutableStateOf(false) }
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = {
-            AppBar(
-                coroutineScope = coroutineScope,
-                scaffoldState = scaffoldState,
-                title = stringResource(id = R.string.home)
-            )
-        },
-        drawerContent = DrawerContent(navController)
-    ) { paddingValues ->
-        SwipeRefresh(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
-            onRefresh = { homeViewModel.refresh() }
-        ) {
-            when (homeViewModel.homeDataApiCallResult.status) {
-                ApiStatus.LOADING, ApiStatus.INACTIVE -> LoadingIndicator()
-                ApiStatus.ERROR -> {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        Button(
-                            onClick = { homeViewModel.refresh() },
-                            modifier = Modifier.align(Alignment.Center)
-                        ) {
-                            Text(stringResource(id = R.string.retry))
-                        }
-                    }
-
-                    LaunchedEffect(snackbarHostState) {
-                        coroutineScope.launch {
-                            snackbarHostState.show(
-                                message = homeViewModel.errorMessage()
-                                    ?: Strings.get(R.string.unknown_error_occured)
-                            )
-                        }
-                    }
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = { DrawerContent(navController) },
+        content = {
+            Scaffold(
+                topBar = {
+                    AppBar(
+                        coroutineScope = coroutineScope,
+                        drawerState = drawerState,
+                        title = stringResource(id = R.string.home)
+                    )
                 }
-                else -> {
-                    val homeData = homeViewModel.homeDataApiCallResult.data!!
-                    val orders = homeData.orders
-                    val screenHeight = LocalConfiguration.current.screenHeightDp
-                    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-                    val onBgColor = MaterialTheme.colors.onBackground
+            ) { paddingValues ->
+                SwipeRefresh(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+                    onRefresh = { homeViewModel.refresh() }
+                ) {
+                    when (homeViewModel.homeDataApiCallResult.status) {
+                        ApiStatus.LOADING, ApiStatus.INACTIVE -> LoadingIndicator()
+                        ApiStatus.ERROR -> {
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                Button(
+                                    onClick = { homeViewModel.refresh() },
+                                    modifier = Modifier.align(Alignment.Center)
+                                ) {
+                                    Text(stringResource(id = R.string.retry))
+                                }
+                            }
 
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState()),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(
-                                    top = 15.dp,
-                                    bottom = 15.dp,
-                                    start = 15.dp
-                                ),
-                                text = stringResource(R.string.order_statistics),
-                                fontWeight = FontWeight.Bold,
-                                style = MaterialTheme.typography.body1
-                            )
-
-                            IconButton(onClick = { isDateRegionExpanded = !isDateRegionExpanded }) {
-                                Icon(
-                                    modifier = Modifier.then(Modifier.size(48.dp)),
-                                    imageVector = if (isDateRegionExpanded) {
-                                        Icons.Default.ExpandLess
-                                    } else {
-                                        Icons.Default.ExpandMore
-                                    },
-                                    contentDescription = null
-                                )
+                            LaunchedEffect(snackbarHostState) {
+                                coroutineScope.launch {
+                                    snackbarHostState.show(
+                                        message = homeViewModel.errorMessage()
+                                            ?: Strings.get(R.string.unknown_error_occured)
+                                    )
+                                }
                             }
                         }
 
-                        if (isDateRegionExpanded) {
-                            CustomTextInput(
+                        else -> {
+                            val homeData = homeViewModel.homeDataApiCallResult.data!!
+                            val orders = homeData.orders
+                            val screenHeight = LocalConfiguration.current.screenHeightDp
+                            val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+                            val onBgColor = MaterialTheme.colorScheme.onBackground
+
+                            Column(
                                 modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .clickable { showPeriodStartDialog = true },
-                                value = homeViewModel.periodQuery.periodStart.formatDate(),
-                                readOnly = true,
-                                enabled = false,
-                                onValueChange = {},
-                                label = { Text(text = stringResource(R.string.start_date)) },
-                                trailingIcon = {
-                                    Icon(Icons.Default.EditCalendar, contentDescription = null)
-                                }
-                            )
-
-                            CustomTextInput(
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .clickable { showPeriodEndDialog = true },
-                                value = homeViewModel.periodQuery.periodEnd.formatDate(),
-                                readOnly = true,
-                                enabled = false,
-                                onValueChange = {},
-                                label = { Text(text = stringResource(R.string.end_date)) },
-                                trailingIcon = {
-                                    Icon(Icons.Default.EditCalendar, contentDescription = null)
-                                }
-                            )
-                        }
-
-                        val bars = homeData.toBars()
-                        if (bars.isEmpty()) {
-                            NoContentComponent(
-                                modifier = Modifier.fillMaxWidth(),
-                                message = stringResource(R.string.no_order_found)
-                            )
-                        } else {
-                            BarChart(
-                                barChartData = BarChartData(
-                                    bars = bars,
-                                    maxBarValue = bars.maxOf { it.value }
-                                ),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height((screenHeight * 0.4).dp)
-                                    .padding(vertical = 10.dp),
-                                animation = simpleChartAnimation(),
-                                barDrawer = SimpleBarDrawer(),
-                                xAxisDrawer = SimpleXAxisDrawer(
-                                    axisLineColor = onBgColor,
-                                    axisLineThickness = 2.dp
-                                ),
-                                yAxisDrawer = SimpleYAxisDrawer(
-                                    axisLineColor = onBgColor,
-                                    labelTextColor = onBgColor,
-                                    labelValueFormatter = { it.toInt().toString() },
-                                    drawLabelEvery = 6,
-                                    axisLineThickness = 2.dp
-                                ),
-                                labelDrawer = SimpleLabelDrawer(
-                                    labelTextSize = 13.sp,
-                                    labelTextColor = onBgColor
-                                )
-                            )
-                        }
-
-                        Text(
-                            modifier = Modifier
-                                .padding(top = 25.dp, bottom = 15.dp, start = 15.dp)
-                                .align(Alignment.Start),
-                            text = stringResource(id = R.string.latest_orders),
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.body1
-                        )
-
-                        LazyRow(modifier = Modifier.fillMaxWidth()) {
-                            if (orders.isEmpty()) {
-                                item {
-                                    NoContentComponent(
-                                        modifier = Modifier.width(screenWidth),
-                                        message = stringResource(R.string.no_order_found)
+                                    .fillMaxSize()
+                                    .verticalScroll(rememberScrollState()),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        modifier = Modifier.padding(
+                                            top = 15.dp,
+                                            bottom = 15.dp,
+                                            start = 15.dp
+                                        ),
+                                        text = stringResource(R.string.order_statistics),
+                                        fontWeight = FontWeight.Bold,
+                                        style = MaterialTheme.typography.bodyLarge
                                     )
+
+                                    IconButton(onClick = {
+                                        isDateRegionExpanded = !isDateRegionExpanded
+                                    }) {
+                                        Icon(
+                                            modifier = Modifier.then(Modifier.size(48.dp)),
+                                            imageVector = if (isDateRegionExpanded) {
+                                                Icons.Default.ExpandLess
+                                            } else {
+                                                Icons.Default.ExpandMore
+                                            },
+                                            contentDescription = null
+                                        )
+                                    }
                                 }
-                            } else {
-                                items(items = orders) { item ->
-                                    OrderItem(
+
+                                if (isDateRegionExpanded) {
+                                    CustomTextInput(
                                         modifier = Modifier
-                                            .width(screenWidth)
-                                            .padding(horizontal = 10.dp, vertical = 10.dp),
-                                        order = item,
-                                        onTap = {
-                                            navController.navigate(
-                                                Routes.OrderDetails
-                                                    .path
-                                                    .replace("{orderId}", item.id)
+                                            .align(Alignment.CenterHorizontally)
+                                            .clickable { showPeriodStartDialog = true },
+                                        value = homeViewModel.periodQuery.periodStart.formatDate(),
+                                        readOnly = true,
+                                        enabled = false,
+                                        onValueChange = {},
+                                        label = { Text(text = stringResource(R.string.start_date)) },
+                                        trailingIcon = {
+                                            Icon(
+                                                Icons.Default.EditCalendar,
+                                                contentDescription = null
+                                            )
+                                        }
+                                    )
+
+                                    CustomTextInput(
+                                        modifier = Modifier
+                                            .align(Alignment.CenterHorizontally)
+                                            .clickable { showPeriodEndDialog = true },
+                                        value = homeViewModel.periodQuery.periodEnd.formatDate(),
+                                        readOnly = true,
+                                        enabled = false,
+                                        onValueChange = {},
+                                        label = { Text(text = stringResource(R.string.end_date)) },
+                                        trailingIcon = {
+                                            Icon(
+                                                Icons.Default.EditCalendar,
+                                                contentDescription = null
                                             )
                                         }
                                     )
                                 }
+
+                                val bars = homeData.toBars()
+                                if (bars.isEmpty()) {
+                                    NoContentComponent(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        message = stringResource(R.string.no_order_found)
+                                    )
+                                } else {
+                                    BarChart(
+                                        barChartData = BarChartData(
+                                            bars = bars,
+                                            maxBarValue = bars.maxOf { it.value }
+                                        ),
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height((screenHeight * 0.4).dp)
+                                            .padding(vertical = 10.dp),
+                                        animation = simpleChartAnimation(),
+                                        barDrawer = SimpleBarDrawer(),
+                                        xAxisDrawer = SimpleXAxisDrawer(
+                                            axisLineColor = onBgColor,
+                                            axisLineThickness = 2.dp
+                                        ),
+                                        yAxisDrawer = SimpleYAxisDrawer(
+                                            axisLineColor = onBgColor,
+                                            labelTextColor = onBgColor,
+                                            labelValueFormatter = { it.toInt().toString() },
+                                            drawLabelEvery = 6,
+                                            axisLineThickness = 2.dp
+                                        ),
+                                        labelDrawer = SimpleLabelDrawer(
+                                            labelTextSize = 13.sp,
+                                            labelTextColor = onBgColor
+                                        )
+                                    )
+                                }
+
+                                Text(
+                                    modifier = Modifier
+                                        .padding(top = 25.dp, bottom = 15.dp, start = 15.dp)
+                                        .align(Alignment.Start),
+                                    text = stringResource(id = R.string.latest_orders),
+                                    fontWeight = FontWeight.Bold,
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+
+                                LazyRow(modifier = Modifier.fillMaxWidth()) {
+                                    if (orders.isEmpty()) {
+                                        item {
+                                            NoContentComponent(
+                                                modifier = Modifier.width(screenWidth),
+                                                message = stringResource(R.string.no_order_found)
+                                            )
+                                        }
+                                    } else {
+                                        items(items = orders) { item ->
+                                            OrderItem(
+                                                modifier = Modifier
+                                                    .width(screenWidth)
+                                                    .padding(horizontal = 10.dp, vertical = 10.dp),
+                                                order = item,
+                                                onTap = {
+                                                    navController.navigate(
+                                                        Routes.OrderDetails
+                                                            .path
+                                                            .replace("{orderId}", item.id)
+                                                    )
+                                                }
+                                            )
+                                        }
+                                    }
+                                }
+
+                                TextButton(
+                                    modifier = Modifier
+                                        .align(Alignment.End)
+                                        .padding(end = 10.dp, bottom = 15.dp),
+                                    onClick = { navController.navigate(Routes.DistributorOrdersReceived.path) }
+                                ) {
+                                    Text(stringResource(id = R.string.view_all))
+
+                                    Icon(
+                                        modifier = Modifier.padding(start = 5.dp),
+                                        imageVector = Icons.Default.KeyboardDoubleArrowRight,
+                                        contentDescription = null
+                                    )
+                                }
+
+                                if (showPeriodStartDialog) {
+                                    DatePicker(
+                                        date = homeViewModel.periodQuery.periodStart.toLocalDate(),
+                                        onDateUpdated = {
+                                            homeViewModel.periodQuery = homeViewModel.periodQuery
+                                                .copy(periodStart = it.toDate())
+                                            showPeriodStartDialog = false
+                                            homeViewModel.getHomeData()
+                                        },
+                                        onCancel = { showPeriodStartDialog = false },
+                                        show = showPeriodStartDialog,
+                                        maxDate = homeViewModel.periodQuery.periodEnd
+                                    )
+                                }
+
+                                if (showPeriodEndDialog) {
+                                    DatePicker(
+                                        date = homeViewModel.periodQuery.periodEnd.toLocalDate(),
+                                        onDateUpdated = {
+                                            homeViewModel.periodQuery = homeViewModel.periodQuery
+                                                .copy(periodEnd = it.toDate())
+                                            showPeriodEndDialog = false
+                                            homeViewModel.getHomeData()
+                                        },
+                                        onCancel = { showPeriodEndDialog = false },
+                                        minDate = homeViewModel.periodQuery.periodStart,
+                                        show = showPeriodEndDialog
+                                    )
+                                }
                             }
-                        }
-
-                        TextButton(
-                            modifier = Modifier
-                                .align(Alignment.End)
-                                .padding(end = 10.dp, bottom = 15.dp),
-                            onClick = { navController.navigate(Routes.DistributorOrdersReceived.path) }
-                        ) {
-                            Text(stringResource(id = R.string.view_all))
-
-                            Icon(
-                                modifier = Modifier.padding(start = 5.dp),
-                                imageVector = Icons.Default.KeyboardDoubleArrowRight,
-                                contentDescription = null
-                            )
-                        }
-
-                        if (showPeriodStartDialog) {
-                            DatePicker(
-                                date = homeViewModel.periodQuery.periodStart.toLocalDate(),
-                                onDateUpdated = {
-                                    homeViewModel.periodQuery = homeViewModel.periodQuery
-                                        .copy(periodStart = it.toDate())
-                                    showPeriodStartDialog = false
-                                    homeViewModel.getHomeData()
-                                },
-                                onCancel = { showPeriodStartDialog = false },
-                                show = showPeriodStartDialog,
-                                maxDate = homeViewModel.periodQuery.periodEnd
-                            )
-                        }
-
-                        if (showPeriodEndDialog) {
-                            DatePicker(
-                                date = homeViewModel.periodQuery.periodEnd.toLocalDate(),
-                                onDateUpdated = {
-                                    homeViewModel.periodQuery = homeViewModel.periodQuery
-                                        .copy(periodEnd = it.toDate())
-                                    showPeriodEndDialog = false
-                                    homeViewModel.getHomeData()
-                                },
-                                onCancel = { showPeriodEndDialog = false },
-                                minDate = homeViewModel.periodQuery.periodStart,
-                                show = showPeriodEndDialog
-                            )
                         }
                     }
                 }
             }
         }
-    }
-}
-
-
-private fun Date.toLocalDate(): LocalDate {
-    return LocalDateTime.ofInstant(this.toInstant(), ZoneId.systemDefault()).toLocalDate()!!
-}
-
-private fun LocalDate.toDate(): Date {
-    return Date.from(
-        LocalDateTime.of(this, LocalTime.MIDNIGHT)
-            .atZone(ZoneId.systemDefault())
-            .toInstant()
     )
 }

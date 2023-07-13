@@ -13,16 +13,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.TextFields
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -49,6 +51,7 @@ import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.ImagePicker
+import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.location.LocationMap
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorLocationFormViewModel
@@ -71,77 +74,84 @@ fun DistributorLocationFormScreen(
     )
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val location = serializedLocation.jsonDeserialize<Location>()
     val context = LocalContext.current
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = {
-            AppBar(
-                coroutineScope = coroutineScope,
-                scaffoldState = scaffoldState,
-                canGoBack = true,
-                navController = navController,
-                title = stringResource(
-                    id = if (serializedLocation.isNullOrBlank()) {
-                        R.string.create_a_location
-                    } else {
-                        R.string.update_location
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = { DrawerContent(navController) },
+        gesturesEnabled = false,
+        content = {
+            Scaffold(
+                topBar = {
+                    AppBar(
+                        coroutineScope = coroutineScope,
+                        drawerState = drawerState,
+                        canGoBack = true,
+                        navController = navController,
+                        title = stringResource(
+                            id = if (serializedLocation.isNullOrBlank()) {
+                                R.string.create_a_location
+                            } else {
+                                R.string.update_location
+                            }
+                        )
+                    )
+                }
+            ) { paddingValues ->
+                DistributorLocationFormScreenContent(
+                    modifier = Modifier.padding(paddingValues),
+                    name = distributorLocationFormViewModel.name,
+                    indication = distributorLocationFormViewModel.indication,
+                    location = location,
+                    imageUri = distributorLocationFormViewModel.imageUri,
+                    loading = distributorLocationFormViewModel.apiCallResult.status == ApiStatus.LOADING,
+                    errorMessage = distributorLocationFormViewModel.errorMessage(),
+                    isSuccessful = distributorLocationFormViewModel.apiCallResult.status == ApiStatus.SUCCESS,
+                    onImagePicked = { distributorLocationFormViewModel.imageUri = it },
+                    onNameChange = { distributorLocationFormViewModel.name = it },
+                    onIndicationChange = { distributorLocationFormViewModel.indication = it },
+                    onLatLngUpdate = {
+                        distributorLocationFormViewModel.latLong = it.toCoordinates()
+                    },
+                    onSubmit = {
+                        if (!distributorLocationFormViewModel.formState.isValid) {
+                            coroutineScope.launch {
+                                snackbarHostState.show(
+                                    message = distributorLocationFormViewModel.formState.errorMessage
+                                        ?: Strings.get(R.string.invalid_data)
+                                )
+                            }
+                        } else {
+                            if (location == null) {
+                                distributorLocationFormViewModel.create(context)
+                            } else {
+                                distributorLocationFormViewModel.update(context)
+                            }
+                        }
+                    },
+                    snackbarHostState = snackbarHostState,
+                    coroutineScope = coroutineScope,
+                    navController = navController,
+                    onValidationSuccess = {
+                        distributorLocationFormViewModel.formState =
+                            distributorLocationFormViewModel.formState.copy(
+                                isValid = true,
+                                errorMessage = null
+                            )
+                    },
+                    onValidationError = {
+                        distributorLocationFormViewModel.formState =
+                            distributorLocationFormViewModel.formState.copy(
+                                isValid = false,
+                                errorMessage = it
+                            )
                     }
                 )
-            )
-        },
-        drawerGesturesEnabled = false
-    ) { paddingValues ->
-        DistributorLocationFormScreenContent(
-            modifier = Modifier.padding(paddingValues),
-            name = distributorLocationFormViewModel.name,
-            indication = distributorLocationFormViewModel.indication,
-            location = location,
-            imageUri = distributorLocationFormViewModel.imageUri,
-            loading = distributorLocationFormViewModel.apiCallResult.status == ApiStatus.LOADING,
-            errorMessage = distributorLocationFormViewModel.errorMessage(),
-            isSuccessful = distributorLocationFormViewModel.apiCallResult.status == ApiStatus.SUCCESS,
-            onImagePicked = { distributorLocationFormViewModel.imageUri = it },
-            onNameChange = { distributorLocationFormViewModel.name = it },
-            onIndicationChange = { distributorLocationFormViewModel.indication = it },
-            onLatLngUpdate = { distributorLocationFormViewModel.latLong = it.toCoordinates() },
-            onSubmit = {
-                if (!distributorLocationFormViewModel.formState.isValid) {
-                    coroutineScope.launch {
-                        snackbarHostState.show(
-                            message = distributorLocationFormViewModel.formState.errorMessage
-                                ?: Strings.get(R.string.invalid_data)
-                        )
-                    }
-                } else {
-                    if (location == null) {
-                        distributorLocationFormViewModel.create(context)
-                    } else {
-                        distributorLocationFormViewModel.update(context)
-                    }
-                }
-            },
-            snackbarHostState = snackbarHostState,
-            coroutineScope = coroutineScope,
-            navController = navController,
-            onValidationSuccess = {
-                distributorLocationFormViewModel.formState =
-                    distributorLocationFormViewModel.formState.copy(
-                        isValid = true,
-                        errorMessage = null
-                    )
-            },
-            onValidationError = {
-                distributorLocationFormViewModel.formState =
-                    distributorLocationFormViewModel.formState.copy(
-                        isValid = false,
-                        errorMessage = it
-                    )
             }
-        )
-    }
+        }
+    )
 }
 
 @Composable
@@ -229,7 +239,7 @@ fun DistributorLocationFormScreenContent(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(bottom = 15.dp, start = 10.dp, end = 10.dp),
-                    style = MaterialTheme.typography.body2
+                    style = MaterialTheme.typography.bodyMedium
                 )
 
                 LocationMap(
@@ -287,7 +297,7 @@ fun DistributorLocationFormScreenContent(
                     if (loading) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(24.dp),
-                            color = MaterialTheme.colors.background
+                            color = MaterialTheme.colorScheme.background
                         )
                     } else {
                         Text(text = stringResource(R.string.submit))

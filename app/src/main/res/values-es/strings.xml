@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">RecoverUnsold</string>
+    <string name="app_name">Recover Unsold</string>
     <string name="email_label">Correo electrónico</string>
     <string name="email_placeholder">usario@email.com</string>
     <string name="login_label">Bienvenido</string>
@@ -20,7 +20,7 @@
     <string name="who_are_you">¿ Quién es usted ?</string>
     <string name="invalid_data">Datos invalidados</string>
     <string name="user_not_found">Usuario no encontrado</string>
-    <string name="forgot_password_indications">Introduzca su dirección de correo electrónico para recibir el código de restablecimiento de la contraseña</string>
+    <string name="forgot_password_indications">Introduzca su dirección de correo electrónico</string>
     <string name="send_code_action">Enviar código</string>
     <string name="code_already_sent">¿ Código ya enviado ?</string>
     <string name="code_sent_successfully">El código se ha enviado con éxito, compruebe su bandeja de entrada</string>

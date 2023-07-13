@@ -11,16 +11,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.TextFields
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -69,76 +71,80 @@ fun DistributorProductFormScreen(
     )
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
     val context = LocalContext.current
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = {
-            AppBar(
-                coroutineScope = coroutineScope,
-                scaffoldState = scaffoldState,
-                canGoBack = true,
-                navController = navController,
-                title = stringResource(
-                    id = if (serializedProduct.isNullOrBlank()) {
-                        R.string.new_product
-                    } else {
-                        R.string.update_product
-                    }
-                )
-            )
-        },
-        drawerContent = DrawerContent(navController),
-    ) { paddingValues ->
-        DistributorProductFormScreenContent(
-            modifier = Modifier.padding(paddingValues),
-            formType = if (serializedProduct.isNullOrBlank()) FormType.Create else FormType.Update,
-            name = productFormViewModel.name,
-            description = productFormViewModel.description,
-            imageUris = productFormViewModel.images,
-            currentImageUri = productFormViewModel.images.lastOrNull(),
-            onNameChanged = { productFormViewModel.name = it },
-            onDescriptionChanged = { productFormViewModel.description = it },
-            onImageAdded = { productFormViewModel.images.add(it) },
-            onImageDeleted = { productFormViewModel.images.removeIf { uri -> uri == it } },
-            onValidationSuccess = {
-                productFormViewModel.formState = productFormViewModel.formState
-                    .copy(isValid = true, errorMessage = null)
-            },
-            onValidationError = {
-                productFormViewModel.formState = productFormViewModel.formState
-                    .copy(isValid = false, errorMessage = it)
-            },
-            loading = productFormViewModel.productApiCall.status == ApiStatus.LOADING,
-            snackbarHostState = snackbarHostState,
-            coroutineScope = coroutineScope,
-            isSuccessful = productFormViewModel.productApiCall.status == ApiStatus.SUCCESS,
-            onSubmit = {
-                if (!productFormViewModel.formState.isValid) {
-                    coroutineScope.launch {
-                        snackbarHostState.show(
-                            message = productFormViewModel.formState.errorMessage
-                                ?: Strings.get(R.string.invalid_data)
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = { DrawerContent(navController) },
+        content = {
+            Scaffold(
+                topBar = {
+                    AppBar(
+                        coroutineScope = coroutineScope,
+                        drawerState = drawerState,
+                        canGoBack = true,
+                        navController = navController,
+                        title = stringResource(
+                            id = if (serializedProduct.isNullOrBlank()) {
+                                R.string.new_product
+                            } else {
+                                R.string.update_product
+                            }
+                        )
+                    )
+                }
+            ) { paddingValues ->
+                DistributorProductFormScreenContent(
+                    modifier = Modifier.padding(paddingValues),
+                    formType = if (serializedProduct.isNullOrBlank()) FormType.Create else FormType.Update,
+                    name = productFormViewModel.name,
+                    description = productFormViewModel.description,
+                    imageUris = productFormViewModel.images,
+                    currentImageUri = productFormViewModel.images.lastOrNull(),
+                    onNameChanged = { productFormViewModel.name = it },
+                    onDescriptionChanged = { productFormViewModel.description = it },
+                    onImageAdded = { productFormViewModel.images.add(it) },
+                    onImageDeleted = { productFormViewModel.images.removeIf { uri -> uri == it } },
+                    onValidationSuccess = {
+                        productFormViewModel.formState = productFormViewModel.formState
+                            .copy(isValid = true, errorMessage = null)
+                    },
+                    onValidationError = {
+                        productFormViewModel.formState = productFormViewModel.formState
+                            .copy(isValid = false, errorMessage = it)
+                    },
+                    loading = productFormViewModel.productApiCall.status == ApiStatus.LOADING,
+                    snackbarHostState = snackbarHostState,
+                    coroutineScope = coroutineScope,
+                    isSuccessful = productFormViewModel.productApiCall.status == ApiStatus.SUCCESS,
+                    onSubmit = {
+                        if (!productFormViewModel.formState.isValid) {
+                            coroutineScope.launch {
+                                snackbarHostState.show(
+                                    message = productFormViewModel.formState.errorMessage
+                                        ?: Strings.get(R.string.invalid_data)
+                                )
+                            }
+                        } else {
+                            if (serializedProduct.isNullOrBlank()) {
+                                productFormViewModel.create(context)
+                            } else {
+                                productFormViewModel.update()
+                            }
+                        }
+                    },
+                    onSuccess = {
+                        navController.popBackStack()
+                        navController.popBackStack()
+                        navController.navigate(
+                            Routes.OfferDetails.path.replace("{offerId}", offerId)
                         )
                     }
-                } else {
-                    if (serializedProduct.isNullOrBlank()) {
-                        productFormViewModel.create(context)
-                    } else {
-                        productFormViewModel.update()
-                    }
-                }
-            },
-            onSuccess = {
-                navController.popBackStack()
-                navController.popBackStack()
-                navController.navigate(
-                    Routes.OfferDetails.path.replace("{offerId}", offerId)
                 )
             }
-        )
-    }
+        }
+    )
 }
 
 @Composable
@@ -182,7 +188,7 @@ fun DistributorProductFormScreenContent(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 15.dp, bottom = 25.dp),
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
         )
 
@@ -243,7 +249,7 @@ fun DistributorProductFormScreenContent(
 
         Button(modifier = fieldsModifier, onClick = onSubmit, enabled = !loading) {
             if (loading) {
-                CircularProgressIndicator(color = MaterialTheme.colors.background)
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.background)
             } else {
                 Text(stringResource(R.string.submit), modifier = Modifier.padding(5.dp))
             }

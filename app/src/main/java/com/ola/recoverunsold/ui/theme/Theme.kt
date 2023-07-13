@@ -1,20 +1,19 @@
 package com.ola.recoverunsold.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ola.recoverunsold.utils.store.ThemeObserver
 
-private val LightColors = lightColors(
+private val LightColorScheme = lightColorScheme(
     primary = themeLightPrimary,
     onPrimary = themeLightOnPrimary,
     secondary = themeLightSecondary,
-    secondaryVariant = themeLightSecondaryVariant,
     onSecondary = themeLightOnSecondary,
     error = themeLightError,
     onError = themeLightOnError,
@@ -24,11 +23,10 @@ private val LightColors = lightColors(
     onSurface = themeLightOnSurface,
 )
 
-private val DarkColors = darkColors(
+private val DarkColorScheme = darkColorScheme(
     primary = themeDarkPrimary,
     onPrimary = themeDarkOnPrimary,
     secondary = themeDarkSecondary,
-    secondaryVariant = themeDarkSecondaryVariant,
     onSecondary = themeDarkOnSecondary,
     error = themeDarkError,
     onError = themeDarkOnError,
@@ -45,19 +43,19 @@ fun RecoverUnsoldTheme(
 ) {
     val themeMode by ThemeObserver.themeMode.collectAsState()
 
-    val colors = when (themeMode) {
-        ThemeMode.Dark -> DarkColors
-        ThemeMode.Light -> LightColors
-        else -> if (darkTheme) DarkColors else LightColors
+    val colorScheme = when (themeMode) {
+        ThemeMode.Dark -> DarkColorScheme
+        ThemeMode.Light -> LightColorScheme
+        else -> if (darkTheme) DarkColorScheme else LightColorScheme
     }
 
     val systemUiController = rememberSystemUiController()
-    systemUiController.setSystemBarsColor(color = colors.primaryVariant)
+    systemUiController.setSystemBarsColor(color = colorScheme.primary)
 
     MaterialTheme(
-        colors = colors,
-        typography = Typography,
-        shapes = Shapes,
+        colorScheme = colorScheme,
+        typography = typography,
+        shapes = shapes,
         content = content
     )
 }

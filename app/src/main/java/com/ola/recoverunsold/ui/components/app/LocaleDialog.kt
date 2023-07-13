@@ -5,11 +5,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.RadioButton
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +37,7 @@ fun LocaleDialog(
         title = {
             Text(
                 text = stringResource(id = R.string.select_a_language),
-                style = MaterialTheme.typography.h6
+                style = MaterialTheme.typography.titleLarge
             )
         },
         text = {
@@ -60,7 +60,7 @@ fun LocaleDialog(
 
                         Text(
                             text = stringResource(id = it.third),
-                            style = MaterialTheme.typography.body1.merge(),
+                            style = MaterialTheme.typography.bodyLarge.merge(),
                             modifier = Modifier.padding(start = 16.dp)
                         )
                     }

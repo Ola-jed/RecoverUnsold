@@ -8,17 +8,16 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -53,9 +52,9 @@ fun PasswordResetScreen(
     passwordResetViewModel: PasswordResetViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
-    Scaffold(
-        scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
-    ) { padding ->
+
+
+    Scaffold { padding ->
         PasswordResetContent(
             modifier = Modifier.padding(padding),
             token = passwordResetViewModel.token,
@@ -117,7 +116,6 @@ fun PasswordResetContent(
     val fieldsModifier = modifier
         .fillMaxWidth()
         .padding(horizontal = 10.dp)
-
 
     Column(
         modifier = modifier
@@ -181,7 +179,7 @@ fun PasswordResetContent(
 
             Button(modifier = fieldsModifier, onClick = onSubmit, enabled = !loading) {
                 if (loading) {
-                    CircularProgressIndicator(color = MaterialTheme.colors.background)
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.background)
                 } else {
                     Text(
                         stringResource(R.string.reset_password_message),

@@ -4,12 +4,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.FloatingActionButtonDefaults
-import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.ArrowForwardIos
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -68,7 +68,7 @@ fun ImageSlider(
         if (currentIndex > 0) {
             FloatingActionButton(
                 modifier = Modifier.align(Alignment.CenterStart),
-                backgroundColor = Color.White.copy(alpha = 0.65F),
+                containerColor = Color.White.copy(alpha = 0.65F),
                 elevation = FloatingActionButtonDefaults.elevation(0.dp),
                 onClick = { currentIndex-- }) {
                 Icon(Icons.Filled.ArrowBackIos, contentDescription = null)
@@ -78,7 +78,7 @@ fun ImageSlider(
         if (currentIndex < imageUris.size - 1) {
             FloatingActionButton(
                 modifier = Modifier.align(Alignment.CenterEnd),
-                backgroundColor = Color.White.copy(alpha = 0.65F),
+                containerColor = Color.White.copy(alpha = 0.65F),
                 elevation = FloatingActionButtonDefaults.elevation(0.dp),
                 onClick = { currentIndex++ }) {
                 Icon(Icons.Filled.ArrowForwardIos, contentDescription = null)

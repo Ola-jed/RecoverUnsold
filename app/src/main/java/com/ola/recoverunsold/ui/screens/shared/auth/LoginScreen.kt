@@ -8,20 +8,19 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -72,9 +71,7 @@ fun LoginScreen(
     val coroutineScope = rememberCoroutineScope()
     var passwordVisible by remember { mutableStateOf(false) }
 
-    Scaffold(
-        scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
-    ) { padding ->
+    Scaffold { padding ->
         LoginScreenContent(
             modifier = Modifier.padding(padding),
             email = loginViewModel.email,
@@ -131,10 +128,8 @@ fun LoginScreen(
             coroutineScope = coroutineScope,
             isSuccessful = loginViewModel.apiCallResult.status == ApiStatus.SUCCESS,
             onValidationSuccess = {
-                loginViewModel.formState = loginViewModel.formState.copy(
-                    isValid = true,
-                    errorMessage = null
-                )
+                loginViewModel.formState = loginViewModel.formState
+                    .copy(isValid = true, errorMessage = null)
             },
             onValidationError = {
                 loginViewModel.formState = loginViewModel.formState.copy(
@@ -252,7 +247,7 @@ fun LoginScreenContent(
 
             Button(modifier = fieldsModifier, onClick = onSubmit, enabled = !loading) {
                 if (loading) {
-                    CircularProgressIndicator(color = MaterialTheme.colors.background)
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.background)
                 } else {
                     Text(stringResource(R.string.login_action), modifier = Modifier.padding(5.dp))
                 }

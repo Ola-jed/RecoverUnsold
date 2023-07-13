@@ -1,8 +1,8 @@
 package com.ola.recoverunsold.ui.components.app
 
 import androidx.annotation.StringRes
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,9 +14,9 @@ import androidx.navigation.NavController
 fun NavigationTextButton(
     navController: NavController,
     route: String,
+    modifier: Modifier = Modifier,
     @StringRes text: Int? = null,
     content: String? = null,
-    modifier: Modifier = Modifier,
     outerModifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Center,
     color: Color? = null,

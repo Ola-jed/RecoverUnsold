@@ -6,11 +6,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -62,7 +62,7 @@ fun DistributorProfileInformationSection(
                 .padding(top = 50.dp)
         ) {
             CircularProgressIndicator(
-                color = MaterialTheme.colors.primary, modifier = Modifier.align(
+                color = MaterialTheme.colorScheme.primary, modifier = Modifier.align(
                     Alignment.Center
                 )
             )
@@ -91,20 +91,20 @@ fun DistributorProfileInformationSection(
                 ) {
                     Button(
                         onClick = onEditingEnd,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                     ) {
                         Text(
                             stringResource(R.string.save),
-                            color = MaterialTheme.colors.onPrimary
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                     Button(
                         onClick = onEditingCancel,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                     ) {
                         Text(
                             stringResource(R.string.cancel),
-                            color = MaterialTheme.colors.onError
+                            color = MaterialTheme.colorScheme.onError
                         )
                     }
                 }
@@ -120,11 +120,11 @@ fun DistributorProfileInformationSection(
                 Button(
                     modifier = buttonsModifier,
                     onClick = { showDialog = true },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) {
                     Text(
                         stringResource(R.string.delete_account),
-                        color = MaterialTheme.colors.onError
+                        color = MaterialTheme.colorScheme.onError
                     )
                 }
 

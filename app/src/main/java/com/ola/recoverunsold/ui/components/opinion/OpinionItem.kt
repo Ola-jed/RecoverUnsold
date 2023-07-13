@@ -5,13 +5,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,7 +37,8 @@ fun OpinionItem(
 
     Surface(
         modifier = modifier,
-        elevation = 5.dp
+        tonalElevation = 5.dp,
+        shadowElevation = 5.dp,
     ) {
         Column(modifier = Modifier.padding(5.dp)) {
             Text(opinion.comment)
@@ -53,14 +54,14 @@ fun OpinionItem(
                         id = R.string.published_the,
                         opinion.createdAt.formatDate()
                     ),
-                    style = MaterialTheme.typography.caption
+                    style = MaterialTheme.typography.bodySmall
                 )
 
                 if (canDelete) {
                     IconButton(onClick = { showDeleteConfirmationDialog = true }) {
                         Icon(
                             Icons.Default.Delete,
-                            tint = MaterialTheme.colors.error,
+                            tint = MaterialTheme.colorScheme.error,
                             contentDescription = null
                         )
                     }

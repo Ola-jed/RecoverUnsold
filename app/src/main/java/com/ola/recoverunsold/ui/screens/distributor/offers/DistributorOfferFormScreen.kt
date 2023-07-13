@@ -12,23 +12,25 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ExposedDropdownMenuBox
-import androidx.compose.material.ExposedDropdownMenuDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Switch
-import androidx.compose.material.SwitchDefaults
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.EventBusy
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -55,6 +57,7 @@ import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.DateTimePicker
+import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorOfferFormViewModel
 import com.ola.recoverunsold.ui.theme.success
@@ -84,93 +87,94 @@ fun DistributorOfferFormScreen(
     )
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
     val offer = serializedOffer.jsonDeserialize<Offer>()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = {
-            AppBar(
-                coroutineScope = coroutineScope,
-                scaffoldState = scaffoldState,
-                canGoBack = true,
-                navController = navController,
-                title = stringResource(
-                    id = if (offer == null) {
-                        R.string.create_new_offer
-                    } else {
-                        R.string.update_offer_label
-                    }
-                )
-            )
-        }
-    ) { paddingValues ->
-        DistributorOfferFormContent(
-            modifier = Modifier.padding(paddingValues),
-            formType = if (offer == null) FormType.Create else FormType.Update,
-            startDate = distributorOfferFormViewModel.startDate,
-            endDate = distributorOfferFormViewModel.endDate,
-            beneficiaries = distributorOfferFormViewModel.beneficiaries,
-            onlinePayment = distributorOfferFormViewModel.onlinePayment,
-            price = distributorOfferFormViewModel.price,
-            locations = distributorOfferFormViewModel.locations,
-            location = distributorOfferFormViewModel.location,
-            onStartDateChange = { distributorOfferFormViewModel.startDate = it },
-            onEndDateChange = { distributorOfferFormViewModel.endDate = it },
-            onBeneficiariesChange = { distributorOfferFormViewModel.beneficiaries = it },
-            onOnlinePaymentChange = { distributorOfferFormViewModel.onlinePayment = it },
-            onPriceChange = { distributorOfferFormViewModel.price = it },
-            onLocationChange = { distributorOfferFormViewModel.location = it },
-            onSubmit = {
-                if (!distributorOfferFormViewModel.formState.isValid) {
-                    coroutineScope.launch {
-                        snackbarHostState.show(
-                            message = distributorOfferFormViewModel.formState.errorMessage
-                                ?: Strings.get(R.string.invalid_data)
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = { DrawerContent(navController) },
+        content = {
+            Scaffold(
+                topBar = {
+                    AppBar(
+                        coroutineScope = coroutineScope,
+                        drawerState = drawerState,
+                        canGoBack = true,
+                        navController = navController,
+                        title = stringResource(
+                            id = if (offer == null) {
+                                R.string.create_new_offer
+                            } else {
+                                R.string.update_offer_label
+                            }
+                        )
+                    )
+                }
+            ) { paddingValues ->
+                DistributorOfferFormContent(
+                    modifier = Modifier.padding(paddingValues),
+                    formType = if (offer == null) FormType.Create else FormType.Update,
+                    startDate = distributorOfferFormViewModel.startDate,
+                    endDate = distributorOfferFormViewModel.endDate,
+                    beneficiaries = distributorOfferFormViewModel.beneficiaries,
+                    onlinePayment = distributorOfferFormViewModel.onlinePayment,
+                    price = distributorOfferFormViewModel.price,
+                    locations = distributorOfferFormViewModel.locations,
+                    location = distributorOfferFormViewModel.location,
+                    onStartDateChange = { distributorOfferFormViewModel.startDate = it },
+                    onEndDateChange = { distributorOfferFormViewModel.endDate = it },
+                    onBeneficiariesChange = { distributorOfferFormViewModel.beneficiaries = it },
+                    onOnlinePaymentChange = { distributorOfferFormViewModel.onlinePayment = it },
+                    onPriceChange = { distributorOfferFormViewModel.price = it },
+                    onLocationChange = { distributorOfferFormViewModel.location = it },
+                    onSubmit = {
+                        if (!distributorOfferFormViewModel.formState.isValid) {
+                            coroutineScope.launch {
+                                snackbarHostState.show(
+                                    message = distributorOfferFormViewModel.formState.errorMessage
+                                        ?: Strings.get(R.string.invalid_data)
+                                )
+                            }
+                        } else {
+                            if (offer == null) {
+                                distributorOfferFormViewModel.create()
+                            } else {
+                                distributorOfferFormViewModel.update()
+                            }
+                        }
+                    },
+                    loading = distributorOfferFormViewModel.offerResponse.status == ApiStatus.LOADING,
+                    snackbarHostState = snackbarHostState,
+                    coroutineScope = coroutineScope,
+                    errorMessage = distributorOfferFormViewModel.errorMessage(),
+                    onValidationSuccess = {
+                        distributorOfferFormViewModel.formState =
+                            distributorOfferFormViewModel.formState
+                                .copy(isValid = true, errorMessage = null)
+                    },
+                    onValidationError = {
+                        distributorOfferFormViewModel.formState =
+                            distributorOfferFormViewModel.formState
+                                .copy(isValid = false, errorMessage = it)
+                    },
+                    isSuccessful = distributorOfferFormViewModel.offerResponse.status == ApiStatus.SUCCESS,
+                    onSuccess = {
+                        navController.popBackStack()
+                        navController.popBackStack()
+                        navController.navigate(
+                            Routes.OfferDetails.path.replace(
+                                "{offerId}",
+                                distributorOfferFormViewModel.offerResponse.data!!.id
+                            )
                         )
                     }
-                } else {
-                    if (offer == null) {
-                        distributorOfferFormViewModel.create()
-                    } else {
-                        distributorOfferFormViewModel.update()
-                    }
-                }
-            },
-            loading = distributorOfferFormViewModel.offerResponse.status == ApiStatus.LOADING,
-            snackbarHostState = snackbarHostState,
-            coroutineScope = coroutineScope,
-            errorMessage = distributorOfferFormViewModel.errorMessage(),
-            onValidationSuccess = {
-                distributorOfferFormViewModel.formState = distributorOfferFormViewModel.formState
-                    .copy(
-                        isValid = true,
-                        errorMessage = null
-                    )
-            },
-            onValidationError = {
-                distributorOfferFormViewModel.formState = distributorOfferFormViewModel.formState
-                    .copy(
-                        isValid = false,
-                        errorMessage = it
-                    )
-            },
-            isSuccessful = distributorOfferFormViewModel.offerResponse.status == ApiStatus.SUCCESS,
-            onSuccess = {
-                navController.popBackStack()
-                navController.popBackStack()
-                navController.navigate(
-                    Routes.OfferDetails.path.replace(
-                        "{offerId}",
-                        distributorOfferFormViewModel.offerResponse.data!!.id
-                    )
                 )
             }
-        )
-    }
+        }
+    )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DistributorOfferFormContent(
     modifier: Modifier,
@@ -269,12 +273,13 @@ fun DistributorOfferFormContent(
                 onDismissRequest = { showLocationsDropdown = false }
             ) {
                 locations.forEach {
-                    DropdownMenuItem(onClick = {
-                        onLocationChange(it)
-                        showLocationsDropdown = false
-                    }) {
-                        Text(text = it.name)
-                    }
+                    DropdownMenuItem(
+                        onClick = {
+                            onLocationChange(it)
+                            showLocationsDropdown = false
+                        },
+                        text = { Text(text = it.name) }
+                    )
                 }
             }
         }
@@ -305,10 +310,10 @@ fun DistributorOfferFormContent(
                 checked = onlinePayment,
                 onCheckedChange = onOnlinePaymentChange,
                 colors = SwitchDefaults.colors(
-                    checkedThumbColor = MaterialTheme.colors.primary,
-                    uncheckedThumbColor = MaterialTheme.colors.primary,
-                    checkedTrackColor = MaterialTheme.colors.success,
-                    uncheckedTrackColor = MaterialTheme.colors.onBackground,
+                    checkedThumbColor = MaterialTheme.colorScheme.primary,
+                    uncheckedThumbColor = MaterialTheme.colorScheme.primary,
+                    checkedTrackColor = MaterialTheme.colorScheme.success,
+                    uncheckedTrackColor = MaterialTheme.colorScheme.onBackground,
                 )
             )
         }
@@ -319,7 +324,7 @@ fun DistributorOfferFormContent(
             enabled = !loading
         ) {
             if (loading) {
-                CircularProgressIndicator(color = MaterialTheme.colors.background)
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.background)
             } else {
                 Text(stringResource(R.string.submit), modifier = Modifier.padding(5.dp))
             }

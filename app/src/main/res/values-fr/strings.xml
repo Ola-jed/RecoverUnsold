@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">RecoverUnsold</string>
+    <string name="app_name">Recover Unsold</string>
     <string name="email_label">Email</string>
     <string name="email_placeholder">utilisateur@email.com</string>
     <string name="login_label">Bienvenue</string>
@@ -20,7 +20,7 @@
     <string name="who_are_you">Qui êtes vous ?</string>
     <string name="invalid_data">Données invalides</string>
     <string name="user_not_found">Utilisateur introuvable</string>
-    <string name="forgot_password_indications">Saisissez votre adresse électronique pour recevoir le code de réinitialisation du mot de passe.</string>
+    <string name="forgot_password_indications">Saisissez votre adresse électronique</string>
     <string name="send_code_action">Envoyer le code</string>
     <string name="code_already_sent">Code déjà envoyé ?</string>
     <string name="code_sent_successfully">Code envoyé avec succès, vérifiez votre boîte de réception</string>

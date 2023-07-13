@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,101 +46,111 @@ fun OrdersScreen(
     customerOrderViewModel: CustomerOrderViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = {
-            AppBar(
-                coroutineScope = coroutineScope,
-                scaffoldState = scaffoldState,
-                title = stringResource(id = R.string.orders_placed)
-            )
-        },
-        drawerContent = DrawerContent(navController)
-    ) { paddingValues ->
-        when (customerOrderViewModel.ordersGetResponse.status) {
-            ApiStatus.LOADING, ApiStatus.INACTIVE -> LoadingIndicator()
-            ApiStatus.ERROR -> {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    Button(
-                        onClick = {
-                            customerOrderViewModel.resetFilters()
-                            customerOrderViewModel.getOrders()
-                        },
-                        modifier = Modifier.align(Alignment.Center)
-                    ) {
-                        Text(stringResource(id = R.string.retry))
-                    }
-                }
-
-                LaunchedEffect(snackbarHostState) {
-                    coroutineScope.launch {
-                        snackbarHostState.show(
-                            message = customerOrderViewModel.errorMessage()
-                                ?: Strings.get(R.string.unknown_error_occured)
-                        )
-                    }
-                }
-            }
-            else -> {
-                val orders = customerOrderViewModel.ordersGetResponse.data!!
-
-                Column(modifier = Modifier.padding(paddingValues)) {
-                    OrderFilterComponent(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 25.dp, start = 20.dp, end = 20.dp, bottom = 10.dp),
-                        orderStatus = customerOrderViewModel.orderQuery.status?.let {
-                            OrderStatus.valueOf(it)
-                        },
-                        onOrderStatusChange = {
-                            customerOrderViewModel.orderQuery = customerOrderViewModel
-                                .orderQuery
-                                .copy(status = it?.name, page = 1)
-                            customerOrderViewModel.getOrders()
-                        }
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = { DrawerContent(navController) },
+        content = {
+            Scaffold(
+                topBar = {
+                    AppBar(
+                        coroutineScope = coroutineScope,
+                        drawerState = drawerState,
+                        title = stringResource(id = R.string.orders_placed)
                     )
+                }
+            ) { paddingValues ->
+                when (customerOrderViewModel.ordersGetResponse.status) {
+                    ApiStatus.LOADING, ApiStatus.INACTIVE -> LoadingIndicator()
+                    ApiStatus.ERROR -> {
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            Button(
+                                onClick = {
+                                    customerOrderViewModel.resetFilters()
+                                    customerOrderViewModel.getOrders()
+                                },
+                                modifier = Modifier.align(Alignment.Center)
+                            ) {
+                                Text(stringResource(id = R.string.retry))
+                            }
+                        }
 
-                    if (orders.items.isEmpty()) {
-                        NoContentComponent(
-                            modifier = Modifier.fillMaxWidth(),
-                            message = stringResource(R.string.no_order_found)
-                        )
-                    } else {
-                        LazyColumn(
-                            modifier = Modifier
-                                .padding(paddingValues)
-                                .fillMaxSize()
-                        ) {
-                            items(items = orders.items) {
-                                OrderItem(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 10.dp, vertical = 20.dp),
-                                    order = it,
-                                    onTap = {
-                                        navController.navigate(
-                                            Routes.OrderDetails
-                                                .path
-                                                .replace("{orderId}", it.id)
-                                        )
-                                    }
+                        LaunchedEffect(snackbarHostState) {
+                            coroutineScope.launch {
+                                snackbarHostState.show(
+                                    message = customerOrderViewModel.errorMessage()
+                                        ?: Strings.get(R.string.unknown_error_occured)
                                 )
                             }
+                        }
+                    }
 
-                            item {
-                                PaginationComponent(
+                    else -> {
+                        val orders = customerOrderViewModel.ordersGetResponse.data!!
+
+                        Column(modifier = Modifier.padding(paddingValues)) {
+                            OrderFilterComponent(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        top = 25.dp,
+                                        start = 20.dp,
+                                        end = 20.dp,
+                                        bottom = 10.dp
+                                    ),
+                                orderStatus = customerOrderViewModel.orderQuery.status?.let {
+                                    OrderStatus.valueOf(it)
+                                },
+                                onOrderStatusChange = {
+                                    customerOrderViewModel.orderQuery = customerOrderViewModel
+                                        .orderQuery
+                                        .copy(status = it?.name, page = 1)
+                                    customerOrderViewModel.getOrders()
+                                }
+                            )
+
+                            if (orders.items.isEmpty()) {
+                                NoContentComponent(
                                     modifier = Modifier.fillMaxWidth(),
-                                    page = orders,
-                                    onPrevious = { customerOrderViewModel.getPrevious() },
-                                    onNext = { customerOrderViewModel.getNext() }
+                                    message = stringResource(R.string.no_order_found)
                                 )
+                            } else {
+                                LazyColumn(
+                                    modifier = Modifier
+                                        .padding(paddingValues)
+                                        .fillMaxSize()
+                                ) {
+                                    items(items = orders.items) {
+                                        OrderItem(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(horizontal = 10.dp, vertical = 20.dp),
+                                            order = it,
+                                            onTap = {
+                                                navController.navigate(
+                                                    Routes.OrderDetails
+                                                        .path
+                                                        .replace("{orderId}", it.id)
+                                                )
+                                            }
+                                        )
+                                    }
+
+                                    item {
+                                        PaginationComponent(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            page = orders,
+                                            onPrevious = { customerOrderViewModel.getPrevious() },
+                                            onNext = { customerOrderViewModel.getNext() }
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
         }
-    }
+    )
 }

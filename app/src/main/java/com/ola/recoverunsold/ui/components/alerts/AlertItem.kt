@@ -3,11 +3,6 @@ package com.ola.recoverunsold.ui.components.alerts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.CalendarToday
@@ -18,6 +13,11 @@ import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Web
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,7 +46,8 @@ fun AlertItem(
 
     Surface(
         modifier = modifier,
-        elevation = 10.dp
+        shadowElevation = 10.dp,
+        tonalElevation = 10.dp
     ) {
         Column(
             modifier = Modifier
@@ -138,7 +139,7 @@ fun AlertItem(
                 onClick = { showDeleteConfirmationDialog = true }) {
                 Icon(
                     Icons.Default.Delete,
-                    tint = MaterialTheme.colors.error,
+                    tint = MaterialTheme.colorScheme.error,
                     contentDescription = null
                 )
             }
