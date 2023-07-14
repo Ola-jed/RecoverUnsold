@@ -1,5 +1,6 @@
 package com.ola.recoverunsold.ui.components.offer
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -71,6 +72,10 @@ fun OfferFilterComponent(
     val focusManager = LocalFocusManager.current
 
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        val componentsModifier = Modifier
+            .fillMaxWidth()
+            .align(Alignment.CenterHorizontally)
+
         TextButton(
             modifier = Modifier.align(Alignment.Start),
             onClick = { itemsAreVisible = !itemsAreVisible },
@@ -86,11 +91,8 @@ fun OfferFilterComponent(
                 Icon(Icons.Default.FilterList, contentDescription = null)
             }
         }
-        if (itemsAreVisible) {
-            val componentsModifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally)
 
+        AnimatedVisibility(visible = itemsAreVisible) {
             Column(modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp)) {
                 Text(
                     stringResource(id = R.string.price_label),
