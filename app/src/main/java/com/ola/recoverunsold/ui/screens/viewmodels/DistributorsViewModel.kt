@@ -12,7 +12,7 @@ import com.ola.recoverunsold.api.query.DistributorFilterQuery
 import com.ola.recoverunsold.api.services.wrappers.DistributorServiceWrapper
 import com.ola.recoverunsold.models.DistributorInformation
 import com.ola.recoverunsold.models.Page
-import com.ola.recoverunsold.utils.misc.toApiCallResult
+import com.ola.recoverunsold.utils.extensions.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

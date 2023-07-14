@@ -20,7 +20,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.AlertType
 import com.ola.recoverunsold.models.DistributorLabel
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
-import com.ola.recoverunsold.utils.misc.label
+import com.ola.recoverunsold.utils.extensions.label
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

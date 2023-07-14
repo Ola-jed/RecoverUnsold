@@ -23,7 +23,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.DistributorInformation
-import com.ola.recoverunsold.utils.misc.formatDate
+import com.ola.recoverunsold.utils.extensions.formatDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

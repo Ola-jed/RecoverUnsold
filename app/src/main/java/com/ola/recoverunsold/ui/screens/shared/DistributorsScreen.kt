@@ -40,7 +40,7 @@ import com.ola.recoverunsold.ui.components.distributor.DistributorInformationCom
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorsViewModel
-import com.ola.recoverunsold.utils.misc.show
+import com.ola.recoverunsold.utils.extensions.show
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
 

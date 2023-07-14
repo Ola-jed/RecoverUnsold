@@ -9,7 +9,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.requests.ReviewMessageRequest
 import com.ola.recoverunsold.api.services.ReviewsService
-import com.ola.recoverunsold.utils.misc.toApiCallResult
+import com.ola.recoverunsold.utils.extensions.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import dagger.hilt.android.lifecycle.HiltViewModel

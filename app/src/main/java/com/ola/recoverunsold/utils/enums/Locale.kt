@@ -1,4 +1,4 @@
-package com.ola.recoverunsold.utils.misc
+package com.ola.recoverunsold.utils.enums
 
 enum class Locale(val code: String) {
     Fr("fr"),

@@ -15,7 +15,7 @@ import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
 import com.ola.recoverunsold.models.DistributorInformation
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.Page
-import com.ola.recoverunsold.utils.misc.toApiCallResult
+import com.ola.recoverunsold.utils.extensions.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

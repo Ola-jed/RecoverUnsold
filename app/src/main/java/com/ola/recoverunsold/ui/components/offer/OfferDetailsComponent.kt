@@ -18,10 +18,10 @@ import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.ui.components.app.ItemDetailsLine
-import com.ola.recoverunsold.utils.misc.addSeconds
-import com.ola.recoverunsold.utils.misc.formatDate
-import com.ola.recoverunsold.utils.misc.formatDateTime
-import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
+import com.ola.recoverunsold.utils.extensions.addSeconds
+import com.ola.recoverunsold.utils.extensions.formatDate
+import com.ola.recoverunsold.utils.extensions.formatDateTime
+import com.ola.recoverunsold.utils.extensions.formatWithoutTrailingZeros
 
 @Composable
 fun OfferDetailsComponent(offer: Offer) {

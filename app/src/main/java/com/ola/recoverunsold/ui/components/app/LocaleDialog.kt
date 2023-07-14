@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
-import com.ola.recoverunsold.utils.misc.Locale
+import com.ola.recoverunsold.utils.enums.Locale
 
 @Composable
 fun LocaleDialog(

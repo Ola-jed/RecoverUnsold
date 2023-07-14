@@ -36,9 +36,9 @@ import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.DateTimePicker
-import com.ola.recoverunsold.utils.misc.formatDateTime
-import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
-import com.ola.recoverunsold.utils.misc.toSecureDouble
+import com.ola.recoverunsold.utils.extensions.formatDateTime
+import com.ola.recoverunsold.utils.extensions.formatWithoutTrailingZeros
+import com.ola.recoverunsold.utils.extensions.toSecureDouble
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)

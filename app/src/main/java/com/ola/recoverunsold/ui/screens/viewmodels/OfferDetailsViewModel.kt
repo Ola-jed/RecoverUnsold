@@ -16,7 +16,7 @@ import com.ola.recoverunsold.api.services.wrappers.OrderServiceWrapper
 import com.ola.recoverunsold.api.services.wrappers.ProductServiceWrapper
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.Product
-import com.ola.recoverunsold.utils.misc.toApiCallResult
+import com.ola.recoverunsold.utils.extensions.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.store.UserObserver

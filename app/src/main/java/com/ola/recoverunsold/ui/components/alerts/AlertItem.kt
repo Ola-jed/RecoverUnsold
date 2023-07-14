@@ -33,7 +33,7 @@ import com.ola.recoverunsold.models.Alert
 import com.ola.recoverunsold.models.AlertType
 import com.ola.recoverunsold.ui.components.app.ConfirmDialog
 import com.ola.recoverunsold.ui.components.distributor.DistributorInformationLine
-import com.ola.recoverunsold.utils.misc.formatDate
+import com.ola.recoverunsold.utils.extensions.formatDate
 
 @Composable
 fun AlertItem(

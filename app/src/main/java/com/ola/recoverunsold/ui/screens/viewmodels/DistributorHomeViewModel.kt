@@ -10,8 +10,8 @@ import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.query.PeriodQuery
 import com.ola.recoverunsold.api.services.HomeService
 import com.ola.recoverunsold.models.DistributorHomeData
-import com.ola.recoverunsold.utils.misc.minusSeconds
-import com.ola.recoverunsold.utils.misc.toApiCallResult
+import com.ola.recoverunsold.utils.extensions.minusSeconds
+import com.ola.recoverunsold.utils.extensions.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

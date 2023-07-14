@@ -41,7 +41,7 @@ import com.ola.recoverunsold.ui.components.app.AppHero
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.screens.viewmodels.AboutViewModel
-import com.ola.recoverunsold.utils.misc.show
+import com.ola.recoverunsold.utils.extensions.show
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
 

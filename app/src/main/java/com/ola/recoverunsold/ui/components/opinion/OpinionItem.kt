@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Opinion
 import com.ola.recoverunsold.ui.components.app.ConfirmDialog
-import com.ola.recoverunsold.utils.misc.formatDate
+import com.ola.recoverunsold.utils.extensions.formatDate
 
 @Composable
 fun OpinionItem(

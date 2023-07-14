@@ -59,11 +59,11 @@ import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.offer.OfferRelativeDistanceItem
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.CloseOffersViewModel
-import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
-import com.ola.recoverunsold.utils.misc.getDeviceLocation
-import com.ola.recoverunsold.utils.misc.openMapWithCoordinates
-import com.ola.recoverunsold.utils.misc.show
-import com.ola.recoverunsold.utils.misc.toSecureInt
+import com.ola.recoverunsold.utils.extensions.formatWithoutTrailingZeros
+import com.ola.recoverunsold.utils.extensions.getDeviceLocation
+import com.ola.recoverunsold.utils.extensions.openMapWithCoordinates
+import com.ola.recoverunsold.utils.extensions.show
+import com.ola.recoverunsold.utils.extensions.toSecureInt
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.IntegerValidator
 import kotlinx.coroutines.launch

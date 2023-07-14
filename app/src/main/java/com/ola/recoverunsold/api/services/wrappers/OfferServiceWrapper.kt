@@ -9,7 +9,7 @@ import com.ola.recoverunsold.api.services.OfferService
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.OfferWithRelativeDistance
 import com.ola.recoverunsold.models.Page
-import com.ola.recoverunsold.utils.misc.toMultipartRequestBody
+import com.ola.recoverunsold.utils.extensions.toMultipartRequestBody
 import retrofit2.Response
 import java.text.SimpleDateFormat
 

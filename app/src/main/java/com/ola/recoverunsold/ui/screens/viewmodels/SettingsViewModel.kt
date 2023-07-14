@@ -8,7 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.ola.recoverunsold.ui.theme.ThemeMode
-import com.ola.recoverunsold.utils.misc.Locale
+import com.ola.recoverunsold.utils.enums.Locale
 import com.ola.recoverunsold.utils.store.AppPreferences
 import com.ola.recoverunsold.utils.store.LocaleObserver
 import com.ola.recoverunsold.utils.store.ThemeObserver

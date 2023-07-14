@@ -47,7 +47,7 @@ import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.NavigationTextButton
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.CustomerRegisterViewModel
-import com.ola.recoverunsold.utils.misc.show
+import com.ola.recoverunsold.utils.extensions.show
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.EmailValidator
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator

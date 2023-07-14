@@ -21,7 +21,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Customer
 import com.ola.recoverunsold.models.Distributor
 import com.ola.recoverunsold.models.User
-import com.ola.recoverunsold.utils.misc.formatDate
+import com.ola.recoverunsold.utils.extensions.formatDate
 
 /**
  * Component to show information about users

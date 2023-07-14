@@ -2,7 +2,7 @@ package com.ola.recoverunsold.utils.store
 
 import android.content.Context
 import com.ola.recoverunsold.ui.theme.ThemeMode
-import com.ola.recoverunsold.utils.misc.Locale
+import com.ola.recoverunsold.utils.enums.Locale
 
 object AppPreferences {
     private const val SHARED_PREFERENCES = "sp"

@@ -7,8 +7,8 @@ import com.ola.recoverunsold.models.AlertType
 import com.ola.recoverunsold.models.OrderStatus
 import com.ola.recoverunsold.utils.adapters.DateAdapter
 import com.ola.recoverunsold.utils.adapters.ULongAdapter
-import com.ola.recoverunsold.utils.misc.hasNetwork
-import com.ola.recoverunsold.utils.misc.httpCache
+import com.ola.recoverunsold.utils.extensions.hasNetwork
+import com.ola.recoverunsold.utils.extensions.httpCache
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.squareup.moshi.Moshi
 import okhttp3.Interceptor

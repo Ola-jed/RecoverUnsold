@@ -35,7 +35,7 @@ import com.ola.recoverunsold.ui.components.offer.OfferFilterComponent
 import com.ola.recoverunsold.ui.components.offer.OfferItem
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.OffersViewModel
-import com.ola.recoverunsold.utils.misc.show
+import com.ola.recoverunsold.utils.extensions.show
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
 

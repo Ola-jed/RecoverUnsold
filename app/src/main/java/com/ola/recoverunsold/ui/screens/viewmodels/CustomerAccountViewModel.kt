@@ -10,8 +10,8 @@ import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.requests.CustomerUpdateRequest
 import com.ola.recoverunsold.api.services.AccountService
 import com.ola.recoverunsold.models.Customer
-import com.ola.recoverunsold.utils.misc.nullIfBlank
-import com.ola.recoverunsold.utils.misc.toApiCallResult
+import com.ola.recoverunsold.utils.extensions.nullIfBlank
+import com.ola.recoverunsold.utils.extensions.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.UserObserver
 import com.ola.recoverunsold.utils.validation.FormState

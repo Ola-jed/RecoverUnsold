@@ -14,7 +14,7 @@ import com.ola.recoverunsold.api.responses.AuthenticationResult
 import com.ola.recoverunsold.api.services.AccountService
 import com.ola.recoverunsold.api.services.AuthService
 import com.ola.recoverunsold.api.services.FcmTokenService
-import com.ola.recoverunsold.utils.misc.toApiCallResult
+import com.ola.recoverunsold.utils.extensions.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.FormState
 import dagger.hilt.android.lifecycle.HiltViewModel

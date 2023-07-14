@@ -19,8 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.OrderStatus
-import com.ola.recoverunsold.utils.misc.internationalizedValue
-import com.ola.recoverunsold.utils.misc.toIcon
+import com.ola.recoverunsold.utils.extensions.internationalizedValue
+import com.ola.recoverunsold.utils.extensions.toIcon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

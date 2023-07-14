@@ -14,9 +14,9 @@ import com.ola.recoverunsold.api.requests.LocationCreateOrUpdateRequest
 import com.ola.recoverunsold.api.services.wrappers.LocationServiceWrapper
 import com.ola.recoverunsold.models.LatLong
 import com.ola.recoverunsold.models.Location
-import com.ola.recoverunsold.utils.misc.createFile
-import com.ola.recoverunsold.utils.misc.nullIfBlank
-import com.ola.recoverunsold.utils.misc.toApiCallResult
+import com.ola.recoverunsold.utils.extensions.createFile
+import com.ola.recoverunsold.utils.extensions.nullIfBlank
+import com.ola.recoverunsold.utils.extensions.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.TokenStore
 import com.ola.recoverunsold.utils.validation.FormState

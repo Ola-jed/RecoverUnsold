@@ -23,7 +23,7 @@ import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
-import com.ola.recoverunsold.utils.misc.getDeviceLocation
+import com.ola.recoverunsold.utils.extensions.getDeviceLocation
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable

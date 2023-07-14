@@ -23,13 +23,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Order
-import com.ola.recoverunsold.utils.misc.backgroundColor
-import com.ola.recoverunsold.utils.misc.foregroundColor
-import com.ola.recoverunsold.utils.misc.formatDate
-import com.ola.recoverunsold.utils.misc.formatDateTime
-import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
-import com.ola.recoverunsold.utils.misc.internationalizedValueSingular
-import com.ola.recoverunsold.utils.misc.toIcon
+import com.ola.recoverunsold.utils.extensions.backgroundColor
+import com.ola.recoverunsold.utils.extensions.foregroundColor
+import com.ola.recoverunsold.utils.extensions.formatDate
+import com.ola.recoverunsold.utils.extensions.formatDateTime
+import com.ola.recoverunsold.utils.extensions.formatWithoutTrailingZeros
+import com.ola.recoverunsold.utils.extensions.internationalizedValueSingular
+import com.ola.recoverunsold.utils.extensions.toIcon
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)

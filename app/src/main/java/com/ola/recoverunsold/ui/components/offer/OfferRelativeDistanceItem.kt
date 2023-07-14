@@ -25,9 +25,9 @@ import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.OfferWithRelativeDistance
 import com.ola.recoverunsold.ui.components.app.ImageSlider
-import com.ola.recoverunsold.utils.misc.formatDate
-import com.ola.recoverunsold.utils.misc.formatDateTime
-import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
+import com.ola.recoverunsold.utils.extensions.formatDate
+import com.ola.recoverunsold.utils.extensions.formatDateTime
+import com.ola.recoverunsold.utils.extensions.formatWithoutTrailingZeros
 import androidx.compose.ui.platform.LocalConfiguration as LocalConfiguration1
 
 @OptIn(ExperimentalMaterial3Api::class)

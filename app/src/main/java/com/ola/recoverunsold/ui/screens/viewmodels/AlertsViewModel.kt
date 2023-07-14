@@ -13,7 +13,7 @@ import com.ola.recoverunsold.api.services.DistributorService
 import com.ola.recoverunsold.models.Alert
 import com.ola.recoverunsold.models.AlertType
 import com.ola.recoverunsold.models.DistributorLabel
-import com.ola.recoverunsold.utils.misc.toApiCallResult
+import com.ola.recoverunsold.utils.extensions.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

@@ -15,8 +15,8 @@ import com.ola.recoverunsold.api.requests.ProductCreateRequest
 import com.ola.recoverunsold.api.requests.ProductUpdateRequest
 import com.ola.recoverunsold.api.services.wrappers.ProductServiceWrapper
 import com.ola.recoverunsold.models.Product
-import com.ola.recoverunsold.utils.misc.createFile
-import com.ola.recoverunsold.utils.misc.toApiCallResult
+import com.ola.recoverunsold.utils.extensions.createFile
+import com.ola.recoverunsold.utils.extensions.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.FormState
 import dagger.assisted.Assisted

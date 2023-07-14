@@ -18,7 +18,7 @@ import com.ola.recoverunsold.models.Distributor
 import com.ola.recoverunsold.models.Opinion
 import com.ola.recoverunsold.models.Order
 import com.ola.recoverunsold.models.OrderStatus
-import com.ola.recoverunsold.utils.misc.toApiCallResult
+import com.ola.recoverunsold.utils.extensions.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.UserObserver
 import dagger.assisted.Assisted

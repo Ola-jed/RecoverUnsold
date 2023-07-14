@@ -33,9 +33,9 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.ui.components.app.ConfirmDialog
 import com.ola.recoverunsold.ui.components.app.ImageSlider
-import com.ola.recoverunsold.utils.misc.formatDate
-import com.ola.recoverunsold.utils.misc.formatDateTime
-import com.ola.recoverunsold.utils.misc.formatWithoutTrailingZeros
+import com.ola.recoverunsold.utils.extensions.formatDate
+import com.ola.recoverunsold.utils.extensions.formatDateTime
+import com.ola.recoverunsold.utils.extensions.formatWithoutTrailingZeros
 
 /**
  * A component to show information about an offer

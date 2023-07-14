@@ -1,6 +1,6 @@
 package com.ola.recoverunsold.api.query
 
-import com.ola.recoverunsold.utils.misc.format
+import com.ola.recoverunsold.utils.extensions.format
 import java.util.Date
 
 data class OfferFilterQuery(

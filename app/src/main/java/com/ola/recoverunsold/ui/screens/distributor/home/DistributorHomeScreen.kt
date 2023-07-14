@@ -61,11 +61,11 @@ import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.order.OrderItem
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorHomeViewModel
-import com.ola.recoverunsold.utils.misc.formatDate
-import com.ola.recoverunsold.utils.misc.show
-import com.ola.recoverunsold.utils.misc.toBars
-import com.ola.recoverunsold.utils.misc.toDate
-import com.ola.recoverunsold.utils.misc.toLocalDate
+import com.ola.recoverunsold.utils.extensions.formatDate
+import com.ola.recoverunsold.utils.extensions.show
+import com.ola.recoverunsold.utils.extensions.toBars
+import com.ola.recoverunsold.utils.extensions.toDate
+import com.ola.recoverunsold.utils.extensions.toLocalDate
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
 import me.bytebeats.views.charts.bar.BarChart

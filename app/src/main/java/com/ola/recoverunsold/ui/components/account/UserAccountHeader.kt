@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.ola.recoverunsold.R
-import com.ola.recoverunsold.utils.misc.md5
+import com.ola.recoverunsold.utils.extensions.md5
 
 @Composable
 fun UserAccountHeader(

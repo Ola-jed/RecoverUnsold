@@ -55,9 +55,9 @@ import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.location.LocationMap
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorLocationFormViewModel
-import com.ola.recoverunsold.utils.misc.jsonDeserialize
-import com.ola.recoverunsold.utils.misc.show
-import com.ola.recoverunsold.utils.misc.toCoordinates
+import com.ola.recoverunsold.utils.extensions.jsonDeserialize
+import com.ola.recoverunsold.utils.extensions.show
+import com.ola.recoverunsold.utils.extensions.toCoordinates
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import dagger.hilt.android.EntryPointAccessors

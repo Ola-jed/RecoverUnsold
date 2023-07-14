@@ -53,8 +53,8 @@ import com.ola.recoverunsold.ui.components.offer.OfferFilterComponent
 import com.ola.recoverunsold.ui.components.offer.OfferItem
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorDetailsViewModel
-import com.ola.recoverunsold.utils.misc.formatDate
-import com.ola.recoverunsold.utils.misc.show
+import com.ola.recoverunsold.utils.extensions.formatDate
+import com.ola.recoverunsold.utils.extensions.show
 import com.ola.recoverunsold.utils.resources.Strings
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.launch

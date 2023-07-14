@@ -6,7 +6,7 @@ import com.ola.recoverunsold.api.services.LocationService
 import com.ola.recoverunsold.api.services.NoContentResponse
 import com.ola.recoverunsold.models.Location
 import com.ola.recoverunsold.models.Page
-import com.ola.recoverunsold.utils.misc.toMultipartRequestBody
+import com.ola.recoverunsold.utils.extensions.toMultipartRequestBody
 import retrofit2.Response
 
 class LocationServiceWrapper(private val locationService: LocationService) {

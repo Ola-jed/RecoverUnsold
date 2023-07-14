@@ -36,7 +36,7 @@ import com.ola.recoverunsold.ui.components.theme.ThemeDialog
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.SettingsViewModel
 import com.ola.recoverunsold.ui.theme.ThemeMode
-import com.ola.recoverunsold.utils.misc.Locale
+import com.ola.recoverunsold.utils.enums.Locale
 
 @Composable
 fun SettingsScreen(

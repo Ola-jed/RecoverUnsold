@@ -29,7 +29,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Product
 import com.ola.recoverunsold.ui.components.app.ConfirmDialog
 import com.ola.recoverunsold.ui.components.app.ImageSlider
-import com.ola.recoverunsold.utils.misc.formatDate
+import com.ola.recoverunsold.utils.extensions.formatDate
 
 @Composable
 fun ProductItem(

@@ -12,7 +12,7 @@ import com.ola.recoverunsold.api.requests.DistributorRegisterRequest
 import com.ola.recoverunsold.api.requests.UserVerificationStartRequest
 import com.ola.recoverunsold.api.services.AuthService
 import com.ola.recoverunsold.api.services.UserVerificationService
-import com.ola.recoverunsold.utils.misc.nullIfBlank
+import com.ola.recoverunsold.utils.extensions.nullIfBlank
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.FormState
 import dagger.hilt.android.lifecycle.HiltViewModel

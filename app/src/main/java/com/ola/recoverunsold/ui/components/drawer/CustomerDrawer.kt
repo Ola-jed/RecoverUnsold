@@ -38,7 +38,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Customer
 import com.ola.recoverunsold.ui.components.account.UserAccountHeader
 import com.ola.recoverunsold.ui.navigation.Routes
-import com.ola.recoverunsold.utils.misc.logout
+import com.ola.recoverunsold.utils.extensions.logout
 import kotlinx.coroutines.launch
 
 @Composable

@@ -6,7 +6,7 @@ import com.ola.recoverunsold.api.requests.ProductUpdateRequest
 import com.ola.recoverunsold.api.services.ProductService
 import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.models.Product
-import com.ola.recoverunsold.utils.misc.toMultipartRequestBody
+import com.ola.recoverunsold.utils.extensions.toMultipartRequestBody
 import retrofit2.Response
 
 class ProductServiceWrapper(private val productService: ProductService) {

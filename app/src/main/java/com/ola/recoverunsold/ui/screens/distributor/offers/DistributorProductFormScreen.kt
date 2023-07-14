@@ -49,9 +49,9 @@ import com.ola.recoverunsold.ui.components.app.LocalImagesList
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.ProductFormViewModel
-import com.ola.recoverunsold.utils.misc.FormType
-import com.ola.recoverunsold.utils.misc.jsonDeserialize
-import com.ola.recoverunsold.utils.misc.show
+import com.ola.recoverunsold.utils.enums.FormType
+import com.ola.recoverunsold.utils.extensions.jsonDeserialize
+import com.ola.recoverunsold.utils.extensions.show
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import dagger.hilt.android.EntryPointAccessors

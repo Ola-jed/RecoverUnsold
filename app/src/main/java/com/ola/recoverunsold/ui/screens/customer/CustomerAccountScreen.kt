@@ -22,7 +22,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,8 +34,7 @@ import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.navigation.Routes
 import com.ola.recoverunsold.ui.screens.viewmodels.CustomerAccountViewModel
-import com.ola.recoverunsold.utils.misc.logout
-import com.ola.recoverunsold.utils.misc.show
+import com.ola.recoverunsold.utils.extensions.show
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.store.UserObserver
 import kotlinx.coroutines.launch
@@ -50,7 +48,6 @@ fun CustomerAccountScreen(
     val coroutineScope = rememberCoroutineScope()
     val user by UserObserver.user.collectAsState()
     var isEditing by rememberSaveable { mutableStateOf(false) }
-    val context = LocalContext.current
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     ModalNavigationDrawer(
@@ -110,7 +107,6 @@ fun CustomerAccountScreen(
                             onDelete = {
                                 customerAccountServiceViewModel.deleteCustomer {
                                     coroutineScope.launch {
-                                        context.logout()
                                         navController.navigate(Routes.Home.path) {
                                             popUpTo(Routes.Home.path) { inclusive = true }
                                         }

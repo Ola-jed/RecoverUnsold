@@ -12,8 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.models.Offer
-import com.ola.recoverunsold.utils.misc.statusIcon
-import com.ola.recoverunsold.utils.misc.statusLabel
+import com.ola.recoverunsold.utils.extensions.statusIcon
+import com.ola.recoverunsold.utils.extensions.statusLabel
 
 @Composable
 fun OfferStatusBadge(offer: Offer, modifier: Modifier = Modifier) {

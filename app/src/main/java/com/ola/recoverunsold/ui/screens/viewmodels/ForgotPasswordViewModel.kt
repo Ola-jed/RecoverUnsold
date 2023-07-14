@@ -10,7 +10,7 @@ import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.core.StatusCode
 import com.ola.recoverunsold.api.requests.ForgotPasswordStartRequest
 import com.ola.recoverunsold.api.services.ForgotPasswordService
-import com.ola.recoverunsold.utils.misc.toApiCallResult
+import com.ola.recoverunsold.utils.extensions.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import com.ola.recoverunsold.utils.validation.FormState
 import dagger.hilt.android.lifecycle.HiltViewModel

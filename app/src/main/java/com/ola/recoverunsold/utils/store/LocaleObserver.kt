@@ -1,6 +1,6 @@
 package com.ola.recoverunsold.utils.store
 
-import com.ola.recoverunsold.utils.misc.Locale
+import com.ola.recoverunsold.utils.enums.Locale
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
