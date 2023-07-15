@@ -206,7 +206,7 @@
     <string name="to_be_picked_up_on">A retirer le</string>
     <string name="welcome">Bienvenue</string>
     <string name="about_us">À propos de nous</string>
-    <string name="about_us_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Aliquam nulla facilisi cras fermentum odio eu feugiat. Congue quisque egestas diam in arcu cursus euismod quis. Diam ut venenatis tellus in metus vulputate eu scelerisque felis.</string>
+    <string name="about_us_text">Recover Unsold est une application mobile développée afin de permettre aux différents utilisateurs et aux distributeurs d\'être mis en contact. Cette application a pour objectif de permettre aux distributeurs de disposer d\'un moyen pour écouler plus facilement leurs invendus et aux utilisateurs d\'avoir accès à des produits de qualité à coûts réduits.</string>
     <string name="send_us_a_message">Envoyez-nous un message</string>
     <string name="your_message">Votre message</string>
     <string name="message_sent_successfully">Message envoyé avec succès</string>
