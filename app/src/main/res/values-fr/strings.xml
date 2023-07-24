@@ -39,7 +39,7 @@
     <string name="register_success_verification_failed">Inscription réussie mais l\'email de vérification n\'a pas été envoyé</string>
     <string name="username_placeholder">Paul</string>
     <string name="username_label">Nom d\'utilisateur</string>
-    <string name="register_action">S\'inscrire</string>
+    <string name="register_action">Inscription</string>
     <string name="already_registered">Déjà inscrit ?</string>
     <string name="verification_code_not_sent">Le code de vérification n\'a pas été envoyé ?</string>
     <string name="unknown_error_occured">Une erreur s\'est produite. Veuillez réessayer</string>

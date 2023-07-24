@@ -32,6 +32,7 @@ import kotlin.random.Random
 @Composable
 fun VisitorDrawer(navController: NavController): @Composable ColumnScope.() -> Unit {
     val configuration = LocalConfiguration.current
+
     return {
         Box(
             modifier = Modifier
