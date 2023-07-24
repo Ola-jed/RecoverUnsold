@@ -65,11 +65,12 @@ fun OfferFilterComponent(
         stringResource(id = R.string.n_a) to null
     )
     var showDropDownActiveLabels by rememberSaveable { mutableStateOf(false) }
-    val currentDropdownActiveLabel by remember { mutableStateOf(activeLabelsMapping.filter { it.value == active }.keys.first()) }
     var itemsAreVisible by rememberSaveable { mutableStateOf(false) }
     var showMinDatePicker by remember { mutableStateOf(false) }
     var showMaxDatePicker by remember { mutableStateOf(false) }
+
     val focusManager = LocalFocusManager.current
+    val currentDropdownActiveLabel = activeLabelsMapping.filter { it.value == active }.keys.first()
 
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         val componentsModifier = Modifier
@@ -161,7 +162,7 @@ fun OfferFilterComponent(
                     onExpandedChange = { showDropDownActiveLabels = !showDropDownActiveLabels }
                 ) {
                     CustomTextInput(
-                        modifier = componentsModifier,
+                        modifier = componentsModifier.menuAnchor(),
                         value = currentDropdownActiveLabel,
                         readOnly = true,
                         onValueChange = {},
@@ -179,12 +180,13 @@ fun OfferFilterComponent(
                         onDismissRequest = { showDropDownActiveLabels = false }
                     ) {
                         activeLabelsMapping.forEach {
-                            DropdownMenuItem(onClick = {
-                                onActiveChange(it.value)
-                                showDropDownActiveLabels = false
-                            }, text = {
-                                Text(text = it.key)
-                            })
+                            DropdownMenuItem(
+                                onClick = {
+                                    onActiveChange(it.value)
+                                    showDropDownActiveLabels = false
+                                },
+                                text = { Text(text = it.key) }
+                            )
                         }
                     }
                 }

@@ -257,7 +257,7 @@ fun DistributorOfferFormContent(
             onExpandedChange = { showLocationsDropdown = !showLocationsDropdown }
         ) {
             CustomTextInput(
-                modifier = fieldsModifier,
+                modifier = fieldsModifier.menuAnchor(),
                 value = location?.name ?: "",
                 readOnly = true,
                 onValueChange = {},

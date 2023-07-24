@@ -42,7 +42,9 @@ fun AlertForm(
             onExpandedChange = { showAlertTypeDropdown = !showAlertTypeDropdown }
         ) {
             CustomTextInput(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(),
                 value = alertType.label(),
                 readOnly = true,
                 onValueChange = {},
@@ -74,7 +76,9 @@ fun AlertForm(
                 onExpandedChange = { showLabelsDropdown = !showLabelsDropdown }
             ) {
                 CustomTextInput(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor(),
                     value = distributorLabel?.name ?: "",
                     readOnly = true,
                     onValueChange = {},

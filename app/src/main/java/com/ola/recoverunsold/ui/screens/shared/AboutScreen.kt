@@ -71,7 +71,6 @@ fun AboutScreen(
                         coroutineScope = coroutineScope,
                         drawerState = drawerState,
                         title = stringResource(id = R.string.about),
-                        canGoBack = true,
                         navController = navController
                     )
                 },
