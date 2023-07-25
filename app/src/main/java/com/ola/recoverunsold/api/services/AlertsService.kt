@@ -19,7 +19,7 @@ interface AlertsService : BaseApiService {
         @Body alertCreateRequest: AlertCreateRequest
     ): NoContentResponse
 
-    @DELETE(ApiUrls.alertsUrl + "/{id}")
+    @DELETE("${ApiUrls.alertsUrl}/{id}")
     suspend fun deleteAlert(
         @Path("id") id: String
     ): NoContentResponse

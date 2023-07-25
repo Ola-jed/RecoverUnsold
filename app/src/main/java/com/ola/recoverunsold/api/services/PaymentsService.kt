@@ -7,7 +7,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface PaymentsService : BaseApiService {
-    @POST(ApiUrls.ordersUrl + "/{id}/Pay")
+    @POST("${ApiUrls.ordersUrl}/{id}/Pay")
     suspend fun payOrder(
         @Path("id") id: String,
         @Body transactionRequest: TransactionRequest

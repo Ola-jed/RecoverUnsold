@@ -12,7 +12,7 @@ import retrofit2.http.Path
 import retrofit2.http.QueryMap
 
 interface OrderService : BaseApiService {
-    @GET(ApiUrls.ordersUrl + "/{id}")
+    @GET("${ApiUrls.ordersUrl}/{id}")
     suspend fun getOrder(
         @Path("id") id: String
     ): Response<Order>
@@ -27,29 +27,29 @@ interface OrderService : BaseApiService {
         @QueryMap filters: Map<String, String>
     ): Response<Page<Order>>
 
-    @GET(ApiUrls.offersUrl + "/{id}" + "/Orders")
+    @GET("${ApiUrls.offersUrl}/{id}/Orders")
     suspend fun getOfferOrders(
         @Path("id") id: String,
         @QueryMap filters: Map<String, String>
     ): Response<Page<Order>>
 
-    @POST(ApiUrls.offersUrl + "/{id}/Orders")
+    @POST("${ApiUrls.offersUrl}/{id}/Orders")
     suspend fun createOrder(
         @Path("id") offerId: String,
         @Body orderCreateRequest: OrderCreateRequest
     ): Response<Order>
 
-    @POST(ApiUrls.ordersUrl + "/{id}/Accept")
+    @POST("${ApiUrls.ordersUrl}/{id}/Accept")
     suspend fun acceptOrder(
         @Path("id") id: String
     ): NoContentResponse
 
-    @POST(ApiUrls.ordersUrl + "/{id}/Reject")
+    @POST("${ApiUrls.ordersUrl}/{id}/Reject")
     suspend fun rejectOrder(
         @Path("id") id: String
     ): NoContentResponse
 
-    @POST(ApiUrls.ordersUrl + "/{id}/Complete")
+    @POST("${ApiUrls.ordersUrl}/{id}/Complete")
     suspend fun completeOrder(
         @Path("id") id: String
     ): NoContentResponse

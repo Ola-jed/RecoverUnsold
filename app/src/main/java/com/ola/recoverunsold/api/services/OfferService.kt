@@ -23,13 +23,13 @@ interface OfferService : BaseApiService {
         @QueryMap filters: Map<String, String>
     ): Response<Page<Offer>>
 
-    @GET(ApiUrls.distributorOffersUrl + "/{distributorId}")
+    @GET("${ApiUrls.distributorOffersUrl}/{distributorId}")
     suspend fun getDistributorOffers(
         @Path("distributorId") distributorId: String,
         @QueryMap filters: Map<String, String>
     ): Response<Page<Offer>>
 
-    @GET(ApiUrls.offersUrl + "/{id}")
+    @GET("${ApiUrls.offersUrl}/{id}")
     suspend fun getOffer(
         @Path("id") id: String
     ): Response<Offer>
@@ -49,13 +49,13 @@ interface OfferService : BaseApiService {
         @Part("locationId") locationId: RequestBody
     ): Response<Offer>
 
-    @PUT(ApiUrls.offersUrl + "/{id}")
+    @PUT("${ApiUrls.offersUrl}/{id}")
     suspend fun updateOffer(
         @Path("id") id: String,
         @Body offerUpdateRequest: OfferUpdateRequest
     ): NoContentResponse
 
-    @DELETE(ApiUrls.offersUrl + "/{id}")
+    @DELETE("${ApiUrls.offersUrl}/{id}")
     suspend fun deleteOffer(
         @Path("id") id: String
     ): NoContentResponse

@@ -15,7 +15,7 @@ interface DistributorService: BaseApiService {
         @QueryMap filters: Map<String, String>
     ): Response<Page<DistributorInformation>>
 
-    @GET(ApiUrls.distributorsUrl + "/{id}")
+    @GET("${ApiUrls.distributorsUrl}/{id}")
     suspend fun getDistributor(
         @Path("id") id: String
     ): Response<DistributorInformation>

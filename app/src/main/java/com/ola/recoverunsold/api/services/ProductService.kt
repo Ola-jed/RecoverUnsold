@@ -18,24 +18,24 @@ import retrofit2.http.Path
 import retrofit2.http.QueryMap
 
 interface ProductService : BaseApiService {
-    @GET(ApiUrls.productsUrl + "/{id}")
+    @GET("${ApiUrls.productsUrl}/{id}")
     suspend fun getProduct(
         @Path("id") id: String
     ): Response<Product>
 
-    @GET(ApiUrls.distributorProductsUrl + "/{id}")
+    @GET("${ApiUrls.distributorProductsUrl}/{id}")
     suspend fun getDistributorProducts(
         @Path("id") id: String,
         @QueryMap pagination: Map<String, String>
     ): Response<Page<Product>>
 
-    @GET(ApiUrls.offersUrl + "/{id}/Products")
+    @GET("${ApiUrls.offersUrl}/{id}/Products")
     suspend fun getOfferProducts(
         @Path("id") id: String,
         @QueryMap pagination: Map<String, String>
     ): Response<Page<Product>>
 
-    @POST(ApiUrls.offersUrl + "/{id}/Products")
+    @POST("${ApiUrls.offersUrl}/{id}/Products")
     @Multipart
     suspend fun createProduct(
         @Path("id") id: String,
@@ -44,13 +44,13 @@ interface ProductService : BaseApiService {
         @Part images: List<MultipartBody.Part>? = null
     ): Response<Product>
 
-    @PUT(ApiUrls.productsUrl + "/{id}")
+    @PUT("${ApiUrls.productsUrl}/{id}")
     suspend fun updateProduct(
         @Path("id") id: String,
         @Body productUpdateRequest: ProductUpdateRequest
     ): NoContentResponse
 
-    @DELETE(ApiUrls.productsUrl + "/{id}")
+    @DELETE("${ApiUrls.productsUrl}/{id}")
     suspend fun deleteProduct(
         @Path("id") id: String,
     ): NoContentResponse

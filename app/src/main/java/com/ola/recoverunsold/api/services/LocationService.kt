@@ -16,19 +16,19 @@ import retrofit2.http.Path
 import retrofit2.http.QueryMap
 
 interface LocationService : BaseApiService {
-    @GET(ApiUrls.distributorsLocationsUrl + "/{distributorId}")
+    @GET("${ApiUrls.distributorsLocationsUrl}/{distributorId}")
     suspend fun getDistributorLocations(
         @Path("distributorId") distributorId: String,
         @QueryMap pagination: Map<String, String>
     ): Response<Page<Location>>
 
-    @GET(ApiUrls.locationsSearchUrl + "/{query}")
+    @GET("${ApiUrls.locationsSearchUrl}/{query}")
     suspend fun searchLocations(
         @Path("query") query: String,
         @QueryMap pagination: Map<String, String>
     ): Response<Page<Location>>
 
-    @GET(ApiUrls.locationsUrl + "/{id}")
+    @GET("${ApiUrls.locationsUrl}/{id}")
     suspend fun getLocation(@Path("id") id: String): Response<Location>
 
     @GET(ApiUrls.locationsUrl)
@@ -46,7 +46,7 @@ interface LocationService : BaseApiService {
         @Part("longitude") longitude: RequestBody
     ): Response<Location>
 
-    @PUT(ApiUrls.locationsUrl + "/{id}")
+    @PUT("${ApiUrls.locationsUrl}/{id}")
     @Multipart
     suspend fun updateLocation(
         @Path("id") id: String,
@@ -57,7 +57,7 @@ interface LocationService : BaseApiService {
         @Part("longitude") longitude: RequestBody
     ): NoContentResponse
 
-    @DELETE(ApiUrls.locationsUrl + "/{id}")
+    @DELETE("${ApiUrls.locationsUrl}/{id}")
     suspend fun deleteLocation(
         @Path("id") id: String
     ): NoContentResponse
