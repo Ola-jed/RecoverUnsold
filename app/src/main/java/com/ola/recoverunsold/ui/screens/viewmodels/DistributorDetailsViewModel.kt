@@ -10,11 +10,14 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiCallResult
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.api.query.OfferFilterQuery
+import com.ola.recoverunsold.api.requests.ReportCreateRequest
 import com.ola.recoverunsold.api.services.DistributorService
+import com.ola.recoverunsold.api.services.ReportsService
 import com.ola.recoverunsold.api.services.wrappers.OfferServiceWrapper
 import com.ola.recoverunsold.models.DistributorInformation
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.models.Page
+import com.ola.recoverunsold.utils.extensions.nullIfBlank
 import com.ola.recoverunsold.utils.extensions.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
 import dagger.assisted.Assisted
@@ -24,6 +27,7 @@ import kotlinx.coroutines.launch
 
 class DistributorDetailsViewModel @AssistedInject constructor(
     private val distributorService: DistributorService,
+    private val reportsService: ReportsService,
     private val offerServiceWrapper: OfferServiceWrapper,
     @Assisted private val distributorId: String
 ) : ViewModel() {
@@ -32,6 +36,9 @@ class DistributorDetailsViewModel @AssistedInject constructor(
         ApiCallResult.Inactive
     )
     var offersApiCallResult: ApiCallResult<Page<Offer>> by mutableStateOf(ApiCallResult.Inactive)
+    var reportingDistributor by mutableStateOf(false)
+    var reportReason by mutableStateOf("")
+    var reportMessage by mutableStateOf("")
 
     init {
         getDistributorInformation()
@@ -75,6 +82,23 @@ class DistributorDetailsViewModel @AssistedInject constructor(
             Strings.get(R.string.unknown_error_occured)
         } else {
             null
+        }
+    }
+
+    fun reportDistributor(onSuccess: () -> Unit, onError: () -> Unit) {
+        viewModelScope.launch {
+            reportingDistributor = true
+            val response = reportsService.reportDistributor(
+                distributorId,
+                ReportCreateRequest(reportReason, reportMessage.nullIfBlank())
+            ).toApiCallResult()
+
+            reportingDistributor = false
+            if (response.statusCode <= 400) {
+                onSuccess()
+            } else {
+                onError()
+            }
         }
     }
 

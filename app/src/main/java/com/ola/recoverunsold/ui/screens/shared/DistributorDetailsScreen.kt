@@ -12,14 +12,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -44,6 +51,7 @@ import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.api.query.OfferFilterQuery
 import com.ola.recoverunsold.ui.components.account.UserAccountHeader
 import com.ola.recoverunsold.ui.components.app.AppBar
+import com.ola.recoverunsold.ui.components.app.CustomTextInput
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
 import com.ola.recoverunsold.ui.components.app.NoContentComponent
 import com.ola.recoverunsold.ui.components.app.PaginationComponent
@@ -56,9 +64,11 @@ import com.ola.recoverunsold.ui.screens.viewmodels.DistributorDetailsViewModel
 import com.ola.recoverunsold.utils.extensions.formatDate
 import com.ola.recoverunsold.utils.extensions.show
 import com.ola.recoverunsold.utils.resources.Strings
+import com.ola.recoverunsold.utils.validation.IsRequiredValidator
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DistributorDetailsScreen(
     navController: NavController,
@@ -73,11 +83,17 @@ fun DistributorDetailsScreen(
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
 
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = SheetState(skipPartiallyExpanded = true),
+        snackbarHostState = snackbarHostState
+    )
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = { DrawerContent(navController) },
         content = {
-            Scaffold(
+            BottomSheetScaffold(
+                scaffoldState = bottomSheetScaffoldState,
                 topBar = {
                     AppBar(
                         coroutineScope = coroutineScope,
@@ -86,6 +102,62 @@ fun DistributorDetailsScreen(
                         canGoBack = true,
                         navController = navController
                     )
+                },
+                sheetPeekHeight = 0.dp,
+                sheetTonalElevation = 25.dp,
+                sheetShadowElevation = 25.dp,
+                sheetShape = RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp),
+                sheetContent = {
+                    val focusManager = LocalFocusManager.current
+
+                    Column(
+                        modifier = Modifier
+                            .padding(top = 10.dp, bottom = 50.dp)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        CustomTextInput(
+                            modifier = Modifier.fillMaxWidth(0.8F),
+                            label = { Text(text = stringResource(id = R.string.report_reason)) },
+                            value = distributorDetailsViewModel.reportReason,
+                            onValueChange = { distributorDetailsViewModel.reportReason = it },
+                            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                            validator = IsRequiredValidator()
+                        )
+
+                        CustomTextInput(
+                            modifier = Modifier.fillMaxWidth(0.8F),
+                            label = { Text(text = stringResource(id = R.string.report_description)) },
+                            value = distributorDetailsViewModel.reportMessage,
+                            onValueChange = { distributorDetailsViewModel.reportMessage = it },
+                            maxLines = 5,
+                            singleLine = false,
+                            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+                        )
+
+                        Button(
+                            modifier = Modifier.fillMaxWidth(0.8F),
+                            onClick = {
+                                if (distributorDetailsViewModel.reportReason.isBlank()) {
+                                    coroutineScope.launch {
+                                        snackbarHostState.show(Strings.get(R.string.report_reason_required))
+                                    }
+                                } else {
+                                    distributorDetailsViewModel.reportDistributor(
+                                        onSuccess = {},
+                                        onError = {}
+                                    )
+                                }
+                            },
+                            enabled = !distributorDetailsViewModel.reportingDistributor
+                        ) {
+                            if (distributorDetailsViewModel.reportingDistributor) {
+                                CircularProgressIndicator()
+                            } else {
+                                Text(text = stringResource(id = R.string.report_distributor))
+                            }
+                        }
+                    }
                 }
             ) { paddingValues ->
                 LazyColumn(

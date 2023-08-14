@@ -287,4 +287,8 @@
     <string name="follow_system_theme">Seguir el tema del sistema (por defecto)</string>
     <string name="follow_system_language">Seguir el idioma del sistema (por defecto)</string>
     <string name="chosen_image_too_big">La imagen elegida es demasiado grande</string>
+    <string name="report_distributor">Denunciar al distribuidor</string>
+    <string name="report_reason">Motivo de la denuncia</string>
+    <string name="report_description">Descripción</string>
+    <string name="report_reason_required">El motivo de la denuncia es obligatorio</string>
 </resources>

@@ -288,4 +288,8 @@
     <string name="follow_system_theme">Suivre le thème du système (par défaut)</string>
     <string name="follow_system_language">Suivre la langue du système (par défaut)</string>
     <string name="chosen_image_too_big">L\'image choisie est trop volumineuse</string>
+    <string name="report_distributor">Signaler le distributeur</string>
+    <string name="report_reason">Motif du signalement</string>
+    <string name="report_description">Description</string>
+    <string name="report_reason_required">Le motif du signalement est obligatoire</string>
 </resources>

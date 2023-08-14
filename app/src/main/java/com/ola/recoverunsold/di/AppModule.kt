@@ -13,6 +13,7 @@ import com.ola.recoverunsold.api.services.OfferService
 import com.ola.recoverunsold.api.services.OpinionsService
 import com.ola.recoverunsold.api.services.OrderService
 import com.ola.recoverunsold.api.services.PaymentsService
+import com.ola.recoverunsold.api.services.ReportsService
 import com.ola.recoverunsold.api.services.ReviewsService
 import com.ola.recoverunsold.api.services.UserVerificationService
 import com.ola.recoverunsold.api.services.wrappers.DistributorServiceWrapper
@@ -84,6 +85,10 @@ object AppModule {
     @Provides
     @Singleton
     fun providesHomeService() = ApiClient.buildService<HomeService>()
+
+    @Provides
+    @Singleton
+    fun providesReportsService() = ApiClient.buildService<ReportsService>()
 
     @Provides
     @Singleton
