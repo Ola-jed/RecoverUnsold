@@ -18,6 +18,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -65,6 +66,7 @@ fun AboutScreen(
         drawerContent = { DrawerContent(navController) },
         content = {
             BottomSheetScaffold(
+                snackbarHost = { SnackbarHost(snackbarHostState) },
                 scaffoldState = bottomSheetScaffoldState,
                 topBar = {
                     AppBar(

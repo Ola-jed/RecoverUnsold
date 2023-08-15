@@ -14,6 +14,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -73,18 +74,21 @@ fun DistributorLocationsScreen(
             else -> {
                 val locations = locationsSectionViewModel.locationsGetResponse.data!!
 
-                Scaffold(floatingActionButton = {
-                    ExtendableFab(
-                        extended = listState.isScrollingUp(),
-                        text = { Text(stringResource(id = R.string.add)) },
-                        icon = { Icon(Icons.Default.Add, contentDescription = null) },
-                        onClick = {
-                            navController.navigate(
-                                Routes.LocationCreateOrUpdate.path.remove("{location}")
-                            )
-                        }
-                    )
-                }) { padding ->
+                Scaffold(
+                    snackbarHost = { SnackbarHost(snackbarHostState) },
+                    floatingActionButton = {
+                        ExtendableFab(
+                            extended = listState.isScrollingUp(),
+                            text = { Text(stringResource(id = R.string.add)) },
+                            icon = { Icon(Icons.Default.Add, contentDescription = null) },
+                            onClick = {
+                                navController.navigate(
+                                    Routes.LocationCreateOrUpdate.path.remove("{location}")
+                                )
+                            }
+                        )
+                    }
+                ) { padding ->
                     if (locations.items.isEmpty()) {
                         NoContentComponent(
                             modifier = Modifier

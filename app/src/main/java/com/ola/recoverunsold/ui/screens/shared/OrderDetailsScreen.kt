@@ -47,6 +47,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -132,6 +133,7 @@ fun OrderDetailsScreen(
         drawerContent = { DrawerContent(navController) },
         content = {
             BottomSheetScaffold(
+                snackbarHost = { SnackbarHost(snackbarHostState) },
                 scaffoldState = bottomSheetScaffoldState,
                 topBar = {
                     AppBar(
