@@ -20,6 +20,7 @@ import com.ola.recoverunsold.models.Page
 import com.ola.recoverunsold.utils.extensions.nullIfBlank
 import com.ola.recoverunsold.utils.extensions.toApiCallResult
 import com.ola.recoverunsold.utils.resources.Strings
+import com.ola.recoverunsold.utils.store.UserObserver
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -36,6 +37,7 @@ class DistributorDetailsViewModel @AssistedInject constructor(
         ApiCallResult.Inactive
     )
     var offersApiCallResult: ApiCallResult<Page<Offer>> by mutableStateOf(ApiCallResult.Inactive)
+    var isAuthenticated by mutableStateOf(UserObserver.user.value != null)
     var reportingDistributor by mutableStateOf(false)
     var reportReason by mutableStateOf("")
     var reportMessage by mutableStateOf("")

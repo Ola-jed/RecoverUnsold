@@ -17,6 +17,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -336,6 +337,28 @@ fun DistributorDetailsScreen(
                                         modifier = Modifier.fillMaxWidth(0.75F)
                                     ) {
                                         Text(stringResource(id = R.string.send_email))
+                                    }
+                                }
+                            }
+
+
+                            if (distributorDetailsViewModel.isAuthenticated) {
+                                item {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.Center
+                                    ) {
+                                        Button(
+                                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+                                            onClick = {
+                                                coroutineScope.launch {
+                                                    bottomSheetScaffoldState.bottomSheetState.expand()
+                                                }
+                                            },
+                                            modifier = Modifier.fillMaxWidth(0.75F)
+                                        ) {
+                                            Text(stringResource(id = R.string.report))
+                                        }
                                     }
                                 }
                             }

@@ -252,6 +252,7 @@
     <string name="my_orders">Mis pedidos</string>
     <plurals name="orders_made_number">
         <item quantity="one">%d pedido realizado</item>
+        <item quantity="many">%d pedidos realizados</item>
         <item quantity="other">%d pedidos realizados</item>
     </plurals>
     <string name="cumulative_order_value">Cantidad de pedidos : %1$s</string>
@@ -291,4 +292,5 @@
     <string name="report_reason">Motivo de la denuncia</string>
     <string name="report_description">Descripción</string>
     <string name="report_reason_required">El motivo de la denuncia es obligatorio</string>
+    <string name="report">Denunciar</string>
 </resources>
