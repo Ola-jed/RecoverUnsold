@@ -86,7 +86,7 @@ fun DistributorDetailsScreen(
     val configuration = LocalConfiguration.current
 
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = SheetState(skipPartiallyExpanded = true),
+        bottomSheetState = SheetState(skipPartiallyExpanded = false),
         snackbarHostState = snackbarHostState
     )
 
@@ -140,6 +140,7 @@ fun DistributorDetailsScreen(
 
                         Button(
                             modifier = Modifier.fillMaxWidth(0.8F),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                             onClick = {
                                 if (distributorDetailsViewModel.reportReason.isBlank()) {
                                     coroutineScope.launch {
@@ -147,8 +148,18 @@ fun DistributorDetailsScreen(
                                     }
                                 } else {
                                     distributorDetailsViewModel.reportDistributor(
-                                        onSuccess = {},
-                                        onError = {}
+                                        onSuccess = {
+                                            coroutineScope.launch {
+                                                bottomSheetScaffoldState.bottomSheetState.hide()
+                                                snackbarHostState.show(Strings.get(R.string.reported_successfully))
+                                            }
+                                        },
+                                        onError = {
+                                            coroutineScope.launch {
+                                                bottomSheetScaffoldState.bottomSheetState.hide()
+                                                snackbarHostState.show(Strings.get(R.string.unknown_error_occured))
+                                            }
+                                        }
                                     )
                                 }
                             },
@@ -157,7 +168,10 @@ fun DistributorDetailsScreen(
                             if (distributorDetailsViewModel.reportingDistributor) {
                                 CircularProgressIndicator()
                             } else {
-                                Text(text = stringResource(id = R.string.report_distributor))
+                                Text(
+                                    text = stringResource(id = R.string.report_distributor),
+                                    color = MaterialTheme.colorScheme.onError
+                                )
                             }
                         }
                     }
@@ -357,7 +371,10 @@ fun DistributorDetailsScreen(
                                             },
                                             modifier = Modifier.fillMaxWidth(0.75F)
                                         ) {
-                                            Text(stringResource(id = R.string.report))
+                                            Text(
+                                                stringResource(id = R.string.report),
+                                                color = MaterialTheme.colorScheme.onError
+                                            )
                                         }
                                     }
                                 }

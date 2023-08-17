@@ -96,6 +96,9 @@ class DistributorDetailsViewModel @AssistedInject constructor(
             ).toApiCallResult()
 
             reportingDistributor = false
+            reportMessage = ""
+            reportReason = ""
+
             if (response.statusCode <= 400) {
                 onSuccess()
             } else {

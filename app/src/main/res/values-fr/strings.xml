@@ -293,4 +293,5 @@
     <string name="report_description">Description</string>
     <string name="report_reason_required">Le motif du signalement est obligatoire</string>
     <string name="report">Signaler</string>
+    <string name="reported_successfully">Distributeur signalé avec succès</string>
 </resources>

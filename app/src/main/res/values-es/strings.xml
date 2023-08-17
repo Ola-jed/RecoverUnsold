@@ -293,4 +293,5 @@
     <string name="report_description">Descripción</string>
     <string name="report_reason_required">El motivo de la denuncia es obligatorio</string>
     <string name="report">Denunciar</string>
+    <string name="reported_successfully">Distribuidor denunciado con éxito</string>
 </resources>
