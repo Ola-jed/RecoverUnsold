@@ -300,4 +300,7 @@
     <string name="report_reason_required">The reason for the report is required</string>
     <string name="report">Report</string>
     <string name="reported_successfully">Distributor successfully reported</string>
+    <string name="repayments">Repayments</string>
+    <string name="repayments_pending">Pending</string>
+    <string name="repayments_done">Done</string>
 </resources>

@@ -294,4 +294,7 @@
     <string name="report_reason_required">Le motif du signalement est obligatoire</string>
     <string name="report">Signaler</string>
     <string name="reported_successfully">Distributeur signalé avec succès</string>
+    <string name="repayments">Reversements</string>
+    <string name="repayments_pending">En attente</string>
+    <string name="repayments_done">Éffectués</string>
 </resources>

@@ -294,4 +294,7 @@
     <string name="report_reason_required">El motivo de la denuncia es obligatorio</string>
     <string name="report">Denunciar</string>
     <string name="reported_successfully">Distribuidor denunciado con éxito</string>
+    <string name="repayments">Transferencias</string>
+    <string name="repayments_pending">En espera</string>
+    <string name="repayments_done">Realizados</string>
 </resources>
