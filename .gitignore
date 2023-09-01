@@ -10,4 +10,3 @@ recover-unsold-key.keystore
 .externalNativeBuild
 .cxx
 local.properties
-*.kts
