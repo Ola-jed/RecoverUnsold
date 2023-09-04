@@ -188,7 +188,7 @@ fun DistributorLocationFormScreenContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val focusManager = LocalFocusManager.current
-        val fieldsModifier = modifier
+        val fieldsModifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 10.dp)
 
