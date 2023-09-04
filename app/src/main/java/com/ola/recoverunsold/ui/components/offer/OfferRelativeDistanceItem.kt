@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.OfferWithRelativeDistance
 import com.ola.recoverunsold.ui.components.app.ImageSlider
+import com.ola.recoverunsold.ui.components.app.InformationLine
 import com.ola.recoverunsold.utils.extensions.formatDate
 import com.ola.recoverunsold.utils.extensions.formatDateTime
 import com.ola.recoverunsold.utils.extensions.formatWithoutTrailingZeros
@@ -61,7 +62,7 @@ fun OfferRelativeDistanceItem(
                 )
             }
 
-            OfferInformationLine(
+            InformationLine(
                 modifier = Modifier.padding(top = 7.dp),
                 text = stringResource(
                     R.string.total_amount,
@@ -71,7 +72,7 @@ fun OfferRelativeDistanceItem(
             )
 
             if (offer.beneficiaries != null) {
-                OfferInformationLine(
+                InformationLine(
                     modifier = Modifier.padding(top = 5.dp),
                     text = stringResource(
                         R.string.offer_beneficiaries_data,
@@ -81,7 +82,7 @@ fun OfferRelativeDistanceItem(
                 )
             }
 
-            OfferInformationLine(
+            InformationLine(
                 modifier = Modifier.padding(top = 5.dp),
                 text = stringResource(
                     R.string.start_date_time,
@@ -90,7 +91,7 @@ fun OfferRelativeDistanceItem(
                 icon = Icons.Default.EventAvailable
             )
 
-            OfferInformationLine(
+            InformationLine(
                 modifier = Modifier.padding(top = 5.dp),
                 text = stringResource(
                     R.string.km_away,
@@ -99,7 +100,7 @@ fun OfferRelativeDistanceItem(
                 icon = Icons.Default.Route
             )
 
-            OfferInformationLine(
+            InformationLine(
                 modifier = Modifier.padding(top = 5.dp),
                 text = stringResource(
                     R.string.published_the,

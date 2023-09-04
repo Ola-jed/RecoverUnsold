@@ -303,4 +303,8 @@
     <string name="repayments">Repayments</string>
     <string name="repayments_pending">Pending</string>
     <string name="repayments_done">Done</string>
+    <string name="no_repayments_found">No repayments found</string>
+    <string name="transaction_id">Transaction id</string>
+    <string name="repayment_done">Done</string>
+    <string name="repayment_pending">Pending</string>
 </resources>

@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Order
+import com.ola.recoverunsold.ui.components.app.InformationLine
 import com.ola.recoverunsold.utils.extensions.backgroundColor
 import com.ola.recoverunsold.utils.extensions.foregroundColor
 import com.ola.recoverunsold.utils.extensions.formatDate
@@ -51,7 +52,7 @@ fun DistributorOrderItem(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                OrderInformationLine(
+                InformationLine(
                     text = stringResource(
                         R.string.total_amount,
                         offer.price.formatWithoutTrailingZeros()
@@ -81,19 +82,19 @@ fun DistributorOrderItem(
                 }
             }
 
-            OrderInformationLine(
+            InformationLine(
                 text = stringResource(R.string.ordered_on, order.createdAt.formatDate()),
                 icon = Icons.Default.ShoppingCartCheckout,
                 modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp)
             )
 
-            OrderInformationLine(
+            InformationLine(
                 text = "${stringResource(id = R.string.to_be_picked_up_on)} : ${order.withdrawalDate.formatDateTime()}",
                 icon = Icons.Default.EventAvailable,
                 modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp)
             )
 
-            OrderInformationLine(
+            InformationLine(
                 text = "${stringResource(id = R.string.customer)} : ${order.customer!!.username}",
                 icon = Icons.Default.Person,
                 modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp)

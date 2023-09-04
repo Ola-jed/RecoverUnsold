@@ -13,6 +13,7 @@ import com.ola.recoverunsold.ui.screens.customer.CustomerAccountScreen
 import com.ola.recoverunsold.ui.screens.customer.OrdersScreen
 import com.ola.recoverunsold.ui.screens.distributor.account.DistributorAccountScreen
 import com.ola.recoverunsold.ui.screens.distributor.account.DistributorLocationFormScreen
+import com.ola.recoverunsold.ui.screens.distributor.account.DistributorRepaymentsScreen
 import com.ola.recoverunsold.ui.screens.distributor.offers.DistributorOfferFormScreen
 import com.ola.recoverunsold.ui.screens.distributor.offers.DistributorOffersScreen
 import com.ola.recoverunsold.ui.screens.distributor.offers.DistributorProductFormScreen
@@ -222,6 +223,12 @@ fun NavigationManager(navHostController: NavHostController, snackbarHostState: S
         }
         composable(Routes.Alerts.path) {
             AlertsScreen(
+                navController = navHostController,
+                snackbarHostState = snackbarHostState
+            )
+        }
+        composable(Routes.Repayments.path) {
+            DistributorRepaymentsScreen(
                 navController = navHostController,
                 snackbarHostState = snackbarHostState
             )

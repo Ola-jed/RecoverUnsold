@@ -117,6 +117,7 @@ fun DistributorProfileInformationSection(
                 Button(modifier = buttonsModifier, onClick = onEditingStart) {
                     Text(stringResource(R.string.edit_my_profile))
                 }
+
                 Button(
                     modifier = buttonsModifier,
                     onClick = { showDialog = true },

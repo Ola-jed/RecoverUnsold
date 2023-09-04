@@ -13,6 +13,7 @@ import com.ola.recoverunsold.api.services.OfferService
 import com.ola.recoverunsold.api.services.OpinionsService
 import com.ola.recoverunsold.api.services.OrderService
 import com.ola.recoverunsold.api.services.PaymentsService
+import com.ola.recoverunsold.api.services.RepaymentService
 import com.ola.recoverunsold.api.services.ReportsService
 import com.ola.recoverunsold.api.services.ReviewsService
 import com.ola.recoverunsold.api.services.UserVerificationService
@@ -89,6 +90,10 @@ object AppModule {
     @Provides
     @Singleton
     fun providesReportsService() = ApiClient.buildService<ReportsService>()
+
+    @Provides
+    @Singleton
+    fun providesRepaymentsService() = ApiClient.buildService<RepaymentService>()
 
     @Provides
     @Singleton

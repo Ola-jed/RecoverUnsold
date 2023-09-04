@@ -33,6 +33,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Offer
 import com.ola.recoverunsold.ui.components.app.ConfirmDialog
 import com.ola.recoverunsold.ui.components.app.ImageSlider
+import com.ola.recoverunsold.ui.components.app.InformationLine
 import com.ola.recoverunsold.utils.extensions.formatDate
 import com.ola.recoverunsold.utils.extensions.formatDateTime
 import com.ola.recoverunsold.utils.extensions.formatWithoutTrailingZeros
@@ -77,7 +78,7 @@ fun OfferItem(
                     .fillMaxSize()
                     .padding(10.dp)
             ) {
-                OfferInformationLine(
+                InformationLine(
                     modifier = Modifier.padding(top = 7.dp),
                     text = stringResource(
                         R.string.total_amount,
@@ -87,7 +88,7 @@ fun OfferItem(
                 )
 
                 if (offer.beneficiaries != null) {
-                    OfferInformationLine(
+                    InformationLine(
                         modifier = Modifier.padding(top = 5.dp),
                         text = stringResource(
                             R.string.offer_beneficiaries_data,
@@ -97,7 +98,7 @@ fun OfferItem(
                     )
                 }
 
-                OfferInformationLine(
+                InformationLine(
                     modifier = Modifier.padding(top = 5.dp),
                     text = stringResource(
                         R.string.start_date_time,
@@ -106,7 +107,7 @@ fun OfferItem(
                     icon = Icons.Default.EventAvailable
                 )
 
-                OfferInformationLine(
+                InformationLine(
                     modifier = Modifier.padding(top = 5.dp),
                     text = stringResource(
                         R.string.published_the,

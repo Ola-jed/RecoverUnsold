@@ -297,4 +297,8 @@
     <string name="repayments">Reversements</string>
     <string name="repayments_pending">En attente</string>
     <string name="repayments_done">Éffectués</string>
+    <string name="no_repayments_found">Aucun reversement trouvé</string>
+    <string name="transaction_id">Id de transaction</string>
+    <string name="repayment_done">Effectué</string>
+    <string name="repayment_pending">En attente</string>
 </resources>

@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ShoppingBag
@@ -102,6 +103,13 @@ fun DistributorDrawer(
                 route = Routes.DistributorOrdersReceived.path,
                 text = R.string.orders_received,
                 leadingIcon = Icons.Outlined.History,
+                modifier = Modifier.padding(vertical = 5.dp)
+            )
+            DrawerNavRow(
+                navController = navController,
+                route = Routes.Repayments.path,
+                text = R.string.repayments,
+                leadingIcon = Icons.Outlined.Payments,
                 modifier = Modifier.padding(vertical = 5.dp)
             )
             DrawerNavRow(

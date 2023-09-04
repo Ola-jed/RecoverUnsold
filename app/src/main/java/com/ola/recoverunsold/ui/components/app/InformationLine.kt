@@ -1,4 +1,4 @@
-package com.ola.recoverunsold.ui.components.order
+package com.ola.recoverunsold.ui.components.app
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -11,7 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun OrderInformationLine(
+fun InformationLine(
     modifier: Modifier = Modifier,
     text: String,
     icon: ImageVector,

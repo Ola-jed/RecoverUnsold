@@ -297,4 +297,8 @@
     <string name="repayments">Transferencias</string>
     <string name="repayments_pending">En espera</string>
     <string name="repayments_done">Realizados</string>
+    <string name="no_repayments_found">No se ha encontrado ningún reembolso</string>
+    <string name="transaction_id">Identificación de la transacción</string>
+    <string name="repayment_done">Efectuado</string>
+    <string name="repayment_pending">En espera</string>
 </resources>

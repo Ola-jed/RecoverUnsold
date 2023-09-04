@@ -29,5 +29,6 @@ sealed class Routes(val path: String) {
     object About : Routes("about")
     object Alerts : Routes("alerts")
     object Settings : Routes("settings")
+    object Repayments : Routes("repayments")
 }
 
