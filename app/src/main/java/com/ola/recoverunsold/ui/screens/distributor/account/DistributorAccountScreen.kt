@@ -123,6 +123,7 @@ fun DistributorAccountScreen(
                             )
                         }
                     }
+
                     when (tabIndex) {
                         profileIndex -> DistributorProfileInformationSection(
                             distributor = user!! as Distributor,
