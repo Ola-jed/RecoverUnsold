@@ -172,13 +172,13 @@ fun DistributorProductFormScreenContent(
     onSubmit: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
-    val fieldsModifier = modifier
+    val fieldsModifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 20.dp)
     val imageListHeight = (LocalConfiguration.current.screenHeightDp * 0.25).dp
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
