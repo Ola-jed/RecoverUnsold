@@ -11,7 +11,8 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Numbers
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material3.Icon
+import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Customer
 import com.ola.recoverunsold.models.Distributor
 import com.ola.recoverunsold.models.User
+import com.ola.recoverunsold.ui.components.app.ItemDetailsLine
 import com.ola.recoverunsold.utils.extensions.formatDate
 
 /**
@@ -33,95 +35,138 @@ fun UserInformationList(user: User, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 10.dp, vertical = 10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(horizontal = 10.dp, vertical = 10.dp)
     ) {
         UserAccountHeader(
             email = user.email,
             size = 90.dp,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(bottom = 10.dp)
         )
 
-        AccountInformationTile(
-            leadingIcon = {
-                Icon(
-                    Icons.Filled.AccountBox,
-                    contentDescription = null,
-                )
-            },
-            label = stringResource(id = R.string.username_label),
-            data = user.username
-        )
-
-        if (user is Customer) {
-            AccountInformationTile(
-                leadingIcon = {
-                    Icon(Icons.Filled.AccountBox, contentDescription = null)
-                },
-                label = stringResource(R.string.first_name_label),
-                data = user.firstName ?: stringResource(R.string.n_a)
+        Card {
+            ItemDetailsLine(
+                modifier = Modifier.padding(
+                    top = 13.dp,
+                    bottom = 13.dp,
+                    start = 10.dp
+                ),
+                icon = Icons.Filled.AccountBox,
+                text = "${stringResource(id = R.string.username_label)} : ${user.username}"
             )
 
-            AccountInformationTile(
-                leadingIcon = {
-                    Icon(Icons.Filled.AccountBox, contentDescription = null)
-                },
-                label = stringResource(R.string.last_name_label),
-                data = user.lastName ?: stringResource(R.string.n_a)
+            Divider()
+
+            if (user is Customer) {
+                ItemDetailsLine(
+                    modifier = Modifier.padding(
+                        top = 13.dp,
+                        bottom = 13.dp,
+                        start = 10.dp
+                    ),
+                    icon = Icons.Filled.AccountBox,
+                    text = "${stringResource(R.string.first_name_label)} : ${
+                        user.firstName ?: stringResource(
+                            R.string.n_a
+                        )
+                    }"
+                )
+
+                Divider()
+
+                ItemDetailsLine(
+                    modifier = Modifier.padding(
+                        top = 13.dp,
+                        bottom = 13.dp,
+                        start = 10.dp
+                    ),
+                    icon = Icons.Filled.AccountBox,
+                    text = "${stringResource(R.string.last_name_label)} : ${
+                        user.lastName ?: stringResource(
+                            R.string.n_a
+                        )
+                    }"
+                )
+
+                Divider()
+            }
+
+            ItemDetailsLine(
+                modifier = Modifier.padding(
+                    top = 13.dp,
+                    bottom = 13.dp,
+                    start = 10.dp
+                ),
+                icon = Icons.Filled.Email,
+                text = "${stringResource(id = R.string.email_label)} : ${user.email}"
+            )
+
+            Divider()
+
+            if (user is Distributor) {
+                ItemDetailsLine(
+                    modifier = Modifier.padding(
+                        top = 13.dp,
+                        bottom = 13.dp,
+                        start = 10.dp
+                    ),
+                    icon = Icons.Filled.Phone,
+                    text = "${stringResource(id = R.string.phone_label)} : ${user.phone}"
+                )
+
+                Divider()
+
+                ItemDetailsLine(
+                    modifier = Modifier.padding(
+                        top = 13.dp,
+                        bottom = 13.dp,
+                        start = 10.dp
+                    ),
+                    icon = Icons.Filled.Numbers,
+                    text = "${stringResource(id = R.string.tax_id_label)} : ${user.taxId}"
+                )
+
+                Divider()
+
+                ItemDetailsLine(
+                    modifier = Modifier.padding(
+                        top = 13.dp,
+                        bottom = 13.dp,
+                        start = 10.dp
+                    ),
+                    icon = Icons.Filled.Info,
+                    text = "${stringResource(id = R.string.rccm_label)} : ${user.rccm}"
+                )
+
+                Divider()
+
+                ItemDetailsLine(
+                    modifier = Modifier.padding(
+                        top = 13.dp,
+                        bottom = 13.dp,
+                        start = 10.dp
+                    ),
+                    icon = Icons.Filled.Language,
+                    text = "${stringResource(id = R.string.website_url_label)} : ${
+                        (user.websiteUrl ?: stringResource(
+                            R.string.n_a
+                        ))
+                    }"
+                )
+
+                Divider()
+            }
+
+            ItemDetailsLine(
+                modifier = Modifier.padding(
+                    top = 13.dp,
+                    bottom = 13.dp,
+                    start = 10.dp
+                ),
+                icon = Icons.Filled.CalendarToday,
+                text = "${stringResource(id = R.string.member_since_label)} : ${user.createdAt.formatDate()}"
             )
         }
-
-        AccountInformationTile(
-            leadingIcon = {
-                Icon(
-                    Icons.Filled.Email,
-                    contentDescription = null,
-                )
-            },
-            label = stringResource(id = R.string.email_label),
-            data = user.email
-        )
-
-        if (user is Distributor) {
-            AccountInformationTile(
-                leadingIcon = {
-                    Icon(Icons.Filled.Phone, contentDescription = null)
-                },
-                label = stringResource(id = R.string.phone_label),
-                data = user.phone
-            )
-
-            AccountInformationTile(
-                leadingIcon = {
-                    Icon(Icons.Filled.Numbers, contentDescription = null)
-                },
-                label = stringResource(id = R.string.tax_id_label),
-                data = user.taxId
-            )
-
-            AccountInformationTile(
-                leadingIcon = {
-                    Icon(Icons.Filled.Info, contentDescription = null)
-                },
-                label = stringResource(id = R.string.rccm_label),
-                data = user.rccm
-            )
-
-            AccountInformationTile(
-                leadingIcon = {
-                    Icon(Icons.Filled.Language, contentDescription = null)
-                },
-                label = stringResource(id = R.string.website_url_label),
-                data = user.websiteUrl ?: stringResource(R.string.n_a)
-            )
-        }
-
-        AccountInformationTile(
-            leadingIcon = {
-                Icon(Icons.Filled.CalendarToday, contentDescription = null)
-            },
-            label = stringResource(id = R.string.member_since_label),
-            data = user.createdAt.formatDate()
-        )
     }
 }

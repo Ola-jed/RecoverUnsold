@@ -191,6 +191,7 @@ fun OfferDetailsScreen(
 
                         LazyColumn(
                             modifier = Modifier
+                                .fillMaxSize()
                                 .padding(paddingValues)
                                 .padding(horizontal = 15.dp),
                             state = listState

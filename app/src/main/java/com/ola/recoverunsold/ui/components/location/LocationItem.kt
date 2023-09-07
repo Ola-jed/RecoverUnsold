@@ -3,6 +3,7 @@ package com.ola.recoverunsold.ui.components.location
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -90,12 +91,15 @@ fun LocationItem(
 
             if (isModifiable) {
                 Row(
-                    modifier = Modifier.align(Alignment.End),
-                    horizontalArrangement = Arrangement.SpaceAround
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.End),
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    IconButton(onClick = onEdit) {
+                    IconButton(modifier = Modifier.padding(end = 5.dp), onClick = onEdit) {
                         Icon(Icons.Default.Edit, contentDescription = null)
                     }
+
                     IconButton(onClick = { showDeleteConfirmationDialog = true }) {
                         Icon(
                             Icons.Default.Delete,
