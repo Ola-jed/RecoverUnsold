@@ -26,6 +26,8 @@ class DistributorsViewModel @Inject constructor(
     var distributorsApiResult: ApiCallResult<Page<DistributorInformation>> by mutableStateOf(
         ApiCallResult.Inactive
     )
+    var isSearching by mutableStateOf(true)
+
 
     init {
         getDistributors()

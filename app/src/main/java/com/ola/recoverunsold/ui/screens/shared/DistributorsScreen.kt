@@ -6,19 +6,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,8 +25,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -45,6 +42,7 @@ import com.ola.recoverunsold.utils.extensions.show
 import com.ola.recoverunsold.utils.resources.Strings
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DistributorsScreen(
     navController: NavController,
@@ -53,7 +51,6 @@ fun DistributorsScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -97,70 +94,73 @@ fun DistributorsScreen(
                     else -> {
                         val distributors = distributorsViewModel.distributorsApiResult.data!!
 
-                        LazyColumn(
+                        Box(
                             modifier = Modifier
-                                .padding(paddingValues)
                                 .fillMaxSize()
+                                .padding(paddingValues)
                         ) {
-                            item {
-                                TextField(
-                                    modifier = Modifier
-                                        .fillParentMaxWidth(),
-                                    value = distributorsViewModel.distributorFilterQuery.name ?: "",
-                                    leadingIcon = {
-                                        Icon(
-                                            Icons.Filled.Search,
-                                            contentDescription = null
-                                        )
-                                    },
-                                    onValueChange = {
-                                        distributorsViewModel.distributorFilterQuery =
-                                            distributorsViewModel
-                                                .distributorFilterQuery
-                                                .copy(name = it)
-                                    },
-                                    keyboardOptions = KeyboardOptions(
-                                        imeAction = ImeAction.Search,
-                                        keyboardType = KeyboardType.Text
-                                    ),
-                                    keyboardActions = KeyboardActions(onSearch = {
-                                        distributorsViewModel.getDistributors()
-                                    }),
-                                    singleLine = true
-                                )
-                            }
-
-                            if (distributors.items.isEmpty()) {
-                                item {
-                                    NoContentComponent(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        message = stringResource(R.string.no_distributor_found)
+                            SearchBar(
+                                modifier = Modifier
+                                    .align(Alignment.TopCenter),
+                                query = distributorsViewModel.distributorFilterQuery.name ?: "",
+                                onQueryChange = {
+                                    distributorsViewModel.distributorFilterQuery =
+                                        distributorsViewModel
+                                            .distributorFilterQuery
+                                            .copy(name = it)
+                                },
+                                onSearch = { distributorsViewModel.getDistributors() },
+                                active = distributorsViewModel.isSearching,
+                                onActiveChange = { distributorsViewModel.isSearching = it },
+                                placeholder = { Text(text = stringResource(id = R.string.search)) },
+                                leadingIcon = {
+                                    Icon(
+                                        Icons.Filled.Search,
+                                        contentDescription = null
                                     )
-                                }
-                            } else {
-                                items(items = distributors.items) { item ->
-                                    DistributorInformationComponent(
-                                        modifier = Modifier
-                                            .fillParentMaxWidth()
-                                            .padding(horizontal = 10.dp, vertical = 10.dp),
-                                        distributorInformation = item,
-                                        onTap = {
-                                            navController.navigate(
-                                                Routes.DistributorDetails
-                                                    .path
-                                                    .replace("{distributorId}", item.id)
+                                },
+                            ) {
+                                LazyColumn(
+                                    modifier = Modifier
+                                        .padding(paddingValues)
+                                        .fillMaxSize()
+                                ) {
+                                    if (distributors.items.isEmpty()) {
+                                        item {
+                                            NoContentComponent(
+                                                modifier = Modifier.fillMaxWidth(),
+                                                message = stringResource(R.string.no_distributor_found)
                                             )
                                         }
-                                    )
-                                }
+                                    } else {
+                                        items(items = distributors.items) { item ->
+                                            DistributorInformationComponent(
+                                                modifier = Modifier
+                                                    .fillParentMaxWidth()
+                                                    .padding(
+                                                        horizontal = 10.dp,
+                                                        vertical = 10.dp
+                                                    ),
+                                                distributorInformation = item,
+                                                onTap = {
+                                                    navController.navigate(
+                                                        Routes.DistributorDetails
+                                                            .path
+                                                            .replace("{distributorId}", item.id)
+                                                    )
+                                                }
+                                            )
+                                        }
 
-                                item {
-                                    PaginationComponent(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        page = distributors,
-                                        onPrevious = { distributorsViewModel.getPrevious() },
-                                        onNext = { distributorsViewModel.getNext() }
-                                    )
+                                        item {
+                                            PaginationComponent(
+                                                modifier = Modifier.fillMaxWidth(),
+                                                page = distributors,
+                                                onPrevious = { distributorsViewModel.getPrevious() },
+                                                onNext = { distributorsViewModel.getNext() }
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }
