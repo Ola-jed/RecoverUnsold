@@ -180,8 +180,7 @@ fun OffersScreen(
                                     PaginationComponent(
                                         modifier = Modifier.fillMaxWidth(),
                                         page = offers,
-                                        onPrevious = { offersViewModel.getPrevious() },
-                                        onNext = { offersViewModel.getNext() }
+                                        onLoadMore = { offersViewModel.loadMore() }
                                     )
                                 }
 

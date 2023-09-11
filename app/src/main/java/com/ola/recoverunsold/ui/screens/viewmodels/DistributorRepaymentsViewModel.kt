@@ -39,14 +39,23 @@ class DistributorRepaymentsViewModel @Inject constructor(
         }
     }
 
-    fun getNext() {
+    fun loadMore() {
         repaymentsFilterQuery = repaymentsFilterQuery.inc()
-        getRepayments()
-    }
+        val savedPage = repaymentsResponse.data!!
+        repaymentsResponse = ApiCallResult.Loading
+        viewModelScope.launch {
+            val extraApiCallResponse = repaymentService
+                .getRepayments(repaymentsFilterQuery.toQueryMap())
+                .toApiCallResult()
 
-    fun getPrevious() {
-        repaymentsFilterQuery = repaymentsFilterQuery.dec()
-        getRepayments()
+            if (extraApiCallResponse is ApiCallResult.Error) {
+                repaymentsResponse = extraApiCallResponse
+            } else if (extraApiCallResponse is ApiCallResult.Success) {
+                repaymentsResponse = extraApiCallResponse.copy(
+                    _data = extraApiCallResponse.data!!.prepend(savedPage)
+                )
+            }
+        }
     }
 
     fun errorMessage(): String? {

@@ -143,8 +143,7 @@ fun OrdersScreen(
                                         PaginationComponent(
                                             modifier = Modifier.fillMaxWidth(),
                                             page = orders,
-                                            onPrevious = { customerOrderViewModel.getPrevious() },
-                                            onNext = { customerOrderViewModel.getNext() }
+                                            onLoadMore = { customerOrderViewModel.loadMore() }
                                         )
                                     }
                                 }

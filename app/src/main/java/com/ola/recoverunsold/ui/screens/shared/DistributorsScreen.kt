@@ -156,8 +156,7 @@ fun DistributorsScreen(
                                             PaginationComponent(
                                                 modifier = Modifier.fillMaxWidth(),
                                                 page = distributors,
-                                                onPrevious = { distributorsViewModel.getPrevious() },
-                                                onNext = { distributorsViewModel.getNext() }
+                                                onLoadMore = { distributorsViewModel.loadMore() }
                                             )
                                         }
                                     }

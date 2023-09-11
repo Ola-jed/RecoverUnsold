@@ -138,8 +138,7 @@ fun DistributorOrdersReceivedScreen(
                                         PaginationComponent(
                                             modifier = Modifier.fillMaxWidth(),
                                             page = orders,
-                                            onPrevious = { ordersReceivedViewModel.getPrevious() },
-                                            onNext = { ordersReceivedViewModel.getNext() }
+                                            onLoadMore = { ordersReceivedViewModel.loadMore() }
                                         )
                                     }
                                 }

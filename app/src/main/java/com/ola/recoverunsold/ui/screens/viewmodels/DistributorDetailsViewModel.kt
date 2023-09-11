@@ -69,12 +69,21 @@ class DistributorDetailsViewModel @AssistedInject constructor(
 
     fun getNext() {
         offerFilterQuery = offerFilterQuery.inc()
-        getOffers()
-    }
+        val savedPage = offersApiCallResult.data!!
+        offersApiCallResult = ApiCallResult.Loading
+        viewModelScope.launch {
+            val extraApiCallResponse = offerServiceWrapper
+                .getDistributorOffers(distributorApiCallResult.data!!.id, offerFilterQuery)
+                .toApiCallResult()
 
-    fun getPrevious() {
-        offerFilterQuery = offerFilterQuery.dec()
-        getOffers()
+            if (extraApiCallResponse is ApiCallResult.Error) {
+                offersApiCallResult = extraApiCallResponse
+            } else if (extraApiCallResponse is ApiCallResult.Success) {
+                offersApiCallResult = extraApiCallResponse.copy(
+                    _data = extraApiCallResponse.data!!.prepend(savedPage)
+                )
+            }
+        }
     }
 
     fun errorMessage(): String? {

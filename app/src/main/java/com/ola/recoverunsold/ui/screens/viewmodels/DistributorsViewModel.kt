@@ -28,7 +28,6 @@ class DistributorsViewModel @Inject constructor(
     )
     var isSearching by mutableStateOf(true)
 
-
     init {
         getDistributors()
     }
@@ -42,14 +41,23 @@ class DistributorsViewModel @Inject constructor(
         }
     }
 
-    fun getNext() {
+    fun loadMore() {
         distributorFilterQuery = distributorFilterQuery.inc()
-        getDistributors()
-    }
+        val savedPage = distributorsApiResult.data!!
+        distributorsApiResult = ApiCallResult.Loading
+        viewModelScope.launch {
+            val extraApiCallResponse = distributorServiceWrapper
+                .getDistributors(distributorFilterQuery)
+                .toApiCallResult()
 
-    fun getPrevious() {
-        distributorFilterQuery = distributorFilterQuery.dec()
-        getDistributors()
+            if (extraApiCallResponse is ApiCallResult.Error) {
+                distributorsApiResult = extraApiCallResponse
+            } else if (extraApiCallResponse is ApiCallResult.Success) {
+                distributorsApiResult = extraApiCallResponse.copy(
+                    _data = extraApiCallResponse.data!!.prepend(savedPage)
+                )
+            }
+        }
     }
 
     fun resetFilter() {

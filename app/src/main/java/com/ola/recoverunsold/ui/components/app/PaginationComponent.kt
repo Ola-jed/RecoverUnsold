@@ -17,41 +17,18 @@ import com.ola.recoverunsold.models.Page
 fun PaginationComponent(
     modifier: Modifier = Modifier,
     page: Page<*>,
-    onPrevious: () -> Unit,
-    onNext: () -> Unit
+    onLoadMore: () -> Unit
 ) {
-    if (page.pageNumber > 1 && page.hasNext) {
+    if (page.hasNext) {
         Row(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(start = 10.dp, end = 10.dp, top = 10.dp),
-            horizontalArrangement = Arrangement.SpaceAround
+            horizontalArrangement = Arrangement.Center
         ) {
-            Button(modifier = Modifier.fillMaxWidth(0.40F), onClick = onPrevious) {
-                Text(stringResource(id = R.string.previous))
+            Button(modifier = Modifier.fillMaxWidth(), onClick = onLoadMore) {
+                Text(stringResource(id = R.string.view_more))
             }
-
-            Button(modifier = Modifier.fillMaxWidth(0.40F), onClick = onNext) {
-                Text(stringResource(id = R.string.next))
-            }
-        }
-    } else if (page.pageNumber > 1) {
-        Button(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            onClick = onPrevious
-        ) {
-            Text(stringResource(id = R.string.previous))
-        }
-    } else if (page.hasNext) {
-        Button(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            onClick = onNext
-        ) {
-            Text(stringResource(id = R.string.next))
         }
     }
 }

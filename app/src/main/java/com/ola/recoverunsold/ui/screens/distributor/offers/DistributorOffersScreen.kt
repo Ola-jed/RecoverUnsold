@@ -230,8 +230,7 @@ fun DistributorOffersScreen(
                                     PaginationComponent(
                                         modifier = Modifier.fillMaxWidth(),
                                         page = offers,
-                                        onPrevious = { distributorOffersViewModel.getPrevious() },
-                                        onNext = { distributorOffersViewModel.getNext() }
+                                        onLoadMore = { distributorOffersViewModel.loadMore() }
                                     )
                                 }
 

@@ -39,14 +39,23 @@ class OffersViewModel @Inject constructor(
         }
     }
 
-    fun getNext() {
+    fun loadMore() {
         offerFilterQuery = offerFilterQuery.inc()
-        getOffers()
-    }
+        val savedPage = offersApiResult.data!!
+        offersApiResult = ApiCallResult.Loading
+        viewModelScope.launch {
+            val extraApiCallResponse = offerServiceWrapper
+                .getOffers(offerFilterQuery)
+                .toApiCallResult()
 
-    fun getPrevious() {
-        offerFilterQuery = offerFilterQuery.dec()
-        getOffers()
+            if (extraApiCallResponse is ApiCallResult.Error) {
+                offersApiResult = extraApiCallResponse
+            } else if (extraApiCallResponse is ApiCallResult.Success) {
+                offersApiResult = extraApiCallResponse.copy(
+                    _data = extraApiCallResponse.data!!.prepend(savedPage)
+                )
+            }
+        }
     }
 
     fun resetFilter() {

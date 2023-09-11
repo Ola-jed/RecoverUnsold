@@ -38,14 +38,23 @@ class CustomerOrderViewModel @Inject constructor(
         }
     }
 
-    fun getNext() {
+    fun loadMore() {
         orderQuery = orderQuery.inc()
-        getOrders()
-    }
+        val savedPage = ordersGetResponse.data!!
+        ordersGetResponse = ApiCallResult.Loading
+        viewModelScope.launch {
+            val extraApiCallResponse = orderServiceWrapper
+                .getCustomerOrders(orderQuery)
+                .toApiCallResult()
 
-    fun getPrevious() {
-        orderQuery = orderQuery.dec()
-        getOrders()
+            if (extraApiCallResponse is ApiCallResult.Error) {
+                ordersGetResponse = extraApiCallResponse
+            } else if (extraApiCallResponse is ApiCallResult.Success) {
+                ordersGetResponse = extraApiCallResponse.copy(
+                    _data = extraApiCallResponse.data!!.prepend(savedPage)
+                )
+            }
+        }
     }
 
     fun resetFilters() {

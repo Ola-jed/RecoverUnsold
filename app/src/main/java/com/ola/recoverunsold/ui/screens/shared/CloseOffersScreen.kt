@@ -278,8 +278,7 @@ fun CloseOffersScreen(
                                     PaginationComponent(
                                         modifier = Modifier.fillMaxWidth(),
                                         page = offers,
-                                        onPrevious = { closeOffersViewModel.getPrevious() },
-                                        onNext = { closeOffersViewModel.getNext() }
+                                        onLoadMore = { closeOffersViewModel.loadMore() }
                                     )
                                 }
 

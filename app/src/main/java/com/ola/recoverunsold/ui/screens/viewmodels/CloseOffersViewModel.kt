@@ -44,14 +44,23 @@ class CloseOffersViewModel @Inject constructor(
         }
     }
 
-    fun getPrevious() {
-        offerDistanceFilterQuery = offerDistanceFilterQuery.previousPage()
-        getCloseOffers()
-    }
-
-    fun getNext() {
+    fun loadMore() {
         offerDistanceFilterQuery = offerDistanceFilterQuery.nextPage()
-        getCloseOffers()
+        val savedPage = closeOffersApiResult.data!!
+        closeOffersApiResult = ApiCallResult.Loading
+        viewModelScope.launch {
+            val extraApiCallResponse = offerServiceWrapper
+                .getCloseOffers(offerDistanceFilterQuery)
+                .toApiCallResult()
+
+            if (extraApiCallResponse is ApiCallResult.Error) {
+                closeOffersApiResult = extraApiCallResponse
+            } else if (extraApiCallResponse is ApiCallResult.Success) {
+                closeOffersApiResult = extraApiCallResponse.copy(
+                    _data = extraApiCallResponse.data!!.prepend(savedPage)
+                )
+            }
+        }
     }
 
     fun errorMessage(): String? = when (closeOffersApiResult.statusCode) {

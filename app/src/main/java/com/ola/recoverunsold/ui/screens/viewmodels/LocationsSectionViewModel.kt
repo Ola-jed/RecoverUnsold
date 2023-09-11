@@ -39,14 +39,23 @@ class LocationsSectionViewModel @Inject constructor(
         }
     }
 
-    fun getNext() {
+    fun loadMore() {
         paginationQuery = paginationQuery.inc()
-        getLocations()
-    }
+        val savedPage = locationsGetResponse.data!!
+        locationsGetResponse = ApiCallResult.Loading
+        viewModelScope.launch {
+            val extraApiCallResponse = locationServiceWrapper
+                .getLocations(paginationQuery)
+                .toApiCallResult()
 
-    fun getPrevious() {
-        paginationQuery = paginationQuery.dec()
-        getLocations()
+            if (extraApiCallResponse is ApiCallResult.Error) {
+                locationsGetResponse = extraApiCallResponse
+            } else if (extraApiCallResponse is ApiCallResult.Success) {
+                locationsGetResponse = extraApiCallResponse.copy(
+                    _data = extraApiCallResponse.data!!.prepend(savedPage)
+                )
+            }
+        }
     }
 
     fun deleteLocation(location: Location, onSuccess: () -> Unit, onFailure: () -> Unit) {

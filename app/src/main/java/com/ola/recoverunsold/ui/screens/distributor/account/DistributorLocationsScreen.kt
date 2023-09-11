@@ -139,8 +139,7 @@ fun DistributorLocationsScreen(
                                 PaginationComponent(
                                     modifier = Modifier.fillMaxWidth(),
                                     page = locations,
-                                    onPrevious = { locationsSectionViewModel.getPrevious() },
-                                    onNext = { locationsSectionViewModel.getNext() }
+                                    onLoadMore = { locationsSectionViewModel.loadMore() }
                                 )
                             }
                             item {

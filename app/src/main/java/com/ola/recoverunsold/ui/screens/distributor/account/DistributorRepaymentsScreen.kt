@@ -145,8 +145,7 @@ fun DistributorRepaymentsScreen(
                                     PaginationComponent(
                                         modifier = Modifier.fillMaxWidth(),
                                         page = repayments,
-                                        onPrevious = { repaymentsViewModel.getPrevious() },
-                                        onNext = { repaymentsViewModel.getNext() }
+                                        onLoadMore = { repaymentsViewModel.loadMore() }
                                     )
                                 }
 
