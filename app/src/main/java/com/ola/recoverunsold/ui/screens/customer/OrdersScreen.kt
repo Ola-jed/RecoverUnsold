@@ -66,7 +66,11 @@ fun OrdersScreen(
                 when (customerOrderViewModel.ordersGetResponse.status) {
                     ApiStatus.LOADING, ApiStatus.INACTIVE -> LoadingIndicator()
                     ApiStatus.ERROR -> {
-                        Box(modifier = Modifier.fillMaxSize()) {
+                        Box(
+                            modifier = Modifier
+                                .padding(paddingValues)
+                                .fillMaxSize()
+                        ) {
                             Button(
                                 onClick = {
                                     customerOrderViewModel.resetFilters()
@@ -120,7 +124,6 @@ fun OrdersScreen(
                             } else {
                                 LazyColumn(
                                     modifier = Modifier
-                                        .padding(paddingValues)
                                         .fillMaxSize()
                                 ) {
                                     items(items = orders.items) {

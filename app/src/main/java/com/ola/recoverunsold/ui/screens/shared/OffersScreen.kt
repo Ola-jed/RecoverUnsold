@@ -185,17 +185,13 @@ fun OffersScreen(
                                 }
 
                                 item {
-                                    Row(
+                                    Button(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .padding(20.dp),
-                                        horizontalArrangement = Arrangement.Center
+                                            .padding(horizontal = 10.dp),
+                                        onClick = { navController.navigate(Routes.CloseOffers.path) }
                                     ) {
-                                        Button(onClick = {
-                                            navController.navigate(Routes.CloseOffers.path)
-                                        }) {
-                                            Text(stringResource(id = R.string.offers_nearby))
-                                        }
+                                        Text(stringResource(id = R.string.offers_nearby))
                                     }
                                 }
                             }
