@@ -132,9 +132,9 @@ fun DistributorRepaymentsScreen(
                                         repayment = item,
                                         onTap = {
                                             navController.navigate(
-                                                Routes.OfferDetails.path.replace(
-                                                    "{offerId}",
-                                                    item.order!!.offer!!.id
+                                                Routes.OrderDetails.path.replace(
+                                                    "{orderId}",
+                                                    item.order!!.id
                                                 )
                                             )
                                         }
