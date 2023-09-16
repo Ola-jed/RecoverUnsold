@@ -115,7 +115,6 @@ fun DistributorOrdersReceivedScreen(
                             } else {
                                 LazyColumn(
                                     modifier = Modifier
-                                        .padding(paddingValues)
                                         .fillMaxSize()
                                 ) {
                                     items(items = orders.items) {

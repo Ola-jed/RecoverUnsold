@@ -148,21 +148,6 @@ fun DistributorRepaymentsScreen(
                                         onLoadMore = { repaymentsViewModel.loadMore() }
                                     )
                                 }
-
-                                item {
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(20.dp),
-                                        horizontalArrangement = Arrangement.Center
-                                    ) {
-                                        Button(onClick = {
-                                            navController.navigate(Routes.CloseOffers.path)
-                                        }) {
-                                            Text(stringResource(id = R.string.offers_nearby))
-                                        }
-                                    }
-                                }
                             }
                         }
                     }
