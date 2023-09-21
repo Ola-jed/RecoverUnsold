@@ -6,6 +6,8 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.net.Uri
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ola.recoverunsold.MainActivity
@@ -78,13 +80,7 @@ class MainViewModel @Inject constructor(private val accountService: AccountServi
 
     private fun setLocale(context: Context) {
         val locale = AppPreferences.getLocale(context)
-//        val phoneLocale = AndroidLocale(locale.code)
-//        val resources: Resources = context.resources
-//        val config: Configuration = resources.configuration
-//        config.setLocale(phoneLocale)
-//        context.createConfigurationContext(config)
-//        context.resources.updateConfiguration(config, context.resources.displayMetrics)
-//        AndroidLocale.setDefault(phoneLocale)
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(locale.code))
         LocaleObserver.update(locale)
     }
 
