@@ -301,4 +301,6 @@
     <string name="transaction_id">Id de transaction</string>
     <string name="repayment_done">Effectué</string>
     <string name="repayment_pending">En attente</string>
+    <string name="no_internet_connection">Aucune connexion internet</string>
+    <string name="back_online">Connexion internet détectée</string>
 </resources>

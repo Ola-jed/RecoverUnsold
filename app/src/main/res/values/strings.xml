@@ -307,4 +307,6 @@
     <string name="transaction_id">Transaction id</string>
     <string name="repayment_done">Done</string>
     <string name="repayment_pending">Pending</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="back_online">Back online</string>
 </resources>

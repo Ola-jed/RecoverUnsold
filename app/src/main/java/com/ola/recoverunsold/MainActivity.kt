@@ -5,7 +5,9 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material3.SnackbarHostState
@@ -14,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import co.opensi.kkiapay.uikit.Kkiapay
+import com.ola.recoverunsold.ui.components.connectivity.ConnectivityStatus
 import com.ola.recoverunsold.ui.navigation.NavigationManager
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorDetailsViewModel
 import com.ola.recoverunsold.ui.screens.viewmodels.DistributorLocationFormViewModel
@@ -27,6 +30,7 @@ import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.components.ActivityComponent
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -43,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         fun offerDetailsViewModelFactory(): OfferDetailsViewModel.Factory
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.initializeApp(applicationContext)
@@ -51,15 +56,19 @@ class MainActivity : AppCompatActivity() {
         }
         setContent {
             RecoverUnsoldTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    val snackbarHostState = remember { SnackbarHostState() }
-                    NavigationManager(
-                        navHostController = rememberNavController(),
-                        snackbarHostState = snackbarHostState
-                    )
+                Column(modifier = Modifier.fillMaxSize()) {
+                    ConnectivityStatus(modifier = Modifier.fillMaxWidth())
+
+                    Surface(
+                        modifier = Modifier.weight(1f),
+                        color = MaterialTheme.colors.background
+                    ) {
+                        val snackbarHostState = remember { SnackbarHostState() }
+                        NavigationManager(
+                            navHostController = rememberNavController(),
+                            snackbarHostState = snackbarHostState
+                        )
+                    }
                 }
             }
         }
