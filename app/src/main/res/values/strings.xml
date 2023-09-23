@@ -309,4 +309,7 @@
     <string name="repayment_pending">Pending</string>
     <string name="no_internet_connection">No internet connection</string>
     <string name="back_online">Back online</string>
+    <string name="generate_invoice">Generate the invoice</string>
+    <string name="invoice_being_sent_by_email">The invoice is being sent, please check your mailbox to download it.</string>
+    <string name="invoice_generation_failed">Invoice generation failed</string>
 </resources>

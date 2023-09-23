@@ -653,6 +653,45 @@ fun OrderDetailsScreen(
                                     }
                                 }
 
+                                if (order.status == OrderStatus.Completed && orderDetailsViewModel.isCustomer) {
+                                    item {
+                                        Button(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(horizontal = 8.dp),
+                                            onClick = {
+                                                orderDetailsViewModel.sendOrderInvoice(
+                                                    onSuccess = {
+                                                        coroutineScope.launch {
+                                                            snackbarHostState.show(
+                                                                Strings.get(
+                                                                    R.string.invoice_being_sent_by_email
+                                                                )
+                                                            )
+                                                        }
+                                                    },
+                                                    onFailure = {
+                                                        coroutineScope.launch {
+                                                            snackbarHostState.show(
+                                                                Strings.get(
+                                                                    R.string.invoice_generation_failed
+                                                                )
+                                                            )
+                                                        }
+                                                    }
+                                                )
+                                            },
+                                            enabled = !orderDetailsViewModel.generatingInvoice
+                                        ) {
+                                            if (orderDetailsViewModel.generatingInvoice) {
+                                                CircularProgressIndicator()
+                                            } else {
+                                                Text(text = stringResource(id = R.string.generate_invoice))
+                                            }
+                                        }
+                                    }
+                                }
+
                                 if (order.opinions.isNotEmpty()) {
                                     item {
                                         SubtitleWithIcon(

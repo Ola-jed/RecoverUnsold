@@ -303,4 +303,7 @@
     <string name="repayment_pending">En espera</string>
     <string name="no_internet_connection">No hay conexión a Internet</string>
     <string name="back_online">Conexión a Internet detectada</string>
+    <string name="generate_invoice">Generar factura</string>
+    <string name="invoice_being_sent_by_email">La factura está siendo enviada, por favor revise su buzón para descargarla.</string>
+    <string name="invoice_generation_failed">Error en la generación de facturas</string>
 </resources>

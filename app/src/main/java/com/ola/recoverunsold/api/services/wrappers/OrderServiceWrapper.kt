@@ -48,4 +48,8 @@ class OrderServiceWrapper(private val orderService: OrderService) {
     suspend fun completeOrder(orderId: String): NoContentResponse {
         return orderService.completeOrder(orderId)
     }
+
+    suspend fun sendOrderInvoice(orderId: String): NoContentResponse {
+        return orderService.sendOrderInvoice(orderId)
+    }
 }

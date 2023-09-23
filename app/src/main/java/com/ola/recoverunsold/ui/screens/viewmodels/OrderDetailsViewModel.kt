@@ -41,6 +41,7 @@ class OrderDetailsViewModel @AssistedInject constructor(
     val isCustomer = UserObserver.user.value is Customer
     val customer = UserObserver.user.value as? Customer
     private val _isRefreshing = MutableStateFlow(false)
+    var generatingInvoice by mutableStateOf(false)
     val isRefreshing: StateFlow<Boolean>
         get() = _isRefreshing.asStateFlow()
 
@@ -140,6 +141,19 @@ class OrderDetailsViewModel @AssistedInject constructor(
             } else {
                 onFailure()
                 return@launch
+            }
+        }
+    }
+
+    fun sendOrderInvoice(onSuccess: () -> Unit, onFailure: () -> Unit) {
+        generatingInvoice = true
+        viewModelScope.launch {
+            val response = ordersServiceWrapper.sendOrderInvoice(orderId)
+            generatingInvoice = false
+            if (response.isSuccessful) {
+                onSuccess()
+            } else {
+                onFailure()
             }
         }
     }

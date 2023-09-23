@@ -53,4 +53,9 @@ interface OrderService : BaseApiService {
     suspend fun completeOrder(
         @Path("id") id: String
     ): NoContentResponse
+
+    @POST("${ApiUrls.ordersUrl}/{id}/Invoice")
+    suspend fun sendOrderInvoice(
+        @Path("id") id: String
+    ): NoContentResponse
 }
