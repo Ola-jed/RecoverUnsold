@@ -16,9 +16,3 @@ Mobile application for an application that helps to facilitate the disposal of u
 ## Api
 
 The github repository for the api is hosted here : https://github.com/Ola-jed/RecoverUnsoldBackend
-
-### TODO
-
-- [x] Fix the locale picker not updating the app language after the restart
-- [x] Prevent image picker from choosing images more than 1.5 mo
-
