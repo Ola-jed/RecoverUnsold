@@ -306,4 +306,5 @@
     <string name="generate_invoice">Generar factura</string>
     <string name="invoice_being_sent_by_email">La factura está siendo enviada, por favor revise su buzón para descargarla.</string>
     <string name="invoice_generation_failed">Error en la generación de facturas</string>
+    <string name="add_product_indication">No hay productos. Anada un producto utilizando el boton de arriba a la derecha</string>
 </resources>

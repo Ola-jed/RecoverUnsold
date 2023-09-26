@@ -312,4 +312,5 @@
     <string name="generate_invoice">Generate the invoice</string>
     <string name="invoice_being_sent_by_email">The invoice is being sent, please check your mailbox to download it.</string>
     <string name="invoice_generation_failed">Invoice generation failed</string>
+    <string name="add_product_indication">No products. Add a product using the button at top right</string>
 </resources>

@@ -24,6 +24,8 @@ import androidx.compose.material.icons.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -111,17 +113,19 @@ fun OfferDetailsScreen(
                         navController = navController,
                         title = stringResource(id = R.string.offer_details),
                         actions = {
-                            IconButton(onClick = {
-                                navController.navigate(
-                                    Routes.OfferProduct.path
-                                        .replace("{offerId}", offerId)
-                                        .remove("{product}")
-                                )
-                            }) {
-                                Icon(
-                                    Icons.Default.PlaylistAdd,
-                                    contentDescription = stringResource(id = R.string.add_a_product)
-                                )
+                            if (offerDetailsViewModel.isDistributor) {
+                                IconButton(onClick = {
+                                    navController.navigate(
+                                        Routes.OfferProduct.path
+                                            .replace("{offerId}", offerId)
+                                            .remove("{product}")
+                                    )
+                                }) {
+                                    Icon(
+                                        Icons.Default.PlaylistAdd,
+                                        contentDescription = stringResource(id = R.string.add_a_product)
+                                    )
+                                }
                             }
                         }
                     )
@@ -312,6 +316,20 @@ fun OfferDetailsScreen(
                                                 )
                                             }
                                         }
+                                    }
+                                }
+                            }
+
+                            if (offer.products.isNullOrEmpty() && offerDetailsViewModel.isDistributor) {
+                                item {
+                                    Card(
+                                        modifier = Modifier.padding(vertical = 5.dp),
+                                        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+                                    ) {
+                                        Text(
+                                            modifier = Modifier.padding(5.dp),
+                                            text = stringResource(id = R.string.add_product_indication)
+                                        )
                                     }
                                 }
                             }

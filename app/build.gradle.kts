@@ -90,7 +90,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-permissions:0.21.1-beta")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.21.1-beta")
     implementation("com.google.accompanist:accompanist-swiperefresh:0.21.1-beta")
-    implementation("com.google.firebase:firebase-messaging:23.1.2")
+    implementation("com.google.firebase:firebase-messaging:23.2.1")
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("com.google.dagger:hilt-android:2.43.2")
     implementation("androidx.appcompat:appcompat:1.6.1")
