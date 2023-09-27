@@ -28,9 +28,9 @@ import androidx.navigation.NavController
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.ui.components.app.AppBar
+import com.ola.recoverunsold.ui.components.app.LoadMoreComponent
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
 import com.ola.recoverunsold.ui.components.app.NoContentComponent
-import com.ola.recoverunsold.ui.components.app.PaginationComponent
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.repayment.RepaymentFilterComponent
 import com.ola.recoverunsold.ui.components.repayment.RepaymentItem
@@ -142,7 +142,7 @@ fun DistributorRepaymentsScreen(
                                 }
 
                                 item {
-                                    PaginationComponent(
+                                    LoadMoreComponent(
                                         modifier = Modifier.fillMaxWidth(),
                                         page = repayments,
                                         onLoadMore = { repaymentsViewModel.loadMore() }

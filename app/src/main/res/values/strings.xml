@@ -167,7 +167,7 @@
     <string name="distance">Distance in kilometers</string>
     <string name="feature_requiring_permission">This feature requires permission to access your location.</string>
     <string name="search">Search</string>
-    <string name="enter_search_department">Enter the department in which to search</string>
+    <string name="enter_search_department">Enter the department in which to search, using the button at the top right</string>
     <string name="change_search_radius">Change the search radius</string>
     <string name="invalid_date">Invalid date</string>
     <string name="beneficiaries_number_already_reached">Beneficiaries number already reached</string>

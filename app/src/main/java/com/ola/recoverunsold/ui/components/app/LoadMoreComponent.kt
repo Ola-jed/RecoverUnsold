@@ -14,7 +14,7 @@ import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Page
 
 @Composable
-fun PaginationComponent(
+fun LoadMoreComponent(
     modifier: Modifier = Modifier,
     page: Page<*>,
     onLoadMore: () -> Unit

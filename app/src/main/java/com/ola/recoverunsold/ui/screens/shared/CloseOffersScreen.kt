@@ -53,9 +53,9 @@ import com.ola.recoverunsold.api.core.ApiStatus
 import com.ola.recoverunsold.models.LatLong
 import com.ola.recoverunsold.ui.components.app.AppBar
 import com.ola.recoverunsold.ui.components.app.CustomTextInput
+import com.ola.recoverunsold.ui.components.app.LoadMoreComponent
 import com.ola.recoverunsold.ui.components.app.LoadingIndicator
 import com.ola.recoverunsold.ui.components.app.NoContentComponent
-import com.ola.recoverunsold.ui.components.app.PaginationComponent
 import com.ola.recoverunsold.ui.components.drawer.DrawerContent
 import com.ola.recoverunsold.ui.components.offer.OfferRelativeDistanceItem
 import com.ola.recoverunsold.ui.navigation.Routes
@@ -166,11 +166,17 @@ fun CloseOffersScreen(
             ) { paddingValues ->
                 when (closeOffersViewModel.closeOffersApiResult.status) {
                     ApiStatus.INACTIVE -> {
-                        Text(
-                            text = stringResource(id = R.string.enter_search_department),
-                            modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp),
-                            fontSize = 19.sp
-                        )
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            Text(
+                                modifier = Modifier.padding(
+                                    top = 10.dp,
+                                    start = 10.dp,
+                                    end = 10.dp
+                                ),
+                                text = stringResource(id = R.string.enter_search_department),
+                                fontSize = 19.sp
+                            )
+                        }
 
                         DisposableEffect(key1 = lifecycleOwner, effect = {
                             val observer = LifecycleEventObserver { _, event ->
@@ -275,7 +281,7 @@ fun CloseOffersScreen(
                                 }
 
                                 item {
-                                    PaginationComponent(
+                                    LoadMoreComponent(
                                         modifier = Modifier.fillMaxWidth(),
                                         page = offers,
                                         onLoadMore = { closeOffersViewModel.loadMore() }
