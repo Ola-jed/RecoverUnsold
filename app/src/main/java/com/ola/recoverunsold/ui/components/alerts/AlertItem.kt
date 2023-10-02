@@ -1,7 +1,10 @@
 package com.ola.recoverunsold.ui.components.alerts
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
@@ -26,7 +29,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.ola.recoverunsold.R
 import com.ola.recoverunsold.models.Alert
@@ -54,23 +56,32 @@ fun AlertItem(
                 .fillMaxSize()
                 .padding(5.dp)
         ) {
-            Icon(
-                imageVector = Icons.Default.NotificationsActive,
-                contentDescription = null,
-                modifier = Modifier.padding(bottom = 5.dp)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Surface(color = MaterialTheme.colorScheme.primary) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 7.5.dp, vertical = 5.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.NotificationsActive,
+                            contentDescription = null,
+                        )
 
-            Text(text = "${stringResource(id = R.string.trigger)} : ")
-
-            Text(
-                text = stringResource(
-                    id = when (alert.alertType) {
-                        AlertType.AnyOfferPublished -> R.string.all_new_publications
-                        AlertType.DistributorOfferPublished -> R.string.publications_of_given_distributor
+                        Text(
+                            modifier = Modifier.padding(start = 3.dp),
+                            text = stringResource(
+                                id = when (alert.alertType) {
+                                    AlertType.AnyOfferPublished -> R.string.all_new_publications
+                                    AlertType.DistributorOfferPublished -> R.string.publications_of_given_distributor
+                                }
+                            )
+                        )
                     }
-                ),
-                fontWeight = FontWeight.SemiBold
-            )
+                }
+            }
 
             if (alert.distributorInformation != null) {
                 IconButton(onClick = { showDistributorInformation = !showDistributorInformation }) {
