@@ -54,7 +54,6 @@ fun AlertItem(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(5.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -67,7 +66,7 @@ fun AlertItem(
                     ) {
                         Icon(
                             imageVector = Icons.Default.NotificationsActive,
-                            contentDescription = null,
+                            contentDescription = null
                         )
 
                         Text(
