@@ -15,5 +15,7 @@
     <color name="light_secondary">#08283A</color>
     <color name="dark_secondary">#08283A</color>
     <color name="light_error">#BA1A1A</color>
-    <color name="dark_error">#FFB4AB</color>
+    <color name="dark_error">#FFB4AB</color>*
+    <color name="light_background">#FFFBFF</color>
+    <color name="dark_background">#1B1B1F</color>
 </resources>

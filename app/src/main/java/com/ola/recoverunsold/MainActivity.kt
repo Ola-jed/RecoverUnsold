@@ -5,11 +5,12 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -56,12 +57,20 @@ class MainActivity : AppCompatActivity() {
         }
         setContent {
             RecoverUnsoldTheme {
-                Column(modifier = Modifier.fillMaxSize()) {
+                val bgColor = MaterialTheme.colorScheme.background
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(bgColor)
+                ) {
                     ConnectivityStatus(modifier = Modifier.fillMaxWidth())
 
                     Surface(
-                        modifier = Modifier.weight(1f),
-                        color = MaterialTheme.colors.background
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        color = bgColor
                     ) {
                         val snackbarHostState = remember { SnackbarHostState() }
                         NavigationManager(
