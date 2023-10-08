@@ -4,6 +4,7 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ola.recoverunsold.models.Customer
 import com.ola.recoverunsold.models.Distributor
@@ -14,6 +15,7 @@ fun DrawerContent(navController: NavController) {
     val user by UserObserver.user.collectAsState()
 
     return ModalDrawerSheet(
+        drawerShape = CustomDrawerShape(10.dp, 0.85f),
         content = when (user) {
             null -> VisitorDrawer(navController = navController)
             is Customer -> CustomerDrawer(user as Customer, navController)
